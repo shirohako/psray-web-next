@@ -3,9 +3,13 @@ import { House, LayoutDashboard, Users, FileText, Settings, Menu, Zap, type Icon
 
 const route = useRoute()
 
-// Sidebar collapse state. Default expanded; restored from localStorage on mount
-// (read in onMounted to avoid an SSR/hydration mismatch).
+// Desktop (lg+) sidebar collapse state: full width <-> icon rail.
+// Default expanded; restored from localStorage on mount (read in onMounted to
+// avoid an SSR/hydration mismatch).
 const collapsed = ref(false)
+// Mobile (< lg) drawer state: the sidebar is fully hidden off-canvas and slides
+// in as an overlay layer above the content when opened.
+const mobileOpen = ref(false)
 
 onMounted(() => {
   const saved = localStorage.getItem('sidebar:collapsed')
@@ -16,8 +20,14 @@ watch(collapsed, (v) => {
   localStorage.setItem('sidebar:collapsed', v ? '1' : '0')
 })
 
+// The top-bar button collapses the rail on desktop, and opens/closes the
+// overlay drawer on mobile.
 function toggleSidebar() {
-  collapsed.value = !collapsed.value
+  if (window.matchMedia('(min-width: 1024px)').matches) {
+    collapsed.value = !collapsed.value
+  } else {
+    mobileOpen.value = !mobileOpen.value
+  }
 }
 
 type MenuItem = {
@@ -62,7 +72,7 @@ function isActive(to: string) {
           >
             <LucideIcon :icon="Zap" class="size-5" />
           </span>
-          <span class="hidden text-lg font-bold tracking-tight text-slate-900 sm:block">
+          <span class="text-lg font-bold tracking-tight text-slate-900">
             PS<span class="text-indigo-600">Ray</span>
           </span>
         </NuxtLink>
@@ -85,15 +95,32 @@ function isActive(to: string) {
       </div>
     </header>
 
-    <!-- Left sidebar -->
+    <!-- Mobile backdrop: only visible while the drawer is open on small screens -->
+    <Transition
+      enter-active-class="transition-opacity duration-300"
+      enter-from-class="opacity-0"
+      leave-active-class="transition-opacity duration-300"
+      leave-to-class="opacity-0"
+    >
+      <div
+        v-if="mobileOpen"
+        class="fixed inset-0 top-16 z-30 bg-slate-900/50 lg:hidden"
+        @click="mobileOpen = false"
+      />
+    </Transition>
+
+    <!-- Left sidebar: overlay drawer on mobile, pushing rail on desktop -->
     <aside
-      class="fixed bottom-0 left-0 top-16 z-30 flex flex-col border-r border-slate-200 bg-white transition-[width] duration-300 ease-in-out"
-      :class="collapsed ? 'w-17' : 'w-64'"
+      class="fixed bottom-0 left-0 top-16 z-40 flex w-64 flex-col border-r border-slate-200 bg-white transition-transform duration-300 ease-in-out lg:translate-x-0 lg:transition-[width]"
+      :class="[
+        mobileOpen ? 'translate-x-0 shadow-xl' : '-translate-x-full',
+        collapsed ? 'lg:w-17' : 'lg:w-64',
+      ]"
     >
       <nav class="flex-1 overflow-y-auto px-3 py-4">
         <p
-          class="mb-2 px-3 text-xs font-semibold uppercase tracking-wider text-slate-400 transition-opacity duration-200"
-          :class="collapsed ? 'pointer-events-none opacity-0' : 'opacity-100'"
+          class="mb-2 px-3 text-xs font-semibold uppercase tracking-wider text-slate-400"
+          :class="collapsed ? 'lg:hidden' : ''"
         >
           导航
         </p>
@@ -102,12 +129,13 @@ function isActive(to: string) {
             <NuxtLink
               :to="item.to"
               :title="collapsed ? item.label : undefined"
+              @click="mobileOpen = false"
               class="group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition"
               :class="[
                 isActive(item.to)
                   ? 'bg-indigo-50 text-indigo-700'
                   : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900',
-                collapsed ? 'justify-center' : '',
+                collapsed ? 'lg:justify-center' : '',
               ]"
             >
               <LucideIcon
@@ -116,17 +144,17 @@ function isActive(to: string) {
                 class="size-6 shrink-0 transition-colors"
                 :class="isActive(item.to) ? 'text-indigo-600' : 'text-slate-400 group-hover:text-slate-600'"
               />
-              <span v-if="!collapsed" class="truncate">{{ item.label }}</span>
+              <span class="truncate" :class="collapsed ? 'lg:hidden' : ''">{{ item.label }}</span>
             </NuxtLink>
           </li>
         </ul>
       </nav>
     </aside>
 
-    <!-- Main content -->
+    <!-- Main content: no offset on mobile (drawer overlays), pushed on desktop -->
     <main
       class="pt-16 transition-[padding] duration-300 ease-in-out"
-      :class="collapsed ? 'pl-17' : 'pl-64'"
+      :class="collapsed ? 'lg:pl-17' : 'lg:pl-64'"
     >
       <div class="mx-auto max-w-7xl p-4 sm:p-6 lg:p-8">
         <slot />
