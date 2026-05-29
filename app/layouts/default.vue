@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { House, LayoutDashboard, Users, FileText, Settings, Menu, Zap, type IconNode } from 'lucide'
+import { House, LayoutDashboard, Users, FileText, Settings, Menu, Gamepad2, type IconNode } from 'lucide'
 
 const route = useRoute()
+const appConfig = useAppConfig()
 
 // Desktop (lg+) sidebar collapse state: full width <-> icon rail.
 // Default expanded; restored from localStorage on mount (read in onMounted to
@@ -61,19 +62,26 @@ function isActive(to: string) {
           type="button"
           @click="toggleSidebar"
           :aria-label="collapsed ? '展开菜单' : '折叠菜单'"
-          class="grid size-10 place-items-center rounded-lg text-slate-500 transition hover:bg-slate-100 hover:text-slate-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+          class="grid size-10 place-items-center rounded-lg text-slate-500 transition hover:bg-slate-100 hover:text-slate-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-900"
         >
           <LucideIcon :icon="Menu" class="size-6" stroke-width="1.75" />
         </button>
 
         <NuxtLink to="/" class="flex items-center gap-2.5">
+          <img
+            v-if="appConfig.brand.logo"
+            :src="appConfig.brand.logo"
+            alt="PSRay"
+            class="size-9 object-contain"
+          />
           <span
-            class="grid size-9 place-items-center rounded-xl bg-linear-to-br from-indigo-500 to-violet-600 text-white shadow-sm shadow-indigo-500/30"
+            v-else
+            class="grid size-9 place-items-center rounded-xl bg-slate-900 text-white shadow-sm shadow-slate-900/30"
           >
-            <LucideIcon :icon="Zap" class="size-5" />
+            <LucideIcon :icon="Gamepad2" class="size-5" />
           </span>
           <span class="text-lg font-bold tracking-tight text-slate-900">
-            PS<span class="text-indigo-600">Ray</span>
+            PS<span class="text-slate-900">Ray</span>
           </span>
         </NuxtLink>
       </div>
@@ -88,7 +96,7 @@ function isActive(to: string) {
         </NuxtLink>
         <NuxtLink
           to="/register"
-          class="rounded-lg bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm shadow-indigo-600/30 transition hover:bg-indigo-500 active:bg-indigo-700 sm:px-4"
+          class="rounded-lg bg-slate-900 px-3 py-2 text-sm font-semibold text-white shadow-sm shadow-slate-900/30 transition hover:bg-slate-800 active:bg-slate-950 sm:px-4"
         >
           注册
         </NuxtLink>
@@ -133,7 +141,7 @@ function isActive(to: string) {
               class="group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition"
               :class="[
                 isActive(item.to)
-                  ? 'bg-indigo-50 text-indigo-700'
+                  ? 'bg-slate-100 text-slate-900'
                   : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900',
                 collapsed ? 'lg:justify-center' : '',
               ]"
@@ -142,7 +150,7 @@ function isActive(to: string) {
                 :icon="item.icon"
                 stroke-width="1.75"
                 class="size-6 shrink-0 transition-colors"
-                :class="isActive(item.to) ? 'text-indigo-600' : 'text-slate-400 group-hover:text-slate-600'"
+                :class="isActive(item.to) ? 'text-slate-900' : 'text-slate-400 group-hover:text-slate-600'"
               />
               <span class="truncate" :class="collapsed ? 'lg:hidden' : ''">{{ item.label }}</span>
             </NuxtLink>
