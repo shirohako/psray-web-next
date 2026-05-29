@@ -62,11 +62,11 @@ const isRegistered = computed(() => props.profile.joined_at != null)
       <!-- Name + about + meta -->
       <div class="mt-3">
         <div class="flex flex-wrap items-center gap-2">
-          <h1 class="text-2xl font-bold tracking-tight text-slate-900">{{ profile.psnid }}</h1>
+          <h1 class="text-xl font-bold leading-none tracking-tight text-slate-900">{{ profile.psnid }}</h1>
           <LucideIcon
             :icon="BadgeCheck"
-            class="size-5 shrink-0"
-            :class="isRegistered ? 'text-slate-900' : 'text-slate-300'"
+            class="size-4 shrink-0"
+            :class="isRegistered ? 'text-sky-600' : 'text-slate-300'"
             :title="isRegistered ? '已注册用户' : '未注册（仅同步 PSN 资料）'"
           />
           <span

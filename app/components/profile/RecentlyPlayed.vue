@@ -4,9 +4,22 @@ import type { PlayedTrophySet } from '~/services/profile'
 
 const props = defineProps<{ psnid: string }>()
 
-const { data: recent, pending } = await useApiFetch<PlayedTrophySet[]>(
-  () => `/profile/${props.psnid}/recently-played`,
+interface PageMeta {
+  page: number
+  per_page: number
+  total: number
+  total_pages: number
+}
+
+const page = ref(1)
+
+// `page` is read inside the URL getter, so changing it re-fetches.
+const { data: res, pending } = await useApiFetchRaw<PlayedTrophySet[], PageMeta>(
+  () => `/profile/${props.psnid}/recently-played?page=${page.value}`,
 )
+
+const recent = computed(() => res.value?.data ?? [])
+const totalPages = computed(() => res.value?.meta?.total_pages ?? 1)
 
 /** Per-tier earned counts in display order (platinum → bronze). */
 function earnedTiers(g: PlayedTrophySet) {
@@ -20,8 +33,16 @@ function earnedTiers(g: PlayedTrophySet) {
 </script>
 
 <template>
-  <!-- Loading -->
-  <div v-if="pending" class="divide-y divide-slate-100">
+  <!-- Top pager (only when the current page is long enough to be worth it) -->
+  <div
+    v-if="totalPages > 1 && recent.length > 5"
+    class="border-b border-slate-100 px-4 py-2.5"
+  >
+    <Pagination v-model:page="page" :total-pages="totalPages" />
+  </div>
+
+  <!-- Loading (initial only — on page change we keep the list visible) -->
+  <div v-if="pending && !recent.length" class="divide-y divide-slate-100">
     <div v-for="i in 5" :key="i" class="flex items-center gap-4 px-4 py-3.5 sm:px-5">
       <div class="size-16 shrink-0 animate-pulse rounded-lg bg-slate-200" />
       <div class="flex-1 space-y-2">
@@ -33,12 +54,12 @@ function earnedTiers(g: PlayedTrophySet) {
   </div>
 
   <!-- Empty -->
-  <div v-else-if="!recent || !recent.length" class="px-6 py-20 text-center text-sm text-slate-500">
+  <div v-else-if="!recent.length" class="px-6 py-20 text-center text-sm text-slate-500">
     还没有游玩记录。
   </div>
 
   <!-- List -->
-  <div v-else class="divide-y divide-slate-100">
+  <div v-else class="divide-y divide-slate-100 transition-opacity" :class="{ 'opacity-50': pending }">
     <NuxtLink
       v-for="g in recent"
       :key="g.id"
@@ -57,15 +78,13 @@ function earnedTiers(g: PlayedTrophySet) {
       </div>
       <div class="min-w-0 flex-1">
         <div class="flex items-center gap-2">
-          <h3 class="truncate font-semibold text-slate-900">{{ g.trophy_set.trophy_title_name }}</h3>
           <span
             class="shrink-0 rounded px-1.5 py-0.5 text-[10px] font-bold"
-            :class="g.trophy_set.trophy_title_platform === 'PS5'
-              ? 'bg-slate-900 text-white'
-              : 'bg-slate-100 text-slate-600'"
+            :class="platformBadgeClass(g.trophy_set.trophy_title_platform)"
           >
             {{ g.trophy_set.trophy_title_platform }}
           </span>
+          <h3 class="min-w-0 truncate font-semibold text-slate-900">{{ g.trophy_set.trophy_title_name }}</h3>
         </div>
         <div class="mt-1.5 flex items-center gap-3 text-xs text-slate-500">
           <span class="inline-flex items-center gap-1">
@@ -94,5 +113,10 @@ function earnedTiers(g: PlayedTrophySet) {
         class="size-5 shrink-0 text-slate-300 transition group-hover:text-slate-400"
       />
     </NuxtLink>
+  </div>
+
+  <!-- Bottom pager -->
+  <div v-if="totalPages > 1" class="border-t border-slate-100 px-4 py-3">
+    <Pagination v-model:page="page" :total-pages="totalPages" />
   </div>
 </template>

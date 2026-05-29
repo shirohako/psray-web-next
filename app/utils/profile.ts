@@ -60,6 +60,21 @@ export const rankText = (r: number | null | undefined) => (r == null ? '暂无�
 /** Sum of all four trophy tiers. */
 export const sumTrophies = (p: Profile) => p.platinum + p.gold + p.silver + p.bronze
 
+/**
+ * Tailwind classes for a platform badge (filled, white text). Cohesive palette:
+ * PS5 stays near-black (brand), the rest are distinct same-weight hues.
+ */
+export function platformBadgeClass(platform: string): string {
+  switch (platform) {
+    case 'PS5': return 'bg-slate-900 text-white'
+    case 'PS4': return 'bg-sky-600 text-white'
+    case 'PS3': return 'bg-teal-600 text-white'
+    case 'PSVITA': return 'bg-rose-500 text-white'
+    case 'PSP': return 'bg-amber-600 text-white'
+    default: return 'bg-slate-600 text-white'
+  }
+}
+
 export type TrophyKey = 'platinum' | 'gold' | 'silver' | 'bronze'
 
 /** Display metadata for the four trophy tiers (order = platinum → bronze). */

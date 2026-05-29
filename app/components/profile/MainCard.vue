@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import { Gamepad2, type IconNode } from 'lucide'
+import { Gamepad2, Trophy, type IconNode } from 'lucide'
 
 defineProps<{ psnid: string }>()
 
 // Tabbed main card. Each tab renders its own content component; add new tabs
-// here as their components land (奖杯墙 / 游戏评测 …).
-type TabKey = 'recent'
+// here as their components land.
+type TabKey = 'recent' | 'trophies'
 const tabs: { key: TabKey; label: string; icon: IconNode }[] = [
   { key: 'recent', label: '最近玩过', icon: Gamepad2 },
+  { key: 'trophies', label: '奖杯记录', icon: Trophy },
 ]
 const activeTab = ref<TabKey>('recent')
 </script>
@@ -15,23 +16,24 @@ const activeTab = ref<TabKey>('recent')
 <template>
   <div class="rounded-lg border border-slate-200 bg-white shadow-sm">
     <!-- Tab bar -->
-    <div class="flex gap-1 border-b border-slate-200 px-2 sm:px-4">
+    <div class="flex gap-1 border-b border-slate-200 px-4 py-2.5 sm:px-5">
       <button
         v-for="tab in tabs"
         :key="tab.key"
         type="button"
         @click="activeTab = tab.key"
-        class="-mb-px flex items-center gap-2 border-b-2 px-3 py-3 text-sm font-medium transition sm:px-4"
+        class="inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition"
         :class="activeTab === tab.key
-          ? 'border-slate-900 text-slate-900'
-          : 'border-transparent text-slate-500 hover:text-slate-800'"
+          ? 'bg-slate-900 text-white'
+          : 'bg-slate-100 text-slate-500 hover:bg-slate-200 hover:text-slate-900'"
       >
-        <LucideIcon :icon="tab.icon" class="size-4" stroke-width="1.75" />
+        <LucideIcon :icon="tab.icon" class="size-4" stroke-width="2" />
         {{ tab.label }}
       </button>
     </div>
 
     <!-- Tab content -->
     <ProfileRecentlyPlayed v-if="activeTab === 'recent'" :psnid="psnid" />
+    <ProfileTrophyLog v-else-if="activeTab === 'trophies'" />
   </div>
 </template>
