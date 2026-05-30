@@ -35,12 +35,11 @@ const countByDate = computed(() => {
   return counts
 })
 
-// Anchor to the latest activity returned by the API so inactive profiles still
-// show a meaningful year instead of an empty current-year graph.
-const endDate = computed(() => {
-  const latest = [...countByDate.value.keys()].sort().at(-1)
-  return latest ? parseDate(latest) : parseDate(dateKey(new Date()))
-})
+// Anchor to today (browser date), not the latest API row — the API's most
+// recent entry isn't guaranteed to be current. The graph always shows the
+// trailing 12 months; any API rows outside that window (e.g. a stale 2024
+// entry) fall outside the iterated range and are simply ignored.
+const endDate = computed(() => parseDate(dateKey(new Date())))
 const startDate = computed(() => shiftDays(previousYearAnniversary(endDate.value), 1))
 const dayCount = computed(() =>
   Math.round((endDate.value.getTime() - startDate.value.getTime()) / DAY_MS) + 1,
