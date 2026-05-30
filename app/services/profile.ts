@@ -83,6 +83,20 @@ export interface CalendarDay {
   count: number
 }
 
+/** One trophy-count or platinum-count milestone. */
+export interface ProfileMilestone {
+  type: 'trophy' | 'platinum'
+  /** Milestone number, returned as a numeric string by the API. */
+  index: string
+  trophy_set_id: number
+  trophy_id: number
+  /** Unix seconds. */
+  earned_at: number
+  trophyName: string
+  trophyIconUrl: string
+  trophySetName: string
+}
+
 /** Trophy tier counts. */
 export interface TrophyCounts {
   bronze: number
@@ -135,5 +149,8 @@ export function useProfiles() {
     /** Recently played titles (paginated — returns the `{ data, meta }` envelope). */
     recentlyPlayed: (psnid: string, query?: Record<string, unknown>) =>
       raw.get<PlayedTrophySet[]>(`/profile/${psnid}/recently-played`, { query }),
+
+    milestones: (psnid: string) =>
+      get<ProfileMilestone[]>(`/profile/${psnid}/milestones`),
   }
 }
