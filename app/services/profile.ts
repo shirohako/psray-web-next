@@ -6,6 +6,8 @@
  * setup calls `useApiFetch<Profile>('/profile/:psnid')` directly.
  */
 
+import type { Rarity, TrophyType } from '~/services/trophies'
+
 /** A PSN trophy profile as returned by `GET /profile/:psnid`. */
 export interface Profile {
   id: number
@@ -140,6 +142,33 @@ export interface PlayedTrophySet {
   trophy_set: TrophySet
 }
 
+/**
+ * One trophy the user has earned, as returned by `recent-trophies`. The nested
+ * `trophy` carries enough metadata to render a row (it omits the per-language
+ * translations the trophy-set page would need).
+ */
+export interface RecentTrophy {
+  id: number
+  trophy_set_id: number
+  trophy_id: number
+  /** Unix seconds. */
+  earned_at: number
+  trophy: {
+    id: number
+    trophy_type: TrophyType
+    trophy_name: string
+    trophy_detail: string
+    trophy_icon_url: string
+    /** 0/1 — hidden on PSN until earned. */
+    trophy_hidden: number
+    /** PSN official earn rate, %. */
+    trophy_earned_rate: number
+    /** Site-wide earn rate, %. */
+    psray_rate: number
+    rarity: Rarity
+  }
+}
+
 export function useProfiles() {
   const { get, raw } = useApi()
 
@@ -149,6 +178,10 @@ export function useProfiles() {
     /** Recently played titles (paginated — returns the `{ data, meta }` envelope). */
     recentlyPlayed: (psnid: string, query?: Record<string, unknown>) =>
       raw.get<PlayedTrophySet[]>(`/profile/${psnid}/recently-played`, { query }),
+
+    /** Recently earned trophies (paginated — returns the `{ data, meta }` envelope). */
+    recentTrophies: (psnid: string, query?: Record<string, unknown>) =>
+      raw.get<RecentTrophy[]>(`/profile/${psnid}/recent-trophies`, { query }),
 
     milestones: (psnid: string) =>
       get<ProfileMilestone[]>(`/profile/${psnid}/milestones`),

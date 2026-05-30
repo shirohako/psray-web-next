@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import { Gamepad2, Milestone, type IconNode } from 'lucide'
+import { Gamepad2, Milestone, Trophy, type IconNode } from 'lucide'
 
 defineProps<{ psnid: string }>()
 
 // Tabbed main card. Each tab renders its own content component; add new tabs
 // here as their components land.
-type TabKey = 'recent' | 'milestones'
+type TabKey = 'recent' | 'trophies' | 'milestones'
 const tabs: { key: TabKey; label: string; icon: IconNode }[] = [
   { key: 'recent', label: '最近玩过', icon: Gamepad2 },
+  { key: 'trophies', label: '获得的奖杯', icon: Trophy },
   { key: 'milestones', label: '里程碑', icon: Milestone },
 ]
 const activeTab = ref<TabKey>('recent')
@@ -34,6 +35,7 @@ const activeTab = ref<TabKey>('recent')
 
     <!-- Tab content -->
     <ProfileRecentlyPlayed v-if="activeTab === 'recent'" :psnid="psnid" />
+    <ProfileEarnedTrophies v-else-if="activeTab === 'trophies'" :psnid="psnid" />
     <ProfileMilestones v-else-if="activeTab === 'milestones'" :psnid="psnid" />
   </div>
 </template>

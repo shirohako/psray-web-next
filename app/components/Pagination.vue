@@ -5,14 +5,24 @@ const props = defineProps<{ page: number; totalPages: number }>()
 const emit = defineEmits<{ 'update:page': [n: number] }>()
 
 /**
- * Items to render: always the first and last page, the current page ±1, and
- * `'…'` markers wherever there's a gap between shown pages.
+ * Items to render: always the first and last page, a window of 3 consecutive
+ * pages around the current one, and `'…'` markers wherever there's a gap. The
+ * window shifts inward near the edges so it stays 3 wide — e.g. on page 1 you
+ * get「1 2 3 … last」rather than just「1 2 … last」.
  */
 const items = computed<(number | '…')[]>(() => {
   const { page, totalPages } = props
   if (totalPages <= 1) return [1]
 
-  const shown = [...new Set([1, page - 1, page, page + 1, totalPages])]
+  let lo = page - 1
+  let hi = page + 1
+  if (lo < 1) hi += 1 - lo
+  if (hi > totalPages) lo -= hi - totalPages
+  lo = Math.max(lo, 1)
+  hi = Math.min(hi, totalPages)
+
+  const window = Array.from({ length: hi - lo + 1 }, (_, i) => lo + i)
+  const shown = [...new Set([1, ...window, totalPages])]
     .filter(p => p >= 1 && p <= totalPages)
     .sort((a, b) => a - b)
 
