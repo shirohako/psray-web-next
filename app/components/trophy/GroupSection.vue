@@ -69,7 +69,7 @@ const displayTrophies = computed(() => {
       没有符合条件的奖杯。
     </p>
 
-    <div v-else class="divide-y divide-slate-100">
+    <div v-else class="divide-y divide-slate-200">
       <TrophyItem
         v-for="trophy in displayTrophies"
         :key="trophy.id"

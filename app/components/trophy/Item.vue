@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Trophy, Check, Eye, EyeOff, Lightbulb } from 'lucide'
+import { Trophy, Check, Eye, EyeOff, MessageSquare, EllipsisVertical } from 'lucide'
 import type { Trophy as TrophyData } from '~/services/trophies'
 
 const props = defineProps<{
@@ -21,7 +21,6 @@ const translation = computed(() =>
 )
 const name = computed(() => translation.value?.trophyName || props.trophy.trophy_name)
 const detail = computed(() => translation.value?.trophyDetail || props.trophy.trophy_detail)
-const rarity = computed(() => rarityMeta(props.trophy.rarity))
 const showEarned = computed(() => props.hasViewer && props.earned)
 
 // Per-trophy peek override, toggled by the eye icon next to the title. The
@@ -45,35 +44,35 @@ const displayDetail = computed(() => (masked.value ? '' : detail.value))
 
 <template>
   <div
-    class="flex items-center gap-4 px-4 py-3.5 transition sm:px-5"
-    :class="showEarned ? 'bg-emerald-50/40' : 'hover:bg-slate-50'"
+    class="flex items-center gap-3 px-3 py-3 transition sm:gap-4 sm:px-5 sm:py-3.5"
+    :class="showEarned ? 'bg-sky-50/60' : 'hover:bg-slate-50'"
   >
-    <div class="flex shrink-0 items-center gap-3">
+    <div class="flex shrink-0 items-center gap-2 sm:gap-3">
       <!-- Continuous serial number -->
       <span class="w-6 text-right text-sm font-semibold tabular-nums text-slate-400">#{{ number }}</span>
 
       <!-- Icon + tier badge + earned check -->
       <div class="relative">
-      <img
-        :src="trophy.trophy_icon_url"
-        :alt="displayName"
-        class="size-16 rounded-lg object-cover shadow-sm"
-        :class="{ 'blur-[3px] grayscale': masked }"
-      />
-      <span
-        class="absolute -bottom-1.5 -right-1.5 grid size-6 place-items-center rounded-full border-2 border-white bg-white shadow-sm"
-        :class="trophyTierColor(trophy.trophy_type)"
-        :title="trophy.trophy_type"
-      >
-        <LucideIcon :icon="Trophy" class="size-3.5" />
-      </span>
-      <span
-        v-if="showEarned"
-        class="absolute -right-1.5 -top-1.5 grid size-5 place-items-center rounded-full border-2 border-white bg-slate-900 text-white shadow-sm"
-        title="已获得"
-      >
-        <LucideIcon :icon="Check" class="size-3" stroke-width="3" />
-      </span>
+        <img
+          :src="trophy.trophy_icon_url"
+          :alt="displayName"
+          class="size-14 rounded-lg object-cover shadow-sm sm:size-16"
+          :class="{ 'blur-[3px] grayscale': masked }"
+        />
+        <span
+          class="absolute -bottom-1.5 -right-1.5 grid size-6 place-items-center rounded-full border-2 border-white bg-white shadow-sm"
+          :class="trophyTierColor(trophy.trophy_type)"
+          :title="trophy.trophy_type"
+        >
+          <LucideIcon :icon="Trophy" class="size-3.5" />
+        </span>
+        <span
+          v-if="showEarned"
+          class="absolute -right-1.5 -top-1.5 grid size-5 place-items-center rounded-full border-2 border-white bg-slate-900 text-white shadow-sm"
+          title="已获得"
+        >
+          <LucideIcon :icon="Check" class="size-3" stroke-width="3" />
+        </span>
       </div>
     </div>
 
@@ -90,25 +89,40 @@ const displayDetail = computed(() => (masked.value ? '' : detail.value))
         >
           <LucideIcon :icon="masked ? EyeOff : Eye" class="size-3" />
         </button>
-        <NuxtLink
-          v-if="trophy.tips > 0"
-          :to="`/trophies/tips/${trophy.id}`"
-          class="inline-flex items-center gap-1 rounded bg-sky-50 px-1.5 py-0.5 text-[10px] font-medium text-sky-600 transition hover:bg-sky-100"
-        >
-          <LucideIcon :icon="Lightbulb" class="size-3" />{{ trophy.tips }} 攻略
-        </NuxtLink>
       </div>
       <p v-if="displayDetail" class="mt-0.5 line-clamp-2 text-sm text-slate-500">{{ displayDetail }}</p>
     </div>
 
-    <!-- Rarity + earn rates -->
-    <div class="hidden shrink-0 flex-col items-end gap-1.5 sm:flex">
-      <span class="rounded-full px-2 py-0.5 text-xs font-semibold" :class="rarity.pill">
-        {{ rarity.label }}
-      </span>
-      <div class="text-xs text-slate-500">
-        <span title="PSN 官方获得率"><span class="text-slate-400">PSN</span> {{ trophy.trophy_earned_rate }}%</span>
+    <!-- PSN earn rate + actions -->
+    <div class="flex shrink-0 items-center gap-1.5 sm:gap-3">
+      <div class="hidden flex-col items-end leading-tight sm:flex">
+        <span class="text-[10px] font-medium text-slate-400">PSN</span>
+        <span class="text-sm font-semibold tabular-nums text-slate-700">{{ trophy.trophy_earned_rate }}%</span>
       </div>
+
+      <!-- Comment button (badge = number of tips) -->
+      <button
+        type="button"
+        class="relative grid size-7 place-items-center rounded-full border border-slate-200 bg-white text-slate-500 shadow-sm transition hover:border-slate-300 hover:bg-slate-50 hover:text-slate-900"
+        title="留言"
+      >
+        <LucideIcon :icon="MessageSquare" class="size-3.5" />
+        <span
+          class="absolute -right-1 -top-1 grid h-3.5 min-w-3.5 place-items-center rounded-full px-1 text-[9px] font-bold leading-none text-white"
+          :class="trophy.tips > 0 ? 'bg-slate-900' : 'bg-slate-300'"
+        >
+          {{ trophy.tips }}
+        </span>
+      </button>
+
+      <!-- More menu (dropdown wired up next step) -->
+      <button
+        type="button"
+        class="grid size-7 place-items-center rounded-full border border-slate-200 bg-white text-slate-500 shadow-sm transition hover:border-slate-300 hover:bg-slate-50 hover:text-slate-900"
+        title="更多"
+      >
+        <LucideIcon :icon="EllipsisVertical" class="size-4" />
+      </button>
     </div>
   </div>
 </template>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Trophy } from 'lucide'
+import { Trophy, ChevronRight } from 'lucide'
 import type { RecentPlayer } from '~/services/trophies'
 
 defineProps<{ players: RecentPlayer[] }>()
@@ -39,5 +39,15 @@ defineProps<{ players: RecentPlayer[] }>()
         </NuxtLink>
       </li>
     </ul>
+
+    <div v-if="players.length" class="border-t border-slate-100 p-2">
+      <button
+        type="button"
+        class="flex w-full items-center justify-center gap-1 rounded-md py-1.5 text-sm font-medium text-slate-600 transition hover:bg-slate-50 hover:text-slate-900"
+      >
+        查看更多
+        <LucideIcon :icon="ChevronRight" class="size-4" />
+      </button>
+    </div>
   </div>
 </template>

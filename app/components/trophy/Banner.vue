@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Trophy, Users, Gauge, CheckCircle2 } from 'lucide'
+import { Trophy, Users, Gauge, CheckCircle2, Timer, Flag } from 'lucide'
 import type { TrophySetDetailInfo } from '~/services/trophies'
 
 const props = defineProps<{ trophySet: TrophySetDetailInfo }>()
@@ -22,11 +22,12 @@ const stats = computed(() => [
       />
       <div class="absolute inset-0 bg-slate-900/70" />
 
-      <div class="relative flex flex-col gap-5 p-5 sm:flex-row sm:items-center sm:p-6">
+      <div class="relative flex flex-col items-center gap-5 p-5 text-center sm:flex-row sm:items-center sm:p-6 sm:text-left">
+        <!-- PS5 icons are square; PS4 are 320×176 landscape — keep natural aspect. -->
         <img
           :src="trophySet.trophy_title_icon_url"
           :alt="trophySet.trophy_title_name"
-          class="size-24 shrink-0 rounded-xl border border-white/15 object-cover shadow-lg sm:size-28"
+          class="h-24 w-auto max-w-50 shrink-0 rounded-xl border border-white/15 object-contain shadow-lg sm:h-28"
         />
         <div class="min-w-0 flex-1">
           <span
@@ -42,12 +43,28 @@ const stats = computed(() => [
             {{ trophySet.trophy_title_detail }}
           </p>
           <!-- Defined trophies by tier -->
-          <div class="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1.5">
+          <div class="mt-3 flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5 sm:justify-start">
             <span v-for="t in trophyKinds" :key="t.key" class="inline-flex items-baseline gap-1.5">
               <span class="size-2.5 translate-y-0.5 rounded-full" :class="t.dot" />
               <span class="text-sm font-bold text-white">{{ trophySet.defined_trophies[t.key] }}</span>
               <span class="text-xs text-slate-300">{{ t.label }}</span>
             </span>
+          </div>
+
+          <!-- Ranking shortcuts -->
+          <div class="mt-4 flex flex-wrap items-center justify-center gap-2 sm:justify-start">
+            <button
+              type="button"
+              class="inline-flex items-center gap-1.5 rounded-lg bg-white/10 px-3 py-1.5 text-xs font-medium text-white ring-1 ring-white/15 backdrop-blur transition hover:bg-white/20"
+            >
+              <LucideIcon :icon="Timer" class="size-3.5" />最短耗时排行
+            </button>
+            <button
+              type="button"
+              class="inline-flex items-center gap-1.5 rounded-lg bg-white/10 px-3 py-1.5 text-xs font-medium text-white ring-1 ring-white/15 backdrop-blur transition hover:bg-white/20"
+            >
+              <LucideIcon :icon="Flag" class="size-3.5" />最先完成排行
+            </button>
           </div>
         </div>
       </div>
