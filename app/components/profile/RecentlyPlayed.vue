@@ -63,7 +63,7 @@ function earnedTiers(g: PlayedTrophySet) {
     <NuxtLink
       v-for="g in recent"
       :key="g.id"
-      :to="`/trophies/${g.trophy_set_id}`"
+      :to="{ path: `/trophies/${g.trophy_set_id}`, query: { psnid } }"
       class="group flex items-center gap-4 px-4 py-3.5 transition hover:bg-slate-50 sm:px-5"
     >
       <!-- Fixed-width slot keeps rows aligned; the image renders at its natural
