@@ -72,8 +72,15 @@ export interface Profile {
   is_follower: boolean
 
   milestones: unknown | null
-  calendar: unknown[]
+  calendar?: CalendarDay[] | null
   social_account: unknown | null
+}
+
+/** Trophy activity for one calendar day. */
+export interface CalendarDay {
+  /** Local calendar date in `YYYY-MM-DD` format. */
+  date: string
+  count: number
 }
 
 /** Trophy tier counts. */

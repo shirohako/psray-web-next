@@ -40,6 +40,7 @@ const masked = computed(
 )
 const displayName = computed(() => (masked.value ? '隐藏奖杯' : name.value))
 const displayDetail = computed(() => (masked.value ? '' : detail.value))
+const fmtRate = (rate: number) => rate.toFixed(1)
 </script>
 
 <template>
@@ -98,17 +99,17 @@ const displayDetail = computed(() => (masked.value ? '' : detail.value))
       <Tooltip placement="left" class="max-sm:hidden">
         <div tabindex="0" class="flex cursor-pointer flex-col items-end leading-tight focus:outline-none">
           <span class="text-[10px] font-medium text-slate-400">PSN</span>
-          <span class="text-sm font-semibold tabular-nums text-slate-700">{{ trophy.trophy_earned_rate }}%</span>
+          <span class="text-sm font-semibold tabular-nums text-slate-700">{{ fmtRate(trophy.trophy_earned_rate) }}%</span>
         </div>
         <template #content>
           <div class="space-y-1">
             <div class="flex items-center justify-between gap-4">
               <span class="text-slate-300">PSN 完成率</span>
-              <span class="font-semibold tabular-nums">{{ trophy.trophy_earned_rate }}%</span>
+              <span class="font-semibold tabular-nums">{{ fmtRate(trophy.trophy_earned_rate) }}%</span>
             </div>
             <div class="flex items-center justify-between gap-4">
-              <span class="text-slate-300">PSray 完成率</span>
-              <span class="font-semibold tabular-nums">{{ trophy.psray_rate }}%</span>
+              <span class="text-slate-300">PSRay 完成率</span>
+              <span class="font-semibold tabular-nums">{{ fmtRate(trophy.psray_rate) }}%</span>
             </div>
           </div>
         </template>

@@ -28,6 +28,7 @@
   <!-- Profile -->
   <div v-else class="space-y-6">
     <ProfileHeader :profile="profile" />
+    <ProfileTrophyCalendar v-if="profile.calendar?.length" :calendar="profile.calendar" />
 
     <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
       <!-- Left: tabbed activity -->

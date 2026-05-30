@@ -11,9 +11,9 @@ const props = withDefaults(defineProps<{
 const emit = defineEmits<{ 'update:open': [v: boolean] }>()
 
 const tabs: { value: PlayerRankType; label: string }[] = [
-  { value: 'recent', label: '最近游玩' },
-  { value: 'progress', label: '进度' },
-  { value: 'speedrun', label: '速通' },
+  { value: 'recent', label: '最近再玩' },
+  { value: 'progress', label: '最先完成' },
+  { value: 'speedrun', label: '耗时最短' },
 ]
 
 const type = ref<PlayerRankType>('recent')
