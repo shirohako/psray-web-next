@@ -33,6 +33,7 @@ function earnedTiers(g: PlayedTrophySet) {
 </script>
 
 <template>
+  <div>
   <!-- Top pager (only when the current page is long enough to be worth it) -->
   <div
     v-if="totalPages > 1 && recent.length > 5"
@@ -130,5 +131,6 @@ function earnedTiers(g: PlayedTrophySet) {
   <!-- Bottom pager -->
   <div v-if="totalPages > 1" class="border-t border-slate-100 px-4 py-3">
     <Pagination v-model:page="page" :total-pages="totalPages" />
+  </div>
   </div>
 </template>
