@@ -119,6 +119,8 @@ export interface TrophySet {
   trophy_title_icon_url: string
   has_trophy_groups: number
   np_service_name: string
+  /** Trophy-set region, a two-letter code, e.g. `HK` | `JP` | `EU`. */
+  region: string
   defined_trophies: TrophyCounts
 }
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Clock, ChevronRight } from 'lucide'
+import { Clock, ChevronRight, Globe } from 'lucide'
 import type { PlayedTrophySet } from '~/services/profile'
 
 const props = defineProps<{ psnid: string }>()
@@ -64,40 +64,46 @@ function earnedTiers(g: PlayedTrophySet) {
       v-for="g in recent"
       :key="g.id"
       :to="{ path: `/trophies/${g.trophy_set_id}`, query: { psnid } }"
-      class="group flex items-center gap-4 px-4 py-3.5 transition hover:bg-slate-50 sm:px-5"
+      class="group flex items-center gap-4 px-4 py-4 transition hover:bg-slate-50 sm:px-5"
     >
       <!-- Fixed-width slot keeps rows aligned; the image renders at its natural
-           aspect (PS4 320×176 landscape, PS5 square) with its own rounded corners
-           + shadow, so there's no gray letterbox box around it. -->
+           aspect (PS4 320×176 landscape, PS5 square) with a soft ring instead of
+           a gray letterbox box around it. -->
       <div class="flex h-18 w-24 shrink-0 items-center justify-center">
         <img
           :src="g.trophy_set.trophy_title_icon_url"
           :alt="g.trophy_set.trophy_title_name"
-          class="max-h-full max-w-full rounded-lg object-contain shadow-sm"
+          class="max-h-full max-w-full rounded-lg object-contain shadow-sm ring-1 ring-black/5"
         />
       </div>
+
       <div class="min-w-0 flex-1">
-        <div class="flex items-center gap-2">
+        <!-- Title -->
+        <h3 class="truncate font-semibold text-slate-900">{{ g.trophy_set.trophy_title_name }}</h3>
+
+        <!-- Platform + region + last-played time -->
+        <div class="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1">
           <span
-            class="shrink-0 rounded px-1.5 py-0.5 text-[10px] font-bold"
+            class="shrink-0 rounded px-1.5 py-0.5 text-[10px] font-bold leading-none"
             :class="platformBadgeClass(g.trophy_set.trophy_title_platform)"
           >
             {{ g.trophy_set.trophy_title_platform }}
           </span>
-          <h3 class="min-w-0 truncate font-semibold text-slate-900">{{ g.trophy_set.trophy_title_name }}</h3>
-        </div>
-        <div class="mt-1.5 flex items-center gap-3 text-xs text-slate-500">
-          <span class="inline-flex items-center gap-1">
-            <LucideIcon :icon="Clock" class="size-3.5 text-slate-400" /> {{ fromNow(g.last_updated_at) }}
+          <span
+            v-if="g.trophy_set.region"
+            class="inline-flex shrink-0 items-center gap-1 rounded border border-slate-200 bg-slate-50 px-1.5 py-0.5 text-[10px] font-bold leading-none tracking-wide text-slate-500"
+          >
+            <LucideIcon :icon="Globe" class="size-3 text-slate-400" />
+            {{ g.trophy_set.region }}
           </span>
-          <span class="inline-flex items-center gap-2">
-            <span v-for="(t, i) in earnedTiers(g)" :key="i" class="inline-flex items-center gap-0.5">
-              <span class="size-2 rounded-full" :class="t.dot" />{{ t.count }}
-            </span>
+          <span class="inline-flex items-center gap-1 text-xs tabular-nums text-slate-400">
+            <LucideIcon :icon="Clock" class="size-3.5" />
+            {{ fmtDateTime(g.last_updated_at) }}
           </span>
         </div>
-        <!-- Progress -->
-        <div class="mt-2 flex items-center gap-2">
+
+        <!-- Progress + per-tier earned counts -->
+        <div class="mt-2.5 flex items-center gap-3">
           <div class="h-1.5 flex-1 overflow-hidden rounded-full bg-slate-100">
             <div
               class="h-full rounded-full"
@@ -105,9 +111,15 @@ function earnedTiers(g: PlayedTrophySet) {
               :style="{ width: `${g.progress}%` }"
             />
           </div>
-          <span class="w-9 shrink-0 text-right text-xs font-semibold text-slate-600">{{ g.progress }}%</span>
+          <span class="w-9 shrink-0 text-right text-xs font-semibold tabular-nums text-slate-600">{{ g.progress }}%</span>
+        </div>
+        <div class="mt-1.5 flex items-center gap-3 text-xs text-slate-500">
+          <span v-for="(t, i) in earnedTiers(g)" :key="i" class="inline-flex items-center gap-1 tabular-nums">
+            <span class="size-2 rounded-full" :class="t.dot" />{{ t.count }}
+          </span>
         </div>
       </div>
+
       <LucideIcon
         :icon="ChevronRight"
         class="size-5 shrink-0 text-slate-300 transition group-hover:text-slate-400"
