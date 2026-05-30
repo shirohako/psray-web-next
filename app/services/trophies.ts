@@ -129,12 +129,46 @@ export interface TrophySetDetail {
   viewer_progress: ViewerProgress | null
 }
 
+/** Player-ranking modes for `GET /trophies/:id/players`. */
+export type PlayerRankType = 'recent' | 'progress' | 'speedrun'
+
+/** A ranked player row from `GET /trophies/:id/players`. */
+export interface PlayerRanking {
+  rank: number
+  psnid: string
+  avatar_url: string
+  country: string
+  /** Completion percent, 0–100. */
+  progress: number
+  earned_platinum: number
+  earned_gold: number
+  earned_silver: number
+  earned_bronze: number
+  /** Unix seconds. */
+  first_earned_at: number | null
+  /** Unix seconds. */
+  last_updated_at: number | null
+  /** Completion time in seconds (last − first earned); `null` when unfinished. */
+  gap: number | null
+}
+
+export interface PlayersMeta {
+  page: number
+  per_page: number
+  total: number
+  total_pages: number
+}
+
 export function useTrophies() {
-  const { get } = useApi()
+  const { get, raw } = useApi()
 
   return {
     /** Trophy-set detail. Pass `psnid` to embed a user's progress. */
     find: (id: number | string, query?: { psnid?: string; lang?: string }) =>
       get<TrophySetDetail>(`/trophies/${id}`, { query }),
+
+    /** Ranked players for a set (paginated — returns the `{ data, meta }` envelope). */
+    players: (id: number | string, query?: { type?: PlayerRankType; page?: number }) =>
+      raw.get<PlayerRanking[], PlayersMeta>(`/trophies/${id}/players`, { query }),
   }
 }

@@ -28,6 +28,18 @@ export function fmtDateTime(unix: number | null | undefined) {
   })
 }
 
+/** A duration in seconds → compact zh label, e.g.「3天14小时」.「—」for null. */
+export function formatDuration(sec: number | null | undefined) {
+  if (sec == null) return '—'
+  const d = Math.floor(sec / 86_400)
+  const h = Math.floor((sec % 86_400) / 3600)
+  const m = Math.floor((sec % 3600) / 60)
+  if (d > 0) return `${d}天${h}小时`
+  if (h > 0) return `${h}小时${m}分`
+  if (m > 0) return `${m}分`
+  return `${sec}秒`
+}
+
 /** Coarse relative time, e.g.「3 天前」. */
 export function fromNow(unix: number | null | undefined) {
   if (!unix) return '—'

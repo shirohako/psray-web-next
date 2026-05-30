@@ -1,8 +1,17 @@
 <script setup lang="ts">
 import { Trophy, Users, Gauge, CheckCircle2, Timer, Flag } from 'lucide'
-import type { TrophySetDetailInfo } from '~/services/trophies'
+import type { TrophySetDetailInfo, PlayerRankType } from '~/services/trophies'
 
 const props = defineProps<{ trophySet: TrophySetDetailInfo }>()
+
+// Ranking shortcuts open the shared players dialog on a specific sort tab.
+const dialogOpen = ref(false)
+const dialogType = ref<PlayerRankType>('recent')
+
+function openRanking(type: PlayerRankType) {
+  dialogType.value = type
+  dialogOpen.value = true
+}
 
 const stats = computed(() => [
   { icon: Users, label: '拥有者', value: fmt(props.trophySet.owners), tint: 'text-slate-900' },
@@ -30,15 +39,17 @@ const stats = computed(() => [
           class="h-24 w-auto max-w-50 shrink-0 rounded-xl border border-white/15 object-contain shadow-lg sm:h-28"
         />
         <div class="min-w-0 flex-1">
-          <span
-            class="inline-block rounded px-1.5 py-0.5 text-[10px] font-bold"
-            :class="platformBadgeClass(trophySet.trophy_title_platform)"
-          >
-            {{ trophySet.trophy_title_platform }}
-          </span>
-          <h1 class="mt-2 text-xl font-bold leading-tight tracking-tight text-white sm:text-2xl">
-            {{ trophySet.trophy_title_name }}
-          </h1>
+          <div class="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 sm:justify-start">
+            <h1 class="text-xl font-bold leading-tight tracking-tight text-white sm:text-2xl">
+              {{ trophySet.trophy_title_name }}
+            </h1>
+            <span
+              class="shrink-0 rounded px-1.5 py-0.5 text-[10px] font-bold"
+              :class="platformBadgeClass(trophySet.trophy_title_platform)"
+            >
+              {{ trophySet.trophy_title_platform }}
+            </span>
+          </div>
           <p v-if="trophySet.trophy_title_detail" class="mt-1.5 line-clamp-2 max-w-prose text-sm text-slate-300">
             {{ trophySet.trophy_title_detail }}
           </p>
@@ -56,12 +67,14 @@ const stats = computed(() => [
             <button
               type="button"
               class="inline-flex items-center gap-1.5 rounded-lg bg-white/10 px-3 py-1.5 text-xs font-medium text-white ring-1 ring-white/15 backdrop-blur transition hover:bg-white/20"
+              @click="openRanking('speedrun')"
             >
               <LucideIcon :icon="Timer" class="size-3.5" />最短耗时排行
             </button>
             <button
               type="button"
               class="inline-flex items-center gap-1.5 rounded-lg bg-white/10 px-3 py-1.5 text-xs font-medium text-white ring-1 ring-white/15 backdrop-blur transition hover:bg-white/20"
+              @click="openRanking('progress')"
             >
               <LucideIcon :icon="Flag" class="size-3.5" />最先完成排行
             </button>
@@ -69,6 +82,8 @@ const stats = computed(() => [
         </div>
       </div>
     </div>
+
+    <TrophyPlayersDialog :id="trophySet.id" v-model:open="dialogOpen" :initial-type="dialogType" />
 
     <!-- Aggregate stats strip -->
     <div class="grid grid-cols-2 divide-x divide-y divide-slate-100 sm:grid-cols-4 sm:divide-y-0">

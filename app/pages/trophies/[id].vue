@@ -105,7 +105,7 @@
       <aside class="space-y-6">
         <TrophyViewerProgress v-if="data.viewer_progress" :progress="data.viewer_progress" />
 
-        <TrophyRecentPlayers :players="data.recent_players" />
+        <TrophyRecentPlayers :id="data.trophy_set.id" :players="data.recent_players" />
       </aside>
     </div>
   </div>

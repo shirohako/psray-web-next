@@ -95,18 +95,32 @@ const displayDetail = computed(() => (masked.value ? '' : detail.value))
 
     <!-- PSN earn rate + actions -->
     <div class="flex shrink-0 items-center gap-1.5 sm:gap-3">
-      <div class="hidden flex-col items-end leading-tight sm:flex">
-        <span class="text-[10px] font-medium text-slate-400">PSN</span>
-        <span class="text-sm font-semibold tabular-nums text-slate-700">{{ trophy.trophy_earned_rate }}%</span>
-      </div>
+      <Tooltip placement="left" class="max-sm:hidden">
+        <div tabindex="0" class="flex cursor-pointer flex-col items-end leading-tight focus:outline-none">
+          <span class="text-[10px] font-medium text-slate-400">PSN</span>
+          <span class="text-sm font-semibold tabular-nums text-slate-700">{{ trophy.trophy_earned_rate }}%</span>
+        </div>
+        <template #content>
+          <div class="space-y-1">
+            <div class="flex items-center justify-between gap-4">
+              <span class="text-slate-300">PSN 完成率</span>
+              <span class="font-semibold tabular-nums">{{ trophy.trophy_earned_rate }}%</span>
+            </div>
+            <div class="flex items-center justify-between gap-4">
+              <span class="text-slate-300">PSray 完成率</span>
+              <span class="font-semibold tabular-nums">{{ trophy.psray_rate }}%</span>
+            </div>
+          </div>
+        </template>
+      </Tooltip>
 
       <!-- Comment button (badge = number of tips) -->
       <button
         type="button"
-        class="relative grid size-7 place-items-center rounded-full border border-slate-200 bg-white text-slate-500 shadow-sm transition hover:border-slate-300 hover:bg-slate-50 hover:text-slate-900"
+        class="relative grid size-6 place-items-center rounded-full border border-slate-200 bg-white text-slate-500 shadow-sm transition hover:border-slate-300 hover:bg-slate-50 hover:text-slate-900 sm:size-7"
         title="留言"
       >
-        <LucideIcon :icon="MessageSquare" class="size-3.5" />
+        <LucideIcon :icon="MessageSquare" class="size-3 sm:size-3.5" />
         <span
           class="absolute -right-1 -top-1 grid h-3.5 min-w-3.5 place-items-center rounded-full px-1 text-[9px] font-bold leading-none text-white"
           :class="trophy.tips > 0 ? 'bg-slate-900' : 'bg-slate-300'"
@@ -118,10 +132,10 @@ const displayDetail = computed(() => (masked.value ? '' : detail.value))
       <!-- More menu (dropdown wired up next step) -->
       <button
         type="button"
-        class="grid size-7 place-items-center rounded-full border border-slate-200 bg-white text-slate-500 shadow-sm transition hover:border-slate-300 hover:bg-slate-50 hover:text-slate-900"
+        class="grid size-6 place-items-center rounded-full border border-slate-200 bg-white text-slate-500 shadow-sm transition hover:border-slate-300 hover:bg-slate-50 hover:text-slate-900 sm:size-7"
         title="更多"
       >
-        <LucideIcon :icon="EllipsisVertical" class="size-4" />
+        <LucideIcon :icon="EllipsisVertical" class="size-3.5 sm:size-4" />
       </button>
     </div>
   </div>

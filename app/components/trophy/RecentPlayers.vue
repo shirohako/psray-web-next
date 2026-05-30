@@ -2,7 +2,9 @@
 import { Trophy, ChevronRight } from 'lucide'
 import type { RecentPlayer } from '~/services/trophies'
 
-defineProps<{ players: RecentPlayer[] }>()
+defineProps<{ id: number | string; players: RecentPlayer[] }>()
+
+const dialogOpen = ref(false)
 </script>
 
 <template>
@@ -44,10 +46,13 @@ defineProps<{ players: RecentPlayer[] }>()
       <button
         type="button"
         class="flex w-full items-center justify-center gap-1 rounded-md py-1.5 text-sm font-medium text-slate-600 transition hover:bg-slate-50 hover:text-slate-900"
+        @click="dialogOpen = true"
       >
         查看更多
         <LucideIcon :icon="ChevronRight" class="size-4" />
       </button>
     </div>
+
+    <TrophyPlayersDialog :id="id" v-model:open="dialogOpen" />
   </div>
 </template>
