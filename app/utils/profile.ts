@@ -63,6 +63,14 @@ const REGION: Record<string, string> = {
 /** Country code → flag + localized name (falls back to the raw code). */
 export const formatRegion = (c: string) => REGION[c] ?? c
 
+/** Country code → flag emoji only (derived from the 2-letter ISO code). */
+export function formatFlag(c: string) {
+  if (!/^[A-Za-z]{2}$/.test(c)) return c
+  return String.fromCodePoint(
+    ...[...c.toUpperCase()].map(ch => 0x1f1e6 + ch.charCodeAt(0) - 65),
+  )
+}
+
 const LANG: Record<string, string> = {
   'zh-CN': '简体中文', 'zh-TW': '繁体中文', 'ja': '日本語', 'en': 'English',
   'ko': '한국어',

@@ -1,3 +1,9 @@
+<script lang="ts">
+// Two root nodes (trigger + teleport) make this a fragment, so disable auto
+// attribute inheritance and bind $attrs to the trigger span explicitly.
+export default { inheritAttrs: false }
+</script>
+
 <script setup lang="ts">
 /**
  * Lightweight tooltip. Wrap any trigger in the default slot; the label shows on
@@ -88,6 +94,7 @@ onUnmounted(hide)
   <span
     ref="trigger"
     class="inline-flex"
+    v-bind="$attrs"
     @mouseenter="show"
     @mouseleave="hide"
     @focusin="show"

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { CalendarDays, Trophy } from 'lucide'
+import { CalendarDays } from 'lucide'
 import type { CalendarDay } from '~/services/profile'
 
 const props = defineProps<{ calendar: CalendarDay[] }>()
@@ -160,11 +160,7 @@ function activityClass(count: number) {
       </div>
     </div>
 
-    <div class="flex flex-wrap items-center justify-between gap-3 border-t border-slate-100 bg-slate-50/60 px-4 py-2.5 text-xs text-slate-400 sm:px-5">
-      <span class="inline-flex items-center gap-1.5">
-        <LucideIcon :icon="Trophy" class="size-3.5 text-slate-500" />
-        每个格子代表一天，共 {{ dayCount }} 天
-      </span>
+    <div class="flex flex-wrap items-center justify-end gap-3 border-t border-slate-100 bg-slate-50/60 px-4 py-2.5 text-xs text-slate-400 sm:px-5">
       <span class="inline-flex items-center gap-1.5">
         少
         <i v-for="level in [0, 1, 5, 10, 20]" :key="level" class="size-2.75 rounded-[3px] ring-1 ring-inset" :class="activityClass(level)" />

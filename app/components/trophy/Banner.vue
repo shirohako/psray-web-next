@@ -36,11 +36,11 @@ const stats = computed(() => [
         <img
           :src="trophySet.trophy_title_icon_url"
           :alt="trophySet.trophy_title_name"
-          class="h-24 w-auto max-w-50 shrink-0 rounded-xl border border-white/15 object-contain shadow-lg sm:h-28"
+          class="h-12 w-auto max-w-50 shrink-0 rounded-lg border border-white/15 object-contain shadow-lg sm:h-28 sm:rounded-xl"
         />
         <div class="min-w-0 flex-1">
           <div class="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 sm:justify-start">
-            <h1 class="text-xl font-bold leading-tight tracking-tight text-white sm:text-2xl">
+            <h1 class="text-base font-bold leading-tight tracking-tight text-white sm:text-2xl">
               {{ trophySet.trophy_title_name }}
             </h1>
             <span
