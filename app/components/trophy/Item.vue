@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Trophy, Check, Eye, EyeOff, MessageSquare, EllipsisVertical } from 'lucide'
+import { Trophy, Check, Eye, EyeOff, MessageSquare, Copy, FileText, Users } from 'lucide'
 import type { Trophy as TrophyData } from '~/services/trophies'
 
 const props = defineProps<{
@@ -23,29 +23,36 @@ const name = computed(() => translation.value?.trophyName || props.trophy.trophy
 const detail = computed(() => translation.value?.trophyDetail || props.trophy.trophy_detail)
 const showEarned = computed(() => props.hasViewer && props.earned)
 
-// Per-trophy peek override, toggled by the eye icon next to the title. The
-// global toggle is the master: flipping it resets any individual overrides, so
-// turning it off re-hides trophies that were peeked open.
-const revealed = ref(false)
-watch(() => props.showSpoilers, () => { revealed.value = false })
+// Per-trophy visibility override toggled by the eye icon next to the title.
+// `null` follows the global state; `true` force-hides, `false` force-reveals.
+// The global toggle is the master: flipping it clears any per-trophy override.
+const override = ref<boolean | null>(null)
+watch(() => props.showSpoilers, () => { override.value = null })
 
-// Mask spoiler trophies unless globally shown, individually revealed, or already
-// earned by the viewer.
-const masked = computed(
-  () =>
-    props.trophy.trophy_hidden === 1 &&
-    !props.showSpoilers &&
-    !props.earned &&
-    !revealed.value,
-)
+// Mask spoiler trophies unless globally shown, already earned by the viewer, or
+// overridden per-trophy via the eye icon.
+const masked = computed(() => {
+  if (props.trophy.trophy_hidden !== 1) return false
+  if (override.value !== null) return override.value
+  return !props.showSpoilers && !props.earned
+})
+
+// The eye flips this trophy's current state — reveal a masked one, hide a shown one.
+function toggleMask() {
+  override.value = !masked.value
+}
 const displayName = computed(() => (masked.value ? '隐藏奖杯' : name.value))
 const displayDetail = computed(() => (masked.value ? '' : detail.value))
 const fmtRate = (rate: number) => rate.toFixed(1)
+
+function copy(text: string) {
+  if (text && import.meta.client) navigator.clipboard?.writeText(text)
+}
 </script>
 
 <template>
-  <div
-    class="flex items-center gap-3 px-3 py-3 transition sm:gap-4 sm:px-5 sm:py-3.5"
+  <Popover
+    class="flex cursor-pointer select-none items-center gap-3 px-3 py-3 transition sm:gap-4 sm:px-5 sm:py-3.5"
     :class="showEarned ? 'bg-sky-50/60' : 'hover:bg-slate-50'"
   >
     <div class="flex shrink-0 items-center gap-2 sm:gap-3">
@@ -82,11 +89,11 @@ const fmtRate = (rate: number) => rate.toFixed(1)
       <div class="flex flex-wrap items-center gap-2">
         <h3 class="min-w-0 truncate font-semibold text-slate-900" :class="{ 'text-slate-400': masked }">{{ displayName }}</h3>
         <button
-          v-if="trophy.trophy_hidden === 1"
+          v-if="trophy.trophy_hidden === 1 && !earned"
           type="button"
           class="inline-flex items-center rounded bg-slate-100 p-1 text-slate-500 transition hover:bg-slate-200 hover:text-slate-700"
           :title="masked ? '显示该隐藏奖杯' : '隐藏该奖杯'"
-          @click="revealed = !revealed"
+          @click.stop="toggleMask"
         >
           <LucideIcon :icon="masked ? EyeOff : Eye" class="size-3" />
         </button>
@@ -115,11 +122,13 @@ const fmtRate = (rate: number) => rate.toFixed(1)
         </template>
       </Tooltip>
 
-      <!-- Comment button (badge = number of tips) -->
+      <!-- Comment button (badge = number of tips). Stops propagation so it
+           keeps its own action instead of opening the row menu. -->
       <button
         type="button"
         class="relative grid size-6 place-items-center rounded-full border border-slate-200 bg-white text-slate-500 shadow-sm transition hover:border-slate-300 hover:bg-slate-50 hover:text-slate-900 sm:size-7"
         title="留言"
+        @click.stop
       >
         <LucideIcon :icon="MessageSquare" class="size-3 sm:size-3.5" />
         <span
@@ -129,15 +138,36 @@ const fmtRate = (rate: number) => rate.toFixed(1)
           {{ trophy.tips }}
         </span>
       </button>
+    </div>
 
-      <!-- More menu (dropdown wired up next step) -->
+    <template #menu="{ close }">
       <button
         type="button"
-        class="grid size-6 place-items-center rounded-full border border-slate-200 bg-white text-slate-500 shadow-sm transition hover:border-slate-300 hover:bg-slate-50 hover:text-slate-900 sm:size-7"
-        title="更多"
+        role="menuitem"
+        class="flex w-full items-center gap-2.5 px-3 py-2 text-left text-slate-700 transition hover:bg-slate-50"
+        @click="copy(name); close()"
       >
-        <LucideIcon :icon="EllipsisVertical" class="size-3.5 sm:size-4" />
+        <LucideIcon :icon="Copy" class="size-4 text-slate-400" />
+        复制奖杯标题
       </button>
-    </div>
-  </div>
+      <button
+        type="button"
+        role="menuitem"
+        class="flex w-full items-center gap-2.5 px-3 py-2 text-left text-slate-700 transition hover:bg-slate-50"
+        @click="copy(detail); close()"
+      >
+        <LucideIcon :icon="FileText" class="size-4 text-slate-400" />
+        复制奖杯描述
+      </button>
+      <button
+        type="button"
+        role="menuitem"
+        class="flex w-full items-center gap-2.5 px-3 py-2 text-left text-slate-700 transition hover:bg-slate-50"
+        @click="close"
+      >
+        <LucideIcon :icon="Users" class="size-4 text-slate-400" />
+        查看近期玩家
+      </button>
+    </template>
+  </Popover>
 </template>
