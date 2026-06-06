@@ -55,16 +55,16 @@ watch([region, registeredOnly], () => reload())
 </script>
 
 <template>
-  <div class="mx-auto flex max-w-5xl flex-col gap-6 lg:flex-row lg:items-start">
+  <div class="mx-auto flex max-w-6xl flex-col gap-6 lg:flex-row lg:items-start">
     <!-- Left: vertical board switcher -->
-    <aside class="lg:w-52 lg:shrink-0">
-      <nav class="flex flex-col gap-1 rounded-xl border border-slate-200/80 bg-white p-2.5 shadow-sm">
-        <p class="px-2.5 pb-1.5 pt-1 text-[11px] font-semibold uppercase tracking-wider text-slate-400">榜单</p>
+    <aside class="lg:w-48 lg:shrink-0">
+      <nav class="flex flex-col gap-1 rounded-xl border border-slate-200/80 bg-white p-2 shadow-sm">
+        <p class="px-2 pb-1.5 pt-1 text-[10px] font-semibold uppercase tracking-wider text-slate-400">榜单</p>
         <button
           v-for="(b, idx) in boards"
           :key="b.key"
           type="button"
-          class="group w-full items-center gap-3 rounded-lg px-2.5 py-2 text-sm font-medium transition"
+          class="group w-full items-center gap-2.5 rounded-lg px-2 py-2 text-[13px] font-medium transition"
           :class="[
             idx < MOBILE_LIMIT ? 'flex' : 'hidden lg:flex',
             b.key === activeKey
@@ -74,12 +74,12 @@ watch([region, registeredOnly], () => reload())
           @click="selectBoard(b.key)"
         >
           <span
-            class="grid size-8 shrink-0 place-items-center rounded-md transition"
+            class="grid size-7 shrink-0 place-items-center rounded-md transition"
             :class="b.key === activeKey
               ? 'bg-white/15 text-white'
               : 'bg-slate-100 text-slate-500 group-hover:bg-slate-200'"
           >
-            <LucideIcon :icon="b.icon" class="size-4" />
+            <LucideIcon :icon="b.icon" class="size-3.5" />
           </span>
           <span class="truncate">{{ b.label }}</span>
         </button>
@@ -88,17 +88,17 @@ watch([region, registeredOnly], () => reload())
         <button
           v-if="boards.length > MOBILE_LIMIT"
           type="button"
-          class="group flex w-full items-center gap-3 rounded-lg px-2.5 py-2 text-sm font-medium transition lg:hidden"
+          class="group flex w-full items-center gap-2.5 rounded-lg px-2 py-2 text-[13px] font-medium transition lg:hidden"
           :class="activeHidden
             ? 'bg-slate-900 text-white shadow-sm'
             : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'"
           @click="pickerOpen = true"
         >
           <span
-            class="grid size-8 shrink-0 place-items-center rounded-md transition"
+            class="grid size-7 shrink-0 place-items-center rounded-md transition"
             :class="activeHidden ? 'bg-white/15 text-white' : 'bg-slate-100 text-slate-500 group-hover:bg-slate-200'"
           >
-            <LucideIcon :icon="Ellipsis" class="size-4" />
+            <LucideIcon :icon="Ellipsis" class="size-3.5" />
           </span>
           <span class="truncate">显示更多</span>
         </button>

@@ -24,15 +24,15 @@ const props = defineProps<{
 // Single source of truth for each column's header + layout. Boards only choose
 // which keys to pass in `columns`; rendering for each key lives in the template.
 const META: Record<LeaderboardColumn, { label: string; align: 'left' | 'center' | 'right'; class?: string }> = {
-  rank: { label: '排名', align: 'center', class: 'w-16' },
+  rank: { label: '排名', align: 'center', class: 'w-14' },
   user: { label: '玩家', align: 'left' },
-  level: { label: '等级', align: 'center', class: 'hidden w-20 sm:table-cell' },
-  platinum: { label: '白金', align: 'right', class: 'hidden w-16 md:table-cell' },
-  gold: { label: '金', align: 'right', class: 'hidden w-14 md:table-cell' },
-  silver: { label: '银', align: 'right', class: 'hidden w-14 md:table-cell' },
-  bronze: { label: '铜', align: 'right', class: 'hidden w-16 md:table-cell' },
-  points: { label: '点数', align: 'right', class: 'w-28' },
-  tips: { label: '心得', align: 'right', class: 'w-24' },
+  level: { label: '等级', align: 'center', class: 'w-16' },
+  platinum: { label: '白金', align: 'right', class: 'w-14' },
+  gold: { label: '金', align: 'right', class: 'w-12' },
+  silver: { label: '银', align: 'right', class: 'w-12' },
+  bronze: { label: '铜', align: 'right', class: 'w-14' },
+  points: { label: '点数', align: 'right', class: 'w-24' },
+  tips: { label: '心得', align: 'right', class: 'w-20' },
 }
 
 const ALIGN = { left: 'text-left', center: 'text-center', right: 'text-right' } as const
@@ -45,6 +45,15 @@ const TIER_DOT: Partial<Record<LeaderboardColumn, string>> = {
   bronze: 'bg-orange-400',
 }
 const isTier = (c: LeaderboardColumn): c is 'platinum' | 'gold' | 'silver' | 'bronze' => c in TIER_DOT
+
+function fmtPointsCompact(n: number | null | undefined) {
+  if (n == null) return '—'
+  if (n < 10000) return fmt(n)
+
+  const unit = n >= 1000000 ? 'M' : 'K'
+  const value = n / (unit === 'M' ? 1000000 : 1000)
+  return `${value.toFixed(2)}${unit}`
+}
 
 // Soft medal pill for the top three, muted number otherwise — matching the
 // rank styling used elsewhere (e.g. the players dialog).
@@ -66,7 +75,7 @@ function rankClass(rank: number) {
             <th
               v-for="c in columns"
               :key="c"
-              class="px-4 py-3"
+              class="px-3 py-3"
               :class="[ALIGN[META[c].align], META[c].class]"
             >
               {{ META[c].label }}
@@ -78,7 +87,7 @@ function rankClass(rank: number) {
             <td
               v-for="c in columns"
               :key="c"
-              class="px-4 py-3.5 align-middle"
+              class="px-3 py-3.5 align-middle"
               :class="[ALIGN[META[c].align], META[c].class]"
             >
               <!-- Rank -->
@@ -104,11 +113,19 @@ function rankClass(rank: number) {
 
               <!-- Trophy tier count (one column per tier) -->
               <span v-else-if="isTier(c)" class="inline-flex items-center justify-end gap-1.5 tabular-nums text-slate-500">
-                <span class="size-2 rounded-full" :class="TIER_DOT[c]" />{{ r[c] }}
+                <span class="size-2 rounded-full" :class="TIER_DOT[c]" />{{ fmt(r[c]) }}
               </span>
 
               <!-- Points (primary metric) -->
-              <span v-else-if="c === 'points'" class="text-[15px] font-bold tabular-nums text-slate-900">{{ fmt(r.points) }}</span>
+              <Tooltip
+                v-else-if="c === 'points'"
+                :content="fmt(r.points)"
+                placement="top"
+              >
+                <span class="cursor-help text-[15px] font-bold tabular-nums text-slate-900">
+                  {{ fmtPointsCompact(r.points) }}
+                </span>
+              </Tooltip>
 
               <!-- Tips count (primary metric) -->
               <span v-else-if="c === 'tips'" class="text-[15px] font-bold tabular-nums text-slate-900">{{ fmt(r.tips) }}</span>

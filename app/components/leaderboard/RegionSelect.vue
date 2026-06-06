@@ -49,7 +49,7 @@ onUnmounted(() => bindGlobals(false))
   <div ref="root" class="relative">
     <button
       type="button"
-      class="flex w-40 items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 shadow-sm transition hover:bg-slate-50"
+      class="flex w-48 items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 shadow-sm transition hover:bg-slate-50"
       @click="open = !open"
     >
       <RegionFlag :country="model" class="shrink-0 text-base" />

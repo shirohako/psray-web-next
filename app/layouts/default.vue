@@ -116,10 +116,10 @@ function isActive(to: string) {
 
     <!-- Left sidebar: overlay drawer on mobile, pushing rail on desktop -->
     <aside
-      class="fixed bottom-0 left-0 top-16 z-40 flex w-64 flex-col border-r border-slate-200 bg-white transition-transform duration-300 ease-in-out lg:translate-x-0 lg:transition-[width]"
+      class="fixed bottom-0 left-0 top-16 z-40 flex w-56 flex-col border-r border-slate-200 bg-white transition-transform duration-300 ease-in-out lg:translate-x-0 lg:transition-[width]"
       :class="[
         mobileOpen ? 'translate-x-0 shadow-xl' : '-translate-x-full',
-        collapsed ? 'lg:w-17' : 'lg:w-64',
+        collapsed ? 'lg:w-17' : 'lg:w-56',
       ]"
     >
       <nav class="flex-1 overflow-y-auto px-3 py-4">
@@ -159,7 +159,7 @@ function isActive(to: string) {
     <!-- Main content: no offset on mobile (drawer overlays), pushed on desktop -->
     <main
       class="pt-16 transition-[padding] duration-300 ease-in-out"
-      :class="collapsed ? 'lg:pl-17' : 'lg:pl-64'"
+      :class="collapsed ? 'lg:pl-17' : 'lg:pl-56'"
     >
       <div class="mx-auto max-w-7xl p-4 sm:p-6 lg:p-8">
         <slot />
