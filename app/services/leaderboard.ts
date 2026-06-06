@@ -24,13 +24,18 @@ export interface LeaderboardRowBase {
 
 /**
  * The row type the table consumes. Metric fields are optional because each
- * board only returns its own (e.g. the points boards send `points`, a tip
- * board would send `tips` and no `points`). Add new metric fields here as
- * boards are introduced.
+ * board only returns its own — the points boards send `points` (+ trophy
+ * tiers), while the tips board sends `tip_count` / `tip_vote_up` and omits the
+ * trophy fields. Add new metric fields here as boards are introduced.
  */
 export interface LeaderboardRow extends LeaderboardRowBase {
   points?: number
-  tips?: number
+  /** Number of trophy tips the user has contributed. */
+  tip_count?: number
+  /** Total up-votes those tips received. */
+  tip_vote_up?: number
+  /** Aggregate contribution score (the contribution board's primary metric). */
+  contribution_points?: number
 }
 
 /** Pagination plus an echo of the request flags. */
@@ -69,5 +74,13 @@ export function useLeaderboard() {
     /** Region points board. `country` is an ISO 3166-1 alpha-2 code, e.g. `HK`. */
     pointsByRegion: (country: string, query?: LeaderboardQuery) =>
       raw.get<LeaderboardRow[], LeaderboardMeta>(`/leaderboard/points/region/${country}`, { query: toQuery(query) }),
+
+    /** Helpfulness board — ranks users by trophy tips contributed + up-votes. */
+    tips: (query?: LeaderboardQuery) =>
+      raw.get<LeaderboardRow[], LeaderboardMeta>('/leaderboard/tips', { query: toQuery(query) }),
+
+    /** Contribution board — ranks users by aggregate contribution points. */
+    contribution: (query?: LeaderboardQuery) =>
+      raw.get<LeaderboardRow[], LeaderboardMeta>('/leaderboard/contribution', { query: toQuery(query) }),
   }
 }

@@ -8,10 +8,11 @@
 export type LeaderboardColumn =
   | 'rank' | 'user' | 'level'
   | 'platinum' | 'gold' | 'silver' | 'bronze'
-  | 'points' | 'tips'
+  | 'points' | 'tipCount' | 'voteUp' | 'contribution'
 </script>
 
 <script setup lang="ts">
+import { ThumbsUp } from 'lucide'
 import type { LeaderboardRow } from '~/services/leaderboard'
 
 const props = defineProps<{
@@ -32,7 +33,9 @@ const META: Record<LeaderboardColumn, { label: string; align: 'left' | 'center' 
   silver: { label: '银', align: 'right', class: 'w-12' },
   bronze: { label: '铜', align: 'right', class: 'w-14' },
   points: { label: '点数', align: 'right', class: 'w-24' },
-  tips: { label: '心得', align: 'right', class: 'w-20' },
+  tipCount: { label: '心得数', align: 'right', class: 'w-20' },
+  voteUp: { label: '获赞', align: 'right', class: 'w-20' },
+  contribution: { label: '贡献点数', align: 'right', class: 'w-24' },
 }
 
 const ALIGN = { left: 'text-left', center: 'text-center', right: 'text-right' } as const
@@ -127,8 +130,18 @@ function rankClass(rank: number) {
                 </span>
               </Tooltip>
 
-              <!-- Tips count (primary metric) -->
-              <span v-else-if="c === 'tips'" class="text-[15px] font-bold tabular-nums text-slate-900">{{ fmt(r.tips) }}</span>
+              <!-- Tip count (primary metric) -->
+              <span v-else-if="c === 'tipCount'" class="text-[15px] font-bold tabular-nums text-slate-900">{{ r.tip_count }}</span>
+
+              <!-- Contribution points (primary metric) -->
+              <span v-else-if="c === 'contribution'" class="text-[15px] font-bold tabular-nums text-slate-900">{{ fmt(r.contribution_points) }}</span>
+
+              <!-- Tip up-votes received. Icon pinned left, number right-aligned
+                   to fill the cell, so icons and digits line up across rows. -->
+              <span v-else-if="c === 'voteUp'" class="flex items-center gap-1 text-slate-600">
+                <LucideIcon :icon="ThumbsUp" class="size-3.5 shrink-0 text-slate-400" />
+                <span class="flex-1 text-right tabular-nums">{{ r.tip_vote_up }}</span>
+              </span>
             </td>
           </tr>
         </tbody>

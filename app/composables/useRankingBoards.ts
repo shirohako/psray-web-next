@@ -1,4 +1,4 @@
-import { Coins, Globe2, type IconNode } from 'lucide'
+import { Coins, Globe2, HeartHandshake, Share2, type IconNode } from 'lucide'
 import type { ApiSuccess } from '~/types/api'
 import type { LeaderboardColumn } from '~/components/leaderboard/Table.vue'
 import { useLeaderboard, type LeaderboardRow, type LeaderboardMeta } from '~/services/leaderboard'
@@ -40,7 +40,7 @@ export function useRankingBoards(): LeaderboardBoard[] {
   return [
     {
       key: 'points',
-      label: '全站点数榜',
+      label: '全站点数排名',
       description: '按 PSN 点数计算的全站总排名',
       icon: Coins,
       columns: ['rank', 'user', 'level', 'platinum', 'gold', 'silver', 'bronze', 'points'],
@@ -49,7 +49,7 @@ export function useRankingBoards(): LeaderboardBoard[] {
     },
     {
       key: 'points-region',
-      label: '地区点数榜',
+      label: '地区点数排名',
       description: '按所选地区的玩家点数排名',
       icon: Globe2,
       columns: ['rank', 'user', 'level', 'platinum', 'gold', 'silver', 'bronze', 'points'],
@@ -57,6 +57,22 @@ export function useRankingBoards(): LeaderboardBoard[] {
       registered: true,
       fetch: ({ page, registeredOnly, region }) =>
         api.pointsByRegion(region, { page, registered_only: registeredOnly }),
+    },
+    {
+      key: 'tips',
+      label: '乐于助人排名',
+      description: '贡献奖杯心得最多、最受认可的玩家',
+      icon: HeartHandshake,
+      columns: ['rank', 'user', 'tipCount', 'voteUp'],
+      fetch: ({ page }) => api.tips({ page }),
+    },
+    {
+      key: 'contribution',
+      label: '贡献排名',
+      description: '按贡献点数计算的总排名',
+      icon: Share2,
+      columns: ['rank', 'user', 'contribution'],
+      fetch: ({ page }) => api.contribution({ page }),
     },
   ]
 }
