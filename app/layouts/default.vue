@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { House, Menu, Gamepad2, type IconNode } from 'lucide'
+import { House, Menu, Gamepad2, Trophy, type IconNode } from 'lucide'
 
 const route = useRoute()
 const appConfig = useAppConfig()
@@ -39,6 +39,7 @@ type MenuItem = {
 
 const menu: MenuItem[] = [
   { label: '首页', to: '/', icon: House },
+  { label: '排行榜', to: '/leaderboard', icon: Trophy },
 ]
 
 function isActive(to: string) {

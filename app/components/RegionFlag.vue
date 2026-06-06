@@ -18,6 +18,6 @@ const icon = computed(() => `flag:${props.country.toLowerCase()}-4x3`)
     :name="icon"
     mode="svg"
     :aria-label="country"
-    class="inline-block shrink-0 rounded-[2px] ring-1 ring-black/5"
+    class="inline-block shrink-0 rounded-xs ring-1 ring-black/5"
   />
 </template>
