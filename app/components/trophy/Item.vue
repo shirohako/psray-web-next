@@ -49,9 +49,10 @@ function copy(text: string) {
   if (text && import.meta.client) navigator.clipboard?.writeText(text)
 }
 
-// Dialogs opened from the row menu.
+// Dialogs opened from the row's menu / comment button.
 const detailOpen = ref(false)
 const earnersOpen = ref(false)
+const tipsOpen = ref(false)
 </script>
 
 <template>
@@ -132,7 +133,7 @@ const earnersOpen = ref(false)
         type="button"
         class="relative grid size-6 place-items-center rounded-full border border-slate-200 bg-white text-slate-500 shadow-sm transition hover:border-slate-300 hover:bg-slate-50 hover:text-slate-900 sm:size-7"
         title="留言"
-        @click.stop
+        @click.stop="tipsOpen = true"
       >
         <LucideIcon :icon="MessageSquare" class="size-3 sm:size-3.5" />
         <span
@@ -186,4 +187,5 @@ const earnersOpen = ref(false)
 
   <TrophyDetailDialog :trophy="trophy" :lang="lang" v-model:open="detailOpen" />
   <TrophyEarnersDialog :trophy-id="trophy.id" :trophy-name="name" v-model:open="earnersOpen" />
+  <TrophyTipsDialog :trophy-id="trophy.id" :trophy-name="name" v-model:open="tipsOpen" />
 </template>

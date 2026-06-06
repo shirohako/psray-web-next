@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
 /* Tailwind v4 Preflight resets <button> to the default cursor; restore the
    pointer for enabled buttons (and role="button") app-wide. */

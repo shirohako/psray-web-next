@@ -168,6 +168,43 @@ export interface TrophyPlayer {
   earned_at: number
 }
 
+/** Content format of a tip's body. */
+export type TipContentType = 'html' | 'markdown'
+
+/** Tip author — a subset of the full profile the tips endpoint embeds. */
+export interface TipUser {
+  id: number
+  psnid: string
+  country: string
+  avatar_url: string
+  /** PS Plus flag (0/1). */
+  plus: number
+  trophy_level: number
+}
+
+/** A community tip/guide for a trophy (`GET /trophies/trophy/:id/tips`). */
+export interface TrophyTip {
+  id: number
+  trophy_id: number
+  user_id: number
+  /** BCP-47 language tag the tip was written in. */
+  language: string
+  /** 0/1 — content contains spoilers. */
+  spoiler: number
+  vote_up: number
+  vote_down: number
+  /** Raw HTML or Markdown source, per `content_type`. */
+  content: string
+  content_type: TipContentType
+  /** Comma-separated tag list, e.g. `"guide,boss"`. */
+  tags: string
+  /** Unix seconds. */
+  created_at: number
+  /** Unix seconds. */
+  updated_at: number
+  user: TipUser
+}
+
 export function useTrophies() {
   const { get, raw } = useApi()
 
@@ -183,5 +220,9 @@ export function useTrophies() {
     /** Players who recently earned a single trophy (returns the `{ data, meta }` envelope). */
     trophyPlayers: (trophyId: number | string, query?: { page?: number }) =>
       raw.get<TrophyPlayer[], PlayersMeta>(`/trophies/trophy/${trophyId}/players`, { query }),
+
+    /** Community tips/guides for a single trophy (returns the `{ data, meta }` envelope). */
+    trophyTips: (trophyId: number | string, query?: { page?: number }) =>
+      raw.get<TrophyTip[], PlayersMeta>(`/trophies/trophy/${trophyId}/tips`, { query }),
   }
 }
