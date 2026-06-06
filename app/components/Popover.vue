@@ -23,15 +23,26 @@ export default { inheritAttrs: false }
  * </Popover>
  * ```
  */
+const emit = defineEmits<{ open: []; close: [] }>()
+
 const open = ref(false)
 const position = ref({ top: 0, left: 0 })
 const panel = ref<HTMLElement | null>(null)
+let observer: ResizeObserver | null = null
 
 function toggle(e: MouseEvent) {
   if (open.value) return close()
   position.value = { top: e.clientY, left: e.clientX }
   open.value = true
-  nextTick(adjust)
+  emit('open')
+  nextTick(() => {
+    adjust()
+    // Keep the panel on-screen as its content grows (e.g. menu → list).
+    if (panel.value) {
+      observer = new ResizeObserver(adjust)
+      observer.observe(panel.value)
+    }
+  })
   window.addEventListener('scroll', close, true)
   window.addEventListener('resize', close)
   window.addEventListener('keydown', onKey)
@@ -54,10 +65,14 @@ function onKey(e: KeyboardEvent) {
 }
 
 function close() {
+  if (!open.value) return
   open.value = false
+  observer?.disconnect()
+  observer = null
   window.removeEventListener('scroll', close, true)
   window.removeEventListener('resize', close)
   window.removeEventListener('keydown', onKey)
+  emit('close')
 }
 
 onUnmounted(close)

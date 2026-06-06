@@ -159,6 +159,15 @@ export interface PlayersMeta {
   total_pages: number
 }
 
+/** A player who recently earned a specific trophy (`GET /trophies/trophy/:id/players`). */
+export interface TrophyPlayer {
+  psnid: string
+  avatar_url: string
+  country: string
+  /** Unix seconds — when this player earned the trophy. */
+  earned_at: number
+}
+
 export function useTrophies() {
   const { get, raw } = useApi()
 
@@ -170,5 +179,9 @@ export function useTrophies() {
     /** Ranked players for a set (paginated — returns the `{ data, meta }` envelope). */
     players: (id: number | string, query?: { type?: PlayerRankType; page?: number }) =>
       raw.get<PlayerRanking[], PlayersMeta>(`/trophies/${id}/players`, { query }),
+
+    /** Players who recently earned a single trophy (returns the `{ data, meta }` envelope). */
+    trophyPlayers: (trophyId: number | string, query?: { page?: number }) =>
+      raw.get<TrophyPlayer[], PlayersMeta>(`/trophies/trophy/${trophyId}/players`, { query }),
   }
 }

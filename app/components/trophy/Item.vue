@@ -48,6 +48,9 @@ const fmtRate = (rate: number) => rate.toFixed(1)
 function copy(text: string) {
   if (text && import.meta.client) navigator.clipboard?.writeText(text)
 }
+
+// Recent-earners dialog, opened from the row menu.
+const earnersOpen = ref(false)
 </script>
 
 <template>
@@ -163,11 +166,13 @@ function copy(text: string) {
         type="button"
         role="menuitem"
         class="flex w-full items-center gap-2.5 px-3 py-2 text-left text-slate-700 transition hover:bg-slate-50"
-        @click="close"
+        @click="earnersOpen = true; close()"
       >
         <LucideIcon :icon="Users" class="size-4 text-slate-400" />
-        查看近期玩家
+        查看近期获得的玩家
       </button>
     </template>
   </Popover>
+
+  <TrophyEarnersDialog :trophy-id="trophy.id" :trophy-name="name" v-model:open="earnersOpen" />
 </template>
