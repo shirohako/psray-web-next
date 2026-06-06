@@ -21,7 +21,7 @@ const dialogOpen = ref(false)
           <img :src="p.avatar_url" :alt="p.psnid" class="size-8 shrink-0 rounded-full bg-slate-100 object-cover" />
           <div class="min-w-0 flex-1">
             <div class="flex items-center gap-1.5 leading-none">
-              <span class="shrink-0 text-xs leading-none">{{ formatFlag(p.country) }}</span>
+              <RegionFlag :country="p.country" class="text-xs" />
               <span class="min-w-0 truncate text-sm font-semibold leading-none text-slate-900 group-hover:text-slate-700">{{ p.psnid }}</span>
               <LucideIcon v-if="p.earned_platinum > 0" :icon="Trophy" class="size-3.5 shrink-0 text-cyan-500" title="已获白金" />
             </div>

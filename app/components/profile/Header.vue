@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {
-  Trophy, Globe, Eye, UserPlus, UserCheck, RefreshCw,
+  Trophy, Eye, UserPlus, UserCheck, RefreshCw,
   Crown, Medal, MapPin, Sparkles, BadgeCheck,
 } from 'lucide'
 import type { Profile } from '~/services/profile'
@@ -79,7 +79,7 @@ const isRegistered = computed(() => props.profile.joined_at != null)
         </p>
         <div class="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-500">
           <span class="inline-flex items-center gap-1">
-            <LucideIcon :icon="Globe" class="size-3.5 text-slate-400" /> {{ formatRegion(profile.country) }}
+            <RegionFlag :country="profile.country" /> {{ regionName(profile.country) }}
           </span>
           <span class="inline-flex items-center gap-1">
             <LucideIcon :icon="Eye" class="size-3.5 text-slate-400" /> {{ fmt(profile.page_views) }} 次浏览
@@ -101,7 +101,7 @@ const isRegistered = computed(() => props.profile.joined_at != null)
         <span class="inline-flex items-center gap-1.5">
           <LucideIcon :icon="MapPin" class="size-4 text-sky-500" />
           <span class="font-bold text-slate-900">{{ rankText(profile.server_rank) }}</span>
-          <span class="text-xs text-slate-400">{{ formatRegion(profile.country) }}排名</span>
+          <span class="text-xs text-slate-400">地区排名</span>
         </span>
         <div class="h-4 w-px bg-slate-200" />
         <span class="inline-flex items-center gap-1.5">

@@ -13,7 +13,9 @@ defineProps<{ profile: Profile }>()
         <dt class="inline-flex items-center gap-2 text-slate-500">
           <LucideIcon :icon="Globe" class="size-4 text-slate-400" />地区
         </dt>
-        <dd class="font-medium text-slate-900">{{ formatRegion(profile.country) }}</dd>
+        <dd class="inline-flex items-center gap-1.5 font-medium text-slate-900">
+          <RegionFlag :country="profile.country" />{{ regionName(profile.country) }}
+        </dd>
       </div>
       <div class="flex items-center justify-between gap-3">
         <dt class="inline-flex items-center gap-2 text-slate-500">

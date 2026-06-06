@@ -81,7 +81,7 @@ watch(() => props.open, (v) => {
           <img :src="p.avatar_url" :alt="p.psnid" class="size-10 shrink-0 rounded-full bg-slate-100 object-cover" />
           <div class="min-w-0 flex-1">
             <div class="flex items-center gap-1.5">
-              <span class="shrink-0 text-xs leading-none">{{ formatFlag(p.country) }}</span>
+              <RegionFlag :country="p.country" class="text-xs" />
               <span class="truncate text-sm font-semibold text-slate-900 group-hover:text-slate-700">{{ p.psnid }}</span>
             </div>
             <div class="mt-0.5 text-xs tabular-nums text-slate-400">{{ fmtDateTime(p.earned_at) }} 获得</div>

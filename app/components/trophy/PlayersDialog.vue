@@ -135,7 +135,7 @@ function rankClass(rank: number) {
               <LucideIcon v-if="p.earned_platinum > 0" :icon="Trophy" class="size-3.5 shrink-0 text-cyan-500" />
             </div>
             <div class="mt-0.5 flex items-center gap-2 text-xs text-slate-400">
-              <span>{{ formatRegion(p.country) }}</span>
+              <span class="inline-flex items-center gap-1"><RegionFlag :country="p.country" />{{ regionName(p.country) }}</span>
               <span>·</span>
               <span v-if="type === 'speedrun'" class="inline-flex items-center gap-1 font-medium text-slate-500">
                 <LucideIcon :icon="Timer" class="size-3" />{{ formatDuration(p.gap) }}

@@ -56,19 +56,17 @@ export function fromNow(unix: number | null | undefined) {
   return `${Math.floor(diff / (365 * day))} 年前`
 }
 
-const REGION: Record<string, string> = {
-  HK: '🇭🇰 香港', JP: '🇯🇵 日本', US: '🇺🇸 美国', CN: '🇨🇳 中国',
-  TW: '🇹🇼 台湾', KR: '🇰🇷 韩国', GB: '🇬🇧 英国',
-}
-/** Country code → flag + localized name (falls back to the raw code). */
-export const formatRegion = (c: string) => REGION[c] ?? c
-
-/** Country code → flag emoji only (derived from the 2-letter ISO code). */
-export function formatFlag(c: string) {
+// English country names derived from the ISO code via Intl. i18n comes later.
+const regionNames = new Intl.DisplayNames(['en'], { type: 'region' })
+/** Country code → English country name (falls back to the raw code). */
+export function regionName(c: string) {
   if (!/^[A-Za-z]{2}$/.test(c)) return c
-  return String.fromCodePoint(
-    ...[...c.toUpperCase()].map(ch => 0x1f1e6 + ch.charCodeAt(0) - 65),
-  )
+  try {
+    return regionNames.of(c.toUpperCase()) ?? c
+  }
+  catch {
+    return c
+  }
 }
 
 const LANG: Record<string, string> = {

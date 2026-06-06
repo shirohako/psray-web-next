@@ -10,11 +10,15 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@nuxt/icon": "2.2.3",
     "@tailwindcss/vite": "^4.3.0",
     "lucide": "^1.17.0",
     "nuxt": "^4.4.6",
     "tailwindcss": "^4.3.0",
     "vue": "^3.5.35",
     "vue-router": "^5.1.0"
+  },
+  "devDependencies": {
+    "@iconify-json/flag": "^1.2.12"
   }
 }
