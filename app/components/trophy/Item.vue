@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Trophy, Check, Eye, EyeOff, MessageSquare, Copy, FileText, Users } from 'lucide'
+import { Trophy, Check, Eye, EyeOff, MessageSquare, Copy, FileText, Users, Info } from 'lucide'
 import type { Trophy as TrophyData } from '~/services/trophies'
 
 const props = defineProps<{
@@ -49,7 +49,8 @@ function copy(text: string) {
   if (text && import.meta.client) navigator.clipboard?.writeText(text)
 }
 
-// Recent-earners dialog, opened from the row menu.
+// Dialogs opened from the row menu.
+const detailOpen = ref(false)
 const earnersOpen = ref(false)
 </script>
 
@@ -148,6 +149,15 @@ const earnersOpen = ref(false)
         type="button"
         role="menuitem"
         class="flex w-full items-center gap-2.5 px-3 py-2 text-left text-slate-700 transition hover:bg-slate-50"
+        @click="detailOpen = true; close()"
+      >
+        <LucideIcon :icon="Info" class="size-4 text-slate-400" />
+        查看奖杯
+      </button>
+      <button
+        type="button"
+        role="menuitem"
+        class="flex w-full items-center gap-2.5 px-3 py-2 text-left text-slate-700 transition hover:bg-slate-50"
         @click="copy(name); close()"
       >
         <LucideIcon :icon="Copy" class="size-4 text-slate-400" />
@@ -174,5 +184,6 @@ const earnersOpen = ref(false)
     </template>
   </Popover>
 
+  <TrophyDetailDialog :trophy="trophy" :lang="lang" v-model:open="detailOpen" />
   <TrophyEarnersDialog :trophy-id="trophy.id" :trophy-name="name" v-model:open="earnersOpen" />
 </template>
