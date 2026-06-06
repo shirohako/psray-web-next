@@ -217,8 +217,11 @@ export function useTrophies() {
     players: (id: number | string, query?: { type?: PlayerRankType; page?: number }) =>
       raw.get<PlayerRanking[], PlayersMeta>(`/trophies/${id}/players`, { query }),
 
-    /** Players who recently earned a single trophy (returns the `{ data, meta }` envelope). */
-    trophyPlayers: (trophyId: number | string, query?: { page?: number }) =>
+    /**
+     * Players who recently earned a single trophy (returns the `{ data, meta }` envelope).
+     * `order`: `desc` = most recent first (default), `asc` = earliest first.
+     */
+    trophyPlayers: (trophyId: number | string, query?: { page?: number; order?: 'desc' | 'asc' }) =>
       raw.get<TrophyPlayer[], PlayersMeta>(`/trophies/trophy/${trophyId}/players`, { query }),
 
     /** Community tips/guides for a single trophy (returns the `{ data, meta }` envelope). */
