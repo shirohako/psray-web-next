@@ -1,4 +1,5 @@
 import type { Profile } from '~/services/profile'
+import { REGIONS } from '~/utils/regions'
 
 /**
  * Shared, framework-free helpers for the profile page and its components.
@@ -56,13 +57,18 @@ export function fromNow(unix: number | null | undefined) {
   return `${Math.floor(diff / (365 * day))} 年前`
 }
 
-// English country names derived from the ISO code via Intl. i18n comes later.
+const REGION_NAMES = Object.fromEntries(REGIONS.map(r => [r.code, r.name]))
+
+// English country names derived from our stable region list first. Intl is only
+// a fallback because Node and browsers can ship different ICU display names.
 const regionNames = new Intl.DisplayNames(['en'], { type: 'region' })
 /** Country code → English country name (falls back to the raw code). */
 export function regionName(c: string) {
   if (!/^[A-Za-z]{2}$/.test(c)) return c
+  const code = c.toUpperCase()
+  if (REGION_NAMES[code]) return REGION_NAMES[code]
   try {
-    return regionNames.of(c.toUpperCase()) ?? c
+    return regionNames.of(code) ?? c
   }
   catch {
     return c

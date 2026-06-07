@@ -34,7 +34,7 @@ const isRegistered = computed(() => props.profile.joined_at != null)
         v-if="profile.plus"
         class="absolute right-4 top-4 inline-flex items-center gap-1 rounded-full bg-amber-400/95 px-2.5 py-1 text-xs font-bold text-amber-950 shadow-sm backdrop-blur"
       >
-        <LucideIcon :icon="Crown" class="size-3.5" /> PLUS
+        <LucideIcon :icon="Crown" class="size-3.5" /> PS PLUS
       </span>
     </div>
 

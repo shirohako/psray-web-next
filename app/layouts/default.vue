@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { House, Menu, Gamepad2, Trophy, type IconNode } from 'lucide'
+import { House, Menu, Gamepad2, Trophy, LogOut, type IconNode } from 'lucide'
 
 const route = useRoute()
 const appConfig = useAppConfig()
+const { user, loggedIn, logout } = useAuth()
 
 // Desktop (lg+) sidebar collapse state: full width <-> icon rail.
 // Default expanded; restored from localStorage on mount (read in onMounted to
@@ -45,6 +46,13 @@ const menu: MenuItem[] = [
 function isActive(to: string) {
   return to === '/' ? route.path === '/' : route.path.startsWith(to)
 }
+
+const profilePath = computed(() => user.value?.psnid ? `/p/${encodeURIComponent(user.value.psnid)}` : '/')
+
+async function onLogout() {
+  logout()
+  await navigateTo('/')
+}
 </script>
 
 <template>
@@ -83,8 +91,36 @@ function isActive(to: string) {
         </NuxtLink>
       </div>
 
-      <!-- Right: auth buttons -->
-      <div class="flex items-center gap-2 sm:gap-3">
+      <!-- Right: auth controls -->
+      <div v-if="loggedIn && user" class="flex items-center gap-2 sm:gap-3">
+        <NuxtLink
+          :to="profilePath"
+          class="flex min-w-0 items-center gap-2 rounded-lg px-2 py-1.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-100 hover:text-slate-900 sm:px-3"
+        >
+          <img
+            v-if="user.avatar_url"
+            :src="user.avatar_url"
+            :alt="user.psnid"
+            class="size-8 shrink-0 rounded-full bg-slate-100 object-cover"
+          />
+          <span
+            v-else
+            class="grid size-8 shrink-0 place-items-center rounded-full bg-slate-900 text-xs font-bold text-white"
+          >
+            {{ user.psnid.slice(0, 1).toUpperCase() }}
+          </span>
+          <span class="hidden max-w-32 truncate sm:block">{{ user.psnid }}</span>
+        </NuxtLink>
+        <button
+          type="button"
+          class="inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-slate-900"
+          @click="onLogout"
+        >
+          <LucideIcon :icon="LogOut" class="size-4" />
+          <span class="hidden sm:inline">退出</span>
+        </button>
+      </div>
+      <div v-else class="flex items-center gap-2 sm:gap-3">
         <NuxtLink
           to="/auth/login"
           class="rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 sm:px-4"

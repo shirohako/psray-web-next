@@ -7,6 +7,7 @@ const props = defineProps<{
   type?: string
   placeholder?: string
   autocomplete?: string
+  error?: string
 }>()
 
 const model = defineModel<string>({ required: true })
@@ -19,6 +20,7 @@ const inputType = computed(() =>
 )
 
 const fieldId = useId()
+const errorId = `${fieldId}-error`
 </script>
 
 <template>
@@ -37,8 +39,15 @@ const fieldId = useId()
         :type="inputType"
         :placeholder="placeholder"
         :autocomplete="autocomplete"
-        class="auth-input w-full rounded-xl border border-slate-200 bg-slate-50 py-3.5 pl-11 text-sm text-slate-900 transition-all duration-200 placeholder:text-slate-400 hover:border-slate-300 hover:bg-white focus:border-slate-900 focus:bg-white focus:outline-none focus:ring-4 focus:ring-slate-900/10"
-        :class="isPassword ? 'pr-11' : 'pr-3.5'"
+        :aria-invalid="!!error"
+        :aria-describedby="error ? errorId : undefined"
+        class="auth-input w-full rounded-xl border bg-slate-50 py-3.5 pl-11 text-sm text-slate-900 transition-all duration-200 placeholder:text-slate-400 hover:bg-white focus:bg-white focus:outline-none focus:ring-4"
+        :class="[
+          isPassword ? 'pr-11' : 'pr-3.5',
+          error
+            ? 'border-rose-300 hover:border-rose-400 focus:border-rose-500 focus:ring-rose-500/10'
+            : 'border-slate-200 hover:border-slate-300 focus:border-slate-900 focus:ring-slate-900/10',
+        ]"
       />
       <button
         v-if="isPassword"
@@ -50,5 +59,8 @@ const fieldId = useId()
         <LucideIcon :icon="revealed ? EyeOff : Eye" class="size-4.5" />
       </button>
     </div>
+    <p v-if="error" :id="errorId" class="mt-1.5 text-xs font-medium text-rose-600">
+      {{ error }}
+    </p>
   </div>
 </template>

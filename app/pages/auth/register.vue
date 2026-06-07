@@ -2,6 +2,7 @@
 import { Mail, Lock, ArrowRight } from 'lucide'
 
 useHead({ title: '注册 · PSRay' })
+definePageMeta({ guestOnly: true })
 
 const email = ref('')
 const password = ref('')

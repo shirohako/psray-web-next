@@ -13,13 +13,13 @@ import { ApiError } from '~/utils/ApiError'
  */
 export default defineNuxtPlugin(() => {
   const config = useRuntimeConfig()
-  const token = useCookie<string | null>('auth_token')
 
   const api = $fetch.create({
     baseURL: config.public.apiBase,
     retry: 0,
 
     onRequest({ options }) {
+      const token = useCookie<string | null>('auth_token')
       const headers = new Headers(options.headers)
       headers.set('Accept', 'application/json')
       if (!headers.has('X-Request-Id')) headers.set('X-Request-Id', crypto.randomUUID())

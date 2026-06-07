@@ -56,7 +56,6 @@ export interface Profile {
   mira: number
   philosophers_stone: number
   trophy_tip: number
-  admin_level: number
   page_views: number
 
   sync_interval: number
