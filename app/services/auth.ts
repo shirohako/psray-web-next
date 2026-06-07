@@ -33,6 +33,14 @@ export interface LoginPayload {
   password: string
 }
 
+export interface LogoutPayload {
+  all?: boolean
+}
+
+export interface LogoutResponse {
+  revoked: number
+}
+
 export interface LoginResponse {
   token: string | LoginToken
   token_type?: 'Bearer' | string
@@ -87,7 +95,7 @@ export function loginSession(res: LoginResponse): AuthSession {
 }
 
 export function useAuthApi() {
-  const { get } = useApi()
+  const { get, post } = useApi()
   const { $api } = useNuxtApp()
 
   return {
@@ -113,5 +121,6 @@ export function useAuthApi() {
       return { data, bearerToken }
     },
     me: () => get<AuthSession>('/auth/me'),
+    logout: (payload?: LogoutPayload) => post<LogoutResponse>('/auth/logout', payload),
   }
 }

@@ -121,7 +121,20 @@ export function useAuth() {
     }
   }
 
-  function logout() {
+  async function logout() {
+    try {
+      if (token.value) await useAuthApi().logout()
+    }
+    catch (error) {
+      if (error instanceof ApiError && error.code === 'UNAUTHENTICATED') {
+        clearToken()
+        clearState()
+        return
+      }
+
+      throw error
+    }
+
     clearToken()
     clearState()
   }

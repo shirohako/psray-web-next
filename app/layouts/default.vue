@@ -50,7 +50,7 @@ function isActive(to: string) {
 const profilePath = computed(() => user.value?.psnid ? `/p/${encodeURIComponent(user.value.psnid)}` : '/')
 
 async function onLogout() {
-  logout()
+  await logout()
   await navigateTo('/')
 }
 </script>

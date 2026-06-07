@@ -86,10 +86,10 @@ async function onSubmit() {
         <div class="animate-rise" style="animation-delay: 0.12s">
           <AuthField
             v-model="loginId"
-            label="PSN ID 或邮箱"
+            label="PSN / Email"
             type="text"
             :icon="Mail"
-            placeholder="abyssmoe 或 you@example.com"
+            placeholder="you@example.com"
             autocomplete="username"
             :error="fieldErrors.loginId || fieldErrors.login_id"
           />
