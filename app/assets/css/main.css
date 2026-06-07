@@ -9,3 +9,52 @@
     cursor: pointer;
   }
 }
+
+/* Subtle entrance + ambient motion used by the auth pages. Kept global so the
+   login/register screens can stagger elements with `animation-delay`. */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes kenburns {
+  from {
+    transform: scale(1.04);
+  }
+  to {
+    transform: scale(1.14);
+  }
+}
+
+@layer utilities {
+  .animate-rise {
+    animation: rise 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  .animate-kenburns {
+    animation: kenburns 24s ease-in-out infinite alternate;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-rise,
+  .animate-kenburns {
+    animation: none;
+  }
+}
+
+/* Neutralize the browser's autofill background on auth inputs so an
+   autofilled field looks identical to a normal one. The huge inset shadow
+   masks the UA background; text-fill-color keeps the text on-theme. */
+.auth-input:-webkit-autofill,
+.auth-input:-webkit-autofill:hover,
+.auth-input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--color-slate-900);
+  -webkit-box-shadow: 0 0 0 1000px var(--color-slate-50) inset;
+  caret-color: var(--color-slate-900);
+}

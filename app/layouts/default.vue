@@ -86,13 +86,13 @@ function isActive(to: string) {
       <!-- Right: auth buttons -->
       <div class="flex items-center gap-2 sm:gap-3">
         <NuxtLink
-          to="/login"
+          to="/auth/login"
           class="rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 sm:px-4"
         >
           登录
         </NuxtLink>
         <NuxtLink
-          to="/register"
+          to="/auth/register"
           class="rounded-lg bg-slate-900 px-3 py-2 text-sm font-semibold text-white shadow-sm shadow-slate-900/30 transition hover:bg-slate-800 active:bg-slate-950 sm:px-4"
         >
           注册

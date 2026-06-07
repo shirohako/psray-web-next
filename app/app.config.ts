@@ -22,4 +22,19 @@ export default defineAppConfig({
     defaultBanner:
       'https://i2.abyss.moe/i/2026/05/29/6a1993a296529.webp',
   },
+  /**
+   * Auth pages (`/login`, `/register`). The two-column layout shows this image
+   * with a frosted-glass quote panel on the left, and the form on the right.
+   *
+   * Extend freely — e.g. add `image` per-page, an array of rotating images,
+   * social-login toggles, etc. Everything here is public, client-safe branding.
+   */
+  auth: {
+    /** Background image for the left showcase panel. */
+    image: 'https://i2.abyss.moe/i/2026/06/07/6a24c0096dc63.jpg',
+    /** One is picked at random on each page load for the glass panel. */
+    quotes: [
+      { text: 'この世に奇跡なんて無い。あるのは偶然と必然、そして誰が何をするかだけ。', author: '火村夕' },
+    ] as { text: string; author: string }[],
+  },
 })
