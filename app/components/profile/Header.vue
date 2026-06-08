@@ -40,23 +40,32 @@ const isRegistered = computed(() => props.profile.joined_at != null)
 
     <!-- Header -->
     <div class="px-4 pb-5 sm:px-6">
-      <!-- Avatar (overlapping banner) + follow button on one baseline -->
+      <!-- Avatar (overlapping banner) + actions on one baseline -->
       <div class="flex items-end justify-between gap-4">
         <img
           :src="profile.avatar_url"
           :alt="profile.psnid"
           class="relative z-10 -mt-12 size-24 rounded-xl border-4 border-white bg-white object-cover shadow-md sm:-mt-14 sm:size-28"
         />
-        <button
-          type="button"
-          class="mb-1 inline-flex shrink-0 items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-semibold shadow-sm transition"
-          :class="profile.is_following
-            ? 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-            : 'bg-slate-900 text-white shadow-slate-900/30 hover:bg-slate-800 active:bg-slate-950'"
-        >
-          <LucideIcon :icon="profile.is_following ? UserCheck : UserPlus" class="size-4" />
-          {{ profile.is_following ? '已关注' : '关注' }}
-        </button>
+        <div class="mb-1 flex shrink-0 items-center gap-2">
+          <NuxtLink
+            :to="{ path: '/sync', query: { psnid: profile.psnid } }"
+            class="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50 hover:text-slate-900"
+          >
+            <LucideIcon :icon="RefreshCw" class="size-4" />
+            同步数据
+          </NuxtLink>
+          <button
+            type="button"
+            class="inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-semibold shadow-sm transition"
+            :class="profile.is_following
+              ? 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+              : 'bg-slate-900 text-white shadow-slate-900/30 hover:bg-slate-800 active:bg-slate-950'"
+          >
+            <LucideIcon :icon="profile.is_following ? UserCheck : UserPlus" class="size-4" />
+            {{ profile.is_following ? '已关注' : '关注' }}
+          </button>
+        </div>
       </div>
 
       <!-- Name + about + meta -->

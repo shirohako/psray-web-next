@@ -45,7 +45,7 @@ defineProps<{ profile: Profile }>()
       </div>
       <div class="flex items-center justify-between gap-3">
         <dt class="inline-flex items-center gap-2 text-slate-500">
-          <LucideIcon :icon="RefreshCw" class="size-4 text-slate-400" />同步间隔
+          <LucideIcon :icon="RefreshCw" class="size-4 text-slate-400" />自动同步间隔
         </dt>
         <dd class="font-medium text-slate-900">{{ profile.sync_interval }} 分钟</dd>
       </div>

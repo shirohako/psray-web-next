@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { House, Menu, Gamepad2, Trophy, LogOut, User, type IconNode } from 'lucide'
+import { House, Menu, Gamepad2, Trophy, LogOut, User, RefreshCw, type IconNode } from 'lucide'
 
 const route = useRoute()
 const appConfig = useAppConfig()
@@ -119,6 +119,14 @@ async function onLogout() {
             >
               <LucideIcon :icon="User" class="size-4 text-slate-400" />
               个人资料
+            </NuxtLink>
+            <NuxtLink
+              :to="{ path: '/sync', query: { psnid: user.psnid } }"
+              class="flex items-center gap-2.5 px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-50 hover:text-slate-900"
+              @click="close"
+            >
+              <LucideIcon :icon="RefreshCw" class="size-4 text-slate-400" />
+              同步账户
             </NuxtLink>
             <button
               type="button"

@@ -87,13 +87,13 @@ async function onSubmit() {
 
 onBeforeUnmount(stopPolling)
 
-// Prefill + auto-start when arriving from a link, e.g. `/sync?psnid=foo`.
+// Prefill from links like `/sync?psnid=foo`, but never auto-submit. Syncing is
+// intentionally user-triggered so opening a link cannot enqueue work by itself.
 onMounted(() => {
   const q = useRoute().query.psnid
   const id = (Array.isArray(q) ? q[0] : q)?.trim()
   if (!id) return
   psnid.value = id
-  onSubmit()
 })
 </script>
 
@@ -107,7 +107,7 @@ onMounted(() => {
         </span>
         <div>
           <h2 class="text-base font-semibold text-slate-900">同步 PSN 资料</h2>
-          <p class="mt-1 text-sm text-slate-500">输入 PSN ID 提交同步请求，提交后每 5 秒自动刷新进度。</p>
+          <p class="mt-1 text-sm text-slate-500">输入 PSN ID 提交同步至服务器同步队列，后台会按顺序处理您的请求。</p>
         </div>
       </div>
 
@@ -162,7 +162,7 @@ onMounted(() => {
           class="inline-flex shrink-0 items-center gap-1.5 text-xs font-medium text-slate-400"
         >
           <span class="size-1.5 animate-pulse rounded-full bg-emerald-500" />
-          每 5 秒刷新
+          进度每 5 秒刷新
         </span>
       </div>
 
@@ -213,14 +213,14 @@ onMounted(() => {
       <div v-if="info.failed_count > 0 || info.skipped_count > 0" class="mt-3 flex flex-wrap gap-2">
         <span
           v-if="info.failed_count > 0"
-          class="inline-flex items-center gap-1 rounded-full bg-rose-50 px-2.5 py-1 text-xs font-medium text-rose-600"
+          class="inline-flex items-center gap-1 rounded-md border border-rose-200 bg-rose-50 px-2.5 py-1 text-xs font-medium text-rose-600"
         >
           <LucideIcon :icon="XCircle" class="size-3.5" />
           失败 {{ info.failed_count }}
         </span>
         <span
           v-if="info.skipped_count > 0"
-          class="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2.5 py-1 text-xs font-medium text-amber-600"
+          class="inline-flex items-center gap-1 rounded-md border border-amber-200 bg-amber-50 px-2.5 py-1 text-xs font-medium text-amber-600"
         >
           <LucideIcon :icon="SkipForward" class="size-3.5" />
           跳过 {{ info.skipped_count }}
