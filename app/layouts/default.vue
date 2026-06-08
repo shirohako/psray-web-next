@@ -93,7 +93,7 @@ async function onLogout() {
 
       <!-- Right: auth controls -->
       <div v-if="loggedIn && user" class="flex items-center gap-2 sm:gap-3">
-        <Popover
+        <DropdownMenu
           align="right"
           class="flex min-w-0 cursor-pointer items-center gap-2 rounded-lg px-2 py-1.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-100 hover:text-slate-900 sm:px-3"
         >
@@ -137,7 +137,7 @@ async function onLogout() {
               退出登录
             </button>
           </template>
-        </Popover>
+        </DropdownMenu>
       </div>
       <div v-else class="flex items-center gap-2 sm:gap-3">
         <NuxtLink

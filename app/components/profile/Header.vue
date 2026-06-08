@@ -98,7 +98,7 @@ const loginTo = computed(() => ({
           </button>
 
           <!-- Following: a menu trigger; "取消关注" lives in the dropdown. -->
-          <Popover
+          <DropdownMenu
             v-else-if="profile.is_following"
             align="right"
             panel-class="!min-w-32"
@@ -123,7 +123,7 @@ const loginTo = computed(() => ({
                 取消关注
               </button>
             </template>
-          </Popover>
+          </DropdownMenu>
 
           <!-- Not following: call-to-action. -->
           <button

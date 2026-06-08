@@ -6,30 +6,26 @@ export default { inheritAttrs: false }
 
 <script setup lang="ts">
 /**
- * Click-anywhere context menu. The default slot is the trigger; clicking
- * anywhere on it opens a teleported menu (the `#menu` slot) at the exact cursor
- * position, flipping/clamping so it stays on screen. Closes on outside click,
- * Esc, scroll, or resize. `$attrs` (class, etc.) bind to the trigger element, so
- * style it like any element.
+ * Anchored dropdown menu. The default slot is the trigger; clicking it opens a
+ * teleported menu (the `#menu` slot) anchored directly under the trigger and
+ * aligned to its left or right edge. Closes on outside click, Esc, scroll, or
+ * resize. `$attrs` (class, etc.) bind to the trigger element, so style it like
+ * any element.
  *
- * Use this when the trigger is a large surface (e.g. a list row) and the menu
- * should appear where the user clicked. For a menu anchored under a specific
- * button, use `DropdownMenu` instead.
- *
- * Put `@click.stop` on any inner control that should keep its own behavior
- * without opening the menu.
+ * Use this for menus with a clear trigger button (avatar menu, "已关注" button).
+ * For a context menu that should open at the cursor, use `Popover` instead.
  *
  * ```vue
- * <Popover class="flex cursor-pointer …">
+ * <DropdownMenu align="right" class="cursor-pointer …">
  *   …trigger content…
  *   <template #menu="{ close }">
- *     <button class="…" @click="doThing(); close()">复制</button>
+ *     <button @click="doThing(); close()">退出登录</button>
  *   </template>
- * </Popover>
+ * </DropdownMenu>
  * ```
  */
 const props = withDefaults(defineProps<{
-  /** Which menu edge sits at the cursor (the menu opens toward the other side). */
+  /** Which trigger edge the menu aligns to. */
   align?: 'left' | 'right'
   /** Extra classes for the teleported menu panel. */
   panelClass?: string
@@ -39,16 +35,17 @@ const emit = defineEmits<{ open: []; close: [] }>()
 
 const open = ref(false)
 const position = ref({ top: 0, left: 0 })
+const trigger = ref<HTMLElement | null>(null)
 const panel = ref<HTMLElement | null>(null)
-// Cursor position captured at open; the panel size isn't known until after
-// render, so adjust() resolves the final placement.
-let point = { x: 0, y: 0 }
+// Trigger bounds captured at open; the final left edge needs the panel width,
+// which isn't known until after render, so adjust() resolves it.
+let anchor: DOMRect | null = null
 let observer: ResizeObserver | null = null
 
-function toggle(event: MouseEvent) {
+function toggle() {
   if (open.value) return close()
-  point = { x: event.clientX, y: event.clientY }
-  position.value = { top: point.y, left: point.x }
+  anchor = trigger.value?.getBoundingClientRect() ?? null
+  if (anchor) position.value = { top: anchor.bottom + 8, left: anchor.left }
   open.value = true
   emit('open')
   nextTick(() => {
@@ -64,26 +61,17 @@ function toggle(event: MouseEvent) {
   window.addEventListener('keydown', onKey)
 }
 
-// Open from the cursor, flipping toward the opposite edge near a screen border.
+// Anchor to the requested trigger edge, then nudge back inside the viewport.
 function adjust() {
   const el = panel.value
-  if (!el) return
+  if (!el || !anchor) return
   const rect = el.getBoundingClientRect()
   const margin = 8
-
-  let left = props.align === 'right' ? point.x - rect.width : point.x
-  // Flip horizontally if the chosen side overflows.
-  if (left + rect.width + margin > window.innerWidth) left = point.x - rect.width
-  if (left < margin) left = point.x
-
-  let top = point.y + 4
-  // Flip above the cursor if it would overflow the bottom.
-  if (top + rect.height + margin > window.innerHeight) top = point.y - rect.height
-
-  position.value = {
-    top: Math.min(Math.max(margin, top), window.innerHeight - rect.height - margin),
-    left: Math.min(Math.max(margin, left), window.innerWidth - rect.width - margin),
-  }
+  let top = anchor.bottom + 8
+  let left = props.align === 'right' ? anchor.right - rect.width : anchor.left
+  if (left + rect.width + margin > window.innerWidth) left = window.innerWidth - rect.width - margin
+  if (top + rect.height + margin > window.innerHeight) top = window.innerHeight - rect.height - margin
+  position.value = { top: Math.max(margin, top), left: Math.max(margin, left) }
 }
 
 function onKey(e: KeyboardEvent) {
@@ -105,7 +93,7 @@ onUnmounted(close)
 </script>
 
 <template>
-  <div v-bind="$attrs" @click="toggle">
+  <div ref="trigger" v-bind="$attrs" @click="toggle">
     <slot />
   </div>
 
