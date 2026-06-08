@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Megaphone, Search } from 'lucide'
+import { Megaphone, Search, RefreshCw } from 'lucide'
 
 const psnid = ref('')
 
@@ -7,6 +7,12 @@ function goToProfile() {
   const id = psnid.value.trim()
   if (!id) return
   navigateTo(`/p/${encodeURIComponent(id)}`)
+}
+
+function goToSync() {
+  const id = psnid.value.trim()
+  if (!id) return
+  navigateTo(`/sync?psnid=${encodeURIComponent(id)}`)
 }
 
 useHead({ title: 'PSRay' })
@@ -21,11 +27,11 @@ useHead({ title: 'PSRay' })
           <LucideIcon :icon="Megaphone" class="size-5" />
         </span>
         <div>
-          <h2 class="text-base font-semibold text-slate-900">We're rebuilding PSRay</h2>
+          <h2 class="text-base font-semibold text-slate-900">A new PSRay is on the way</h2>
           <p class="mt-1.5 text-sm leading-relaxed text-slate-500">
-            The site is currently under reconstruction. All existing features and historical data
-            will be preserved, and will be back online once the rebuild is complete. Thanks for
-            your patience.
+            PSRay is being rebuilt with a cleaner foundation and a better long-term experience.
+            Features will return gradually during the transition, and your historical data will
+            remain intact. Thank you for sticking with us while we bring the new site online.
           </p>
         </div>
       </div>
@@ -51,9 +57,19 @@ useHead({ title: 'PSRay' })
         <button
           type="submit"
           :disabled="!psnid.trim()"
-          class="shrink-0 rounded-lg bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white shadow-sm shadow-slate-900/30 transition hover:bg-slate-800 active:bg-slate-950 disabled:opacity-40 disabled:hover:bg-slate-900"
+          class="inline-flex shrink-0 items-center gap-1.5 rounded-lg bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white shadow-sm shadow-slate-900/30 transition hover:bg-slate-800 active:bg-slate-950 disabled:opacity-40 disabled:hover:bg-slate-900"
         >
+          <LucideIcon :icon="Search" class="size-4" />
           查看
+        </button>
+        <button
+          type="button"
+          :disabled="!psnid.trim()"
+          @click="goToSync"
+          class="inline-flex shrink-0 items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 hover:text-slate-900 disabled:opacity-40 disabled:hover:bg-white"
+        >
+          <LucideIcon :icon="RefreshCw" class="size-4" />
+          同步
         </button>
       </form>
     </section>

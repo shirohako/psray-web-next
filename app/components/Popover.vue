@@ -7,8 +7,8 @@ export default { inheritAttrs: false }
 <script setup lang="ts">
 /**
  * Click-anywhere popover menu. The default slot is the trigger; clicking
- * anywhere on it opens a teleported menu (the `#menu` slot) anchored at the
- * cursor. Closes on outside click, Esc, scroll, or resize. `$attrs` (class,
+ * anywhere on it opens a teleported menu (the `#menu` slot) anchored under the
+ * trigger. Closes on outside click, Esc, scroll, or resize. `$attrs` (class,
  * etc.) bind to the trigger root, so style it like any element.
  *
  * Put `@click.stop` on any inner control that should keep its own behavior
@@ -23,16 +23,26 @@ export default { inheritAttrs: false }
  * </Popover>
  * ```
  */
+const props = withDefaults(defineProps<{
+  /** Which trigger edge the menu aligns to. */
+  align?: 'left' | 'right'
+}>(), { align: 'left' })
+
 const emit = defineEmits<{ open: []; close: [] }>()
 
 const open = ref(false)
 const position = ref({ top: 0, left: 0 })
+const trigger = ref<HTMLElement | null>(null)
 const panel = ref<HTMLElement | null>(null)
+// Trigger bounds captured at open; the final left edge needs the panel width,
+// which isn't known until after render, so adjust() resolves it.
+let anchor: DOMRect | null = null
 let observer: ResizeObserver | null = null
 
-function toggle(e: MouseEvent) {
+function toggle() {
   if (open.value) return close()
-  position.value = { top: e.clientY, left: e.clientX }
+  anchor = trigger.value?.getBoundingClientRect() ?? null
+  if (anchor) position.value = { top: anchor.bottom + 8, left: anchor.left }
   open.value = true
   emit('open')
   nextTick(() => {
@@ -48,13 +58,14 @@ function toggle(e: MouseEvent) {
   window.addEventListener('keydown', onKey)
 }
 
-// Nudge the panel back inside the viewport when the cursor is near an edge.
+// Anchor to the requested trigger edge, then nudge back inside the viewport.
 function adjust() {
   const el = panel.value
-  if (!el) return
+  if (!el || !anchor) return
   const rect = el.getBoundingClientRect()
   const margin = 8
-  let { top, left } = position.value
+  let top = anchor.bottom + 8
+  let left = props.align === 'right' ? anchor.right - rect.width : anchor.left
   if (left + rect.width + margin > window.innerWidth) left = window.innerWidth - rect.width - margin
   if (top + rect.height + margin > window.innerHeight) top = window.innerHeight - rect.height - margin
   position.value = { top: Math.max(margin, top), left: Math.max(margin, left) }
@@ -79,7 +90,7 @@ onUnmounted(close)
 </script>
 
 <template>
-  <div v-bind="$attrs" @click="toggle">
+  <div ref="trigger" v-bind="$attrs" @click="toggle">
     <slot />
   </div>
 
@@ -93,7 +104,8 @@ onUnmounted(close)
         <div
           ref="panel"
           role="menu"
-          class="fixed min-w-44 overflow-hidden rounded-xl border border-slate-200 bg-white py-1 text-sm shadow-lg ring-1 ring-slate-900/5 origin-top-left"
+          class="fixed min-w-44 overflow-hidden rounded-xl border border-slate-200 bg-white py-1 text-sm shadow-lg ring-1 ring-slate-900/5"
+          :class="align === 'right' ? 'origin-top-right' : 'origin-top-left'"
           :style="{ top: `${position.top}px`, left: `${position.left}px` }"
           @click.stop
         >

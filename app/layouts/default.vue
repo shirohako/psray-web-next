@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { House, Menu, Gamepad2, Trophy, LogOut, type IconNode } from 'lucide'
+import { House, Menu, Gamepad2, Trophy, LogOut, User, type IconNode } from 'lucide'
 
 const route = useRoute()
 const appConfig = useAppConfig()
@@ -93,9 +93,9 @@ async function onLogout() {
 
       <!-- Right: auth controls -->
       <div v-if="loggedIn && user" class="flex items-center gap-2 sm:gap-3">
-        <NuxtLink
-          :to="profilePath"
-          class="flex min-w-0 items-center gap-2 rounded-lg px-2 py-1.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-100 hover:text-slate-900 sm:px-3"
+        <Popover
+          align="right"
+          class="flex min-w-0 cursor-pointer items-center gap-2 rounded-lg px-2 py-1.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-100 hover:text-slate-900 sm:px-3"
         >
           <img
             v-if="user.avatar_url"
@@ -110,15 +110,26 @@ async function onLogout() {
             {{ user.psnid.slice(0, 1).toUpperCase() }}
           </span>
           <span class="hidden max-w-32 truncate sm:block">{{ user.psnid }}</span>
-        </NuxtLink>
-        <button
-          type="button"
-          class="inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-slate-900"
-          @click="onLogout"
-        >
-          <LucideIcon :icon="LogOut" class="size-4" />
-          <span class="hidden sm:inline">退出</span>
-        </button>
+
+          <template #menu="{ close }">
+            <NuxtLink
+              :to="profilePath"
+              class="flex items-center gap-2.5 px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-50 hover:text-slate-900"
+              @click="close"
+            >
+              <LucideIcon :icon="User" class="size-4 text-slate-400" />
+              个人资料
+            </NuxtLink>
+            <button
+              type="button"
+              class="flex w-full items-center gap-2.5 px-3 py-2 text-left text-sm font-medium text-slate-600 transition hover:bg-slate-50 hover:text-slate-900"
+              @click="close(); onLogout()"
+            >
+              <LucideIcon :icon="LogOut" class="size-4 text-slate-400" />
+              退出登录
+            </button>
+          </template>
+        </Popover>
       </div>
       <div v-else class="flex items-center gap-2 sm:gap-3">
         <NuxtLink
