@@ -42,6 +42,13 @@ async function pollOnce() {
   if (!activePsnid.value) return
   try {
     const s = await sync.status(activePsnid.value)
+    if (!s) {
+      if (info.value) {
+        info.value = null
+        stopPolling()
+      }
+      return
+    }
     info.value = s
     if (s.status === 'completed' || s.status === 'failed') stopPolling()
   }

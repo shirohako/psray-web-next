@@ -27,7 +27,7 @@
 
   <!-- Profile -->
   <div v-else class="space-y-6">
-    <ProfileHeader :profile="profile" />
+    <ProfileHeader :profile="profile" :follow-pending="followPending" @toggle-follow="toggleFollow" />
     <ProfileTrophyCalendar v-if="profile.calendar?.length" :calendar="profile.calendar" />
 
     <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
@@ -49,13 +49,65 @@
 <script setup lang="ts">
 import { XCircle } from 'lucide'
 import type { Profile } from '~/services/profile'
+import { useProfiles } from '~/services/profile'
+import { ApiError } from '~/utils/ApiError'
 
 const route = useRoute()
 const psnid = computed(() => String(route.params.psnid))
+const auth = useAuth()
 
 const { data: profile, pending, error } = await useApiFetch<Profile>(
   () => `/profile/${psnid.value}`,
 )
+
+const { follow, unfollow } = useProfiles()
+const followPending = ref(false)
+
+function redirectToLogin() {
+  return navigateTo({
+    path: '/auth/login',
+    query: { redirect: route.fullPath },
+  })
+}
+
+/**
+ * Toggle the follow relationship. Optimistically flips `is_following` and the
+ * follower count (so the header button and the social card update instantly),
+ * then reconciles with the server response and rolls back on failure.
+ */
+async function toggleFollow() {
+  const p = profile.value
+  if (!p || followPending.value) return
+  if (!auth.loggedIn.value) {
+    await redirectToLogin()
+    return
+  }
+
+  const next = !p.is_following
+  p.is_following = next
+  p.followers += next ? 1 : -1
+
+  followPending.value = true
+  try {
+    const res = next ? await follow(p.psnid) : await unfollow(p.psnid)
+    if (res.following !== next) {
+      p.is_following = res.following
+      p.followers += res.following ? 1 : -1
+    }
+  }
+  catch (err) {
+    p.is_following = !next
+    p.followers += next ? -1 : 1
+    if (err instanceof ApiError && err.code === 'UNAUTHENTICATED') {
+      await redirectToLogin()
+      return
+    }
+    throw err
+  }
+  finally {
+    followPending.value = false
+  }
+}
 
 useHead(() => ({ title: profile.value ? `${profile.value.psnid} · 个人资料` : '个人资料' }))
 </script>

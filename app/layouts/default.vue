@@ -148,7 +148,7 @@ async function onLogout() {
         </NuxtLink>
         <NuxtLink
           to="/auth/register"
-          class="rounded-lg bg-slate-900 px-3 py-2 text-sm font-semibold text-white shadow-sm shadow-slate-900/30 transition hover:bg-slate-800 active:bg-slate-950 sm:px-4"
+          class="rounded-lg bg-slate-950 px-3 py-2 text-sm font-semibold text-white shadow-sm shadow-slate-950/30 transition hover:bg-black active:bg-black sm:px-4"
         >
           注册
         </NuxtLink>

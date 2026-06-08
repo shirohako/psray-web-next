@@ -3,7 +3,7 @@
  *
  * `submit` enqueues a sync job; `status` reports the user's most recent job.
  * Both build on `useApi()`, so errors surface as {@link ApiError} — branch on
- * `code` (e.g. `SYNC_WORKER_UNAVAILABLE`, `NOT_FOUND`).
+ * `code` (e.g. `SYNC_WORKER_UNAVAILABLE`).
  */
 
 /** Sync job lifecycle. */
@@ -54,8 +54,8 @@ export function useSync() {
     submit: (psnid: string) =>
       post<SyncSubmitResult>(`/profile/sync/${encodeURIComponent(psnid)}`),
 
-    /** Latest sync job status for `psnid`. Throws `NOT_FOUND` when there is no record. */
+    /** Latest sync job status for `psnid`; `null` means no retained status exists. */
     status: (psnid: string) =>
-      get<SyncStatusInfo>(`/profile/sync/${encodeURIComponent(psnid)}/status`),
+      get<SyncStatusInfo | null>(`/profile/sync/${encodeURIComponent(psnid)}/status`),
   }
 }

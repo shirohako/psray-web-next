@@ -1,11 +1,15 @@
 <script setup lang="ts">
 import {
-  Trophy, Eye, UserPlus, UserCheck, RefreshCw,
+  Trophy, Eye, UserPlus, UserCheck, UserMinus, ChevronDown, RefreshCw, Loader2,
   Crown, Medal, MapPin, Sparkles, BadgeCheck,
 } from 'lucide'
 import type { Profile } from '~/services/profile'
 
-const props = defineProps<{ profile: Profile }>()
+const props = defineProps<{ profile: Profile, followPending?: boolean }>()
+defineEmits<{ toggleFollow: [] }>()
+
+const auth = useAuth()
+const route = useRoute()
 
 // Banner image: per-user banner when the API exposes one, else the global
 // default from `app.config.ts`.
@@ -20,6 +24,12 @@ const total = computed(() => sumTrophies(props.profile))
  * the backend exposes a dedicated flag.
  */
 const isRegistered = computed(() => props.profile.joined_at != null)
+const isLoggedIn = computed(() => auth.loggedIn.value)
+const authBusy = computed(() => auth.loading.value || (auth.hasToken.value && !auth.ready.value))
+const loginTo = computed(() => ({
+  path: '/auth/login',
+  query: { redirect: route.fullPath },
+}))
 </script>
 
 <template>
@@ -55,15 +65,80 @@ const isRegistered = computed(() => props.profile.joined_at != null)
             <LucideIcon :icon="RefreshCw" class="size-4" />
             同步数据
           </NuxtLink>
+          <!-- Auth state still resolving: keep the action visually present but unavailable. -->
           <button
+            v-if="authBusy && !profile.can_follow"
             type="button"
-            class="inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-semibold shadow-sm transition"
-            :class="profile.is_following
-              ? 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-              : 'bg-slate-900 text-white shadow-slate-900/30 hover:bg-slate-800 active:bg-slate-950'"
+            disabled
+            class="inline-flex cursor-wait items-center gap-1.5 rounded-lg border border-zinc-200 bg-zinc-50 px-4 py-2 text-sm font-semibold text-zinc-500 shadow-sm"
           >
-            <LucideIcon :icon="profile.is_following ? UserCheck : UserPlus" class="size-4" />
-            {{ profile.is_following ? '已关注' : '关注' }}
+            <LucideIcon :icon="Loader2" class="size-4 animate-spin" />
+            登录中
+          </button>
+
+          <!-- Anonymous viewers can start the action and return after login. -->
+          <NuxtLink
+            v-else-if="!isLoggedIn && !profile.can_follow"
+            :to="loginTo"
+            class="inline-flex items-center gap-1.5 rounded-lg bg-zinc-800 px-4 py-2 text-sm font-semibold text-white shadow-sm shadow-zinc-700/30 transition hover:bg-zinc-950 active:bg-zinc-950"
+          >
+            <LucideIcon :icon="UserPlus" class="size-4" />
+            关注
+          </NuxtLink>
+
+          <!-- Logged-in but can't follow, usually viewing yourself. -->
+          <button
+            v-else-if="!profile.can_follow"
+            type="button"
+            disabled
+            class="inline-flex cursor-not-allowed items-center gap-1.5 rounded-lg border border-zinc-200 bg-zinc-50 px-4 py-2 text-sm font-semibold text-zinc-400 shadow-sm"
+          >
+            <LucideIcon :icon="UserPlus" class="size-4" />
+            关注
+          </button>
+
+          <!-- Following: a menu trigger; "取消关注" lives in the dropdown. -->
+          <Popover
+            v-else-if="profile.is_following"
+            align="right"
+            panel-class="!min-w-32"
+            class="inline-flex cursor-pointer items-center gap-1.5 rounded-lg bg-zinc-950 px-4 py-2 text-sm font-semibold text-white shadow-sm shadow-zinc-900/30 transition hover:bg-zinc-950"
+          >
+            <LucideIcon
+              :icon="followPending ? Loader2 : UserCheck"
+              class="size-4"
+              :class="followPending && 'animate-spin'"
+            />
+            已关注
+            <LucideIcon :icon="ChevronDown" class="size-3.5 text-zinc-400" />
+            <template #menu="{ close }">
+              <button
+                type="button"
+                role="menuitem"
+                :disabled="followPending"
+                class="flex w-full items-center gap-2 px-3 py-2 text-left text-zinc-700 transition hover:bg-rose-50 hover:text-rose-700 disabled:opacity-60"
+                @click="$emit('toggleFollow'); close()"
+              >
+                <LucideIcon :icon="UserMinus" class="size-4 text-rose-500" />
+                取消关注
+              </button>
+            </template>
+          </Popover>
+
+          <!-- Not following: call-to-action. -->
+          <button
+            v-else
+            type="button"
+            :disabled="followPending"
+            class="inline-flex items-center gap-1.5 rounded-lg bg-zinc-800 px-4 py-2 text-sm font-semibold text-white shadow-sm shadow-zinc-700/30 transition hover:bg-zinc-950 active:bg-zinc-950 disabled:opacity-60"
+            @click="$emit('toggleFollow')"
+          >
+            <LucideIcon
+              :icon="followPending ? Loader2 : UserPlus"
+              class="size-4"
+              :class="followPending && 'animate-spin'"
+            />
+            关注
           </button>
         </div>
       </div>

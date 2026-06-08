@@ -69,7 +69,11 @@ export interface Profile {
   /** Unix seconds. */
   updated_at: number | null
 
+  /** Whether the current viewer can follow this profile (logged in & not self). */
+  can_follow: boolean
+  /** Whether the current viewer is following this profile. */
   is_following: boolean
+  /** Whether this profile follows the current viewer. */
   is_follower: boolean
 
   milestones: unknown | null
@@ -170,11 +174,22 @@ export interface RecentTrophy {
   }
 }
 
+/** Response of the follow/unfollow endpoints. */
+export interface FollowResult {
+  following: boolean
+}
+
 export function useProfiles() {
-  const { get, raw } = useApi()
+  const { get, post, delete: del, raw } = useApi()
 
   return {
     find: (psnid: string) => get<Profile>(`/profile/${psnid}`),
+
+    /** Follow a user. Idempotent — re-following an already-followed user succeeds. */
+    follow: (psnid: string) => post<FollowResult>(`/user/following/${psnid}`),
+
+    /** Unfollow a user. Idempotent — unfollowing a non-followed user succeeds. */
+    unfollow: (psnid: string) => del<FollowResult>(`/user/following/${psnid}`),
 
     /** Recently played titles (paginated — returns the `{ data, meta }` envelope). */
     recentlyPlayed: (psnid: string, query?: Record<string, unknown>) =>

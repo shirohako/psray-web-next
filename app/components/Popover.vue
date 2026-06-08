@@ -26,7 +26,9 @@ export default { inheritAttrs: false }
 const props = withDefaults(defineProps<{
   /** Which trigger edge the menu aligns to. */
   align?: 'left' | 'right'
-}>(), { align: 'left' })
+  /** Extra classes for the teleported menu panel. */
+  panelClass?: string
+}>(), { align: 'left', panelClass: '' })
 
 const emit = defineEmits<{ open: []; close: [] }>()
 
@@ -105,7 +107,7 @@ onUnmounted(close)
           ref="panel"
           role="menu"
           class="fixed min-w-44 overflow-hidden rounded-xl border border-slate-200 bg-white py-1 text-sm shadow-lg ring-1 ring-slate-900/5"
-          :class="align === 'right' ? 'origin-top-right' : 'origin-top-left'"
+          :class="[align === 'right' ? 'origin-top-right' : 'origin-top-left', panelClass]"
           :style="{ top: `${position.top}px`, left: `${position.left}px` }"
           @click.stop
         >
