@@ -47,7 +47,7 @@
 </template>
 
 <script setup lang="ts">
-import { XCircle } from 'lucide'
+import { UserCheck, XCircle } from 'lucide'
 import type { Profile } from '~/services/profile'
 import { useProfiles } from '~/services/profile'
 import { ApiError } from '~/utils/ApiError'
@@ -62,6 +62,7 @@ const { data: profile, pending, error } = await useApiFetch<Profile>(
 
 const { follow, unfollow } = useProfiles()
 const followPending = ref(false)
+const toast = useToast()
 
 function redirectToLogin() {
   return navigateTo({
@@ -93,6 +94,13 @@ async function toggleFollow() {
     if (res.following !== next) {
       p.is_following = res.following
       p.followers += res.following ? 1 : -1
+    }
+    if (next && p.is_following) {
+      toast.add({
+        title: '关注成功',
+        description: `已关注 ${p.psnid}`,
+        icon: UserCheck,
+      })
     }
   }
   catch (err) {
