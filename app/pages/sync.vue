@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { RefreshCw, Search, Clock, Loader, CheckCircle2, XCircle, SkipForward, Activity, ListOrdered, Gamepad2, ArrowRight } from 'lucide'
+import { RefreshCw, Search, Clock, Loader, CheckCircle2, XCircle, SkipForward, Activity, ListOrdered, Gamepad2, ArrowRight, SendHorizontal } from 'lucide'
 import { ApiError } from '~/utils/ApiError'
 import { useSync, type SyncStatus, type SyncStatusInfo } from '~/services/sync'
 
@@ -15,7 +15,12 @@ const errorMessage = ref('')
 const activePsnid = ref('')
 const info = ref<SyncStatusInfo | null>(null)
 const polling = ref(false)
-let timer: ReturnType<typeof setInterval> | null = null
+const POLL_INTERVAL_MS = 5000
+const REFRESHING_MIN_MS = 650
+const countdown = ref(POLL_INTERVAL_MS / 1000)
+const refreshing = ref(false)
+let pollTimer: ReturnType<typeof setInterval> | null = null
+let countdownTimer: ReturnType<typeof setInterval> | null = null
 
 const canSubmit = computed(() => psnid.value.trim() !== '' && !submitting.value)
 const progress = computed(() => Math.max(0, Math.min(100, info.value?.progress ?? 0)))
@@ -33,9 +38,44 @@ const inProgress = computed(() =>
   !!info.value && info.value.status !== 'completed' && info.value.status !== 'failed')
 
 function stopPolling() {
-  if (timer) clearInterval(timer)
-  timer = null
+  if (pollTimer) clearInterval(pollTimer)
+  if (countdownTimer) clearInterval(countdownTimer)
+  pollTimer = null
+  countdownTimer = null
   polling.value = false
+  refreshing.value = false
+  countdown.value = POLL_INTERVAL_MS / 1000
+}
+
+function resetCountdown() {
+  countdown.value = POLL_INTERVAL_MS / 1000
+}
+
+function startCountdown() {
+  if (countdownTimer) clearInterval(countdownTimer)
+  resetCountdown()
+  countdownTimer = setInterval(() => {
+    countdown.value = Math.max(1, countdown.value - 1)
+  }, 1000)
+}
+
+function wait(ms: number) {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
+
+async function pollWithRefreshTransition() {
+  countdown.value = 0
+  refreshing.value = true
+  const startedAt = Date.now()
+
+  await pollOnce()
+
+  const remaining = REFRESHING_MIN_MS - (Date.now() - startedAt)
+  if (remaining > 0) await wait(remaining)
+
+  if (!polling.value) return
+  resetCountdown()
+  refreshing.value = false
 }
 
 async function pollOnce() {
@@ -60,6 +100,19 @@ async function pollOnce() {
   }
 }
 
+async function startPollingFor(id: string) {
+  activePsnid.value = id
+  polling.value = true
+  await pollOnce()
+  // First read may have hit a terminal state already; only keep polling if not.
+  if (polling.value) {
+    startCountdown()
+    pollTimer = setInterval(async () => {
+      await pollWithRefreshTransition()
+    }, POLL_INTERVAL_MS)
+  }
+}
+
 async function onSubmit() {
   if (!canSubmit.value) return
 
@@ -71,14 +124,15 @@ async function onSubmit() {
 
   try {
     await sync.submit(id)
-    activePsnid.value = id
-    polling.value = true
-    await pollOnce()
-    // First read may have hit a terminal state already; only keep polling if not.
-    if (polling.value) timer = setInterval(pollOnce, 5000)
+    await startPollingFor(id)
   }
   catch (error) {
     if (error instanceof ApiError) {
+      if (error.code === 'SYNC_IN_PROGRESS') {
+        await startPollingFor(id)
+        return
+      }
+
       errorMessage.value = error.code === 'SYNC_WORKER_UNAVAILABLE'
         ? '同步服务暂时不可用，请稍后再试。'
         : error.message || '提交同步请求失败。'
@@ -105,7 +159,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="mx-auto max-w-2xl space-y-6">
+  <div class="mx-auto max-w-xl space-y-6">
     <!-- Submit form -->
     <section class="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
       <div class="flex items-start gap-3.5">
@@ -122,7 +176,7 @@ onMounted(() => {
         <div class="relative flex-1">
           <LucideIcon
             :icon="Search"
-            class="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-400"
+            class="pointer-events-none absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-slate-400"
           />
           <input
             v-model="psnid"
@@ -131,15 +185,20 @@ onMounted(() => {
             autocapitalize="off"
             autocomplete="off"
             spellcheck="false"
-            class="w-full rounded-lg border border-slate-200 bg-white py-2.5 pl-9 pr-3 text-sm text-slate-900 transition placeholder:text-slate-400 focus:border-slate-400 focus:outline-none"
+            class="w-full rounded-lg border border-slate-200 bg-white py-2 pl-8 pr-2.5 text-xs text-slate-900 transition placeholder:text-slate-400 focus:border-slate-400 focus:outline-none"
           />
         </div>
         <button
           type="submit"
           :disabled="!canSubmit"
-          class="shrink-0 rounded-lg bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white shadow-sm shadow-slate-900/30 transition hover:bg-slate-800 active:bg-slate-950 disabled:opacity-40 disabled:hover:bg-slate-900"
+          class="inline-flex shrink-0 items-center gap-1.5 rounded-lg bg-slate-900 px-3.5 py-2 text-xs font-semibold text-white shadow-sm shadow-slate-900/30 transition hover:bg-slate-800 active:bg-slate-950 disabled:opacity-40 disabled:hover:bg-slate-900"
         >
-          {{ submitting ? '提交中…' : '同步' }}
+          <LucideIcon
+            :icon="submitting ? Loader : SendHorizontal"
+            class="size-3.5"
+            :class="{ 'animate-spin': submitting }"
+          />
+          {{ submitting ? '提交中…' : '提交' }}
         </button>
       </form>
 
@@ -166,29 +225,51 @@ onMounted(() => {
         </div>
         <span
           v-if="polling"
-          class="inline-flex shrink-0 items-center gap-1.5 text-xs font-medium text-slate-400"
+          class="inline-flex h-5 shrink-0 items-center gap-1.5 overflow-hidden text-xs font-medium text-slate-400"
         >
-          <span class="size-1.5 animate-pulse rounded-full bg-emerald-500" />
-          进度每 5 秒刷新
+          <Transition
+            mode="out-in"
+            enter-active-class="transition duration-200 ease-out"
+            enter-from-class="translate-y-1 opacity-0"
+            leave-active-class="transition duration-150 ease-in"
+            leave-to-class="-translate-y-1 opacity-0"
+          >
+            <span v-if="refreshing" key="refreshing" class="inline-flex items-center gap-1.5 text-slate-500">
+              <LucideIcon :icon="RefreshCw" class="size-3.5 animate-spin text-slate-400" />
+              正在刷新进度
+            </span>
+            <span v-else key="countdown" class="inline-flex items-center gap-1.5">
+              <span class="size-1.5 animate-pulse rounded-full bg-emerald-500" />
+              {{ countdown }} 秒后刷新
+            </span>
+          </Transition>
         </span>
       </div>
 
       <!-- Wizard animation while a sync is running -->
-      <div v-if="inProgress" class="flex h-44 items-center justify-center overflow-hidden">
+      <div v-if="inProgress" class="my-4 flex h-44 items-center justify-center overflow-hidden sm:my-6">
         <LoaderWizard class="scale-[0.7]" />
       </div>
 
       <!-- Focal metric: synced / total + progress -->
       <div :class="inProgress ? '' : 'mt-5'">
         <div class="flex items-end justify-between gap-3">
-          <div v-if="info.total_games > 0" class="flex items-baseline gap-1.5">
-            <span class="text-2xl font-bold tabular-nums text-slate-900">{{ info.synced_count }}</span>
-            <span class="text-sm text-slate-400">/ {{ info.total_games }} 个游戏</span>
+          <div v-if="info.total > 0" class="flex items-baseline gap-1.5">
+            <span class="text-2xl font-bold tabular-nums text-slate-900">
+              <AnimatedNumber :value="info.completed" />
+            </span>
+            <span class="text-sm text-slate-400">
+              /
+              <AnimatedNumber :value="info.total" />
+              个游戏
+            </span>
           </div>
           <span v-else class="text-sm text-slate-400">
             {{ info.status === 'queued' ? '等待 worker 领取…' : '正在计算需要同步的游戏…' }}
           </span>
-          <span class="text-sm font-semibold tabular-nums" :class="meta.text">{{ progress }}%</span>
+          <span class="text-2xl font-bold tabular-nums" :class="meta.text">
+            <AnimatedNumber :value="progress" />%
+          </span>
         </div>
         <div class="mt-2 h-2 w-full overflow-hidden rounded-full bg-slate-100">
           <div
@@ -217,20 +298,20 @@ onMounted(() => {
       </p>
 
       <!-- Anomalies: only surfaced when they actually occur -->
-      <div v-if="info.failed_count > 0 || info.skipped_count > 0" class="mt-3 flex flex-wrap gap-2">
+      <div v-if="info.failed > 0 || info.skipped > 0" class="mt-3 flex flex-wrap gap-2">
         <span
-          v-if="info.failed_count > 0"
+          v-if="info.failed > 0"
           class="inline-flex items-center gap-1 rounded-md border border-rose-200 bg-rose-50 px-2.5 py-1 text-xs font-medium text-rose-600"
         >
           <LucideIcon :icon="XCircle" class="size-3.5" />
-          失败 {{ info.failed_count }}
+          失败 {{ info.failed }}
         </span>
         <span
-          v-if="info.skipped_count > 0"
+          v-if="info.skipped > 0"
           class="inline-flex items-center gap-1 rounded-md border border-amber-200 bg-amber-50 px-2.5 py-1 text-xs font-medium text-amber-600"
         >
           <LucideIcon :icon="SkipForward" class="size-3.5" />
-          跳过 {{ info.skipped_count }}
+          跳过 {{ info.skipped }}
         </span>
       </div>
 
