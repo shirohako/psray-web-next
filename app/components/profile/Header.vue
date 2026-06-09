@@ -235,6 +235,9 @@ const loginTo = computed(() => ({
           </span>
         </div>
       </div>
+
+      <!-- Private profile notice (replaces the hidden trophy columns below) -->
+      <PrivateProfileNotice v-if="!profile.is_profile_public" class="mt-5" />
     </div>
   </section>
 </template>

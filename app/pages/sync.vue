@@ -10,6 +10,8 @@ const sync = useSync()
 const psnid = ref('')
 const submitting = ref(false)
 const errorMessage = ref('')
+/** The submitted PSN profile is private — show the dedicated notice, not an error row. */
+const profilePrivate = ref(false)
 
 /** The PSN ID we're currently polling status for. */
 const activePsnid = ref('')
@@ -118,6 +120,7 @@ async function onSubmit() {
 
   const id = psnid.value.trim()
   errorMessage.value = ''
+  profilePrivate.value = false
   info.value = null
   stopPolling()
   submitting.value = true
@@ -130,6 +133,11 @@ async function onSubmit() {
     if (error instanceof ApiError) {
       if (error.code === 'SYNC_IN_PROGRESS') {
         await startPollingFor(id)
+        return
+      }
+
+      if (error.code === 'PSN_PROFILE_PRIVATE') {
+        profilePrivate.value = true
         return
       }
 
@@ -208,6 +216,11 @@ onMounted(() => {
       >
         {{ errorMessage }}
       </p>
+
+      <PrivateProfileNotice v-if="profilePrivate" class="mt-4" title="无法同步非公开的资料">
+        该 PSN 资料为私密，无法同步奖杯数据。<br>
+        请在 PlayStation 隐私设置中将奖杯设为公开后重试。
+      </PrivateProfileNotice>
     </section>
 
     <!-- Live progress -->

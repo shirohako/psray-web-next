@@ -28,21 +28,25 @@
   <!-- Profile -->
   <div v-else class="space-y-6">
     <ProfileHeader :profile="profile" :follow-pending="followPending" @toggle-follow="toggleFollow" />
-    <ProfileTrophyCalendar v-if="profile.calendar?.length" :calendar="profile.calendar" />
 
-    <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
-      <!-- Left: tabbed activity -->
-      <div class="lg:col-span-2">
-        <ProfileMainCard :psnid="psnid" />
+    <!-- Private profiles expose no trophy data: hide the calendar and the two columns below. -->
+    <template v-if="profile.is_profile_public">
+      <ProfileTrophyCalendar v-if="profile.calendar?.length" :calendar="profile.calendar" />
+
+      <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
+        <!-- Left: tabbed activity -->
+        <div class="lg:col-span-2">
+          <ProfileMainCard :psnid="psnid" />
+        </div>
+
+        <!-- Right: extended info -->
+        <aside class="space-y-6">
+          <ProfileStatsCard :profile="profile" />
+          <ProfileSocialCard :profile="profile" />
+          <ProfileAccountCard :profile="profile" />
+        </aside>
       </div>
-
-      <!-- Right: extended info -->
-      <aside class="space-y-6">
-        <ProfileStatsCard :profile="profile" />
-        <ProfileSocialCard :profile="profile" />
-        <ProfileAccountCard :profile="profile" />
-      </aside>
-    </div>
+    </template>
   </div>
 </template>
 
