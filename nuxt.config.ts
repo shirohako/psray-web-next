@@ -5,6 +5,14 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   css: ['./app/assets/css/main.css'],
   devtools: { enabled: true },
+  app: {
+    head: {
+      link: [
+        { rel: 'icon', href: '/favicon.ico', sizes: 'any' },
+        { rel: 'apple-touch-icon', href: '/logo.png' },
+      ],
+    },
+  },
 
   runtimeConfig: {
     public: {
