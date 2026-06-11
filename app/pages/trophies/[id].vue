@@ -103,7 +103,11 @@
 
       <!-- Side: viewer progress (when ?psnid= resolves) + recent players -->
       <aside class="space-y-6">
-        <TrophyViewerProgress v-if="data.viewer_progress" :progress="data.viewer_progress" />
+        <TrophyViewerProgress
+          v-if="data.viewer_progress"
+          :progress="data.viewer_progress"
+          :total="totalDefined(data.trophy_set.defined_trophies)"
+        />
 
         <TrophySimilarSets v-if="data.similar_trophy_sets?.length" :sets="data.similar_trophy_sets" />
 

@@ -138,7 +138,7 @@ export interface RecentPlayer {
   earned_silver?: number
   earned_bronze?: number
   first_earned_at?: number | string | null
-  last_updated_at: number | string
+  last_earned_at: number | string
   duration?: number | null
 }
 
@@ -152,7 +152,8 @@ export interface ViewerProgress {
   earned_gold: number
   earned_platinum: number
   first_earned_at: number | string
-  last_updated_at: number | string
+  last_earned_at: number | string
+  duration?: number | null
   /** Database ids of earned trophies (compare against `Trophy.id`). */
   earned_trophies: number[]
 }

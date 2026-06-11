@@ -26,7 +26,7 @@ const dialogOpen = ref(false)
               <LucideIcon v-if="p.earned_platinum > 0" :icon="Trophy" class="size-3.5 shrink-0 text-cyan-500" title="已获白金" />
             </div>
             <div class="mt-1 text-xs text-slate-400 tabular-nums">
-              {{ fmtDateTime(p.last_updated_at) }}
+              {{ fmtDateTime(p.last_earned_at) }}
             </div>
           </div>
           <div class="flex shrink-0 items-center gap-1.5">
