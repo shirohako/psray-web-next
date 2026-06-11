@@ -1,17 +1,21 @@
 <script setup lang="ts">
-import { Calendar, Clock, RefreshCw } from 'lucide'
-import type { ViewerProgress } from '~/services/trophies'
+import { Calendar, Check, Clock, RefreshCw } from 'lucide'
+import type { DefinedTrophies, ViewerProgress } from '~/services/trophies'
 
-const props = defineProps<{ progress: ViewerProgress, total?: number }>()
+const props = defineProps<{
+  progress: ViewerProgress
+  total?: number
+  definedTrophies?: DefinedTrophies
+}>()
 
 // Per-tier earned counts in display order (platinum → bronze).
 const earned = computed(() => {
   const p = props.progress
   return [
-    { key: 'platinum', count: p.earned_platinum },
-    { key: 'gold', count: p.earned_gold },
-    { key: 'silver', count: p.earned_silver },
-    { key: 'bronze', count: p.earned_bronze },
+    { key: 'platinum', count: p.earned_platinum, total: props.definedTrophies?.platinum },
+    { key: 'gold', count: p.earned_gold, total: props.definedTrophies?.gold },
+    { key: 'silver', count: p.earned_silver, total: props.definedTrophies?.silver },
+    { key: 'bronze', count: p.earned_bronze, total: props.definedTrophies?.bronze },
   ] as const
 })
 
@@ -38,6 +42,10 @@ const earnedTotal = computed(() =>
   + props.progress.earned_gold
   + props.progress.earned_platinum,
 )
+
+function isComplete(count: number, total: number | undefined) {
+  return total != null && total > 0 && count >= total
+}
 </script>
 
 <template>
@@ -67,10 +75,23 @@ const earnedTotal = computed(() =>
       <div
         v-for="t in earned"
         :key="t.key"
-        class="inline-flex items-center justify-center gap-1.5 rounded-md bg-slate-50 px-2 py-1.5"
+        class="relative inline-flex items-center justify-center gap-1.5 rounded-md bg-slate-50 px-2 py-1.5 text-slate-900"
       >
+        <span
+          v-if="isComplete(t.count, t.total)"
+          class="absolute -left-0.5 -top-0.5 grid size-3 place-items-center rounded-full border border-white bg-slate-700 text-white shadow-sm"
+          title="已完成"
+        >
+          <LucideIcon :icon="Check" class="size-1.75" stroke-width="3" />
+        </span>
         <span class="size-2.5 shrink-0 rounded-full" :class="trophyKinds.find(k => k.key === t.key)?.dot" />
-        <span class="text-sm font-bold tabular-nums text-slate-900">{{ t.count }}</span>
+        <span class="inline-flex items-baseline gap-0.75 text-sm font-bold tabular-nums">
+          <span>{{ t.count }}</span>
+          <template v-if="t.total != null">
+            <span class="text-xs text-slate-400">/</span>
+            <span>{{ t.total }}</span>
+          </template>
+        </span>
       </div>
     </div>
 
