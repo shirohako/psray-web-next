@@ -33,12 +33,12 @@ const relationship = computed(() => {
     <div class="grid grid-cols-2 gap-3">
       <div class="flex items-center gap-2.5 rounded-lg border border-slate-100 bg-slate-50/70 px-3 py-2.5">
         <LucideIcon :icon="Users" class="size-4 shrink-0 text-slate-900" />
-        <span class="text-lg font-bold text-slate-900">{{ fmt(profile.followers) }}</span>
+        <span class="text-lg font-bold text-slate-900">{{ fmt(profile.follower_count) }}</span>
         <span class="text-xs text-slate-400">粉丝</span>
       </div>
       <div class="flex items-center gap-2.5 rounded-lg border border-slate-100 bg-slate-50/70 px-3 py-2.5">
         <LucideIcon :icon="Heart" class="size-4 shrink-0 text-rose-500" />
-        <span class="text-lg font-bold text-slate-900">{{ fmt(profile.following) }}</span>
+        <span class="text-lg font-bold text-slate-900">{{ fmt(profile.following_count) }}</span>
         <span class="text-xs text-slate-400">关注</span>
       </div>
     </div>

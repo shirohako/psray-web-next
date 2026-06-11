@@ -27,31 +27,31 @@ const stats = computed(() => [
     <div class="relative">
       <div
         class="absolute inset-0 scale-110 bg-cover bg-center blur-2xl saturate-150"
-        :style="{ backgroundImage: `url(${trophySet.trophy_title_icon_url})` }"
+        :style="{ backgroundImage: `url(${trophySet.icon_url})` }"
       />
       <div class="absolute inset-0 bg-slate-900/70" />
 
       <div class="relative flex flex-col items-center gap-5 p-5 text-center sm:flex-row sm:items-center sm:p-6 sm:text-left">
         <!-- PS5 icons are square; PS4 are 320×176 landscape — keep natural aspect. -->
         <img
-          :src="trophySet.trophy_title_icon_url"
-          :alt="trophySet.trophy_title_name"
+          :src="trophySet.icon_url"
+          :alt="trophySet.name"
           class="h-12 w-auto max-w-50 shrink-0 rounded-lg border border-white/15 object-contain shadow-lg sm:h-28 sm:rounded-xl"
         />
         <div class="min-w-0 flex-1">
           <div class="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 sm:justify-start">
             <h1 class="text-base font-bold leading-tight tracking-tight text-white sm:text-2xl">
-              {{ trophySet.trophy_title_name }}
+              {{ trophySet.name }}
             </h1>
             <span
               class="shrink-0 rounded px-1.5 py-0.5 text-[10px] font-bold"
-              :class="platformBadgeClass(trophySet.trophy_title_platform)"
+              :class="platformBadgeClass(trophySet.platform)"
             >
-              {{ trophySet.trophy_title_platform }}
+              {{ trophySet.platform }}
             </span>
           </div>
-          <p v-if="trophySet.trophy_title_detail" class="mt-1.5 line-clamp-2 max-w-prose text-sm text-slate-300">
-            {{ trophySet.trophy_title_detail }}
+          <p v-if="trophySet.detail" class="mt-1.5 line-clamp-2 max-w-prose text-sm text-slate-300">
+            {{ trophySet.detail }}
           </p>
           <!-- Defined trophies by tier -->
           <div class="mt-3 flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5 sm:justify-start">

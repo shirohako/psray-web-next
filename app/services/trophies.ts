@@ -28,23 +28,26 @@ export interface TrophyTranslation {
 export interface Trophy {
   /** Database primary key (matches `viewer_progress.earned_trophies` ids). */
   id: number
+  trophy_group_id: number
+  type: TrophyType
+  np_communication_id: string
+  psn_group_id: string
   /** PSN in-group index (0-based). */
-  trophy_id: number
-  trophy_type: TrophyType
-  trophy_name: string
-  trophy_detail: string
-  trophy_icon_url: string
-  /** 0/1 — hidden on PSN until earned. */
-  trophy_hidden: number
+  psn_trophy_id: number
+  name: string
+  detail: string
+  icon_url: string
+  is_hidden: boolean
   /** PSN official earn rate, %. */
-  trophy_earned_rate: number
+  psn_earned_rate: number | string
   /** Site-wide earn rate, %. */
   psray_rate: number
+  earned_count: number
   rarity: Rarity
   /** Number of community guides/tips. */
-  tips: number
+  tip_count: number
   /** Per-language translations keyed by language code; `null` when missing. */
-  translations: Record<string, TrophyTranslation | null>
+  translations?: Record<string, TrophyTranslation | null>
   /** Present only when the request carried a `psnid`. */
   earned_by_viewer?: boolean
 }
@@ -65,10 +68,10 @@ export interface GroupLocalization {
 export interface TrophyGroup {
   id: number
   /** PSN internal group id, e.g. `default`. */
-  trophy_group_id: string
-  trophy_title_name: string
-  trophy_title_detail: string
-  trophy_title_icon_url: string
+  psn_group_id: string
+  name: string
+  detail: string
+  icon_url: string
   defined_trophies: DefinedTrophies
   available_languages: AvailableLanguage[]
   /** Group name/intro translations keyed by language code. */
@@ -80,28 +83,45 @@ export interface TrophyGroup {
 export interface TrophySetDetailInfo {
   id: number
   np_communication_id: string
-  trophy_title_name: string
-  trophy_title_detail: string
-  trophy_title_icon_url: string
-  trophy_title_platform: string
+  version: string
+  platform: string
+  name: string
+  detail: string
+  icon_url: string
+  has_trophy_groups: boolean
+  np_service_name: string
   defined_trophies: DefinedTrophies
+  default_language: string | null
   owners: number
+  recent_players: number
   /** Average completion across owners, 0–100. */
   average_progress: number
   completed_players: number
   platinum_achievers: number
+  favorite_count: number
+  wishlist_count: number
+  review_count: number
+  game_id: number | null
+  region: string | null
+  created_at: string
+  updated_at: string
 }
 
 /** A recent player of this title. */
 export interface RecentPlayer {
+  rank?: number
   psnid: string
   avatar_url: string
   country: string
   /** Completion percent, 0–100. */
   progress: number
   earned_platinum: number
-  /** Unix seconds. */
-  last_updated_at: number
+  earned_gold?: number
+  earned_silver?: number
+  earned_bronze?: number
+  first_earned_at?: number | string | null
+  last_updated_at: number | string
+  duration?: number | null
 }
 
 /** The queried user's progress on this set (only when `psnid` was passed). */
@@ -113,10 +133,8 @@ export interface ViewerProgress {
   earned_silver: number
   earned_gold: number
   earned_platinum: number
-  /** Unix seconds. */
-  first_earned_at: number
-  /** Unix seconds. */
-  last_updated_at: number
+  first_earned_at: number | string
+  last_updated_at: number | string
   /** Database ids of earned trophies (compare against `Trophy.id`). */
   earned_trophies: number[]
 }
@@ -126,6 +144,7 @@ export interface TrophySetDetail {
   trophy_set: TrophySetDetailInfo
   groups: TrophyGroup[]
   recent_players: RecentPlayer[]
+  similar_trophy_sets?: TrophySetDetailInfo[]
   viewer_progress: ViewerProgress | null
 }
 
@@ -144,12 +163,10 @@ export interface PlayerRanking {
   earned_gold: number
   earned_silver: number
   earned_bronze: number
-  /** Unix seconds. */
-  first_earned_at: number | null
-  /** Unix seconds. */
-  last_updated_at: number | null
+  first_earned_at: number | string | null
+  last_earned_at: number | string | null
   /** Completion time in seconds (last − first earned); `null` when unfinished. */
-  gap: number | null
+  duration: number | null
 }
 
 export interface PlayersMeta {

@@ -72,23 +72,23 @@ function earnedTiers(g: PlayedTrophySet) {
            a gray letterbox box around it. -->
       <div class="flex h-18 w-24 shrink-0 items-center justify-center">
         <img
-          :src="g.trophy_set.trophy_title_icon_url"
-          :alt="g.trophy_set.trophy_title_name"
+          :src="g.trophy_set.icon_url"
+          :alt="g.trophy_set.name"
           class="max-h-full max-w-full rounded-lg object-contain shadow-sm ring-1 ring-black/5"
         />
       </div>
 
       <div class="min-w-0 flex-1">
         <!-- Title -->
-        <h3 class="truncate font-semibold text-slate-900">{{ g.trophy_set.trophy_title_name }}</h3>
+        <h3 class="truncate font-semibold text-slate-900">{{ g.trophy_set.name }}</h3>
 
-        <!-- Platform + region + last-played time -->
+        <!-- Platform + region + last-earned time -->
         <div class="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1">
           <span
             class="shrink-0 rounded px-1.5 py-0.5 text-[10px] font-bold leading-none"
-            :class="platformBadgeClass(g.trophy_set.trophy_title_platform)"
+            :class="platformBadgeClass(g.trophy_set.platform)"
           >
-            {{ g.trophy_set.trophy_title_platform }}
+            {{ g.trophy_set.platform }}
           </span>
           <span
             v-if="g.trophy_set.region"
@@ -99,7 +99,7 @@ function earnedTiers(g: PlayedTrophySet) {
           </span>
           <span class="inline-flex items-center gap-1 text-xs tabular-nums text-slate-400">
             <LucideIcon :icon="Clock" class="size-3.5" />
-            {{ fmtDateTime(g.last_updated_at) }}
+            {{ fmtDateTime(g.last_earned_at) }}
           </span>
         </div>
 

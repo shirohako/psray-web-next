@@ -17,9 +17,9 @@ const props = defineProps<{
 }>()
 
 const title = computed(() => {
-  if (props.group.trophy_group_id === 'default') return '本篇'
+  if (props.group.psn_group_id === 'default') return '本篇'
   const loc = props.lang ? props.group.localizations[props.lang] : undefined
-  return loc?.localized_title || props.group.trophy_title_name
+  return loc?.localized_title || props.group.name
 })
 
 function isEarned(t: Trophy) {
@@ -37,7 +37,7 @@ const displayTrophies = computed(() => {
 
   if (props.sort === 'rarity') {
     // Lower PSN earn rate = rarer, so ascending puts the rarest first.
-    list = [...list].sort((a, b) => a.trophy_earned_rate - b.trophy_earned_rate)
+    list = [...list].sort((a, b) => Number(a.psn_earned_rate) - Number(b.psn_earned_rate))
   } else if (props.sort === 'earned' && props.hasViewer) {
     // Earned trophies first, in the order the viewer earned them; rest after.
     list = [...list].sort((a, b) => {

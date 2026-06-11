@@ -8,9 +8,12 @@
 
 import type { Rarity, TrophyType } from '~/services/trophies'
 
+export type ApiDate = number | string
+
 /** A PSN trophy profile as returned by `GET /profile/:psnid`. */
 export interface Profile {
   id: number
+  role: string
   psnid: string
   account_id: string
   status: number
@@ -18,12 +21,11 @@ export interface Profile {
   language: string[]
   avatar_url: string
   about_me: string
-  /** PS Plus flag (0/1). */
-  plus: number
+  is_plus: boolean
 
-  games_played: number
-  completed_games: number
-  abandoned_games: number
+  played_game_count: number
+  completed_game_count: number
+  abandoned_game_count: number
 
   trophy_level: number
   /** Progress toward the next trophy level, 0–100. */
@@ -37,37 +39,33 @@ export interface Profile {
   rank: number | null
   server_rank: number | null
 
-  favorite_games: number
-  game_reviews: number
-  followers: number
-  following: number
+  favorite_game_count: number
+  review_count: number
+  follower_count: number
+  following_count: number
 
-  /** Unix seconds. */
-  first_trophy_at: number | null
-  /** Unix seconds. */
-  last_trophy_at: number | null
+  first_trophy_at: ApiDate | null
+  last_trophy_at: ApiDate | null
 
   is_profile_public: boolean
   is_rankable: boolean
-  is_banned: boolean
 
   star_piece: number
   rare_candy: number
   mira: number
   philosophers_stone: number
-  trophy_tip: number
-  page_views: number
+  tip_count: number
+  tip_vote_count: number
+  page_view_count: number
 
   sync_interval: number
-  /** Unix seconds. */
-  sync_next_at: number | null
-  /** Unix seconds. */
-  joined_at: number | null
+  sync_next_at: ApiDate | null
+  registered_at: ApiDate | null
 
   used_space: number
   total_space: number
-  /** Unix seconds. */
-  updated_at: number | null
+  created_at: ApiDate | null
+  updated_at: ApiDate | null
 
   /** Whether the current viewer can follow this profile (logged in & not self). */
   can_follow: boolean
@@ -114,17 +112,29 @@ export interface TrophyCounts {
 export interface TrophySet {
   id: number
   np_communication_id: string
-  trophy_set_version: string
+  version: string
   /** e.g. `PS5` | `PS4` | `PS3` | `PSVITA`. */
-  trophy_title_platform: string
-  trophy_title_name: string
-  trophy_title_detail: string
-  trophy_title_icon_url: string
-  has_trophy_groups: number
+  platform: string
+  name: string
+  detail: string
+  icon_url: string
+  has_trophy_groups: boolean
   np_service_name: string
   /** Trophy-set region, a two-letter code, e.g. `HK` | `JP` | `EU`. */
-  region: string
+  region: string | null
   defined_trophies: TrophyCounts
+  default_language: string | null
+  owners: number
+  recent_players: number
+  average_progress: number
+  completed_players: number
+  platinum_achievers: number
+  favorite_count: number
+  wishlist_count: number
+  review_count: number
+  game_id: number | null
+  created_at: ApiDate | null
+  updated_at: ApiDate | null
 }
 
 /** One of a user's played titles, as returned by `recently-played`. */
@@ -138,12 +148,10 @@ export interface PlayedTrophySet {
   earned_silver: number
   earned_gold: number
   earned_platinum: number
-  gap: number
-  hidden_flag: number
-  /** Unix seconds. */
-  first_earned_at: number | null
-  /** Unix seconds. */
-  last_updated_at: number | null
+  duration: number
+  is_hidden: boolean
+  first_earned_at: ApiDate | null
+  last_earned_at: ApiDate | null
   trophy_set: TrophySet
 }
 
@@ -153,24 +161,28 @@ export interface PlayedTrophySet {
  * translations the trophy-set page would need).
  */
 export interface RecentTrophy {
-  id: number
+  user_id: number
   trophy_set_id: number
   trophy_id: number
-  /** Unix seconds. */
-  earned_at: number
+  earned_at: ApiDate
   trophy: {
     id: number
-    trophy_type: TrophyType
-    trophy_name: string
-    trophy_detail: string
-    trophy_icon_url: string
-    /** 0/1 — hidden on PSN until earned. */
-    trophy_hidden: number
+    trophy_group_id: number
+    type: TrophyType
+    np_communication_id: string
+    psn_group_id: string
+    psn_trophy_id: number
+    name: string
+    detail: string
+    icon_url: string
+    is_hidden: boolean
     /** PSN official earn rate, %. */
-    trophy_earned_rate: number
+    psn_earned_rate: number | string
     /** Site-wide earn rate, %. */
     psray_rate: number
+    earned_count: number
     rarity: Rarity
+    tip_count: number
   }
 }
 

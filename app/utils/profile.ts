@@ -12,18 +12,28 @@ const nf = new Intl.NumberFormat('en-US')
 /** Thousands-separated number, or「—」for null/undefined. */
 export const fmt = (n: number | null | undefined) => (n == null ? '—' : nf.format(n))
 
+type DateLike = number | string | null | undefined
+
+function toDate(value: DateLike) {
+  if (value == null || value === '') return null
+  const date = typeof value === 'number' ? new Date(value * 1000) : new Date(value)
+  return Number.isNaN(date.getTime()) ? null : date
+}
+
 /** Date only, e.g.「2026年5月29日」. */
-export function fmtDate(unix: number | null | undefined) {
-  if (!unix) return '—'
-  return new Date(unix * 1000).toLocaleDateString('zh-CN', {
+export function fmtDate(value: DateLike) {
+  const date = toDate(value)
+  if (!date) return '—'
+  return date.toLocaleDateString('zh-CN', {
     year: 'numeric', month: 'long', day: 'numeric',
   })
 }
 
 /** Absolute date down to the minute, e.g.「2026/05/29 14:30」. */
-export function fmtDateTime(unix: number | null | undefined) {
-  if (!unix) return '—'
-  return new Date(unix * 1000).toLocaleString('zh-CN', {
+export function fmtDateTime(value: DateLike) {
+  const date = toDate(value)
+  if (!date) return '—'
+  return date.toLocaleString('zh-CN', {
     year: 'numeric', month: '2-digit', day: '2-digit',
     hour: '2-digit', minute: '2-digit', hour12: false,
   })
@@ -46,9 +56,10 @@ export function formatDuration(sec: number | null | undefined) {
 }
 
 /** Coarse relative time, e.g.「3 天前」. */
-export function fromNow(unix: number | null | undefined) {
-  if (!unix) return '—'
-  const diff = Date.now() - unix * 1000
+export function fromNow(value: DateLike) {
+  const date = toDate(value)
+  if (!date) return '—'
+  const diff = Date.now() - date.getTime()
   const day = 86_400_000
   if (diff < day) return '今天'
   if (diff < 2 * day) return '昨天'

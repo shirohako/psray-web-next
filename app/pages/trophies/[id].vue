@@ -195,7 +195,7 @@ watch(hasViewer, (v) => {
 
 useHead(() => ({
   title: data.value
-    ? `${data.value.trophy_set.trophy_title_name} · 奖杯`
+    ? `${data.value.trophy_set.name} · 奖杯`
     : '奖杯组',
 }))
 </script>

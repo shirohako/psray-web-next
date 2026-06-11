@@ -11,14 +11,17 @@ const props = defineProps<{
 const emit = defineEmits<{ 'update:open': [v: boolean] }>()
 
 const translation = computed(() =>
-  props.lang ? props.trophy.translations[props.lang] : null,
+  props.lang ? props.trophy.translations?.[props.lang] : null,
 )
-const name = computed(() => translation.value?.trophyName || props.trophy.trophy_name)
-const detail = computed(() => translation.value?.trophyDetail || props.trophy.trophy_detail)
+const name = computed(() => translation.value?.trophyName || props.trophy.name)
+const detail = computed(() => translation.value?.trophyDetail || props.trophy.detail)
 const rarity = computed(() => rarityMeta(props.trophy.rarity))
-const fmtRate = (rate: number) => `${rate.toFixed(1)}%`
+function fmtRate(rate: number | string) {
+  const n = Number(rate)
+  return Number.isFinite(n) ? `${n.toFixed(1)}%` : '—'
+}
 
-const TYPE_LABEL: Record<TrophyData['trophy_type'], string> = {
+const TYPE_LABEL: Record<TrophyData['type'], string> = {
   platinum: '白金',
   gold: '黄金',
   silver: '白银',
@@ -32,11 +35,11 @@ const TYPE_LABEL: Record<TrophyData['trophy_type'], string> = {
       <!-- Icon + name + tier/rarity -->
       <div class="flex gap-4">
         <div class="relative shrink-0">
-          <img :src="trophy.trophy_icon_url" :alt="name" class="size-20 rounded-lg object-cover shadow-sm" />
+          <img :src="trophy.icon_url" :alt="name" class="size-20 rounded-lg object-cover shadow-sm" />
           <span
             class="absolute -bottom-1.5 -right-1.5 grid size-7 place-items-center rounded-full border-2 border-white bg-white shadow-sm"
-            :class="trophyTierColor(trophy.trophy_type)"
-            :title="trophy.trophy_type"
+            :class="trophyTierColor(trophy.type)"
+            :title="trophy.type"
           >
             <LucideIcon :icon="Trophy" class="size-4" />
           </span>
@@ -45,13 +48,13 @@ const TYPE_LABEL: Record<TrophyData['trophy_type'], string> = {
           <h3 class="font-semibold text-slate-900">{{ name }}</h3>
           <div class="mt-2 flex flex-wrap items-center gap-1.5">
             <span class="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-600">
-              {{ TYPE_LABEL[trophy.trophy_type] }}
+              {{ TYPE_LABEL[trophy.type] }}
             </span>
             <span class="rounded-full px-2 py-0.5 text-xs font-medium" :class="rarity.pill">
               {{ rarity.label }}
             </span>
             <span
-              v-if="trophy.trophy_hidden === 1"
+              v-if="trophy.is_hidden"
               class="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-600"
             >
               隐藏奖杯
@@ -71,11 +74,11 @@ const TYPE_LABEL: Record<TrophyData['trophy_type'], string> = {
         </div>
         <div class="flex items-center justify-between gap-2">
           <dt class="text-slate-400">留言数</dt>
-          <dd class="font-semibold tabular-nums text-slate-900">{{ trophy.tips }}</dd>
+          <dd class="font-semibold tabular-nums text-slate-900">{{ trophy.tip_count }}</dd>
         </div>
         <div class="flex items-center justify-between gap-2">
           <dt class="text-slate-400">PSN 完成率</dt>
-          <dd class="font-semibold tabular-nums text-slate-900">{{ fmtRate(trophy.trophy_earned_rate) }}</dd>
+          <dd class="font-semibold tabular-nums text-slate-900">{{ fmtRate(trophy.psn_earned_rate) }}</dd>
         </div>
         <div class="flex items-center justify-between gap-2">
           <dt class="text-slate-400">PSRay 完成率</dt>

@@ -138,9 +138,9 @@ function rankClass(rank: number) {
               <span class="inline-flex items-center gap-1"><RegionFlag :country="p.country" />{{ regionName(p.country) }}</span>
               <span>·</span>
               <span v-if="type === 'speedrun'" class="inline-flex items-center gap-1 font-medium text-slate-500">
-                <LucideIcon :icon="Timer" class="size-3" />{{ formatDuration(p.gap) }}
+                <LucideIcon :icon="Timer" class="size-3" />{{ formatDuration(p.duration) }}
               </span>
-              <span v-else>{{ fmtDateTime(p.last_updated_at) }}</span>
+              <span v-else>{{ fmtDateTime(p.last_earned_at) }}</span>
             </div>
           </div>
 

@@ -20,10 +20,10 @@ const total = computed(() => sumTrophies(props.profile))
 
 /**
  * Whether this is a registered PSRay user (vs. a tracked-only PSN profile).
- * Assumed signal: `joined_at` is set once the account is registered. Adjust if
+ * Assumed signal: `registered_at` is set once the account is registered. Adjust if
  * the backend exposes a dedicated flag.
  */
-const isRegistered = computed(() => props.profile.joined_at != null)
+const isRegistered = computed(() => props.profile.registered_at != null)
 const isLoggedIn = computed(() => auth.loggedIn.value)
 const authBusy = computed(() => auth.loading.value || (auth.hasToken.value && !auth.ready.value))
 const loginTo = computed(() => ({
@@ -41,7 +41,7 @@ const loginTo = computed(() => ({
     >
       <div class="absolute inset-0 bg-linear-to-t from-black/45 via-black/5 to-transparent" />
       <span
-        v-if="profile.plus"
+        v-if="profile.is_plus"
         class="absolute right-4 top-4 inline-flex items-center gap-1 rounded-full bg-amber-400/95 px-2.5 py-1 text-xs font-bold text-amber-950 shadow-sm backdrop-blur"
       >
         <LucideIcon :icon="Crown" class="size-3.5" /> PS PLUS
@@ -166,7 +166,7 @@ const loginTo = computed(() => ({
             <RegionFlag :country="profile.country" /> {{ regionName(profile.country) }}
           </span>
           <span class="inline-flex items-center gap-1">
-            <LucideIcon :icon="Eye" class="size-3.5 text-slate-400" /> {{ fmt(profile.page_views) }} 次浏览
+            <LucideIcon :icon="Eye" class="size-3.5 text-slate-400" /> {{ fmt(profile.page_view_count) }} 次浏览
           </span>
           <span class="inline-flex items-center gap-1">
             <LucideIcon :icon="RefreshCw" class="size-3.5 text-slate-400" /> 更新于 {{ fmtDateTime(profile.updated_at) }}

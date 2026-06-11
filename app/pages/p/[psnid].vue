@@ -90,14 +90,14 @@ async function toggleFollow() {
 
   const next = !p.is_following
   p.is_following = next
-  p.followers += next ? 1 : -1
+  p.follower_count += next ? 1 : -1
 
   followPending.value = true
   try {
     const res = next ? await follow(p.psnid) : await unfollow(p.psnid)
     if (res.following !== next) {
       p.is_following = res.following
-      p.followers += res.following ? 1 : -1
+      p.follower_count += res.following ? 1 : -1
     }
     if (next && p.is_following) {
       toast.add({
@@ -109,7 +109,7 @@ async function toggleFollow() {
   }
   catch (err) {
     p.is_following = !next
-    p.followers += next ? -1 : 1
+    p.follower_count += next ? -1 : 1
     if (err instanceof ApiError && err.code === 'UNAUTHENTICATED') {
       await redirectToLogin()
       return

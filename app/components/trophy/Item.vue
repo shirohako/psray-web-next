@@ -17,10 +17,10 @@ const props = defineProps<{
 }>()
 
 const translation = computed(() =>
-  props.lang ? props.trophy.translations[props.lang] : null,
+  props.lang ? props.trophy.translations?.[props.lang] : null,
 )
-const name = computed(() => translation.value?.trophyName || props.trophy.trophy_name)
-const detail = computed(() => translation.value?.trophyDetail || props.trophy.trophy_detail)
+const name = computed(() => translation.value?.trophyName || props.trophy.name)
+const detail = computed(() => translation.value?.trophyDetail || props.trophy.detail)
 const showEarned = computed(() => props.hasViewer && props.earned)
 
 // Per-trophy visibility override toggled by the eye icon next to the title.
@@ -32,7 +32,7 @@ watch(() => props.showSpoilers, () => { override.value = null })
 // Mask spoiler trophies unless globally shown, already earned by the viewer, or
 // overridden per-trophy via the eye icon.
 const masked = computed(() => {
-  if (props.trophy.trophy_hidden !== 1) return false
+  if (!props.trophy.is_hidden) return false
   if (override.value !== null) return override.value
   return !props.showSpoilers && !props.earned
 })
@@ -43,7 +43,10 @@ function toggleMask() {
 }
 const displayName = computed(() => (masked.value ? '隐藏奖杯' : name.value))
 const displayDetail = computed(() => (masked.value ? '' : detail.value))
-const fmtRate = (rate: number) => rate.toFixed(1)
+function fmtRate(rate: number | string) {
+  const n = Number(rate)
+  return Number.isFinite(n) ? `${n.toFixed(1)}%` : '—'
+}
 
 function copy(text: string) {
   if (text && import.meta.client) navigator.clipboard?.writeText(text)
@@ -67,15 +70,15 @@ const tipsOpen = ref(false)
       <!-- Icon + tier badge + earned check -->
       <div class="relative">
         <img
-          :src="trophy.trophy_icon_url"
+          :src="trophy.icon_url"
           :alt="displayName"
           class="size-14 rounded-lg object-cover shadow-sm sm:size-16"
           :class="{ 'blur-[3px] grayscale': masked }"
         />
         <span
           class="absolute -bottom-1.5 -right-1.5 grid size-6 place-items-center rounded-full border-2 border-white bg-white shadow-sm"
-          :class="trophyTierColor(trophy.trophy_type)"
-          :title="trophy.trophy_type"
+          :class="trophyTierColor(trophy.type)"
+          :title="trophy.type"
         >
           <LucideIcon :icon="Trophy" class="size-3.5" />
         </span>
@@ -94,7 +97,7 @@ const tipsOpen = ref(false)
       <div class="flex flex-wrap items-center gap-2">
         <h3 class="min-w-0 truncate font-semibold text-slate-900" :class="{ 'text-slate-400': masked }">{{ displayName }}</h3>
         <button
-          v-if="trophy.trophy_hidden === 1 && !earned"
+          v-if="trophy.is_hidden && !earned"
           type="button"
           class="inline-flex items-center rounded bg-slate-100 p-1 text-slate-500 transition hover:bg-slate-200 hover:text-slate-700"
           :title="masked ? '显示该隐藏奖杯' : '隐藏该奖杯'"
@@ -111,17 +114,17 @@ const tipsOpen = ref(false)
       <Tooltip placement="left" class="max-sm:hidden">
         <div tabindex="0" class="flex cursor-pointer flex-col items-end leading-tight focus:outline-none">
           <span class="text-[10px] font-medium text-slate-400">PSN</span>
-          <span class="text-sm font-semibold tabular-nums text-slate-700">{{ fmtRate(trophy.trophy_earned_rate) }}%</span>
+          <span class="text-sm font-semibold tabular-nums text-slate-700">{{ fmtRate(trophy.psn_earned_rate) }}</span>
         </div>
         <template #content>
           <div class="space-y-1">
             <div class="flex items-center justify-between gap-4">
               <span class="text-slate-300">PSN 完成率</span>
-              <span class="font-semibold tabular-nums">{{ fmtRate(trophy.trophy_earned_rate) }}%</span>
+              <span class="font-semibold tabular-nums">{{ fmtRate(trophy.psn_earned_rate) }}</span>
             </div>
             <div class="flex items-center justify-between gap-4">
               <span class="text-slate-300">PSRay 完成率</span>
-              <span class="font-semibold tabular-nums">{{ fmtRate(trophy.psray_rate) }}%</span>
+              <span class="font-semibold tabular-nums">{{ fmtRate(trophy.psray_rate) }}</span>
             </div>
           </div>
         </template>
@@ -138,9 +141,9 @@ const tipsOpen = ref(false)
         <LucideIcon :icon="MessageSquare" class="size-3 sm:size-3.5" />
         <span
           class="absolute -right-1 -top-1 grid h-3.5 min-w-3.5 place-items-center rounded-full px-1 text-[9px] font-bold leading-none text-white"
-          :class="trophy.tips > 0 ? 'bg-slate-900' : 'bg-slate-300'"
+          :class="trophy.tip_count > 0 ? 'bg-slate-900' : 'bg-slate-300'"
         >
-          {{ trophy.tips }}
+          {{ trophy.tip_count }}
         </span>
       </button>
     </div>

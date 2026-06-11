@@ -32,7 +32,15 @@ function elapsedSincePrev(index: number): number | null {
   const cur = trophies.value[index]
   const prev = trophies.value[index + 1]
   if (!cur || !prev) return null
-  return cur.earned_at - prev.earned_at
+  const curTime = typeof cur.earned_at === 'number' ? cur.earned_at * 1000 : new Date(cur.earned_at).getTime()
+  const prevTime = typeof prev.earned_at === 'number' ? prev.earned_at * 1000 : new Date(prev.earned_at).getTime()
+  if (Number.isNaN(curTime) || Number.isNaN(prevTime)) return null
+  return Math.max(0, Math.floor((curTime - prevTime) / 1000))
+}
+
+function psnEarnedRate(item: RecentTrophy) {
+  const rate = Number(item.trophy.psn_earned_rate)
+  return Number.isFinite(rate) ? `${rate.toFixed(1)}%` : '—'
 }
 </script>
 
@@ -84,21 +92,21 @@ function elapsedSincePrev(index: number): number | null {
     <div v-else class="divide-y divide-slate-100 transition-opacity" :class="{ 'opacity-50': pending }">
       <NuxtLink
         v-for="(item, index) in trophies"
-        :key="item.id"
+        :key="`${item.trophy_set_id}-${item.trophy_id}-${item.earned_at}`"
         :to="{ path: `/trophies/${item.trophy_set_id}`, query: { psnid } }"
         class="group flex items-center gap-3 px-4 py-3.5 transition hover:bg-slate-50 sm:gap-4 sm:px-5"
       >
         <!-- Icon + tier badge -->
         <div class="relative shrink-0">
           <img
-            :src="item.trophy.trophy_icon_url"
-            :alt="item.trophy.trophy_name"
+            :src="item.trophy.icon_url"
+            :alt="item.trophy.name"
             class="size-14 rounded-lg object-cover shadow-sm"
           />
           <span
             class="absolute -bottom-1.5 -right-1.5 grid size-6 place-items-center rounded-full border-2 border-white bg-white shadow-sm"
-            :class="trophyTierColor(item.trophy.trophy_type)"
-            :title="item.trophy.trophy_type"
+            :class="trophyTierColor(item.trophy.type)"
+            :title="item.trophy.type"
           >
             <LucideIcon :icon="Trophy" class="size-3.5" />
           </span>
@@ -106,9 +114,9 @@ function elapsedSincePrev(index: number): number | null {
 
         <!-- Name + detail + earned time -->
         <div class="min-w-0 flex-1">
-          <h3 class="truncate font-semibold text-slate-900">{{ item.trophy.trophy_name }}</h3>
-          <p v-if="item.trophy.trophy_detail" class="mt-0.5 line-clamp-1 text-xs text-slate-500">
-            {{ item.trophy.trophy_detail }}
+          <h3 class="truncate font-semibold text-slate-900">{{ item.trophy.name }}</h3>
+          <p v-if="item.trophy.detail" class="mt-0.5 line-clamp-1 text-xs text-slate-500">
+            {{ item.trophy.detail }}
           </p>
           <div class="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-slate-400">
             <span class="inline-flex items-center gap-1 tabular-nums">
@@ -130,7 +138,7 @@ function elapsedSincePrev(index: number): number | null {
         <div class="hidden shrink-0 flex-col items-end leading-tight sm:flex">
           <span class="text-[10px] font-medium text-slate-400">PSN</span>
           <span class="text-sm font-semibold tabular-nums text-slate-600">
-            {{ item.trophy.trophy_earned_rate.toFixed(1) }}%
+            {{ psnEarnedRate(item) }}
           </span>
         </div>
 

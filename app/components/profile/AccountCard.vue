@@ -41,7 +41,7 @@ defineProps<{ profile: Profile }>()
         <dt class="inline-flex items-center gap-2 text-slate-500">
           <LucideIcon :icon="Calendar" class="size-4 text-slate-400" />加入于
         </dt>
-        <dd class="font-medium text-slate-900">{{ fmtDate(profile.joined_at) }}</dd>
+        <dd class="font-medium text-slate-900">{{ fmtDate(profile.registered_at) }}</dd>
       </div>
       <div class="flex items-center justify-between gap-3">
         <dt class="inline-flex items-center gap-2 text-slate-500">
