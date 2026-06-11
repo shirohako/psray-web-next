@@ -14,7 +14,7 @@ function openRanking(type: PlayerRankType) {
 }
 
 const stats = computed(() => [
-  { icon: Users, label: '拥有者', value: fmt(props.trophySet.owners), tint: 'text-slate-900' },
+  { icon: Users, label: '玩过', value: fmt(props.trophySet.owners), tint: 'text-slate-900' },
   { icon: Gauge, label: '平均进度', value: `${props.trophySet.average_progress}%`, tint: 'text-sky-600' },
   { icon: CheckCircle2, label: '完成人数', value: fmt(props.trophySet.completed_players), tint: 'text-emerald-600' },
   { icon: Trophy, label: '白金人数', value: fmt(props.trophySet.platinum_achievers), tint: 'text-cyan-600' },
@@ -36,7 +36,7 @@ const stats = computed(() => [
         <img
           :src="trophySet.icon_url"
           :alt="trophySet.name"
-          class="h-12 w-auto max-w-50 shrink-0 rounded-lg border border-white/15 object-contain shadow-lg sm:h-28 sm:rounded-xl"
+          class="h-12 w-auto min-w-12 max-w-50 shrink-0 rounded-lg border border-white/15 bg-white/10 object-contain shadow-lg sm:h-28 sm:min-w-28 sm:rounded-xl"
         />
         <div class="min-w-0 flex-1">
           <div class="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 sm:justify-start">

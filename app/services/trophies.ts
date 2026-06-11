@@ -107,6 +107,24 @@ export interface TrophySetDetailInfo {
   updated_at: string
 }
 
+/**
+ * A regional / cross-platform variant of the current set — the same game
+ * published as a separate store entry. Icon, name and trophy counts are
+ * (almost) identical across variants; what actually differs is `platform`,
+ * `region` and `owners`, so the UI surfaces only those.
+ */
+export interface SimilarTrophySet {
+  id: number
+  np_communication_id: string
+  name: string
+  platform: string
+  icon_url: string
+  defined_trophies: DefinedTrophies
+  default_language: string | null
+  region: string | null
+  owners: number
+}
+
 /** A recent player of this title. */
 export interface RecentPlayer {
   rank?: number
@@ -144,7 +162,7 @@ export interface TrophySetDetail {
   trophy_set: TrophySetDetailInfo
   groups: TrophyGroup[]
   recent_players: RecentPlayer[]
-  similar_trophy_sets?: TrophySetDetailInfo[]
+  similar_trophy_sets?: SimilarTrophySet[]
   viewer_progress: ViewerProgress | null
 }
 

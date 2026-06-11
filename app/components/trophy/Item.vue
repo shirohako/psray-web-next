@@ -72,7 +72,7 @@ const tipsOpen = ref(false)
         <img
           :src="trophy.icon_url"
           :alt="displayName"
-          class="size-14 rounded-lg object-cover shadow-sm sm:size-16"
+          class="size-14 rounded-lg bg-slate-100 object-cover shadow-sm sm:size-16"
           :class="{ 'blur-[3px] grayscale': masked }"
         />
         <span
