@@ -84,7 +84,7 @@ export interface TrophySetDetailInfo {
   id: number
   np_communication_id: string
   version: string
-  platform: string
+  platform: string[]
   name: string
   detail: string
   icon_url: string
@@ -117,7 +117,7 @@ export interface SimilarTrophySet {
   id: number
   np_communication_id: string
   name: string
-  platform: string
+  platform: string[]
   icon_url: string
   defined_trophies: DefinedTrophies
   default_language: string | null

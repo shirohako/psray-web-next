@@ -99,6 +99,14 @@ export const rankText = (r: number | null | undefined) => (r == null ? '暂无�
 /** Sum of all four trophy tiers. */
 export const sumTrophies = (p: Profile) => p.platinum + p.gold + p.silver + p.bronze
 
+export type PlatformValue = string | string[] | null | undefined
+
+/** Normalize legacy single-platform strings and current platform arrays. */
+export function platformList(platform: PlatformValue): string[] {
+  if (Array.isArray(platform)) return platform.filter(Boolean)
+  return platform ? [platform] : []
+}
+
 /**
  * Tailwind classes for a platform badge (filled, white text). Cohesive palette:
  * PS5 stays near-black (brand), the rest are distinct same-weight hues.

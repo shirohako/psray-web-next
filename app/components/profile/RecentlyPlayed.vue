@@ -85,10 +85,12 @@ function earnedTiers(g: PlayedTrophySet) {
         <!-- Platform + region + last-earned time -->
         <div class="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1">
           <span
+            v-for="platform in platformList(g.trophy_set.platform)"
+            :key="platform"
             class="shrink-0 rounded px-1.5 py-0.5 text-[10px] font-bold leading-none"
-            :class="platformBadgeClass(g.trophy_set.platform)"
+            :class="platformBadgeClass(platform)"
           >
-            {{ g.trophy_set.platform }}
+            {{ platform }}
           </span>
           <span
             v-if="g.trophy_set.region"

@@ -9,24 +9,29 @@ const platformRank = (p: string) => {
   const i = PLATFORM_ORDER.indexOf(p)
   return i === -1 ? PLATFORM_ORDER.length : i
 }
+const platformGroupKey = (platform: string[]) => platform.join('/') || 'UNKNOWN'
+const platformGroupRank = (platform: string[]) =>
+  platform.length ? Math.min(...platform.map(platformRank), PLATFORM_ORDER.length) : PLATFORM_ORDER.length
 
 // Same game, different store entries. Name and trophy counts repeat across every
-// variant, so we group by platform — each group shows one cover (covers differ
-// between PS4/PS5, not between regions) and lists its variants as id chips that
-// reveal full details on hover.
+// variant, so we group by platform combination — each group shows one cover
+// and lists its variants as id chips that reveal full details on hover.
 const groups = computed(() => {
   const byPlatform = new Map<string, SimilarTrophySet[]>()
   for (const s of props.sets) {
-    const list = byPlatform.get(s.platform)
+    const platforms = platformList(s.platform)
+    const key = platformGroupKey(platforms)
+    const list = byPlatform.get(key)
     if (list) list.push(s)
-    else byPlatform.set(s.platform, [s])
+    else byPlatform.set(key, [s])
   }
   return [...byPlatform.entries()]
-    .map(([platform, list]) => {
+    .map(([key, list]) => {
       const sets = [...list].sort((a, b) => b.owners - a.owners)
-      return { platform, sets, cover: sets[0]!.icon_url }
+      const platforms = platformList(sets[0]!.platform)
+      return { key, platforms, sets, cover: sets[0]!.icon_url }
     })
-    .sort((a, b) => platformRank(a.platform) - platformRank(b.platform))
+    .sort((a, b) => platformGroupRank(a.platforms) - platformGroupRank(b.platforms))
 })
 </script>
 
@@ -38,14 +43,16 @@ const groups = computed(() => {
     </div>
 
     <div class="divide-y divide-slate-100">
-      <section v-for="g in groups" :key="g.platform" class="p-3 sm:p-3.5">
+      <section v-for="g in groups" :key="g.key" class="p-3 sm:p-3.5">
         <!-- Platform + set count on its own line. -->
         <div class="flex items-center gap-2">
           <span
+            v-for="platform in g.platforms"
+            :key="platform"
             class="inline-block rounded px-1.5 py-0.5 text-[10px] font-bold leading-none"
-            :class="platformBadgeClass(g.platform)"
+            :class="platformBadgeClass(platform)"
           >
-            {{ g.platform }}
+            {{ platform }}
           </span>
           <span class="text-xs text-slate-400">{{ g.sets.length }} 套奖杯</span>
         </div>
@@ -59,9 +66,9 @@ const groups = computed(() => {
                  full slot width. -->
             <img
               :src="g.cover"
-              :alt="g.platform"
+              :alt="g.platforms.join(' / ')"
               class="rounded-md object-contain shadow-sm ring-1 ring-black/5"
-              :class="g.platform === 'PS5' ? 'max-w-14' : 'max-w-full'"
+              :class="g.platforms.length === 1 && g.platforms[0] === 'PS5' ? 'max-w-14' : 'max-w-full'"
             />
           </div>
 

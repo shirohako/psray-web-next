@@ -113,8 +113,8 @@ export interface TrophySet {
   id: number
   np_communication_id: string
   version: string
-  /** e.g. `PS5` | `PS4` | `PS3` | `PSVITA`. */
-  platform: string
+  /** e.g. `['PS5']` or `['PS4', 'PS5']`. */
+  platform: string[]
   name: string
   detail: string
   icon_url: string

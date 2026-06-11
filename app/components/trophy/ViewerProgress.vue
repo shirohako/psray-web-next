@@ -53,21 +53,26 @@ function isComplete(count: number, total: number | undefined) {
     <h2 class="mb-4 text-sm font-semibold text-slate-900">你的进度</h2>
 
     <div class="flex items-center gap-3">
-      <img :src="progress.avatar_url" :alt="progress.psnid" class="size-12 rounded-full bg-slate-100 object-cover" />
-      <div class="min-w-0 flex-1">
-        <div class="truncate font-semibold text-slate-900">{{ progress.psnid }}</div>
-        <div class="mt-1 flex items-center gap-1.5 text-xs text-slate-400">
-          <span>已获得</span>
-          <span class="inline-flex items-baseline gap-1 rounded-md bg-slate-100 px-1.5 py-0.5 font-bold tabular-nums text-slate-800">
-            <span>{{ fmt(earnedTotal) }}</span>
-            <template v-if="total != null">
-              <span class="text-slate-400">/</span>
-              <span>{{ fmt(total) }}</span>
-            </template>
-          </span>
-          <span>个奖杯</span>
+      <NuxtLink
+        :to="`/p/${encodeURIComponent(progress.psnid)}`"
+        class="group flex min-w-0 flex-1 items-center gap-3 rounded-lg p-1.5 transition hover:bg-slate-50"
+      >
+        <img :src="progress.avatar_url" :alt="progress.psnid" class="size-12 shrink-0 rounded-full bg-slate-100 object-cover" />
+        <div class="min-w-0 flex-1">
+          <div class="truncate font-semibold text-slate-900 group-hover:text-slate-700">{{ progress.psnid }}</div>
+          <div class="mt-1 flex items-center gap-1.5 text-xs text-slate-400">
+            <span>已获得</span>
+            <span class="inline-flex items-baseline gap-1 rounded-md bg-slate-100 px-1.5 py-0.5 font-bold tabular-nums text-slate-800">
+              <span>{{ fmt(earnedTotal) }}</span>
+              <template v-if="total != null">
+                <span class="text-slate-400">/</span>
+                <span>{{ fmt(total) }}</span>
+              </template>
+            </span>
+            <span>个奖杯</span>
+          </div>
         </div>
-      </div>
+      </NuxtLink>
       <TrophyProgressRing :progress="progress.progress" :bar-class="ringClass" :size="56" />
     </div>
 
@@ -95,7 +100,7 @@ function isComplete(count: number, total: number | undefined) {
       </div>
     </div>
 
-    <div class="mt-4 grid grid-cols-[7rem_minmax(0,1fr)] gap-2.5 border-t border-slate-100 pt-4">
+    <div class="mt-4 grid grid-cols-[9.5rem_minmax(0,1fr)] gap-2.5 border-t border-slate-100 pt-4">
       <div class="flex min-h-full flex-col justify-center rounded-lg bg-slate-50 px-3.5 py-2.5">
         <div class="inline-flex items-center gap-1.5 text-xs text-slate-400">
           <LucideIcon :icon="Clock" class="size-3.5" />耗时
