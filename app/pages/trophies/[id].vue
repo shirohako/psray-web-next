@@ -98,7 +98,7 @@
 
           <div class="divide-y divide-slate-200">
             <TrophyGroupSection
-              v-for="group in data.groups"
+              v-for="group in sortedGroups"
               :key="group.id"
               :group="group"
               :earned-rank="earnedRank"
@@ -131,7 +131,7 @@
 
 <script setup lang="ts">
 import { XCircle, ArrowUpDown } from 'lucide'
-import { useTrophies, type TrophySetDetail } from '~/services/trophies'
+import { useTrophies, type TrophyGroup, type TrophySetDetail } from '~/services/trophies'
 
 type FilterMode = 'all' | 'earned' | 'unearned'
 type SortMode = 'default' | 'earned' | 'rarity'
@@ -205,14 +205,34 @@ const earnedRank = computed(() => {
   return m
 })
 
-// Continuous serial number per trophy across all groups, in original order
-// (group 1's 11 trophies are #1–#11, so group 2 starts at #12). Stays attached
-// to the trophy regardless of the current filter/sort.
+function groupSortKey(group: TrophyGroup) {
+  if (group.psn_group_id === 'default') return -1
+  const numeric = Number(group.psn_group_id)
+  return Number.isFinite(numeric) ? numeric : Number.MAX_SAFE_INTEGER
+}
+
+// PSN groups are ordered as base game first (`default`), then DLC groups
+// (`001`, `002`, ...). Trophies inside each group follow PSN's own id.
+const sortedGroups = computed(() =>
+  [...(data.value?.groups ?? [])]
+    .sort((a, b) =>
+      groupSortKey(a) - groupSortKey(b)
+      || a.psn_group_id.localeCompare(b.psn_group_id)
+      || a.id - b.id,
+    )
+    .map(group => ({
+      ...group,
+      trophies: [...group.trophies].sort((a, b) =>
+        a.psn_trophy_id - b.psn_trophy_id || a.id - b.id,
+      ),
+    })),
+)
+
+// Trophy row number is PSN's zero-based trophy id shifted to user-facing 1-based.
 const trophyNumbers = computed(() => {
   const m = new Map<number, number>()
-  let n = 0
   for (const group of data.value?.groups ?? []) {
-    for (const t of group.trophies) m.set(t.id, ++n)
+    for (const t of group.trophies) m.set(t.id, t.psn_trophy_id + 1)
   }
   return m
 })

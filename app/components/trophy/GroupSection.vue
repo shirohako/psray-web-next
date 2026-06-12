@@ -23,9 +23,15 @@ function isEarned(t: Trophy) {
   return props.hasViewer && (t.earned_by_viewer ?? props.earnedRank.has(t.id))
 }
 
+const defaultTrophies = computed(() =>
+  [...props.group.trophies].sort((a, b) =>
+    a.psn_trophy_id - b.psn_trophy_id || a.id - b.id,
+  ),
+)
+
 // Filter then sort. Earned-based filter/sort only apply when a viewer is set.
 const displayTrophies = computed(() => {
-  let list = props.group.trophies
+  let list = defaultTrophies.value
 
   if (props.hasViewer && props.filter !== 'all') {
     const want = props.filter === 'earned'
