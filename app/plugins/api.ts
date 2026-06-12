@@ -26,8 +26,8 @@ export default defineNuxtPlugin(() => {
       if (token.value && !headers.has('Authorization')) {
         headers.set('Authorization', `Bearer ${token.value}`)
       }
-      // Apply the user's trophy-language preference (client only — it lives in
-      // localStorage). A per-call `Accept-Language` still wins if already set.
+      // Attach Accept-Language: the saved trophy-language preference when
+      // enabled, otherwise the user's browser default. A per-call header wins.
       const acceptLanguage = usePreferences().acceptLanguage.value
       if (acceptLanguage && !headers.has('Accept-Language')) {
         headers.set('Accept-Language', acceptLanguage)

@@ -5,7 +5,9 @@
  * Currently just the trophy-language preference: when enabled, the user picks a
  * primary + secondary language, and every API request carries a browser-style
  * `Accept-Language` header (`primary,secondary;q=0.9`) so the backend best-
- * matches trophy text to them. See the `$api` plugin + the settings drawer.
+ * matches trophy text to them. When it's off, we fall back to the user's own
+ * browser languages, so requests always carry an `Accept-Language`. See the
+ * `$api` plugin + the settings drawer.
  */
 
 /** Trophy-language preference. When `enabled`, both codes are required. */
@@ -23,17 +25,43 @@ function defaultTrophyLang(): TrophyLangPref {
   return { enabled: false, primary: '', secondary: '' }
 }
 
+/** Build a browser-style Accept-Language value from an ordered language list. */
+function toAcceptLanguage(langs: readonly string[]): string {
+  const unique = [...new Set(langs.filter(Boolean))]
+  return unique
+    .map((lang, i) => (i === 0 ? lang : `${lang};q=${Math.max(0.1, (10 - i) / 10)}`))
+    .join(',')
+}
+
+/**
+ * The user's own language preference, independent of our setting: from
+ * `navigator.languages` on the client, or the incoming page request's
+ * `Accept-Language` during SSR.
+ */
+function browserAcceptLanguage(): string {
+  if (import.meta.client) {
+    const langs = navigator.languages?.length
+      ? navigator.languages
+      : navigator.language
+        ? [navigator.language]
+        : []
+    return toAcceptLanguage(langs)
+  }
+  return useRequestHeaders(['accept-language'])['accept-language'] ?? ''
+}
+
 export function usePreferences() {
   const trophyLang = useState<TrophyLangPref>('prefs:trophyLang', defaultTrophyLang)
 
   /**
-   * Browser-style `Accept-Language` value for the current preference, or `''`
-   * when disabled / incomplete. Two languages → `primary,secondary;q=0.9`.
+   * Effective `Accept-Language` for API requests:
+   * - the trophy-language preference (`primary,secondary;q=0.9`) when enabled,
+   * - otherwise the user's browser languages, so a header is always sent.
    */
   const acceptLanguage = computed(() => {
     const { enabled, primary, secondary } = trophyLang.value
-    if (!enabled || !primary || !secondary) return ''
-    return `${primary},${secondary};q=0.9`
+    if (enabled && primary && secondary) return `${primary},${secondary};q=0.9`
+    return browserAcceptLanguage()
   })
 
   /** Hydrate state from localStorage (call once on the client at startup). */
