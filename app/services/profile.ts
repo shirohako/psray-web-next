@@ -135,6 +135,20 @@ export interface TrophySet {
   game_id: number | null
   created_at: ApiDate | null
   updated_at: ApiDate | null
+  /** Best-matched language for the current viewer/request. */
+  display_language?: string | null
+  /** Trophy-set title translated to `display_language`; falls back to `name`. */
+  localized_name?: string | null
+  /** Present in recently-played responses, currently not displayed. */
+  available_languages?: TrophySetAvailableLanguage[]
+}
+
+/** One available title translation from `recently-played`. */
+export interface TrophySetAvailableLanguage {
+  language_code: string
+  is_default: boolean
+  source: string
+  name: string
 }
 
 /** One of a user's played titles, as returned by `recently-played`. */
@@ -148,7 +162,7 @@ export interface PlayedTrophySet {
   earned_silver: number
   earned_gold: number
   earned_platinum: number
-  duration: number
+  duration: number | null
   is_hidden: boolean
   first_earned_at: ApiDate | null
   last_earned_at: ApiDate | null

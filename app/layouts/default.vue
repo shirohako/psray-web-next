@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { House, Menu, Gamepad2, Trophy, LogOut, User, RefreshCw, type IconNode } from 'lucide'
+import { House, Menu, Gamepad2, Trophy, LogOut, User, RefreshCw, Settings, Languages, type IconNode } from 'lucide'
 
 const route = useRoute()
 const appConfig = useAppConfig()
@@ -91,9 +91,29 @@ async function onLogout() {
         </NuxtLink>
       </div>
 
-      <!-- Right: auth controls -->
-      <div v-if="loggedIn && user" class="flex items-center gap-2 sm:gap-3">
+      <!-- Right: quick actions + auth controls -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        <div class="flex items-center gap-1">
+          <button
+            type="button"
+            aria-label="翻译"
+            title="翻译"
+            class="grid size-10 place-items-center rounded-lg text-slate-500 transition hover:bg-slate-100 hover:text-slate-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-900"
+          >
+            <LucideIcon :icon="Languages" class="size-5" stroke-width="1.75" />
+          </button>
+          <button
+            type="button"
+            aria-label="设置"
+            title="设置"
+            class="grid size-10 place-items-center rounded-lg text-slate-500 transition hover:bg-slate-100 hover:text-slate-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-900"
+          >
+            <LucideIcon :icon="Settings" class="size-5" stroke-width="1.75" />
+          </button>
+        </div>
+
         <DropdownMenu
+          v-if="loggedIn && user"
           align="right"
           class="flex min-w-0 cursor-pointer items-center gap-2 rounded-lg px-2 py-1.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-100 hover:text-slate-900 sm:px-3"
         >
@@ -138,20 +158,21 @@ async function onLogout() {
             </button>
           </template>
         </DropdownMenu>
-      </div>
-      <div v-else class="flex items-center gap-2 sm:gap-3">
-        <NuxtLink
-          to="/auth/login"
-          class="rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 sm:px-4"
-        >
-          登录
-        </NuxtLink>
-        <NuxtLink
-          to="/auth/register"
-          class="rounded-lg bg-slate-950 px-3 py-2 text-sm font-semibold text-white shadow-sm shadow-slate-950/30 transition hover:bg-black active:bg-black sm:px-4"
-        >
-          注册
-        </NuxtLink>
+
+        <template v-else>
+          <NuxtLink
+            to="/auth/login"
+            class="rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 sm:px-4"
+          >
+            登录
+          </NuxtLink>
+          <NuxtLink
+            to="/auth/register"
+            class="rounded-lg bg-slate-950 px-3 py-2 text-sm font-semibold text-white shadow-sm shadow-slate-950/30 transition hover:bg-black active:bg-black sm:px-4"
+          >
+            注册
+          </NuxtLink>
+        </template>
       </div>
     </header>
 

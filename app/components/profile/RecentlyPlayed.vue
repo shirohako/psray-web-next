@@ -21,6 +21,10 @@ const { data: res, pending } = await useApiFetchRaw<PlayedTrophySet[], PageMeta>
 const recent = computed(() => res.value?.data ?? [])
 const totalPages = computed(() => res.value?.meta?.total_pages ?? 1)
 
+function trophySetName(g: PlayedTrophySet) {
+  return g.trophy_set.localized_name || g.trophy_set.name
+}
+
 /** Per-tier earned counts in display order (platinum → bronze). */
 function earnedTiers(g: PlayedTrophySet) {
   return [
@@ -73,14 +77,14 @@ function earnedTiers(g: PlayedTrophySet) {
       <div class="flex h-18 w-24 shrink-0 items-center justify-center">
         <img
           :src="g.trophy_set.icon_url"
-          :alt="g.trophy_set.name"
+          :alt="trophySetName(g)"
           class="max-h-full max-w-full rounded-lg object-contain shadow-sm ring-1 ring-black/5"
         />
       </div>
 
       <div class="min-w-0 flex-1">
         <!-- Title -->
-        <h3 class="truncate font-semibold text-slate-900">{{ g.trophy_set.name }}</h3>
+        <h3 class="truncate font-semibold text-slate-900">{{ trophySetName(g) }}</h3>
 
         <!-- Platform + region + last-earned time -->
         <div class="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1">
