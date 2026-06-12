@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Languages, Check, Loader2 } from 'lucide'
+import { Languages, Check, Loader2, ChevronDown, Tag } from 'lucide'
 import type { AvailableLanguage } from '~/services/trophies'
 
 const props = defineProps<{
@@ -14,10 +14,32 @@ const props = defineProps<{
 const emit = defineEmits<{ select: [code: string] }>()
 
 const open = ref(false)
+// The row the user just tapped — keeps the sheet open with a spinner on it
+// until the parent finishes fetching, then we close.
+const pendingCode = ref('')
 
 function choose(code: string) {
-  open.value = false
-  if (code !== props.current) emit('select', code)
+  if (props.loading) return
+  if (code === props.current) {
+    open.value = false
+    return
+  }
+  pendingCode.value = code
+  emit('select', code)
+}
+
+// Close once the switch settles (loading true → false).
+watch(() => props.loading, (now, was) => {
+  if (was && !now) open.value = false
+})
+
+// Drop stale pending state whenever the sheet is closed.
+watch(open, (v) => {
+  if (!v) pendingCode.value = ''
+})
+
+function isActive(code: string) {
+  return code === pendingCode.value || (!pendingCode.value && code === props.current)
 }
 </script>
 
@@ -30,49 +52,70 @@ function choose(code: string) {
   >
     <LucideIcon :icon="loading ? Loader2 : Languages" class="size-4 text-slate-400" :class="{ 'animate-spin': loading }" />
     <span>{{ langNameEn(current) }}</span>
+    <LucideIcon :icon="ChevronDown" class="size-3.5 text-slate-400" />
   </button>
 
-  <Dialog v-model:open="open" size="sm" title="选择语言">
-    <ul class="space-y-1 p-2">
+  <Dialog v-model:open="open" size="md">
+    <template #title>
+      <span class="inline-flex items-center gap-2">
+        <span class="grid size-7 place-items-center rounded-lg bg-slate-100 text-slate-600">
+          <LucideIcon :icon="Languages" class="size-4" />
+        </span>
+        选择显示语言
+      </span>
+    </template>
+
+    <p class="px-5 pb-1 pt-1 text-xs text-slate-400">
+      选择奖杯名称与描述的显示语言。
+    </p>
+
+    <ul class="space-y-0.5 p-2 pt-1">
       <li v-for="l in languages" :key="l.language_code">
         <button
           type="button"
-          class="group flex w-full items-center gap-3 rounded-xl border px-3 py-2.5 text-left transition"
-          :class="l.language_code === current
-            ? 'border-slate-900/10 bg-slate-50 ring-1 ring-slate-900/5'
-            : 'border-transparent hover:border-slate-200 hover:bg-slate-50'"
+          :disabled="loading"
+          class="group flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left transition duration-200"
+          :class="isActive(l.language_code)
+            ? 'bg-slate-900/4 ring-1 ring-inset ring-slate-900/10'
+            : loading
+              ? 'cursor-default opacity-40'
+              : 'hover:bg-slate-50'"
           @click="choose(l.language_code)"
         >
-          <!-- Language code badge -->
+          <!-- Leading status: spinner while switching, filled check when active,
+               blank (aligned) placeholder otherwise. -->
+          <LucideIcon
+            v-if="pendingCode === l.language_code"
+            :icon="Loader2"
+            class="size-5 shrink-0 animate-spin text-slate-500"
+          />
           <span
-            class="shrink-0 rounded-lg px-2 py-1 font-mono text-[11px] font-semibold tracking-tight tabular-nums transition"
-            :class="l.language_code === current
-              ? 'bg-slate-900 text-white'
-              : 'bg-slate-100 text-slate-500 group-hover:bg-slate-200'"
+            v-else-if="isActive(l.language_code)"
+            class="grid size-5 shrink-0 place-items-center rounded-full bg-slate-900 text-white"
           >
-            {{ l.language_code }}
+            <LucideIcon :icon="Check" class="size-3" stroke-width="3.5" />
           </span>
+          <span v-else class="size-5 shrink-0" />
 
-          <!-- English name + localized title -->
+          <!-- Name (with default tag) + code · localized title meta -->
           <span class="min-w-0 flex-1">
             <span class="flex items-center gap-1.5">
-              <span class="truncate font-medium text-slate-900">{{ langNameEn(l.language_code) }}</span>
+              <span class="truncate text-sm font-semibold text-slate-900">{{ langNameEn(l.language_code) }}</span>
               <span
                 v-if="l.is_default"
-                class="rounded-full bg-amber-50 px-1.5 py-0.5 text-[10px] font-medium leading-none text-amber-600"
+                class="shrink-0 rounded-full bg-amber-50 px-1.5 py-0.5 text-[10px] font-medium leading-none text-amber-600"
               >
                 默认
               </span>
             </span>
-            <span class="mt-0.5 block truncate text-xs text-slate-400">{{ l.name }}</span>
+            <span class="mt-1 flex items-center gap-1.5 text-xs text-slate-400">
+              <span class="inline-flex shrink-0 items-center gap-1 rounded bg-slate-100 px-1.5 py-0.5 font-mono text-[10px] font-medium leading-none text-slate-500">
+                <LucideIcon :icon="Tag" class="size-3" />
+                {{ l.language_code.toLowerCase() }}
+              </span>
+              <span class="truncate">{{ l.name }}</span>
+            </span>
           </span>
-
-          <LucideIcon
-            v-if="l.language_code === current"
-            :icon="Check"
-            class="size-4 shrink-0 text-slate-900"
-            stroke-width="3"
-          />
         </button>
       </li>
     </ul>

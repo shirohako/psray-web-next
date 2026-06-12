@@ -38,13 +38,19 @@
               奖杯
               <span class="text-sm font-normal text-slate-400">共 {{ totalDefined(data.trophy_set.defined_trophies) }} 个</span>
             </h2>
-            <TrophyLanguagePicker
-              v-if="availableLanguages.length"
-              :languages="availableLanguages"
-              :current="data.display_language"
-              :loading="switching"
-              @select="switchLanguage"
-            />
+            <div v-if="availableLanguages.length" class="flex items-center gap-2.5">
+              <span class="hidden items-center gap-1 text-xs font-medium text-slate-400 sm:inline-flex">
+                支持
+                <span class="rounded-full bg-slate-100 px-1.5 py-0.5 font-semibold tabular-nums text-slate-600">{{ availableLanguages.length }}</span>
+                种语言
+              </span>
+              <TrophyLanguagePicker
+                :languages="availableLanguages"
+                :current="data.display_language"
+                :loading="switching"
+                @select="switchLanguage"
+              />
+            </div>
           </div>
 
           <!-- Filter + sort toolbar -->
