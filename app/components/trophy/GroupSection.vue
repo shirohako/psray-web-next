@@ -3,8 +3,6 @@ import type { Trophy, TrophyGroup } from '~/services/trophies'
 
 const props = defineProps<{
   group: TrophyGroup
-  /** Selected language code, or '' for the original text. */
-  lang: string
   /** id → index in the viewer's earned list (empty when no viewer). */
   earnedRank: Map<number, number>
   hasViewer: boolean
@@ -18,8 +16,7 @@ const props = defineProps<{
 
 const title = computed(() => {
   if (props.group.psn_group_id === 'default') return '本篇'
-  const loc = props.lang ? props.group.localizations[props.lang] : undefined
-  return loc?.localized_title || props.group.name
+  return props.group.localized_name || props.group.name
 })
 
 function isEarned(t: Trophy) {
@@ -74,7 +71,6 @@ const displayTrophies = computed(() => {
         v-for="trophy in displayTrophies"
         :key="trophy.id"
         :trophy="trophy"
-        :lang="lang"
         :has-viewer="hasViewer"
         :earned="isEarned(trophy)"
         :show-spoilers="showSpoilers"

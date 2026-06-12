@@ -38,7 +38,13 @@
               奖杯
               <span class="text-sm font-normal text-slate-400">共 {{ totalDefined(data.trophy_set.defined_trophies) }} 个</span>
             </h2>
-            <TrophyLanguageSelect v-model="lang" :languages="availableLanguages" />
+            <TrophyLanguagePicker
+              v-if="availableLanguages.length"
+              :languages="availableLanguages"
+              :current="data.display_language"
+              :loading="switching"
+              @select="switchLanguage"
+            />
           </div>
 
           <!-- Filter + sort toolbar -->
@@ -89,7 +95,6 @@
               v-for="group in data.groups"
               :key="group.id"
               :group="group"
-              :lang="lang"
               :earned-rank="earnedRank"
               :has-viewer="hasViewer"
               :filter="filter"
@@ -120,7 +125,7 @@
 
 <script setup lang="ts">
 import { XCircle, ArrowUpDown } from 'lucide'
-import type { TrophySetDetail } from '~/services/trophies'
+import { useTrophies, type TrophySetDetail } from '~/services/trophies'
 
 type FilterMode = 'all' | 'earned' | 'unearned'
 type SortMode = 'default' | 'earned' | 'rarity'
@@ -137,23 +142,54 @@ const psnid = computed(() =>
 )
 const hasViewer = computed(() => Boolean(psnid.value))
 
+// `deep: true` keeps the payload deeply reactive (Nuxt 4 defaults to a
+// shallowRef). The language switch patches `localized_*` onto nested groups /
+// trophies in place, and only deep reactivity propagates that to the children.
 const { data, pending, error } = await useApiFetch<TrophySetDetail>(() => {
   const base = `/trophies/${id.value}`
   return psnid.value ? `${base}?psnid=${encodeURIComponent(psnid.value)}` : base
-})
+}, { deep: true })
 
-// Selected trophy-text language; '' = original. Fetch returns every language,
-// so switching is client-side with no refetch.
-const lang = ref('')
+// The detail payload arrives in the server's best-matched `display_language`.
+// Switching language re-fetches only the localized text and patches it onto
+// the rendered groups/trophies by id — progress, players and similar sets stay.
+const { localization } = useTrophies()
+const toast = useToast()
+const switching = ref(false)
 
-// Union of languages that have translations across all groups.
-const availableLanguages = computed(() => {
-  const set = new Set<string>()
-  for (const group of data.value?.groups ?? []) {
-    for (const l of group.available_languages) set.add(l.language_code)
+const availableLanguages = computed(() => data.value?.available_languages ?? [])
+
+async function switchLanguage(code: string) {
+  const detail = data.value
+  if (!detail || switching.value || code === detail.display_language) return
+
+  switching.value = true
+  try {
+    const loc = await localization(id.value, { lang: code })
+
+    const groupById = new Map(detail.groups.map(g => [g.id, g]))
+    for (const lg of loc.groups) {
+      const group = groupById.get(lg.id)
+      if (!group) continue
+      group.localized_name = lg.localized_name
+      group.localized_detail = lg.localized_detail
+
+      const trophyById = new Map(group.trophies.map(t => [t.id, t]))
+      for (const lt of lg.trophies) {
+        const trophy = trophyById.get(lt.id)
+        if (!trophy) continue
+        trophy.localized_name = lt.localized_name
+        trophy.localized_detail = lt.localized_detail
+      }
+    }
+
+    detail.display_language = loc.display_language
+  } catch {
+    toast.error({ title: '语言切换失败', description: '请稍后再试。' })
+  } finally {
+    switching.value = false
   }
-  return [...set].sort()
-})
+}
 
 // Maps each earned trophy's db id to its position in the viewer's earned list,
 // which drives both the earned check and the "获得时间" sort.

@@ -46,3 +46,53 @@ export function langLabel(code: string): string {
     return code
   }
 }
+
+/**
+ * English display names for PSN's trophy localization languages (the 25 codes
+ * PSN ships trophy text in). Doubles as the catalogue for the global
+ * trophy-language preference — see {@link TROPHY_LANGUAGE_CODES}.
+ */
+const LANG_NAME_EN: Record<string, string> = {
+  'cs-CZ': 'Czech',
+  'da-DK': 'Danish',
+  'de-DE': 'German',
+  'el-GR': 'Greek',
+  'en-GB': 'English (UK)',
+  'en-US': 'English (US)',
+  'es-419': 'Spanish (Latin America)',
+  'es-ES': 'Spanish',
+  'fi-FI': 'Finnish',
+  'fr-FR': 'French',
+  'hu-HU': 'Hungarian',
+  'it-IT': 'Italian',
+  'ja-JP': 'Japanese',
+  'ko-KR': 'Korean',
+  'nb-NO': 'Norwegian',
+  'nl-NL': 'Dutch',
+  'pl-PL': 'Polish',
+  'pt-BR': 'Portuguese (Brazil)',
+  'pt-PT': 'Portuguese',
+  'ru-RU': 'Russian',
+  'sv-SE': 'Swedish',
+  'th-TH': 'Thai',
+  'tr-TR': 'Turkish',
+  'zh-Hans': 'Chinese (Simplified)',
+  'zh-Hant': 'Chinese (Traditional)',
+}
+
+/** Selectable trophy-language codes, ordered by English name (for preferences). */
+export const TROPHY_LANGUAGE_CODES = Object.keys(LANG_NAME_EN)
+  .sort((a, b) => LANG_NAME_EN[a]!.localeCompare(LANG_NAME_EN[b]!))
+
+/**
+ * English language name for a PSN language code, e.g. `zh-Hant → Chinese
+ * (Traditional)`. Falls back to `Intl.DisplayNames`, then the raw code.
+ */
+export function langNameEn(code: string): string {
+  if (LANG_NAME_EN[code]) return LANG_NAME_EN[code]
+  try {
+    return new Intl.DisplayNames(['en'], { type: 'language' }).of(code) ?? code
+  } catch {
+    return code
+  }
+}

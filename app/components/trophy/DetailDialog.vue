@@ -4,17 +4,12 @@ import type { Trophy as TrophyData } from '~/services/trophies'
 
 const props = defineProps<{
   trophy: TrophyData
-  /** Selected language code, or '' for the original text. */
-  lang: string
   open: boolean
 }>()
 const emit = defineEmits<{ 'update:open': [v: boolean] }>()
 
-const translation = computed(() =>
-  props.lang ? props.trophy.translations?.[props.lang] : null,
-)
-const name = computed(() => translation.value?.trophyName || props.trophy.name)
-const detail = computed(() => translation.value?.trophyDetail || props.trophy.detail)
+const name = computed(() => props.trophy.localized_name || props.trophy.name)
+const detail = computed(() => props.trophy.localized_detail || props.trophy.detail)
 const rarity = computed(() => rarityMeta(props.trophy.rarity))
 function fmtRate(rate: number | string) {
   const n = Number(rate)

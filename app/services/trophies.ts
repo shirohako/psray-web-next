@@ -18,12 +18,6 @@ export interface DefinedTrophies {
   platinum: number
 }
 
-/** A single language's translation of one trophy. */
-export interface TrophyTranslation {
-  trophyName: string
-  trophyDetail: string
-}
-
 /** One trophy within a group. */
 export interface Trophy {
   /** Database primary key (matches `viewer_progress.earned_trophies` ids). */
@@ -46,22 +40,23 @@ export interface Trophy {
   rarity: Rarity
   /** Number of community guides/tips. */
   tip_count: number
-  /** Per-language translations keyed by language code; `null` when missing. */
-  translations?: Record<string, TrophyTranslation | null>
+  /** Title in `display_language`; falls back to `name` when untranslated. */
+  localized_name?: string
+  /** Description in `display_language`; falls back to `detail`. */
+  localized_detail?: string
   /** Present only when the request carried a `psnid`. */
   earned_by_viewer?: boolean
 }
 
-/** A language that has translations for this group + how many trophies it covers. */
+/** A language this set can be displayed in (the title rendered in that language). */
 export interface AvailableLanguage {
+  /** PSN language code, e.g. `zh-Hant`. */
   language_code: string
-  trophy_count: number
-}
-
-/** Translated group title/intro. */
-export interface GroupLocalization {
-  localized_title: string
-  group_detail: string
+  is_default: boolean
+  /** Translation origin, e.g. `official`. */
+  source: string
+  /** The set's title in this language. */
+  name: string
 }
 
 /** A trophy group (base game, or a DLC). */
@@ -73,9 +68,10 @@ export interface TrophyGroup {
   detail: string
   icon_url: string
   defined_trophies: DefinedTrophies
-  available_languages: AvailableLanguage[]
-  /** Group name/intro translations keyed by language code. */
-  localizations: Record<string, GroupLocalization>
+  /** Group title in `display_language`; falls back to `name`. */
+  localized_name?: string
+  /** Group intro in `display_language`; falls back to `detail`. */
+  localized_detail?: string
   trophies: Trophy[]
 }
 
@@ -161,10 +157,38 @@ export interface ViewerProgress {
 /** Full payload of `GET /trophies/:id`. */
 export interface TrophySetDetail {
   trophy_set: TrophySetDetailInfo
+  /** Language the server best-matched this payload to (a `language_code`). */
+  display_language: string
+  /** Every language this set can be switched to. */
+  available_languages: AvailableLanguage[]
   groups: TrophyGroup[]
   recent_players: RecentPlayer[]
   similar_trophy_sets?: SimilarTrophySet[]
   viewer_progress: ViewerProgress | null
+}
+
+/** One trophy's localized text from `GET /trophies/:id/localization`. */
+export interface TrophyLocalizationTrophy {
+  id: number
+  localized_name: string
+  localized_detail: string
+}
+
+/** One group's localized text from `GET /trophies/:id/localization`. */
+export interface TrophyLocalizationGroup {
+  id: number
+  localized_name: string
+  localized_detail: string
+  trophies: TrophyLocalizationTrophy[]
+}
+
+/**
+ * Payload of `GET /trophies/:id/localization` — only the translatable text, to
+ * patch onto an already-rendered detail page when switching display language.
+ */
+export interface TrophyLocalization {
+  display_language: string
+  groups: TrophyLocalizationGroup[]
 }
 
 /** Player-ranking modes for `GET /trophies/:id/players`. */
@@ -248,6 +272,14 @@ export function useTrophies() {
     /** Trophy-set detail. Pass `psnid` to embed a user's progress. */
     find: (id: number | string, query?: { psnid?: string; lang?: string }) =>
       get<TrophySetDetail>(`/trophies/${id}`, { query }),
+
+    /**
+     * Localized text only, for switching the display language without
+     * re-fetching progress / players / similar sets. Patch the returned
+     * `localized_name` / `localized_detail` onto the rendered data by id.
+     */
+    localization: (id: number | string, query?: { lang?: string }) =>
+      get<TrophyLocalization>(`/trophies/${id}/localization`, { query }),
 
     /** Ranked players for a set (paginated — returns the `{ data, meta }` envelope). */
     players: (id: number | string, query?: { type?: PlayerRankType; page?: number }) =>

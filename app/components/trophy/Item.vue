@@ -4,8 +4,6 @@ import type { Trophy as TrophyData } from '~/services/trophies'
 
 const props = defineProps<{
   trophy: TrophyData
-  /** Selected language code, or '' for the original text. */
-  lang: string
   /** Whether the viewed user has earned this trophy. */
   earned: boolean
   /** True when a viewer was requested (enables the earned styling). */
@@ -16,11 +14,8 @@ const props = defineProps<{
   number: number
 }>()
 
-const translation = computed(() =>
-  props.lang ? props.trophy.translations?.[props.lang] : null,
-)
-const name = computed(() => translation.value?.trophyName || props.trophy.name)
-const detail = computed(() => translation.value?.trophyDetail || props.trophy.detail)
+const name = computed(() => props.trophy.localized_name || props.trophy.name)
+const detail = computed(() => props.trophy.localized_detail || props.trophy.detail)
 const showEarned = computed(() => props.hasViewer && props.earned)
 
 // Per-trophy visibility override toggled by the eye icon next to the title.
@@ -188,7 +183,7 @@ const tipsOpen = ref(false)
     </template>
   </Popover>
 
-  <TrophyDetailDialog :trophy="trophy" :lang="lang" v-model:open="detailOpen" />
+  <TrophyDetailDialog :trophy="trophy" v-model:open="detailOpen" />
   <TrophyEarnersDialog :trophy-id="trophy.id" :trophy-name="name" v-model:open="earnersOpen" />
   <TrophyTipsDialog :trophy-id="trophy.id" :trophy-name="name" v-model:open="tipsOpen" />
 </template>

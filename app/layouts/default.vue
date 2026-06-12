@@ -13,6 +13,9 @@ const collapsed = ref(false)
 // in as an overlay layer above the content when opened.
 const mobileOpen = ref(false)
 
+// Site-wide settings drawer (slides from the left).
+const settingsOpen = ref(false)
+
 onMounted(() => {
   const saved = localStorage.getItem('sidebar:collapsed')
   if (saved !== null) collapsed.value = saved === '1'
@@ -107,6 +110,7 @@ async function onLogout() {
             aria-label="设置"
             title="设置"
             class="grid size-10 place-items-center rounded-lg text-slate-500 transition hover:bg-slate-100 hover:text-slate-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-900"
+            @click="settingsOpen = true"
           >
             <LucideIcon :icon="Settings" class="size-5" stroke-width="1.75" />
           </button>
@@ -241,5 +245,8 @@ async function onLogout() {
         <slot />
       </div>
     </main>
+
+    <!-- Site-wide preferences -->
+    <SettingsDrawer v-model:open="settingsOpen" />
   </div>
 </template>
