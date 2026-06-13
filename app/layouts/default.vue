@@ -241,7 +241,7 @@ async function onLogout() {
       class="pt-16 transition-[padding] duration-300 ease-in-out"
       :class="collapsed ? 'lg:pl-17' : 'lg:pl-56'"
     >
-      <div class="mx-auto max-w-7xl p-4 sm:p-6 lg:p-8">
+      <div class="mx-auto max-w-6xl p-4 sm:p-6 lg:p-8">
         <slot />
       </div>
     </main>
