@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Clock, ChevronRight, Globe } from 'lucide'
+import { Clock, ChevronDown, ChevronRight, Globe } from 'lucide'
 import type { PlayedTrophySet } from '~/services/profile'
 
 const props = defineProps<{ psnid: string }>()
@@ -12,6 +12,7 @@ interface PageMeta {
 }
 
 const page = ref(1)
+const expanded = ref(false)
 
 // `page` is read inside the URL getter, so changing it re-fetches.
 const { data: res, pending } = await useApiFetchRaw<PlayedTrophySet[], PageMeta>(
@@ -20,6 +21,7 @@ const { data: res, pending } = await useApiFetchRaw<PlayedTrophySet[], PageMeta>
 
 const recent = computed(() => res.value?.data ?? [])
 const totalPages = computed(() => res.value?.meta?.total_pages ?? 1)
+const canCollapse = computed(() => recent.value.length > 4)
 
 function trophySetName(g: PlayedTrophySet) {
   return g.trophy_set.localized_name || g.trophy_set.name
@@ -34,6 +36,14 @@ function earnedTiers(g: PlayedTrophySet) {
     { dot: 'bg-orange-400', count: g.earned_bronze },
   ]
 }
+
+watch(page, () => {
+  expanded.value = false
+})
+
+watch(() => props.psnid, () => {
+  expanded.value = false
+})
 </script>
 
 <template>
@@ -64,78 +74,109 @@ function earnedTiers(g: PlayedTrophySet) {
   </div>
 
   <!-- List -->
-  <div v-else class="divide-y divide-slate-100 transition-opacity" :class="{ 'opacity-50': pending }">
-    <NuxtLink
-      v-for="g in recent"
-      :key="g.id"
-      :to="{ path: `/trophies/${g.trophy_set_id}`, query: { psnid } }"
-      class="group flex items-center gap-4 px-4 py-4 transition hover:bg-slate-50 sm:px-5"
+  <div v-else class="relative">
+    <div
+      class="divide-y divide-slate-100 transition-[max-height,opacity] duration-500 ease-out max-sm:overflow-hidden"
+      :class="[
+        { 'opacity-50': pending },
+        expanded || !canCollapse ? 'max-sm:max-h-[9999px]' : 'max-sm:max-h-[25rem]',
+      ]"
     >
-      <!-- Fixed-width slot keeps rows aligned; the image renders at its natural
-           aspect (PS4 320×176 landscape, PS5 square) with a soft ring instead of
-           a gray letterbox box around it, plus a loading skeleton. -->
-      <div class="relative flex h-18 w-24 shrink-0 items-center justify-center">
-        <TrophySetImage
-          :src="g.trophy_set.icon_url"
-          :alt="trophySetName(g)"
-          :platform="platformList(g.trophy_set.platform)"
-        />
-      </div>
-
-      <div class="min-w-0 flex-1">
-        <!-- Title -->
-        <h3 class="truncate font-semibold text-slate-900">{{ trophySetName(g) }}</h3>
-
-        <!-- Platform + region + last-earned time -->
-        <div class="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1">
-          <span
-            v-for="platform in platformList(g.trophy_set.platform)"
-            :key="platform"
-            class="shrink-0 rounded px-1.5 py-0.5 text-[10px] font-bold leading-none"
-            :class="platformBadgeClass(platform)"
-          >
-            {{ platform }}
-          </span>
-          <span
-            v-if="g.trophy_set.region"
-            class="inline-flex shrink-0 items-center gap-1 rounded border border-slate-200 bg-slate-50 px-1.5 py-0.5 text-[10px] font-bold leading-none tracking-wide text-slate-500"
-          >
-            <LucideIcon :icon="Globe" class="size-3 text-slate-400" />
-            {{ g.trophy_set.region }}
-          </span>
-          <span class="inline-flex items-center gap-1 text-xs tabular-nums text-slate-400">
-            <LucideIcon :icon="Clock" class="size-3.5" />
-            {{ fmtDateTime(g.last_earned_at) }}
-          </span>
+      <NuxtLink
+        v-for="g in recent"
+        :key="g.id"
+        :to="{ path: `/trophies/${g.trophy_set_id}`, query: { psnid } }"
+        class="group flex items-center gap-4 px-4 py-4 transition hover:bg-slate-50 sm:px-5"
+      >
+        <!-- Fixed-width slot keeps rows aligned; the image renders at its natural
+             aspect (PS4 320×176 landscape, PS5 square) with a soft ring instead of
+             a gray letterbox box around it, plus a loading skeleton. -->
+        <div class="relative flex h-18 w-24 shrink-0 items-center justify-center">
+          <TrophySetImage
+            :src="g.trophy_set.icon_url"
+            :alt="trophySetName(g)"
+            :platform="platformList(g.trophy_set.platform)"
+          />
         </div>
 
-        <!-- Progress + per-tier earned counts -->
-        <div class="mt-2.5 flex items-center gap-3">
-          <div class="h-1.5 flex-1 overflow-hidden rounded-full bg-slate-100">
-            <div
-              class="h-full rounded-full"
-              :class="g.progress === 100 ? 'bg-cyan-400' : 'bg-slate-900'"
-              :style="{ width: `${g.progress}%` }"
-            />
+        <div class="min-w-0 flex-1">
+          <!-- Title -->
+          <h3 class="truncate font-semibold text-slate-900">{{ trophySetName(g) }}</h3>
+
+          <!-- Platform + region + last-earned time -->
+          <div class="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1">
+            <span
+              v-for="platform in platformList(g.trophy_set.platform)"
+              :key="platform"
+              class="shrink-0 rounded px-1.5 py-0.5 text-[10px] font-bold leading-none"
+              :class="platformBadgeClass(platform)"
+            >
+              {{ platform }}
+            </span>
+            <span
+              v-if="g.trophy_set.region"
+              class="inline-flex shrink-0 items-center gap-1 rounded border border-slate-200 bg-slate-50 px-1.5 py-0.5 text-[10px] font-bold leading-none tracking-wide text-slate-500"
+            >
+              <LucideIcon :icon="Globe" class="size-3 text-slate-400" />
+              {{ g.trophy_set.region }}
+            </span>
+            <span class="inline-flex items-center gap-1 text-xs tabular-nums text-slate-400">
+              <LucideIcon :icon="Clock" class="size-3.5" />
+              {{ fmtDateTime(g.last_earned_at) }}
+            </span>
           </div>
-          <span class="w-9 shrink-0 text-right text-xs font-semibold tabular-nums text-slate-600">{{ g.progress }}%</span>
-        </div>
-        <div class="mt-1.5 flex items-center gap-3 text-xs text-slate-500">
-          <span v-for="(t, i) in earnedTiers(g)" :key="i" class="inline-flex items-center gap-1 tabular-nums">
-            <span class="size-2 rounded-full" :class="t.dot" />{{ t.count }}
-          </span>
-        </div>
-      </div>
 
-      <LucideIcon
-        :icon="ChevronRight"
-        class="size-5 shrink-0 text-slate-300 transition group-hover:text-slate-400"
-      />
-    </NuxtLink>
+          <!-- Progress + per-tier earned counts -->
+          <div class="mt-2.5 flex items-center gap-3">
+            <div class="h-1.5 flex-1 overflow-hidden rounded-full bg-slate-100">
+              <div
+                class="h-full rounded-full"
+                :class="g.progress === 100 ? 'bg-cyan-400' : 'bg-slate-900'"
+                :style="{ width: `${g.progress}%` }"
+              />
+            </div>
+            <span class="w-9 shrink-0 text-right text-xs font-semibold tabular-nums text-slate-600">{{ g.progress }}%</span>
+          </div>
+          <div class="mt-1.5 flex items-center gap-3 text-xs text-slate-500">
+            <span v-for="(t, i) in earnedTiers(g)" :key="i" class="inline-flex items-center gap-1 tabular-nums">
+              <span class="size-2 rounded-full" :class="t.dot" />{{ t.count }}
+            </span>
+          </div>
+        </div>
+
+        <LucideIcon
+          :icon="ChevronRight"
+          class="size-5 shrink-0 text-slate-300 transition group-hover:text-slate-400"
+        />
+      </NuxtLink>
+    </div>
+
+    <div
+      v-if="canCollapse"
+      class="sm:hidden"
+      :class="expanded ? 'border-t border-slate-100 bg-white px-4 py-3' : 'pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-white via-white/95 to-white/0 px-4 pb-4 pt-16'"
+    >
+      <button
+        type="button"
+        class="pointer-events-auto flex w-full items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-800 shadow-sm shadow-slate-900/5 transition active:scale-[0.99]"
+        @click="expanded = !expanded"
+      >
+        {{ expanded ? '收起最近玩过' : '展开最近玩过' }}
+        <LucideIcon
+          :icon="ChevronDown"
+          class="size-4 transition-transform duration-300"
+          :class="expanded ? 'rotate-180' : ''"
+        />
+      </button>
+    </div>
   </div>
 
   <!-- Bottom pager -->
-  <div v-if="totalPages > 1" class="border-t border-slate-100 px-4 py-3">
+  <div
+    v-if="totalPages > 1"
+    class="border-t border-slate-100 px-4 py-3"
+    :class="canCollapse && !expanded ? 'max-sm:hidden' : ''"
+  >
     <Pagination v-model:page="page" :total-pages="totalPages" />
   </div>
   </div>

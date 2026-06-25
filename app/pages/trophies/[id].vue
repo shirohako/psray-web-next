@@ -96,18 +96,42 @@
             </div>
           </div>
 
-          <div class="divide-y divide-slate-200">
-            <TrophyGroupSection
-              v-for="group in sortedGroups"
-              :key="group.id"
-              :group="group"
-              :earned-info="earnedInfo"
-              :has-viewer="hasViewer"
-              :filter="filter"
-              :sort="sort"
-              :show-spoilers="showSpoilers"
-              :numbers="trophyNumbers"
-            />
+          <div class="relative">
+            <div
+              class="divide-y divide-slate-200 transition-[max-height] duration-500 ease-out max-sm:overflow-hidden"
+              :class="trophyListExpanded ? 'max-sm:max-h-[9999px]' : 'max-sm:max-h-[34rem]'"
+            >
+              <TrophyGroupSection
+                v-for="group in sortedGroups"
+                :key="group.id"
+                :group="group"
+                :earned-info="earnedInfo"
+                :has-viewer="hasViewer"
+                :filter="filter"
+                :sort="sort"
+                :show-spoilers="showSpoilers"
+                :numbers="trophyNumbers"
+              />
+            </div>
+
+            <div
+              v-if="visibleTrophyCount > 6"
+              class="sm:hidden"
+              :class="trophyListExpanded ? 'border-t border-slate-200 bg-white px-4 py-3' : 'pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-white via-white/95 to-white/0 px-4 pb-4 pt-18'"
+            >
+              <button
+                type="button"
+                class="pointer-events-auto flex w-full items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-800 shadow-sm shadow-slate-900/5 transition active:scale-[0.99]"
+                @click="trophyListExpanded = !trophyListExpanded"
+              >
+                {{ trophyListExpanded ? '收起奖杯列表' : '展开全部奖杯' }}
+                <LucideIcon
+                  :icon="ChevronDown"
+                  class="size-4 transition-transform duration-300"
+                  :class="trophyListExpanded ? 'rotate-180' : ''"
+                />
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -130,8 +154,8 @@
 </template>
 
 <script setup lang="ts">
-import { XCircle, ArrowUpDown } from 'lucide'
-import { useTrophies, type TrophyGroup, type TrophySetDetail } from '~/services/trophies'
+import { XCircle, ArrowUpDown, ChevronDown } from 'lucide'
+import { useTrophies, type Trophy, type TrophyGroup, type TrophySetDetail } from '~/services/trophies'
 
 type FilterMode = 'all' | 'earned' | 'unearned'
 type SortMode = 'default' | 'earned' | 'rarity'
@@ -260,6 +284,24 @@ const sortedGroups = computed(() =>
     })),
 )
 
+function isTrophyEarned(trophy: Trophy) {
+  return hasViewer.value && (trophy.earned_by_viewer ?? earnedInfo.value.has(trophy.id))
+}
+
+const visibleTrophyCount = computed(() => {
+  let count = 0
+  for (const group of sortedGroups.value) {
+    for (const trophy of group.trophies) {
+      if (hasViewer.value && filter.value !== 'all') {
+        const want = filter.value === 'earned'
+        if (isTrophyEarned(trophy) !== want) continue
+      }
+      count += 1
+    }
+  }
+  return count
+})
+
 // Trophy row number is PSN's zero-based trophy id shifted to user-facing 1-based.
 const trophyNumbers = computed(() => {
   const m = new Map<number, number>()
@@ -277,6 +319,7 @@ const filterOptions: { value: FilterMode; label: string }[] = [
 ]
 const filter = ref<FilterMode>('all')
 const sort = ref<SortMode>('default')
+const trophyListExpanded = ref(false)
 
 // Mask spoiler (PSN-hidden) trophies until toggled on; earned ones stay visible.
 // Persisted in a cookie so the preference survives reloads / navigation.
@@ -292,6 +335,10 @@ watch(hasViewer, (v) => {
     filter.value = 'all'
     if (sort.value === 'earned') sort.value = 'default'
   }
+})
+
+watch([filter, sort, showSpoilers], () => {
+  trophyListExpanded.value = false
 })
 
 useHead(() => ({
