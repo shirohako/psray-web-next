@@ -15,6 +15,8 @@ withDefaults(defineProps<{
   title?: string
   /** Optional caption shown above the URL (e.g. the page's name). */
   caption?: string
+  /** Optional detail rows shown below the caption. */
+  meta?: { label: string, value: string | number | null | undefined, copyable?: boolean }[]
 }>(), { title: '页面二维码' })
 
 const open = ref(false)
@@ -48,6 +50,16 @@ async function copyLink() {
     toast.error({ title: '复制失败', description: '请检查浏览器的剪贴板权限。' })
   }
 }
+
+async function copyMeta(value: string | number | null | undefined) {
+  if (!import.meta.client || value == null) return
+  try {
+    await navigator.clipboard.writeText(String(value))
+    toast.success({ title: '已复制' })
+  } catch {
+    toast.error({ title: '复制失败', description: '请检查浏览器的剪贴板权限。' })
+  }
+}
 </script>
 
 <template>
@@ -62,12 +74,33 @@ async function copyLink() {
   </button>
 
   <Dialog v-model:open="open" :title="title" size="sm">
-    <div class="flex flex-col items-center gap-4 px-6 py-6">
-      <div class="rounded-xl bg-white p-3 ring-1 ring-slate-200">
-        <img v-if="dataUrl" :src="dataUrl" alt="二维码" width="208" height="208" class="size-52" />
-        <div v-else class="size-52 animate-pulse rounded bg-slate-100" />
+    <div class="flex flex-col items-center gap-3.5 px-6 py-5">
+      <div class="rounded-lg bg-white p-2.5 ring-1 ring-slate-200">
+        <img v-if="dataUrl" :src="dataUrl" alt="二维码" width="152" height="152" class="size-38" />
+        <div v-else class="size-38 animate-pulse rounded bg-slate-100" />
       </div>
       <p v-if="caption" class="max-w-full truncate text-center text-sm font-semibold text-slate-800">{{ caption }}</p>
+      <dl v-if="meta?.length" class="w-full rounded-lg border border-slate-200 bg-slate-50/70 p-3 text-xs">
+        <div
+          v-for="item in meta"
+          :key="item.label"
+          class="flex items-start justify-between gap-3 py-1 first:pt-0 last:pb-0"
+        >
+          <dt class="shrink-0 text-slate-400">{{ item.label }}</dt>
+          <dd class="flex min-w-0 items-center justify-end gap-1.5 text-right font-medium tabular-nums text-slate-700">
+            <button
+              v-if="item.copyable && item.value != null"
+              type="button"
+              class="grid size-5 shrink-0 place-items-center rounded text-slate-400 transition hover:bg-white hover:text-slate-700"
+              title="复制"
+              @click="copyMeta(item.value)"
+            >
+              <LucideIcon :icon="Copy" class="size-3" />
+            </button>
+            <span class="min-w-0 break-all">{{ item.value ?? '—' }}</span>
+          </dd>
+        </div>
+      </dl>
       <p class="max-w-full break-all text-center text-xs text-slate-400">{{ url }}</p>
       <button
         type="button"

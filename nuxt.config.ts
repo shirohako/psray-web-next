@@ -28,6 +28,8 @@ export default defineNuxtConfig({
     optimizeDeps: {
       include: [
         'lucide',
+        'markdown-it',
+        'qrcode',
       ]
     }
   },

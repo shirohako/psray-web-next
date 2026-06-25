@@ -19,6 +19,13 @@ const stats = computed(() => [
   { icon: CheckCircle2, label: '完成人数', value: fmt(props.trophySet.completed_players), tint: 'text-emerald-600' },
   { icon: Trophy, label: '白金人数', value: fmt(props.trophySet.platinum_achievers), tint: 'text-cyan-600' },
 ])
+
+const qrMeta = computed(() => [
+  { label: '奖杯组 ID', value: props.trophySet.id },
+  { label: 'NP Communication ID', value: props.trophySet.np_communication_id, copyable: true },
+  { label: '版本号', value: props.trophySet.version },
+  { label: '更新时间', value: fmtDateTime(props.trophySet.updated_at) },
+])
 </script>
 
 <template>
@@ -33,7 +40,7 @@ const stats = computed(() => [
 
       <!-- Share via QR -->
       <div class="absolute right-3 top-3 z-10 sm:right-4 sm:top-4">
-        <QrCodeButton title="奖杯组二维码" :caption="trophySet.name" />
+        <QrCodeButton title="奖杯组二维码" :caption="trophySet.name" :meta="qrMeta" />
       </div>
 
       <div class="relative flex flex-col items-center gap-5 p-5 text-center sm:flex-row sm:items-center sm:p-6 sm:text-left">
