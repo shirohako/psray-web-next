@@ -19,10 +19,18 @@ export interface TrophyLangPref {
   secondary: string
 }
 
+/** Which earn rate to surface as the headline figure on trophy lists. */
+export type RateBasis = 'psn' | 'psray'
+
 const STORAGE_KEY = 'prefs:trophy-lang'
+const RATE_BASIS_KEY = 'prefs:rate-basis'
 
 function defaultTrophyLang(): TrophyLangPref {
   return { enabled: false, primary: '', secondary: '' }
+}
+
+function defaultRateBasis(): RateBasis {
+  return 'psn'
 }
 
 /** Build a browser-style Accept-Language value from an ordered language list. */
@@ -52,6 +60,14 @@ function browserAcceptLanguage(): string {
 
 export function usePreferences() {
   const trophyLang = useState<TrophyLangPref>('prefs:trophyLang', defaultTrophyLang)
+
+  // Seeded from a cookie so SSR renders the chosen basis (it's shown on every
+  // trophy row, so a client-only load would flash on hydration). `useState`
+  // keeps it shared + reactive, so saving in the drawer updates the page live.
+  const rateBasis = useState<RateBasis>('prefs:rateBasis', () => {
+    const stored = useCookie<RateBasis>(RATE_BASIS_KEY).value
+    return stored === 'psn' || stored === 'psray' ? stored : defaultRateBasis()
+  })
 
   /**
    * Effective `Accept-Language` for API requests:
@@ -87,5 +103,14 @@ export function usePreferences() {
     }
   }
 
-  return { trophyLang, acceptLanguage, load, saveTrophyLang }
+  /** Commit the earn-rate basis to shared state + its persisting cookie. */
+  function saveRateBasis(basis: RateBasis) {
+    rateBasis.value = basis
+    useCookie<RateBasis>(RATE_BASIS_KEY, {
+      maxAge: 60 * 60 * 24 * 365,
+      sameSite: 'lax',
+    }).value = basis
+  }
+
+  return { trophyLang, rateBasis, acceptLanguage, load, saveTrophyLang, saveRateBasis }
 }

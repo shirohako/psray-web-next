@@ -24,6 +24,14 @@ const name = computed(() => props.trophy.localized_name || props.trophy.name)
 const detail = computed(() => props.trophy.localized_detail || props.trophy.detail)
 const showEarned = computed(() => props.hasViewer && props.earned)
 
+// Headline earn rate follows the site-wide "获取率基准" preference; the tooltip
+// still lists both PSN and PSRay rates regardless.
+const { rateBasis } = usePreferences()
+const primaryRateLabel = computed(() => (rateBasis.value === 'psray' ? 'PSRay' : 'PSN'))
+const primaryRate = computed(() =>
+  rateBasis.value === 'psray' ? props.trophy.psray_rate : props.trophy.psn_earned_rate,
+)
+
 // Per-trophy visibility override toggled by the eye icon next to the title.
 // `null` follows the global state; `true` force-hides, `false` force-reveals.
 // The global toggle is the master: flipping it clears any per-trophy override.
@@ -49,8 +57,15 @@ function fmtRate(rate: number | string) {
   return Number.isFinite(n) ? `${n.toFixed(1)}%` : '—'
 }
 
-function copy(text: string) {
-  if (text && import.meta.client) navigator.clipboard?.writeText(text)
+const toast = useToast()
+async function copy(text: string, label: string) {
+  if (!text || !import.meta.client) return
+  try {
+    await navigator.clipboard.writeText(text)
+    toast.success({ title: `已复制${label}` })
+  } catch {
+    toast.error({ title: '复制失败', description: '请检查浏览器的剪贴板权限。' })
+  }
 }
 
 // Dialogs opened from the row's menu / comment button.
@@ -146,8 +161,8 @@ const tipsOpen = ref(false)
     <div class="flex shrink-0 items-center gap-1.5 sm:gap-3">
       <Tooltip placement="left">
         <div tabindex="0" class="flex cursor-pointer flex-col items-end leading-tight focus:outline-none" @click.stop>
-          <span class="text-[10px] font-medium text-slate-400 max-sm:hidden">PSN</span>
-          <span class="text-xs font-semibold tabular-nums text-slate-700 sm:text-sm">{{ fmtRate(trophy.psn_earned_rate) }}</span>
+          <span class="text-[10px] font-medium text-slate-400 max-sm:hidden">{{ primaryRateLabel }}</span>
+          <span class="text-xs font-semibold tabular-nums text-slate-700 sm:text-sm">{{ fmtRate(primaryRate) }}</span>
         </div>
         <template #content>
           <div class="space-y-1">
@@ -195,7 +210,7 @@ const tipsOpen = ref(false)
         type="button"
         role="menuitem"
         class="flex w-full items-center gap-2.5 px-3 py-2 text-left text-slate-700 transition hover:bg-slate-50"
-        @click="copy(name); close()"
+        @click="copy(name, '奖杯标题'); close()"
       >
         <LucideIcon :icon="Copy" class="size-4 text-slate-400" />
         复制奖杯标题
@@ -204,7 +219,7 @@ const tipsOpen = ref(false)
         type="button"
         role="menuitem"
         class="flex w-full items-center gap-2.5 px-3 py-2 text-left text-slate-700 transition hover:bg-slate-50"
-        @click="copy(detail); close()"
+        @click="copy(detail, '奖杯描述'); close()"
       >
         <LucideIcon :icon="FileText" class="size-4 text-slate-400" />
         复制奖杯描述

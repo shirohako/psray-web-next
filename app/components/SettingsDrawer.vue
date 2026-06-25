@@ -1,18 +1,27 @@
 <script setup lang="ts">
-import { Languages, Check } from 'lucide'
-import type { TrophyLangPref } from '~/composables/usePreferences'
+import { Languages, Percent, Check } from 'lucide'
+import type { RateBasis, TrophyLangPref } from '~/composables/usePreferences'
 
 /** Site preferences drawer. Open via `v-model:open`. */
 const open = defineModel<boolean>('open', { default: false })
 
-const { trophyLang, saveTrophyLang } = usePreferences()
+const { trophyLang, rateBasis, saveTrophyLang, saveRateBasis } = usePreferences()
 const toast = useToast()
 
-// Edit a local draft so nothing commits until "保存"; re-sync on each open.
+// Edit local drafts so nothing commits until "保存"; re-sync on each open.
 const draft = ref<TrophyLangPref>({ ...trophyLang.value })
+const rateDraft = ref<RateBasis>(rateBasis.value)
 watch(open, (v) => {
-  if (v) draft.value = { ...trophyLang.value }
+  if (v) {
+    draft.value = { ...trophyLang.value }
+    rateDraft.value = rateBasis.value
+  }
 })
+
+const rateBasisOptions: { value: RateBasis; label: string }[] = [
+  { value: 'psn', label: 'PSN' },
+  { value: 'psray', label: 'PSRay' },
+]
 
 const languages = TROPHY_LANGUAGE_CODES.map(code => ({
   code,
@@ -37,6 +46,7 @@ const error = computed(() => {
 function save() {
   if (invalid.value) return
   saveTrophyLang(draft.value)
+  saveRateBasis(rateDraft.value)
   open.value = false
   toast.success({ title: '设置已保存', description: '偏好已保存到本地。' })
 }
@@ -106,6 +116,33 @@ function save() {
           </label>
 
           <p v-if="error" class="text-xs font-medium text-rose-500">{{ error }}</p>
+        </div>
+      </section>
+
+      <!-- Trophy earn-rate basis -->
+      <section>
+        <div class="flex items-start gap-2.5">
+          <span class="mt-0.5 grid size-8 shrink-0 place-items-center rounded-lg bg-slate-100 text-slate-500">
+            <LucideIcon :icon="Percent" class="size-4.5" />
+          </span>
+          <div class="min-w-0 flex-1">
+            <h3 class="text-sm font-semibold text-slate-900">奖杯获取率基准</h3>
+            <p class="mt-0.5 text-xs leading-relaxed text-slate-500">
+              选择奖杯列表中主要显示的获取率来源：PSN 官方获取率，或 PSRay 站内获取率。
+            </p>
+            <div class="mt-3 inline-flex rounded-lg bg-slate-100 p-0.5">
+              <button
+                v-for="opt in rateBasisOptions"
+                :key="opt.value"
+                type="button"
+                class="rounded-md px-3.5 py-1 text-sm font-medium transition"
+                :class="rateDraft === opt.value ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-900'"
+                @click="rateDraft = opt.value"
+              >
+                {{ opt.label }}
+              </button>
+            </div>
+          </div>
         </div>
       </section>
     </div>
