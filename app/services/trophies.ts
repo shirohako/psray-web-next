@@ -10,6 +10,8 @@ export type TrophyType = 'platinum' | 'gold' | 'silver' | 'bronze'
 
 export type Rarity = 'COMMON' | 'UNCOMMON' | 'RARE' | 'VERY RARE' | 'ULTRA RARE'
 
+export type ApiDate = number | string
+
 /** Trophy tier counts. */
 export interface DefinedTrophies {
   bronze: number
@@ -147,11 +149,13 @@ export interface ViewerProgress {
   earned_silver: number
   earned_gold: number
   earned_platinum: number
-  first_earned_at: number | string
-  last_earned_at: number | string
+  first_earned_at: ApiDate
+  last_earned_at: ApiDate
   duration?: number | null
-  /** Database ids of earned trophies (compare against `Trophy.id`). */
+  /** Database ids of earned trophies, in earned order (compare against `Trophy.id`). */
   earned_trophies: number[]
+  /** Map of earned trophy db id → the timestamp the viewer earned it. */
+  earned_trophies_at?: Record<string, ApiDate>
 }
 
 /** Full payload of `GET /trophies/:id`. */

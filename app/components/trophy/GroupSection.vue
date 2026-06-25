@@ -3,8 +3,8 @@ import type { Trophy, TrophyGroup } from '~/services/trophies'
 
 const props = defineProps<{
   group: TrophyGroup
-  /** id → index in the viewer's earned list (empty when no viewer). */
-  earnedRank: Map<number, number>
+  /** id → earned order, timestamp, and gap since the previous earned trophy. */
+  earnedInfo: Map<number, { rank: number, earnedAt: number | string | null, sincePrev: number | null }>
   hasViewer: boolean
   filter: 'all' | 'earned' | 'unearned'
   sort: 'default' | 'earned' | 'rarity'
@@ -20,7 +20,22 @@ const title = computed(() => {
 })
 
 function isEarned(t: Trophy) {
-  return props.hasViewer && (t.earned_by_viewer ?? props.earnedRank.has(t.id))
+  return props.hasViewer && (t.earned_by_viewer ?? props.earnedInfo.has(t.id))
+}
+
+function earnedAt(t: Trophy) {
+  return props.earnedInfo.get(t.id)?.earnedAt ?? null
+}
+
+// 1-based position in the viewer's earned order (rank is 0-based).
+function earnedOrder(t: Trophy) {
+  const rank = props.earnedInfo.get(t.id)?.rank
+  return rank == null ? null : rank + 1
+}
+
+// Seconds since the previous earned trophy (`null` for the first / unearned).
+function earnedGap(t: Trophy) {
+  return props.earnedInfo.get(t.id)?.sincePrev ?? null
 }
 
 const defaultTrophies = computed(() =>
@@ -44,8 +59,8 @@ const displayTrophies = computed(() => {
   } else if (props.sort === 'earned' && props.hasViewer) {
     // Earned trophies first, in the order the viewer earned them; rest after.
     list = [...list].sort((a, b) => {
-      const ra = props.earnedRank.get(a.id) ?? Infinity
-      const rb = props.earnedRank.get(b.id) ?? Infinity
+      const ra = props.earnedInfo.get(a.id)?.rank ?? Infinity
+      const rb = props.earnedInfo.get(b.id)?.rank ?? Infinity
       return ra - rb
     })
   }
@@ -79,6 +94,9 @@ const displayTrophies = computed(() => {
         :trophy="trophy"
         :has-viewer="hasViewer"
         :earned="isEarned(trophy)"
+        :earned-at="earnedAt(trophy)"
+        :earned-order="earnedOrder(trophy)"
+        :earned-gap="earnedGap(trophy)"
         :show-spoilers="showSpoilers"
         :number="numbers.get(trophy.id) ?? 0"
       />

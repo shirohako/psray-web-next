@@ -55,6 +55,27 @@ export function formatDuration(sec: number | null | undefined) {
   return `${s}秒`
 }
 
+/**
+ * Gap between two consecutively earned trophies, in English units spaced for
+ * readability, e.g.「18 h 12 m 15 s」「1 d 3 h」「5 s」. Lists every non-zero
+ * unit (d/h/m/s).「< 1 s」for sub-second gaps;「null」when there's no previous
+ * trophy to compare against.
+ */
+export function fmtEarnGap(sec: number | null | undefined) {
+  if (sec == null) return null
+  if (sec < 1) return '< 1 s'
+  const d = Math.floor(sec / 86_400)
+  const h = Math.floor((sec % 86_400) / 3600)
+  const m = Math.floor((sec % 3600) / 60)
+  const s = Math.floor(sec % 60)
+  const parts: string[] = []
+  if (d) parts.push(`${d} d`)
+  if (h) parts.push(`${h} h`)
+  if (m) parts.push(`${m} m`)
+  if (s) parts.push(`${s} s`)
+  return parts.join(' ')
+}
+
 /** Coarse relative time, e.g.「3 天前」. */
 export function fromNow(value: DateLike) {
   const date = toDate(value)

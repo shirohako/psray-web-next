@@ -1,11 +1,17 @@
 <script setup lang="ts">
-import { Trophy, Check, Eye, EyeOff, MessageSquare, Copy, FileText, Users, Info } from 'lucide'
+import { Trophy, Check, Eye, EyeOff, MessageSquare, Copy, FileText, Users, Info, Clock3, Medal, Timer } from 'lucide'
 import type { Trophy as TrophyData } from '~/services/trophies'
 
 const props = defineProps<{
   trophy: TrophyData
   /** Whether the viewed user has earned this trophy. */
   earned: boolean
+  /** When the viewed user earned this trophy, if returned by the API. */
+  earnedAt?: number | string | null
+  /** 1-based order in which the viewer earned this trophy. */
+  earnedOrder?: number | null
+  /** Seconds since the viewer's previous earned trophy (`null` for the first). */
+  earnedGap?: number | null
   /** True when a viewer was requested (enables the earned styling). */
   hasViewer: boolean
   /** Reveal PSN-hidden (spoiler) trophies. */
@@ -102,14 +108,46 @@ const tipsOpen = ref(false)
         </button>
       </div>
       <p v-if="displayDetail" class="mt-0.5 line-clamp-2 text-sm text-slate-500">{{ displayDetail }}</p>
+      <div
+        v-if="showEarned && earnedAt"
+        class="mt-1 flex max-w-full flex-wrap items-center gap-x-2.5 gap-y-1 text-[11px] font-medium leading-none text-slate-400"
+      >
+        <!-- When the viewer earned it -->
+        <span class="inline-flex min-w-0 items-center gap-1" title="获得时间">
+          <LucideIcon :icon="Clock3" class="size-3 shrink-0" />
+          <span class="truncate tabular-nums">{{ fmtDateTime(earnedAt) }}</span>
+        </span>
+
+        <!-- Earned-order badge; the tooltip carries the gap since the previously
+             earned trophy -->
+        <Tooltip v-if="earnedOrder" placement="top" class="shrink-0 cursor-help text-slate-500">
+          <span class="inline-flex items-center gap-1" @click.stop>
+            <LucideIcon :icon="Medal" class="size-3 shrink-0" />
+            <span class="font-semibold tabular-nums">{{ earnedOrder }}</span>
+          </span>
+          <template #content>
+            <span v-if="earnedGap == null" class="flex items-center gap-1.5 text-slate-400">
+              <LucideIcon :icon="Medal" class="size-3.5 shrink-0" />
+              首个获得的奖杯
+            </span>
+            <template v-else>
+              <span class="flex items-center gap-1.5 text-slate-400">
+                <LucideIcon :icon="Timer" class="size-3.5 shrink-0" />
+                距离上一个奖杯获取时间
+              </span>
+              <span class="mt-1 block pl-5 tabular-nums">{{ fmtEarnGap(earnedGap) }}</span>
+            </template>
+          </template>
+        </Tooltip>
+      </div>
     </div>
 
     <!-- PSN earn rate + actions -->
     <div class="flex shrink-0 items-center gap-1.5 sm:gap-3">
-      <Tooltip placement="left" class="max-sm:hidden">
-        <div tabindex="0" class="flex cursor-pointer flex-col items-end leading-tight focus:outline-none">
-          <span class="text-[10px] font-medium text-slate-400">PSN</span>
-          <span class="text-sm font-semibold tabular-nums text-slate-700">{{ fmtRate(trophy.psn_earned_rate) }}</span>
+      <Tooltip placement="left">
+        <div tabindex="0" class="flex cursor-pointer flex-col items-end leading-tight focus:outline-none" @click.stop>
+          <span class="text-[10px] font-medium text-slate-400 max-sm:hidden">PSN</span>
+          <span class="text-xs font-semibold tabular-nums text-slate-700 sm:text-sm">{{ fmtRate(trophy.psn_earned_rate) }}</span>
         </div>
         <template #content>
           <div class="space-y-1">

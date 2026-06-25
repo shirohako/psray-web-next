@@ -101,7 +101,7 @@
               v-for="group in sortedGroups"
               :key="group.id"
               :group="group"
-              :earned-rank="earnedRank"
+              :earned-info="earnedInfo"
               :has-viewer="hasViewer"
               :filter="filter"
               :sort="sort"
@@ -197,11 +197,43 @@ async function switchLanguage(code: string) {
   }
 }
 
-// Maps each earned trophy's db id to its position in the viewer's earned list,
-// which drives both the earned check and the "获得时间" sort.
-const earnedRank = computed(() => {
-  const m = new Map<number, number>()
-  ;(data.value?.viewer_progress?.earned_trophies ?? []).forEach((id, i) => m.set(id, i))
+// Parse an API date (unix seconds or ISO string) to epoch ms, or null.
+function toMs(value: number | string | null): number | null {
+  if (value == null || value === '') return null
+  const date = typeof value === 'number' ? new Date(value * 1000) : new Date(value)
+  const t = date.getTime()
+  return Number.isNaN(t) ? null : t
+}
+
+// Maps each earned trophy's db id to its chronological earned position (0-based
+// `rank`, also drives the "获得时间" sort), timestamp, and seconds since the
+// previously earned trophy (`null` for the first). The raw `earned_trophies`
+// list isn't guaranteed to be time-sorted, so we order by `earned_trophies_at`
+// to get the true "this is the Nth trophy earned" sequence and gaps (trophies
+// missing a timestamp sort last).
+const earnedInfo = computed(() => {
+  const m = new Map<number, { rank: number, earnedAt: number | string | null, sincePrev: number | null }>()
+  const progress = data.value?.viewer_progress
+  if (!progress) return m
+
+  const times = progress.earned_trophies_at ?? {}
+  const ordered = progress.earned_trophies
+    .map(id => ({ id, earnedAt: times[id] ?? null, ms: toMs(times[id] ?? null) }))
+    .sort((a, b) => {
+      if (a.ms == null) return b.ms == null ? 0 : 1
+      if (b.ms == null) return -1
+      return a.ms - b.ms
+    })
+
+  let prevMs: number | null = null
+  ordered.forEach(({ id, earnedAt, ms }, i) => {
+    const sincePrev = i > 0 && ms != null && prevMs != null
+      ? Math.round((ms - prevMs) / 1000)
+      : null
+    m.set(id, { rank: i, earnedAt, sincePrev })
+    if (ms != null) prevMs = ms
+  })
+
   return m
 })
 
