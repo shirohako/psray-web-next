@@ -136,11 +136,10 @@ function rankClass(rank: number) {
               <!-- Contribution points (primary metric) -->
               <span v-else-if="c === 'contribution'" class="text-[15px] font-bold tabular-nums text-slate-900">{{ fmt(r.contribution_points) }}</span>
 
-              <!-- Tip up-votes received. Icon pinned left, number right-aligned
-                   to fill the cell, so icons and digits line up across rows. -->
-              <span v-else-if="c === 'voteUp'" class="flex items-center gap-1 text-slate-600">
+              <!-- Tip up-votes received. Keep icon + number as one right-aligned unit. -->
+              <span v-else-if="c === 'voteUp'" class="inline-flex items-center justify-end gap-1.5 text-slate-600">
                 <LucideIcon :icon="ThumbsUp" class="size-3.5 shrink-0 text-slate-400" />
-                <span class="flex-1 text-right tabular-nums">{{ r.tip_vote_up }}</span>
+                <span class="min-w-5 text-right tabular-nums">{{ fmt(r.tip_vote_count ?? r.tip_vote_up) }}</span>
               </span>
             </td>
           </tr>

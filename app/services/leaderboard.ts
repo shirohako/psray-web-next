@@ -25,7 +25,7 @@ export interface LeaderboardRowBase {
 /**
  * The row type the table consumes. Metric fields are optional because each
  * board only returns its own — the points boards send `points` (+ trophy
- * tiers), while the tips board sends `tip_count` / `tip_vote_up` and omits the
+ * tiers), while the tips board sends `tip_count` / `tip_vote_count` and omits the
  * trophy fields. Add new metric fields here as boards are introduced.
  */
 export interface LeaderboardRow extends LeaderboardRowBase {
@@ -33,6 +33,8 @@ export interface LeaderboardRow extends LeaderboardRowBase {
   /** Number of trophy tips the user has contributed. */
   tip_count?: number
   /** Total up-votes those tips received. */
+  tip_vote_count?: number
+  /** Legacy alias for total up-votes. */
   tip_vote_up?: number
   /** Aggregate contribution score (the contribution board's primary metric). */
   contribution_points?: number
