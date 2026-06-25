@@ -40,12 +40,15 @@ const loginTo = computed(() => ({
       :style="{ backgroundImage: `url(${bannerImage})` }"
     >
       <div class="absolute inset-0 bg-linear-to-t from-black/45 via-black/5 to-transparent" />
-      <span
-        v-if="profile.is_plus"
-        class="absolute right-4 top-4 inline-flex items-center gap-1 rounded-full bg-amber-400/95 px-2.5 py-1 text-xs font-bold text-amber-950 shadow-sm backdrop-blur"
-      >
-        <LucideIcon :icon="Crown" class="size-3.5" /> PS PLUS
-      </span>
+      <div class="absolute right-4 top-4 z-10 flex items-center gap-2">
+        <span
+          v-if="profile.is_plus"
+          class="inline-flex items-center gap-1 rounded-full bg-amber-400/95 px-2.5 py-1 text-xs font-bold text-amber-950 shadow-sm backdrop-blur"
+        >
+          <LucideIcon :icon="Crown" class="size-3.5" /> PS PLUS
+        </span>
+        <QrCodeButton title="个人资料二维码" :caption="profile.psnid" />
+      </div>
     </div>
 
     <!-- Header -->

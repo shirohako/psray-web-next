@@ -73,12 +73,12 @@ function earnedTiers(g: PlayedTrophySet) {
     >
       <!-- Fixed-width slot keeps rows aligned; the image renders at its natural
            aspect (PS4 320×176 landscape, PS5 square) with a soft ring instead of
-           a gray letterbox box around it. -->
-      <div class="flex h-18 w-24 shrink-0 items-center justify-center">
-        <img
+           a gray letterbox box around it, plus a loading skeleton. -->
+      <div class="relative flex h-18 w-24 shrink-0 items-center justify-center">
+        <TrophySetImage
           :src="g.trophy_set.icon_url"
           :alt="trophySetName(g)"
-          class="max-h-full max-w-full rounded-lg object-contain shadow-sm ring-1 ring-black/5"
+          :platform="platformList(g.trophy_set.platform)"
         />
       </div>
 

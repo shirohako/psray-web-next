@@ -31,6 +31,11 @@ const stats = computed(() => [
       />
       <div class="absolute inset-0 bg-slate-900/70" />
 
+      <!-- Share via QR -->
+      <div class="absolute right-3 top-3 z-10 sm:right-4 sm:top-4">
+        <QrCodeButton title="奖杯组二维码" :caption="trophySet.name" />
+      </div>
+
       <div class="relative flex flex-col items-center gap-5 p-5 text-center sm:flex-row sm:items-center sm:p-6 sm:text-left">
         <!-- PS5 icons are square; PS4 are 320×176 landscape — keep natural aspect. -->
         <img

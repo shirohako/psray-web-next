@@ -20,13 +20,13 @@ const total = computed(() => sumTrophies(props.profile))
       </div>
       <div>
         <dt class="inline-flex items-center gap-1 text-xs text-slate-400">
-          <LucideIcon :icon="CheckCircle2" class="size-3.5 text-emerald-400" />已完成
+          <LucideIcon :icon="CheckCircle2" class="size-3.5 text-emerald-400" />完美
         </dt>
         <dd class="mt-0.5 text-lg font-bold text-slate-900">{{ fmt(profile.completed_game_count) }}</dd>
       </div>
       <div>
         <dt class="inline-flex items-center gap-1 text-xs text-slate-400">
-          <LucideIcon :icon="XCircle" class="size-3.5 text-rose-400" />已弃坑
+          <LucideIcon :icon="XCircle" class="size-3.5 text-rose-400" />低完成率
         </dt>
         <dd class="mt-0.5 text-lg font-bold text-slate-900">{{ fmt(profile.abandoned_game_count) }}</dd>
       </div>
