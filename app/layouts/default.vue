@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { House, Menu, Gamepad2, Trophy, LogOut, User, RefreshCw, Settings, Languages, type IconNode } from 'lucide'
+import { House, Menu, Gamepad2, Trophy, LogOut, User, RefreshCw, Settings, Languages, Search, type IconNode } from 'lucide'
 
 const route = useRoute()
 const appConfig = useAppConfig()
@@ -97,6 +97,14 @@ async function onLogout() {
       <!-- Right: quick actions + auth controls -->
       <div class="flex items-center gap-2 sm:gap-3">
         <div class="flex items-center gap-1">
+          <button
+            type="button"
+            aria-label="搜索"
+            title="搜索"
+            class="grid size-10 place-items-center rounded-lg text-slate-500 transition hover:bg-slate-100 hover:text-slate-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-900"
+          >
+            <LucideIcon :icon="Search" class="size-5" stroke-width="1.75" />
+          </button>
           <button
             type="button"
             aria-label="翻译"

@@ -57,6 +57,18 @@ function fmtRate(rate: number | string) {
   return Number.isFinite(n) ? `${n.toFixed(1)}%` : '—'
 }
 
+function fmtEarnGap(sec: number) {
+  const s = Math.max(0, Math.round(sec))
+  const d = Math.floor(s / 86_400)
+  const h = Math.floor((s % 86_400) / 3600)
+  const m = Math.floor((s % 3600) / 60)
+  const rest = s % 60
+  if (d > 0) return h > 0 ? `${d}d ${h}h` : `${d}d`
+  if (h > 0) return m > 0 ? `${h}h ${m}m` : `${h}h`
+  if (m > 0) return rest > 0 ? `${m}m ${rest}s` : `${m}m`
+  return `${rest}s`
+}
+
 const toast = useToast()
 async function copy(text: string, label: string) {
   if (!text || !import.meta.client) return
@@ -141,17 +153,30 @@ const tipsOpen = ref(false)
             <span class="font-semibold tabular-nums">{{ earnedOrder }}</span>
           </span>
           <template #content>
-            <span v-if="earnedGap == null" class="flex items-center gap-1.5 text-slate-400">
-              <LucideIcon :icon="Medal" class="size-3.5 shrink-0" />
-              首个获得的奖杯
-            </span>
-            <template v-else>
-              <span class="flex items-center gap-1.5 text-slate-400">
-                <LucideIcon :icon="Timer" class="size-3.5 shrink-0" />
-                距离上一个奖杯获取时间
-              </span>
-              <span class="mt-1 block pl-5 tabular-nums">{{ fmtEarnGap(earnedGap) }}</span>
-            </template>
+            <div v-if="earnedGap == null" class="w-36 p-1">
+              <div class="flex items-center justify-between gap-3 text-[10px] font-medium text-slate-400">
+                <span class="inline-flex items-center gap-1.5">
+                  <LucideIcon :icon="Medal" class="size-3" />
+                  获得顺序
+                </span>
+                <span class="tabular-nums">#{{ earnedOrder }}</span>
+              </div>
+              <div class="mt-1.5 flex items-center gap-2">
+                <span class="text-sm font-semibold leading-none text-white">首个获得</span>
+              </div>
+            </div>
+            <div v-else class="w-36 p-1">
+              <div class="flex items-center justify-between gap-3 text-[10px] font-medium text-slate-400">
+                <span class="inline-flex items-center gap-1.5">
+                  <LucideIcon :icon="Timer" class="size-3" />
+                  相对上一个奖杯
+                </span>
+                <span class="tabular-nums">#{{ earnedOrder }}</span>
+              </div>
+              <div class="mt-1.5 flex items-center gap-2">
+                <span class="text-sm font-semibold leading-none text-white tabular-nums">+ {{ fmtEarnGap(earnedGap) }}</span>
+              </div>
+            </div>
           </template>
         </Tooltip>
       </div>

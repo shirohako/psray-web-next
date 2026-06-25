@@ -48,7 +48,7 @@ const qrMeta = computed(() => [
         <img
           :src="trophySet.icon_url"
           :alt="trophySet.name"
-          class="h-12 w-auto min-w-12 max-w-50 shrink-0 rounded-lg border border-white/15 bg-white/10 object-contain shadow-lg sm:h-28 sm:min-w-28 sm:rounded-xl"
+          class="h-24 w-auto min-w-24 max-w-50 shrink-0 rounded-lg border border-white/15 bg-white/10 object-contain shadow-lg sm:h-28 sm:min-w-28 sm:rounded-xl"
         />
         <div class="min-w-0 flex-1">
           <div class="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 sm:justify-start">
