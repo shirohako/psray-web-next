@@ -240,13 +240,25 @@ const earnedInfo = computed(() => {
   const progress = data.value?.viewer_progress
   if (!progress) return m
 
+  // Platinum is awarded in the same instant as the trophy that completes the
+  // set, so they share a timestamp. Treat platinum as earned last in any tie so
+  // it ranks after the trophy that actually triggered it.
+  const isPlatinum = new Set<number>()
+  for (const group of data.value?.groups ?? []) {
+    for (const t of group.trophies) {
+      if (t.type === 'platinum') isPlatinum.add(t.id)
+    }
+  }
+
   const times = progress.earned_trophies_at ?? {}
   const ordered = progress.earned_trophies
     .map(id => ({ id, earnedAt: times[id] ?? null, ms: toMs(times[id] ?? null) }))
     .sort((a, b) => {
       if (a.ms == null) return b.ms == null ? 0 : 1
       if (b.ms == null) return -1
-      return a.ms - b.ms
+      if (a.ms !== b.ms) return a.ms - b.ms
+      // Same timestamp: platinum sorts after non-platinum.
+      return Number(isPlatinum.has(a.id)) - Number(isPlatinum.has(b.id))
     })
 
   let prevMs: number | null = null

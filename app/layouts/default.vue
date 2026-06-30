@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { House, Menu, Gamepad2, Trophy, LogOut, User, RefreshCw, Settings, Languages, Search, type IconNode } from 'lucide'
+import { House, Menu, Gamepad2, Trophy, LogOut, LogIn, UserPlus, User, RefreshCw, Settings, Languages, Search, type IconNode } from 'lucide'
 
 const route = useRoute()
 const appConfig = useAppConfig()
@@ -172,16 +172,50 @@ async function onLogout() {
         </DropdownMenu>
 
         <template v-else>
+          <!-- Mobile (< sm): single icon trigger opening a login/register menu -->
+          <DropdownMenu align="right" class="sm:hidden">
+            <button
+              type="button"
+              aria-label="登录或注册"
+              title="登录或注册"
+              class="grid size-10 cursor-pointer place-items-center rounded-lg text-slate-500 transition hover:bg-slate-100 hover:text-slate-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-900"
+            >
+              <LucideIcon :icon="User" class="size-5" stroke-width="1.75" />
+            </button>
+
+            <template #menu="{ close }">
+              <NuxtLink
+                to="/auth/login"
+                class="flex items-center gap-2.5 px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-50 hover:text-slate-900"
+                @click="close"
+              >
+                <LucideIcon :icon="LogIn" class="size-4 text-slate-400" />
+                登录
+              </NuxtLink>
+              <NuxtLink
+                to="/auth/register"
+                class="flex items-center gap-2.5 px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-50 hover:text-slate-900"
+                @click="close"
+              >
+                <LucideIcon :icon="UserPlus" class="size-4 text-slate-400" />
+                注册
+              </NuxtLink>
+            </template>
+          </DropdownMenu>
+
+          <!-- Desktop (sm+): inline login + register buttons -->
           <NuxtLink
             to="/auth/login"
-            class="rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 sm:px-4"
+            class="hidden items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 shadow-sm shadow-slate-900/5 transition hover:border-slate-400 hover:bg-slate-50 hover:text-slate-900 sm:inline-flex sm:px-4"
           >
+            <LucideIcon :icon="LogIn" class="size-4" stroke-width="1.75" />
             登录
           </NuxtLink>
           <NuxtLink
             to="/auth/register"
-            class="rounded-lg bg-slate-950 px-3 py-2 text-sm font-semibold text-white shadow-sm shadow-slate-950/30 transition hover:bg-black active:bg-black sm:px-4"
+            class="hidden items-center gap-1.5 rounded-lg bg-slate-950 px-3 py-2 text-sm font-semibold text-white shadow-sm shadow-slate-950/30 transition hover:bg-black active:bg-black sm:inline-flex sm:px-4"
           >
+            <LucideIcon :icon="UserPlus" class="size-4" stroke-width="1.75" />
             注册
           </NuxtLink>
         </template>

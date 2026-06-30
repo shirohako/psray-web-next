@@ -63,7 +63,7 @@ const loginTo = computed(() => ({
         <div class="mb-1 flex shrink-0 items-center gap-2">
           <NuxtLink
             :to="{ path: '/sync', query: { psnid: profile.psnid } }"
-            class="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50 hover:text-slate-900"
+            class="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold sm:px-4 sm:py-2 sm:text-sm text-slate-700 shadow-sm transition hover:bg-slate-50 hover:text-slate-900"
           >
             <LucideIcon :icon="RefreshCw" class="size-4" />
             同步数据
@@ -73,7 +73,7 @@ const loginTo = computed(() => ({
             v-if="authBusy && !profile.can_follow"
             type="button"
             disabled
-            class="inline-flex cursor-wait items-center gap-1.5 rounded-lg border border-zinc-200 bg-zinc-50 px-4 py-2 text-sm font-semibold text-zinc-500 shadow-sm"
+            class="inline-flex cursor-wait items-center gap-1.5 rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-1.5 text-xs font-semibold sm:px-4 sm:py-2 sm:text-sm text-zinc-500 shadow-sm"
           >
             <LucideIcon :icon="Loader2" class="size-4 animate-spin" />
             登录中
@@ -83,7 +83,7 @@ const loginTo = computed(() => ({
           <NuxtLink
             v-else-if="!isLoggedIn && !profile.can_follow"
             :to="loginTo"
-            class="inline-flex items-center gap-1.5 rounded-lg bg-zinc-800 px-4 py-2 text-sm font-semibold text-white shadow-sm shadow-zinc-700/30 transition hover:bg-zinc-950 active:bg-zinc-950"
+            class="inline-flex items-center gap-1.5 rounded-lg bg-zinc-800 px-3 py-1.5 text-xs font-semibold sm:px-4 sm:py-2 sm:text-sm text-white shadow-sm shadow-zinc-700/30 transition hover:bg-zinc-950 active:bg-zinc-950"
           >
             <LucideIcon :icon="UserPlus" class="size-4" />
             关注
@@ -94,7 +94,7 @@ const loginTo = computed(() => ({
             v-else-if="!profile.can_follow"
             type="button"
             disabled
-            class="inline-flex cursor-not-allowed items-center gap-1.5 rounded-lg border border-zinc-200 bg-zinc-50 px-4 py-2 text-sm font-semibold text-zinc-400 shadow-sm"
+            class="inline-flex cursor-not-allowed items-center gap-1.5 rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-1.5 text-xs font-semibold sm:px-4 sm:py-2 sm:text-sm text-zinc-400 shadow-sm"
           >
             <LucideIcon :icon="UserPlus" class="size-4" />
             关注
@@ -105,7 +105,7 @@ const loginTo = computed(() => ({
             v-else-if="profile.is_following"
             align="right"
             panel-class="!min-w-32"
-            class="inline-flex cursor-pointer items-center gap-1.5 rounded-lg bg-zinc-950 px-4 py-2 text-sm font-semibold text-white shadow-sm shadow-zinc-900/30 transition hover:bg-zinc-950"
+            class="inline-flex cursor-pointer items-center gap-1.5 rounded-lg bg-zinc-950 px-3 py-1.5 text-xs font-semibold sm:px-4 sm:py-2 sm:text-sm text-white shadow-sm shadow-zinc-900/30 transition hover:bg-zinc-950"
           >
             <LucideIcon
               :icon="followPending ? Loader2 : UserCheck"
@@ -133,7 +133,7 @@ const loginTo = computed(() => ({
             v-else
             type="button"
             :disabled="followPending"
-            class="inline-flex items-center gap-1.5 rounded-lg bg-zinc-800 px-4 py-2 text-sm font-semibold text-white shadow-sm shadow-zinc-700/30 transition hover:bg-zinc-950 active:bg-zinc-950 disabled:opacity-60"
+            class="inline-flex items-center gap-1.5 rounded-lg bg-zinc-800 px-3 py-1.5 text-xs font-semibold sm:px-4 sm:py-2 sm:text-sm text-white shadow-sm shadow-zinc-700/30 transition hover:bg-zinc-950 active:bg-zinc-950 disabled:opacity-60"
             @click="$emit('toggleFollow')"
           >
             <LucideIcon

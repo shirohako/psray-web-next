@@ -153,29 +153,25 @@ const tipsOpen = ref(false)
             <span class="font-semibold tabular-nums">{{ earnedOrder }}</span>
           </span>
           <template #content>
-            <div v-if="earnedGap == null" class="w-36 p-1">
-              <div class="flex items-center justify-between gap-3 text-[10px] font-medium text-slate-400">
-                <span class="inline-flex items-center gap-1.5">
+            <div v-if="earnedGap == null" class="flex w-40 items-center justify-between gap-3 p-1">
+              <div class="min-w-0">
+                <div class="flex items-center gap-1.5 text-[10px] font-medium text-slate-400">
                   <LucideIcon :icon="Medal" class="size-3" />
                   获得顺序
-                </span>
-                <span class="tabular-nums">#{{ earnedOrder }}</span>
+                </div>
+                <div class="mt-1.5 text-sm font-semibold leading-none text-white">首个获得</div>
               </div>
-              <div class="mt-1.5 flex items-center gap-2">
-                <span class="text-sm font-semibold leading-none text-white">首个获得</span>
-              </div>
+              <div class="shrink-0 text-base font-bold tabular-nums text-slate-300">#{{ earnedOrder }}</div>
             </div>
-            <div v-else class="w-36 p-1">
-              <div class="flex items-center justify-between gap-3 text-[10px] font-medium text-slate-400">
-                <span class="inline-flex items-center gap-1.5">
+            <div v-else class="flex w-40 items-center justify-between gap-3 p-1">
+              <div class="min-w-0">
+                <div class="flex items-center gap-1.5 text-[10px] font-medium text-slate-400">
                   <LucideIcon :icon="Timer" class="size-3" />
                   相对上一个奖杯
-                </span>
-                <span class="tabular-nums">#{{ earnedOrder }}</span>
+                </div>
+                <div class="mt-1.5 text-sm font-semibold leading-none text-white tabular-nums">+ {{ fmtEarnGap(earnedGap) }}</div>
               </div>
-              <div class="mt-1.5 flex items-center gap-2">
-                <span class="text-sm font-semibold leading-none text-white tabular-nums">+ {{ fmtEarnGap(earnedGap) }}</span>
-              </div>
+              <div class="shrink-0 text-base font-bold tabular-nums text-slate-300">#{{ earnedOrder }}</div>
             </div>
           </template>
         </Tooltip>
