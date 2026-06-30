@@ -204,16 +204,16 @@ async function onLogout() {
           </DropdownMenu>
 
           <!-- Desktop (sm+): inline login + register buttons -->
-          <NuxtLink
+          <UiButton1
             to="/auth/login"
-            class="hidden items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 shadow-sm shadow-slate-900/5 transition hover:border-slate-400 hover:bg-slate-50 hover:text-slate-900 sm:inline-flex sm:px-4"
-          >
-            <LucideIcon :icon="LogIn" class="size-4" stroke-width="1.75" />
-            登录
-          </NuxtLink>
+            label="登录"
+            hover-label="进入"
+            :icon="LogIn"
+            class="max-sm:hidden"
+          />
           <NuxtLink
             to="/auth/register"
-            class="hidden items-center gap-1.5 rounded-lg bg-slate-950 px-3 py-2 text-sm font-semibold text-white shadow-sm shadow-slate-950/30 transition hover:bg-black active:bg-black sm:inline-flex sm:px-4"
+            class="hidden h-9 items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-4 text-sm font-semibold text-slate-700 shadow-sm shadow-slate-900/5 transition hover:border-slate-400 hover:bg-slate-50 hover:text-slate-900 sm:inline-flex"
           >
             <LucideIcon :icon="UserPlus" class="size-4" stroke-width="1.75" />
             注册

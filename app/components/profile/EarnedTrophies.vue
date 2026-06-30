@@ -21,6 +21,16 @@ const { data: res, pending } = await useApiFetchRaw<RecentTrophy[], PageMeta>(
 const trophies = computed(() => res.value?.data ?? [])
 const total = computed(() => res.value?.meta?.total ?? 0)
 const totalPages = computed(() => res.value?.meta?.total_pages ?? 1)
+const perPage = computed(() => res.value?.meta?.per_page ?? trophies.value.length)
+
+/**
+ * 1-based acquisition order across the whole history. The list is newest-first
+ * and paginated, so the first row of a page is the `(page-1)*per_page`-th most
+ * recent trophy — i.e. order `total - (page-1)*per_page`, decreasing per row.
+ */
+function earnedOrder(index: number): number {
+  return total.value - (page.value - 1) * perPage.value - index
+}
 
 /**
  * Seconds elapsed between this trophy and the one earned just before it. The
@@ -96,6 +106,13 @@ function psnEarnedRate(item: RecentTrophy) {
         :to="{ path: `/trophies/${item.trophy_set_id}`, query: { psnid } }"
         class="group flex items-center gap-3 px-4 py-3.5 transition hover:bg-slate-50 sm:gap-4 sm:px-5"
       >
+        <!-- Acquisition order (newest = highest) -->
+        <span
+          class="inline-flex shrink-0 items-baseline gap-px text-sm font-semibold tabular-nums text-slate-400 transition group-hover:text-slate-700"
+        >
+          <span class="text-[10px] text-slate-300">#</span>{{ earnedOrder(index) }}
+        </span>
+
         <!-- Icon + tier badge -->
         <div class="relative shrink-0">
           <img

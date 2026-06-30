@@ -15,9 +15,18 @@ const { data: milestones, pending, error } = await useApiFetch<ProfileMilestone[
   () => `/profile/${props.psnid}/milestones`,
 )
 
+// `earned_at` may arrive as a number (epoch seconds) or an ISO string; coerce
+// to milliseconds so the comparison is numeric (raw string subtraction yields
+// NaN, which silently no-ops the sort and makes the toggle look broken).
+function earnedMs(item: ProfileMilestone): number {
+  const v = item.earned_at as number | string
+  const t = typeof v === 'number' ? v * 1000 : new Date(v).getTime()
+  return Number.isNaN(t) ? 0 : t
+}
+
 const sorted = computed(() =>
   [...(milestones.value ?? [])].sort((a, b) =>
-    ascending.value ? a.earned_at - b.earned_at : b.earned_at - a.earned_at,
+    ascending.value ? earnedMs(a) - earnedMs(b) : earnedMs(b) - earnedMs(a),
   ),
 )
 const visibleMilestones = computed(() =>
@@ -85,6 +94,14 @@ function milestoneMeta(item: ProfileMilestone) {
 
     <div v-else class="relative px-4 py-2 sm:px-5">
       <span v-if="visibleMilestones.length > 1" class="absolute bottom-14 left-9 top-14 w-px bg-slate-200 sm:left-10" />
+      <TransitionGroup
+        tag="div"
+        enter-active-class="transition duration-300 ease-out"
+        enter-from-class="opacity-0"
+        leave-active-class="absolute transition duration-300 ease-out"
+        leave-to-class="opacity-0"
+        move-class="transition-transform duration-500 ease-in-out"
+      >
       <NuxtLink
         v-for="(item, index) in visibleMilestones"
         :key="`${item.type}-${item.index}-${item.trophy_id}`"
@@ -127,6 +144,7 @@ function milestoneMeta(item: ProfileMilestone) {
           </div>
         </div>
       </NuxtLink>
+      </TransitionGroup>
     </div>
 
     <div v-if="hiddenCount" class="border-t border-slate-100 px-4 py-3 text-center sm:px-5">

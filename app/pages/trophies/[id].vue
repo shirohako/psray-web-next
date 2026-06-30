@@ -99,7 +99,7 @@
           <div class="relative">
             <div
               class="divide-y divide-slate-200 transition-[max-height] duration-500 ease-out max-sm:overflow-hidden"
-              :class="trophyListExpanded ? 'max-sm:max-h-[9999px]' : 'max-sm:max-h-[34rem]'"
+              :class="trophyListExpanded ? 'max-sm:max-h-[9999px]' : 'max-sm:max-h-136'"
             >
               <TrophyGroupSection
                 v-for="group in sortedGroups"
@@ -117,7 +117,7 @@
             <div
               v-if="visibleTrophyCount > 6"
               class="sm:hidden"
-              :class="trophyListExpanded ? 'border-t border-slate-200 bg-white px-4 py-3' : 'pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-white via-white/95 to-white/0 px-4 pb-4 pt-18'"
+              :class="trophyListExpanded ? 'border-t border-slate-200 bg-white px-4 py-3' : 'pointer-events-none absolute inset-x-0 bottom-0 bg-linear-to-t from-white via-white/95 to-white/0 px-4 pb-4 pt-18'"
             >
               <button
                 type="button"
