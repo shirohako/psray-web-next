@@ -19,12 +19,32 @@ const props = defineProps<{
 
 const loaded = ref(false)
 const failed = ref(false)
+const img = ref<HTMLImageElement | null>(null)
+
+function syncImageState() {
+  const el = img.value
+  if (!el || !el.complete) return
+  if (el.naturalWidth > 0) loaded.value = true
+  else failed.value = true
+}
+
+function onLoad() {
+  loaded.value = true
+}
+
+function onError() {
+  failed.value = true
+}
 
 // Reset when the source changes (e.g. list re-render on pagination).
-watch(() => props.src, () => {
+watch(() => props.src, async () => {
   loaded.value = false
   failed.value = false
+  await nextTick()
+  syncImageState()
 })
+
+onMounted(syncImageState)
 
 const isSquare = computed(() => (props.platform ?? []).includes('PS5'))
 </script>
@@ -44,6 +64,7 @@ const isSquare = computed(() => (props.platform ?? []).includes('PS5'))
     <LucideIcon :icon="ImageOff" class="size-5" />
   </div>
   <img
+    ref="img"
     v-show="!failed"
     :src="src"
     :alt="alt"
@@ -51,7 +72,7 @@ const isSquare = computed(() => (props.platform ?? []).includes('PS5'))
     decoding="async"
     class="max-h-full max-w-full rounded-lg object-contain shadow-sm ring-1 ring-black/5 transition-opacity duration-300"
     :class="loaded ? 'opacity-100' : 'opacity-0'"
-    @load="loaded = true"
-    @error="failed = true"
+    @load="onLoad"
+    @error="onError"
   />
 </template>

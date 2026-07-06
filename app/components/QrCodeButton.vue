@@ -67,10 +67,10 @@ async function copyMeta(value: string | number | null | undefined) {
     type="button"
     title="页面二维码"
     aria-label="页面二维码"
-    class="inline-flex size-9 items-center justify-center rounded-lg bg-white/10 text-white ring-1 ring-white/15 backdrop-blur transition hover:bg-white/20"
+    class="inline-flex size-8 items-center justify-center rounded-lg bg-white/15 text-white ring-1 ring-white/20 backdrop-blur-md transition hover:bg-white/25"
     @click="show"
   >
-    <LucideIcon :icon="QrCode" class="size-4.5" />
+    <LucideIcon :icon="QrCode" class="size-4" />
   </button>
 
   <Dialog v-model:open="open" :title="title" size="sm">

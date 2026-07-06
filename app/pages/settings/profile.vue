@@ -173,21 +173,21 @@ async function save() {
       <div>
         <div class="overflow-hidden rounded-xl border border-slate-200 ring-1 ring-slate-900/5">
           <div
-            class="relative h-32 bg-slate-300 bg-cover bg-center sm:h-40"
+            class="relative h-48 bg-slate-300 bg-cover bg-center sm:h-64"
             :style="{ backgroundImage: `url(${previewBanner})` }"
           >
-            <div class="absolute inset-0 bg-linear-to-t from-black/45 via-black/5 to-transparent" />
+            <div class="absolute inset-0 bg-linear-to-t from-black/55 via-black/10 to-black/5" />
           </div>
           <div class="px-4 pb-4">
             <img
               v-if="previewAvatar"
               :src="previewAvatar"
               :alt="user?.psnid"
-              class="relative z-10 -mt-10 size-20 rounded-xl border-4 border-white bg-white object-cover shadow-md sm:size-24"
+              class="relative z-10 -mt-18 size-24 rounded-xl border-4 border-white bg-white object-cover shadow-md sm:-mt-22 sm:size-28"
             />
             <span
               v-else
-              class="relative z-10 -mt-10 grid size-20 place-items-center rounded-xl border-4 border-white bg-slate-900 text-2xl font-bold text-white shadow-md sm:size-24"
+              class="relative z-10 -mt-18 grid size-24 place-items-center rounded-xl border-4 border-white bg-slate-900 text-2xl font-bold text-white shadow-md sm:-mt-22 sm:size-28"
             >
               {{ initial }}
             </span>
@@ -232,9 +232,11 @@ async function save() {
             </div>
             <p v-if="fieldErrors.banner_url" class="mt-1.5 text-xs font-medium text-rose-600">{{ fieldErrors.banner_url }}</p>
           </div>
+          <p class="text-xs leading-relaxed text-slate-400">
+            建议使用约 4.5:1 的宽幅图片（如 1440×320），过小的图片在大屏上可能模糊。
+          </p>
           <p class="flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs leading-relaxed text-slate-400">
-            可先用第三方图床上传图片，再把链接填到这里。
-            <span>直接上传功能开发中</span>
+            可先用第三方图床上传图片，再把链接填到这里。直接上传功能开发中。
           </p>
         </div>
       </section>
@@ -290,8 +292,7 @@ async function save() {
             <p v-if="fieldErrors.avatar_url" class="mt-1.5 text-xs font-medium text-rose-600">{{ fieldErrors.avatar_url }}</p>
           </div>
           <p class="flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs leading-relaxed text-slate-400">
-            同样可以使用第三方图床。
-            <span>直接上传功能开发中</span>
+            可以使用第三方图床。直接上传功能开发中。
           </p>
         </div>
       </section>

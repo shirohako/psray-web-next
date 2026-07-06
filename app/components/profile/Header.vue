@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {
   Trophy, Eye, UserPlus, UserCheck, UserMinus, ChevronDown, RefreshCw, Loader2,
-  Crown, Medal, MapPin, Sparkles, BadgeCheck,
+  Crown, Medal, MapPin, Sparkles, BadgeCheck, PawPrint,
 } from 'lucide'
 import type { Profile } from '~/services/profile'
 
@@ -29,50 +29,124 @@ const loginTo = computed(() => ({
   path: '/auth/login',
   query: { redirect: route.fullPath },
 }))
+
+const actionButtonBase =
+  'inline-flex h-8 shrink-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-lg border border-white/20 px-3 text-xs font-semibold leading-none shadow-sm shadow-slate-950/20 backdrop-blur transition sm:h-9 sm:px-4 sm:text-sm'
+const hasInteractionFollowAction = computed(() =>
+  (authBusy.value && !props.profile.can_follow) || (!isLoggedIn.value && !props.profile.can_follow) || props.profile.can_follow,
+)
 </script>
 
 <template>
   <section class="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
     <!-- Banner -->
     <div
-      class="relative h-36 bg-slate-300 bg-cover bg-center sm:h-48"
+      class="relative h-48 bg-slate-300 bg-cover bg-center sm:h-64"
       :style="{ backgroundImage: `url(${bannerImage})` }"
     >
-      <div class="absolute inset-0 bg-linear-to-t from-black/45 via-black/5 to-transparent" />
+      <div class="absolute inset-0 bg-linear-to-t from-black/55 via-black/10 to-black/5" />
       <div class="absolute right-4 top-4 z-10 flex items-center gap-2">
-        <span
+        <Tooltip
           v-if="profile.is_plus"
-          class="inline-flex items-center gap-1 rounded-full bg-amber-400/95 px-2.5 py-1 text-xs font-bold text-amber-950 shadow-sm backdrop-blur"
+          content="非实时数据"
+          placement="bottom"
+          class="cursor-help"
         >
-          <LucideIcon :icon="Crown" class="size-3.5" /> PS PLUS
-        </span>
+          <span class="inline-flex items-center gap-1 rounded-md bg-amber-400/95 px-2.5 py-1 text-xs font-bold text-amber-950 shadow-sm backdrop-blur-md">
+            <LucideIcon :icon="Crown" class="size-3.5" /> PS+
+          </span>
+        </Tooltip>
         <QrCodeButton title="个人资料二维码" :caption="profile.psnid" />
       </div>
-    </div>
 
-    <!-- Header -->
-    <div class="px-4 pb-5 sm:px-6">
-      <!-- Avatar (overlapping banner) + actions on one baseline -->
-      <div class="flex items-end justify-between gap-4">
-        <img
-          :src="profile.avatar_url"
-          :alt="profile.psnid"
-          class="relative z-10 -mt-12 size-24 rounded-xl border-4 border-white bg-white object-cover shadow-md sm:-mt-14 sm:size-28"
-        />
-        <div class="mb-1 flex shrink-0 items-center gap-2">
+      <!-- Primary actions, overlaid at the banner's bottom-right -->
+      <div class="absolute bottom-4 right-4 z-20 flex items-center gap-2">
+        <DropdownMenu
+          align="right"
+          panel-class="!min-w-36 !rounded-lg !py-1"
+          :class="[actionButtonBase, '!h-9 !gap-2 !px-4 !text-sm cursor-pointer bg-zinc-900/90 text-white hover:bg-zinc-950 sm:hidden']"
+        >
+          <LucideIcon :icon="PawPrint" class="size-4" />
+          互动
+          <LucideIcon :icon="ChevronDown" class="size-3.5 text-zinc-400" />
+
+          <template #menu="{ close }">
+            <NuxtLink
+              :to="{ path: '/sync', query: { psnid: profile.psnid } }"
+              class="flex w-full items-center gap-2 px-2.5 py-1.5 text-sm font-medium text-slate-600 transition hover:bg-slate-50 hover:text-slate-900"
+              @click="close"
+            >
+              <LucideIcon :icon="RefreshCw" class="size-3.5 text-slate-400" />
+              更新
+            </NuxtLink>
+
+            <div v-if="hasInteractionFollowAction" class="mx-2 my-0.5 border-t border-slate-100" />
+
+            <button
+              v-if="authBusy && !profile.can_follow"
+              type="button"
+              role="menuitem"
+              disabled
+              class="flex w-full cursor-wait items-center gap-2 px-2.5 py-1.5 text-left text-sm font-medium text-slate-400"
+            >
+              <LucideIcon :icon="Loader2" class="size-3.5 animate-spin text-slate-400" />
+              登录中
+            </button>
+
+            <NuxtLink
+              v-else-if="!isLoggedIn && !profile.can_follow"
+              :to="loginTo"
+              class="flex w-full items-center gap-2 px-2.5 py-1.5 text-sm font-medium text-slate-600 transition hover:bg-slate-50 hover:text-slate-900"
+              @click="close"
+            >
+              <LucideIcon :icon="UserPlus" class="size-3.5 text-slate-400" />
+              关注
+            </NuxtLink>
+
+            <button
+              v-else-if="profile.is_following"
+              type="button"
+              role="menuitem"
+              :disabled="followPending"
+              class="flex w-full items-center gap-2 px-2.5 py-1.5 text-left text-sm font-medium text-slate-600 transition hover:bg-rose-50 hover:text-rose-700 disabled:opacity-60"
+              @click="$emit('toggleFollow'); close()"
+            >
+              <LucideIcon :icon="UserMinus" class="size-3.5 text-rose-500" />
+              取消关注
+            </button>
+
+            <button
+              v-else-if="profile.can_follow"
+              type="button"
+              role="menuitem"
+              :disabled="followPending"
+              class="flex w-full items-center gap-2 px-2.5 py-1.5 text-left text-sm font-medium text-slate-600 transition hover:bg-slate-50 hover:text-slate-900 disabled:opacity-60"
+              @click="$emit('toggleFollow'); close()"
+            >
+              <LucideIcon
+                :icon="followPending ? Loader2 : UserPlus"
+                class="size-3.5 text-slate-400"
+                :class="followPending && 'animate-spin'"
+              />
+              关注
+            </button>
+          </template>
+        </DropdownMenu>
+
+        <div class="hidden items-center gap-2 sm:flex">
           <NuxtLink
             :to="{ path: '/sync', query: { psnid: profile.psnid } }"
-            class="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold sm:px-4 sm:py-2 sm:text-sm text-slate-700 shadow-sm transition hover:bg-slate-50 hover:text-slate-900"
+            :class="[actionButtonBase, 'bg-white text-slate-700 hover:bg-slate-100 hover:text-slate-900']"
           >
             <LucideIcon :icon="RefreshCw" class="size-4" />
-            同步数据
+            更新
           </NuxtLink>
           <!-- Auth state still resolving: keep the action visually present but unavailable. -->
           <button
             v-if="authBusy && !profile.can_follow"
             type="button"
             disabled
-            class="inline-flex cursor-wait items-center gap-1.5 rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-1.5 text-xs font-semibold sm:px-4 sm:py-2 sm:text-sm text-zinc-500 shadow-sm"
+            :class="[actionButtonBase, 'cursor-wait bg-white/70 text-zinc-500']"
           >
             <LucideIcon :icon="Loader2" class="size-4 animate-spin" />
             登录中
@@ -82,29 +156,22 @@ const loginTo = computed(() => ({
           <NuxtLink
             v-else-if="!isLoggedIn && !profile.can_follow"
             :to="loginTo"
-            class="inline-flex items-center gap-1.5 rounded-lg bg-zinc-800 px-3 py-1.5 text-xs font-semibold sm:px-4 sm:py-2 sm:text-sm text-white shadow-sm shadow-zinc-700/30 transition hover:bg-zinc-950 active:bg-zinc-950"
+            :class="[actionButtonBase, 'bg-zinc-900/90 text-white hover:bg-zinc-950 active:bg-zinc-950']"
           >
             <LucideIcon :icon="UserPlus" class="size-4" />
             关注
           </NuxtLink>
 
-          <!-- Logged-in but can't follow, usually viewing yourself. -->
-          <button
-            v-else-if="!profile.can_follow"
-            type="button"
-            disabled
-            class="inline-flex cursor-not-allowed items-center gap-1.5 rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-1.5 text-xs font-semibold sm:px-4 sm:py-2 sm:text-sm text-zinc-400 shadow-sm"
-          >
-            <LucideIcon :icon="UserPlus" class="size-4" />
-            关注
-          </button>
+          <!-- Logged-in but can't follow (e.g. viewing yourself): no follow action at all.
+               This empty branch keeps the chain from falling through to the 关注 CTA below. -->
+          <template v-else-if="!profile.can_follow" />
 
           <!-- Following: a menu trigger; "取消关注" lives in the dropdown. -->
           <DropdownMenu
             v-else-if="profile.is_following"
             align="right"
             panel-class="!min-w-32"
-            class="inline-flex cursor-pointer items-center gap-1.5 rounded-lg bg-zinc-950 px-3 py-1.5 text-xs font-semibold sm:px-4 sm:py-2 sm:text-sm text-white shadow-sm shadow-zinc-900/30 transition hover:bg-zinc-950"
+            :class="[actionButtonBase, 'cursor-pointer bg-zinc-900/90 text-white hover:bg-zinc-950']"
           >
             <LucideIcon
               :icon="followPending ? Loader2 : UserCheck"
@@ -132,7 +199,7 @@ const loginTo = computed(() => ({
             v-else
             type="button"
             :disabled="followPending"
-            class="inline-flex items-center gap-1.5 rounded-lg bg-zinc-800 px-3 py-1.5 text-xs font-semibold sm:px-4 sm:py-2 sm:text-sm text-white shadow-sm shadow-zinc-700/30 transition hover:bg-zinc-950 active:bg-zinc-950 disabled:opacity-60"
+            :class="[actionButtonBase, 'bg-zinc-900/90 text-white hover:bg-zinc-950 active:bg-zinc-950 disabled:opacity-60']"
             @click="$emit('toggleFollow')"
           >
             <LucideIcon
@@ -144,6 +211,16 @@ const loginTo = computed(() => ({
           </button>
         </div>
       </div>
+    </div>
+
+    <!-- Header -->
+    <div class="px-4 pb-5 sm:px-6">
+      <!-- Avatar overlaps the banner -->
+      <img
+        :src="profile.avatar_url"
+        :alt="profile.psnid"
+        class="relative z-10 -mt-18 size-24 rounded-xl border-4 border-white bg-white object-cover shadow-md sm:-mt-22 sm:size-28"
+      />
 
       <!-- Name + about + meta -->
       <div class="mt-3">

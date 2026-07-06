@@ -79,7 +79,7 @@ watch(() => props.psnid, () => {
       class="divide-y divide-slate-100 transition-[max-height,opacity] duration-500 ease-out max-sm:overflow-hidden"
       :class="[
         { 'opacity-50': pending },
-        expanded || !canCollapse ? 'max-sm:max-h-[9999px]' : 'max-sm:max-h-[25rem]',
+        expanded || !canCollapse ? 'max-sm:max-h-[9999px]' : 'max-sm:max-h-100',
       ]"
     >
       <NuxtLink
@@ -154,7 +154,7 @@ watch(() => props.psnid, () => {
     <div
       v-if="canCollapse"
       class="sm:hidden"
-      :class="expanded ? 'border-t border-slate-100 bg-white px-4 py-3' : 'pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-white via-white/95 to-white/0 px-4 pb-4 pt-16'"
+      :class="expanded ? 'border-t border-slate-100 bg-white px-4 py-3' : 'pointer-events-none absolute inset-x-0 bottom-0 bg-linear-to-t from-white via-white/95 to-white/0 px-4 pb-4 pt-16'"
     >
       <button
         type="button"

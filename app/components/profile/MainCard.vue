@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { Gamepad2, Milestone, Trophy, type IconNode } from 'lucide'
+import { Check, ChevronDown, Gamepad2, Milestone, Trophy, type IconNode } from 'lucide'
 
-defineProps<{ psnid: string }>()
+const props = defineProps<{ psnid: string }>()
 
 // Tabbed main card. Each tab renders its own content component; add new tabs
 // here as their components land.
@@ -11,17 +11,62 @@ const tabs: { key: TabKey; label: string; icon: IconNode }[] = [
   { key: 'trophies', label: '获得的奖杯', icon: Trophy },
   { key: 'milestones', label: '里程碑', icon: Milestone },
 ]
+type TabItem = (typeof tabs)[number]
 
 // Each tab's content component fetches its data with a top-level `await`, so
 // switching tabs suspends until that data lands. The <Suspense> below (see
 // template) surfaces a skeleton during the wait.
 const activeTab = ref<TabKey>('recent')
+const defaultTab = tabs[0] as TabItem
+const activeTabItem = computed<TabItem>(() => tabs.find(tab => tab.key === activeTab.value) ?? defaultTab)
 </script>
 
 <template>
   <div class="rounded-lg border border-slate-200 bg-white shadow-sm">
     <!-- Tab bar -->
-    <div class="flex gap-1 border-b border-slate-200 px-4 py-2.5 sm:px-5">
+    <div class="border-b border-slate-200 px-3 py-2.5 sm:hidden">
+      <DropdownMenu
+        align="left"
+        panel-class="!w-[calc(100vw-3.5rem)] !min-w-0 !rounded-lg !border-slate-200 !py-1.5 !shadow-xl !shadow-slate-900/10"
+        class="inline-flex w-full items-center justify-between gap-3 rounded-lg border border-slate-200 bg-white px-3.5 py-2.5 text-sm font-semibold text-slate-900 shadow-sm shadow-slate-900/5 transition hover:border-slate-300 hover:bg-slate-50"
+      >
+        <span class="inline-flex min-w-0 items-center gap-2">
+          <LucideIcon :icon="activeTabItem.icon" class="size-4 shrink-0 text-slate-500" stroke-width="2" />
+          <span class="truncate">{{ activeTabItem.label }}</span>
+        </span>
+        <LucideIcon :icon="ChevronDown" class="size-4 shrink-0 text-slate-400" />
+
+        <template #menu="{ close }">
+          <button
+            v-for="tab in tabs"
+            :key="tab.key"
+            type="button"
+            role="menuitem"
+            class="flex w-full items-center gap-2.5 px-3 py-2.5 text-left text-sm font-medium transition"
+            :class="activeTab === tab.key
+              ? 'bg-slate-100 text-slate-900'
+              : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'"
+            @click="activeTab = tab.key; close()"
+          >
+            <LucideIcon
+              :icon="tab.icon"
+              class="size-4 shrink-0"
+              :class="activeTab === tab.key ? 'text-slate-700' : 'text-slate-400'"
+              stroke-width="2"
+            />
+            <span class="min-w-0 flex-1">{{ tab.label }}</span>
+            <LucideIcon
+              v-if="activeTab === tab.key"
+              :icon="Check"
+              class="size-4 shrink-0 text-slate-500"
+              stroke-width="2"
+            />
+          </button>
+        </template>
+      </DropdownMenu>
+    </div>
+
+    <div class="hidden gap-1 border-b border-slate-200 px-5 py-2.5 sm:flex">
       <button
         v-for="tab in tabs"
         :key="tab.key"
@@ -32,7 +77,7 @@ const activeTab = ref<TabKey>('recent')
           ? 'bg-slate-900 text-white'
           : 'bg-slate-100 text-slate-500 hover:bg-slate-200 hover:text-slate-900'"
       >
-        <LucideIcon :icon="tab.icon" class="size-4" stroke-width="2" />
+        <LucideIcon :icon="tab.icon" class="size-4 shrink-0" stroke-width="2" />
         {{ tab.label }}
       </button>
     </div>
@@ -44,9 +89,9 @@ const activeTab = ref<TabKey>('recent')
          The surrounding <Transition> fades between skeleton and content. -->
     <Transition name="tab-fade" mode="out-in">
       <Suspense timeout="0">
-        <ProfileRecentlyPlayed v-if="activeTab === 'recent'" :psnid="psnid" />
-        <ProfileEarnedTrophies v-else-if="activeTab === 'trophies'" :psnid="psnid" />
-        <ProfileMilestones v-else :psnid="psnid" />
+        <ProfileRecentlyPlayed v-if="activeTab === 'recent'" :psnid="props.psnid" />
+        <ProfileEarnedTrophies v-else-if="activeTab === 'trophies'" :psnid="props.psnid" />
+        <ProfileMilestones v-else :psnid="props.psnid" />
 
         <template #fallback>
           <div class="divide-y divide-slate-100">
