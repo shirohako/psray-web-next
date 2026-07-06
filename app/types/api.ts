@@ -23,6 +23,9 @@ export type ErrorCode =
   | 'EMAIL_SEND_FAILED'
   | 'VERIFICATION_CODE_INVALID'
   | 'VERIFICATION_CODE_EXPIRED'
+  // Registration (send-code + PSN-profile verification).
+  | 'ALREADY_REGISTERED'
+  | 'PSN_PROFILE_FAILED'
   // eslint-disable-next-line @typescript-eslint/ban-types
   | (string & {})
 

@@ -53,6 +53,19 @@ export interface LoginPayload {
   password: string
 }
 
+/** Registration: bind email + password to an in-library PSN account (see `pages/auth/register.vue`). */
+export interface RegisterPayload {
+  psnid: string
+  email: string
+  password: string
+}
+
+/** Shared `POST /auth/send-code` payload. `type` selects the code's purpose. */
+export interface SendCodePayload {
+  email: string
+  type: 'register' | 'change_email'
+}
+
 export interface LogoutPayload {
   all?: boolean
 }
@@ -113,11 +126,17 @@ function toAuthSession(raw: RawMeResponse): AuthSession {
   }
 }
 
-/** `POST /auth/login` envelope. We only consume the bearer token + its expiry. */
-interface LoginResponse {
+/** Token envelope shared by `POST /auth/login` and `POST /auth/register`. We only consume the token + expiry. */
+interface TokenResponse {
   token: string
   token_type?: string
   expires_at?: string
+}
+
+/** The resolved bearer token from an auth endpoint; the caller loads the account via {@link useAuthApi.me}. */
+export interface IssuedToken {
+  token: string
+  expiresAt: string | null
 }
 
 function parseBearerToken(value: string | null) {
@@ -133,29 +152,32 @@ export function useAuthApi() {
   const { get, post } = useApi()
   const { $api } = useNuxtApp()
 
-  return {
-    /** Authenticate and return just the bearer token; the caller loads the account via {@link me}. */
-    async login(payload: LoginPayload) {
-      const res = await $api.raw<ApiSuccess<LoginResponse>>('/auth/login', {
-        method: 'POST',
-        body: payload,
+  /** POST a token-issuing endpoint (`/auth/login`, `/auth/register`) and pull the bearer token off it. */
+  async function authenticate(url: string, body: unknown): Promise<IssuedToken> {
+    const res = await $api.raw<ApiSuccess<TokenResponse>>(url, { method: 'POST', body })
+    const data = res._data?.data
+    const token =
+      data?.token
+      ?? parseBearerToken(res.headers.get('Authorization'))
+      ?? parseBearerToken(res.headers.get('X-Auth-Token'))
+
+    if (!token) {
+      throw new ApiError({
+        code: 'INTERNAL_ERROR',
+        message: 'Authentication succeeded, but the API did not return a token.',
+        status: 500,
       })
-      const data = res._data?.data
-      const token =
-        data?.token
-        ?? parseBearerToken(res.headers.get('Authorization'))
-        ?? parseBearerToken(res.headers.get('X-Auth-Token'))
+    }
 
-      if (!token) {
-        throw new ApiError({
-          code: 'INTERNAL_ERROR',
-          message: 'Login succeeded, but the API did not return a token.',
-          status: 500,
-        })
-      }
+    return { token, expiresAt: data?.expires_at ?? null }
+  }
 
-      return { token, expiresAt: data?.expires_at ?? null }
-    },
+  return {
+    login: (payload: LoginPayload) => authenticate('/auth/login', payload),
+    /** Verify email + PSN-profile ownership and register; on success the backend auto-issues a token. */
+    register: (payload: RegisterPayload) => authenticate('/auth/register', payload),
+    /** Email a verification code for the given `type` (register / change-email). */
+    sendCode: (payload: SendCodePayload) => post<{ message: string }>('/auth/send-code', payload),
     me: async () => toAuthSession(await get<RawMeResponse>('/auth/me')),
     logout: (payload?: LogoutPayload) => post<LogoutResponse>('/auth/logout', payload),
   }

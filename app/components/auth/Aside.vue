@@ -27,7 +27,7 @@ onMounted(() => {
 
     <!-- Content: quote anchored to the top, no glass -->
     <div class="relative flex h-full flex-col p-9 xl:p-12">
-      <figure class="animate-rise max-w-md" style="animation-delay: 0.15s">
+      <div class="animate-rise max-w-md" style="animation-delay: 0.15s">
         <LucideIcon :icon="Quote" class="size-9 text-white/35" />
 
         <Transition
@@ -37,19 +37,21 @@ onMounted(() => {
           leave-active-class="transition duration-200 ease-in"
           leave-to-class="opacity-0"
         >
-          <blockquote :key="quote.text" class="mt-5">
-            <p
-              class="text-lg font-medium leading-relaxed tracking-wide text-white drop-shadow-sm xl:text-xl xl:leading-relaxed"
-            >
-              {{ quote.text }}
-            </p>
+          <figure :key="quote.text" class="mt-5">
+            <blockquote>
+              <p
+                class="text-lg font-medium leading-relaxed tracking-wide text-white drop-shadow-sm xl:text-xl xl:leading-relaxed"
+              >
+                {{ quote.text }}
+              </p>
+            </blockquote>
             <figcaption class="mt-6 flex items-center gap-3">
               <span class="h-px w-8 bg-white/50" />
               <span class="text-sm font-medium tracking-wide text-white/80">{{ quote.author }}</span>
             </figcaption>
-          </blockquote>
+          </figure>
         </Transition>
-      </figure>
+      </div>
     </div>
   </div>
 </template>

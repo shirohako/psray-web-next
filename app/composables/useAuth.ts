@@ -95,19 +95,20 @@ export function useAuth() {
     }
   }
 
-  // Login only yields a bearer token; the account itself is loaded through the
-  // same `fetchMe()` path a normal session refresh uses, so login and refresh
-  // always resolve to an identical `AuthUser` with no shapes to keep in sync.
+  // Login only yields a bearer token; the account is loaded through the same
+  // `fetchMe()` path a normal session refresh uses, so login and refresh resolve
+  // to an identical `AuthUser` with no shapes to keep in sync. (Registration
+  // does not log in — see `useRegisterFlow`.)
   async function login(payload: LoginPayload) {
     loading.value = true
     try {
-      const { token: bearerToken, expiresAt } = await useAuthApi().login(payload)
-      setToken(bearerToken, expiresAt)
+      const issued = await useAuthApi().login(payload)
+      setToken(issued.token, issued.expiresAt)
       // `setToken` writes the `auth_token` cookie through a `useCookie` ref,
-      // whose actual `document.cookie` write is flushed by a watcher on the
-      // next tick, not synchronously. Without this wait the immediate
-      // `fetchMe()` below can fire before the new cookie lands, so its
-      // Authorization header re-reads the old (or absent) token and 401s.
+      // whose actual `document.cookie` write is flushed by a watcher on the next
+      // tick, not synchronously. Without this wait the immediate `fetchMe()`
+      // below can fire before the new cookie lands, so its Authorization header
+      // re-reads the old (or absent) token and 401s.
       await nextTick()
       const session = await fetchMe()
       if (!session) {

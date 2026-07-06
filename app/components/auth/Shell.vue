@@ -1,10 +1,20 @@
+<script setup lang="ts">
+/**
+ * Auth card layout: showcase image on the left (lg+), form column on the right.
+ * `compactAside` narrows the image column — used by taller forms (register)
+ * that want more room for their content.
+ */
+defineProps<{ compactAside?: boolean }>()
+</script>
+
 <template>
   <!-- Sits inside the default layout (top bar + sidebar stay visible). The
        card hugs its content and is centered in the remaining viewport height
        (viewport - top bar - layout padding). -->
   <div class="flex min-h-[calc(100dvh-6rem)] items-center justify-center lg:min-h-[calc(100dvh-8rem)]">
     <div
-      class="w-full max-w-5xl overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm lg:grid lg:min-h-136 lg:grid-cols-[3fr_2fr]"
+      class="w-full max-w-5xl overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm lg:grid lg:min-h-136"
+      :class="compactAside ? 'lg:grid-cols-[1fr_1fr]' : 'lg:grid-cols-[3fr_2fr]'"
     >
       <!-- Left showcase: image + frosted quote. Hidden on small screens. -->
       <aside class="relative hidden lg:block">
