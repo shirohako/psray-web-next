@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { animate, stagger, type JSAnimation } from 'animejs'
 import { Clock, ChevronDown, ChevronRight, Globe } from 'lucide'
 import type { PlayedTrophySet } from '~/services/profile'
 
@@ -13,6 +14,12 @@ interface PageMeta {
 
 const page = ref(1)
 const expanded = ref(false)
+const animatedReady = ref(false)
+const listEl = ref<HTMLElement | null>(null)
+const toggleIconEl = ref<HTMLElement | null>(null)
+const listAnimation = shallowRef<JSAnimation | null>(null)
+const toggleIconAnimation = shallowRef<JSAnimation | null>(null)
+const collapsedListHeight = 400
 
 // `page` is read inside the URL getter, so changing it re-fetches.
 const { data: res, pending } = await useApiFetchRaw<PlayedTrophySet[], PageMeta>(
@@ -37,12 +44,149 @@ function earnedTiers(g: PlayedTrophySet) {
   ]
 }
 
-watch(page, () => {
-  expanded.value = false
-})
+function isMobileViewport() {
+  return import.meta.client && window.matchMedia('(max-width: 639.98px)').matches
+}
+
+function prefersReducedMotion() {
+  return import.meta.client && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+}
+
+function targetListHeight() {
+  const el = listEl.value
+  if (!el) return collapsedListHeight
+  return expanded.value || !canCollapse.value
+    ? el.scrollHeight
+    : Math.min(collapsedListHeight, el.scrollHeight)
+}
+
+function syncListHeight() {
+  const el = listEl.value
+  if (!el) return
+
+  listAnimation.value?.cancel()
+  listAnimation.value = null
+
+  if (!canCollapse.value || !isMobileViewport()) {
+    el.style.height = ''
+    el.style.overflow = ''
+    el.style.opacity = ''
+    return
+  }
+
+  el.style.overflow = 'hidden'
+  el.style.height = expanded.value ? 'auto' : `${targetListHeight()}px`
+  el.style.opacity = ''
+}
+
+function syncToggleIcon() {
+  const el = toggleIconEl.value
+  if (!el) return
+
+  toggleIconAnimation.value?.cancel()
+  toggleIconAnimation.value = null
+  el.style.transform = `rotate(${expanded.value ? 180 : 0}deg)`
+}
+
+function animateToggleIcon(isExpanded: boolean) {
+  const el = toggleIconEl.value
+  if (!el) return
+
+  if (!animatedReady.value || prefersReducedMotion()) {
+    syncToggleIcon()
+    return
+  }
+
+  toggleIconAnimation.value?.cancel()
+  toggleIconAnimation.value = animate(el, {
+    rotateZ: isExpanded ? 180 : 0,
+    translateY: isExpanded ? [0, 3, 0] : [0, -3, 0],
+    scale: [1, 1.28, 0.92, 1],
+    duration: 560,
+    ease: 'outBack(1.8)',
+    onComplete: () => {
+      toggleIconAnimation.value = null
+    },
+  })
+}
+
+async function animateListHeight(isExpanded: boolean) {
+  await nextTick()
+
+  const el = listEl.value
+  if (!el) return
+
+  if (!animatedReady.value || !canCollapse.value || !isMobileViewport() || prefersReducedMotion()) {
+    syncListHeight()
+    return
+  }
+
+  listAnimation.value?.cancel()
+
+  const fromHeight = el.getBoundingClientRect().height
+  el.style.height = `${fromHeight}px`
+  el.style.overflow = 'hidden'
+
+  await nextTick()
+
+  const toHeight = isExpanded ? el.scrollHeight : Math.min(collapsedListHeight, el.scrollHeight)
+  const rows = Array.from(el.querySelectorAll(':scope > a')).slice(4)
+
+  animate(rows, {
+    translateX: isExpanded ? [48, 0] : [0, -18],
+    translateY: isExpanded ? [22, 0] : [0, -6],
+    rotateZ: isExpanded ? [1.5, 0] : [0, -0.5],
+    scale: isExpanded ? [0.92, 1] : [1, 0.98],
+    opacity: isExpanded ? [0, 1] : [1, 0],
+    filter: isExpanded ? ['blur(5px)', 'blur(0px)'] : ['blur(0px)', 'blur(2px)'],
+    duration: isExpanded ? 980 : 620,
+    delay: isExpanded ? stagger(95) : stagger(48, { from: 'last' }),
+    ease: isExpanded ? 'outBack(1.35)' : 'inOutCubic',
+  })
+
+  listAnimation.value = animate(el, {
+    height: `${toHeight}px`,
+    duration: isExpanded ? 1100 : 820,
+    ease: isExpanded ? 'outQuart' : 'inOutCubic',
+    onComplete: () => {
+      el.style.height = isExpanded ? 'auto' : `${toHeight}px`
+      el.style.overflow = 'hidden'
+      el.style.opacity = ''
+      rows.forEach((row) => {
+        const item = row as HTMLElement
+        item.style.transform = ''
+        item.style.opacity = ''
+        item.style.filter = ''
+      })
+      listAnimation.value = null
+    },
+  })
+}
 
 watch(() => props.psnid, () => {
   expanded.value = false
+})
+
+watch(expanded, (isExpanded) => {
+  animateToggleIcon(isExpanded)
+  animateListHeight(isExpanded)
+})
+
+watch([recent, canCollapse], async () => {
+  await nextTick()
+  syncListHeight()
+})
+
+onMounted(async () => {
+  await nextTick()
+  animatedReady.value = true
+  syncListHeight()
+  syncToggleIcon()
+})
+
+onBeforeUnmount(() => {
+  listAnimation.value?.cancel()
+  toggleIconAnimation.value?.cancel()
 })
 </script>
 
@@ -76,35 +220,31 @@ watch(() => props.psnid, () => {
   <!-- List -->
   <div v-else class="relative">
     <div
-      class="divide-y divide-slate-100 transition-[max-height,opacity] duration-500 ease-out max-sm:overflow-hidden"
+      ref="listEl"
+      class="divide-y divide-slate-100 max-sm:overflow-hidden"
       :class="[
         { 'opacity-50': pending },
-        expanded || !canCollapse ? 'max-sm:max-h-[9999px]' : 'max-sm:max-h-100',
+        !animatedReady && canCollapse && !expanded ? 'max-sm:max-h-100' : '',
       ]"
     >
       <NuxtLink
         v-for="g in recent"
         :key="g.id"
         :to="{ path: `/trophies/${g.trophy_set_id}`, query: { psnid } }"
-        class="group flex items-center gap-4 px-4 py-4 transition hover:bg-slate-50 sm:px-5"
+        class="group flex items-start gap-4 px-4 py-4 transition hover:bg-slate-50 sm:items-center sm:px-5"
       >
         <!-- Fixed-width slot keeps rows aligned; the image renders at its natural
              aspect (PS4 320×176 landscape, PS5 square) with a soft ring instead of
              a gray letterbox box around it, plus a loading skeleton. -->
-        <div class="relative flex h-18 w-24 shrink-0 items-center justify-center">
-          <TrophySetImage
-            :src="g.trophy_set.icon_url"
-            :alt="trophySetName(g)"
-            :platform="platformList(g.trophy_set.platform)"
-          />
-        </div>
-
-        <div class="min-w-0 flex-1">
-          <!-- Title -->
-          <h3 class="truncate font-semibold text-slate-900">{{ trophySetName(g) }}</h3>
-
-          <!-- Platform + region + last-earned time -->
-          <div class="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1">
+        <div class="flex w-24 shrink-0 flex-col items-center gap-1.5">
+          <div class="relative flex h-18 w-24 items-center justify-center">
+            <TrophySetImage
+              :src="g.trophy_set.icon_url"
+              :alt="trophySetName(g)"
+              :platform="platformList(g.trophy_set.platform)"
+            />
+          </div>
+          <div class="flex max-w-24 flex-wrap justify-center gap-1 sm:hidden">
             <span
               v-for="platform in platformList(g.trophy_set.platform)"
               :key="platform"
@@ -116,6 +256,30 @@ watch(() => props.psnid, () => {
             <span
               v-if="g.trophy_set.region"
               class="inline-flex shrink-0 items-center gap-1 rounded border border-slate-200 bg-slate-50 px-1.5 py-0.5 text-[10px] font-bold leading-none tracking-wide text-slate-500"
+            >
+              <LucideIcon :icon="Globe" class="size-3 text-slate-400" />
+              {{ g.trophy_set.region }}
+            </span>
+          </div>
+        </div>
+
+        <div class="min-w-0 flex-1">
+          <!-- Title -->
+          <h3 class="truncate font-semibold text-slate-900">{{ trophySetName(g) }}</h3>
+
+          <!-- Platform + region + last-earned time -->
+          <div class="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1">
+            <span
+              v-for="platform in platformList(g.trophy_set.platform)"
+              :key="platform"
+              class="hidden shrink-0 rounded px-1.5 py-0.5 text-[10px] font-bold leading-none sm:inline-flex"
+              :class="platformBadgeClass(platform)"
+            >
+              {{ platform }}
+            </span>
+            <span
+              v-if="g.trophy_set.region"
+              class="hidden shrink-0 items-center gap-1 rounded border border-slate-200 bg-slate-50 px-1.5 py-0.5 text-[10px] font-bold leading-none tracking-wide text-slate-500 sm:inline-flex"
             >
               <LucideIcon :icon="Globe" class="size-3 text-slate-400" />
               {{ g.trophy_set.region }}
@@ -162,11 +326,9 @@ watch(() => props.psnid, () => {
         @click="expanded = !expanded"
       >
         {{ expanded ? '收起最近玩过' : '展开最近玩过' }}
-        <LucideIcon
-          :icon="ChevronDown"
-          class="size-4 transition-transform duration-300"
-          :class="expanded ? 'rotate-180' : ''"
-        />
+        <span ref="toggleIconEl" class="inline-flex size-4 items-center justify-center">
+          <LucideIcon :icon="ChevronDown" class="size-4" />
+        </span>
       </button>
     </div>
   </div>
