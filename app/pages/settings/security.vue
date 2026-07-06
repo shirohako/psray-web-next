@@ -35,7 +35,7 @@ const emailErrors = ref<Record<string, string>>({})
 
 let cooldownTimer: ReturnType<typeof setInterval> | undefined
 
-const currentEmail = computed(() => user.value?.setting?.email || '未绑定邮箱')
+const currentEmail = computed(() => user.value?.email || '未绑定邮箱')
 const canSendCode = computed(() => newEmail.value.trim() !== '' && codeCooldown.value === 0 && !codeSending.value)
 const canSaveEmail = computed(() =>
   newEmail.value.trim() !== '' && emailCode.value.trim() !== '' && emailPassword.value !== '',

@@ -2,34 +2,37 @@ import type { ApiSuccess } from '~/types/api'
 import type { Profile } from '~/services/profile'
 import { ApiError } from '~/utils/ApiError'
 
+// ---------------------------------------------------------------------------
+// Domain types
+// ---------------------------------------------------------------------------
+
 /**
- * Private per-account settings. Only the authenticated user carries these, and
- * only `GET /auth/me` returns them — the public profile (`/profile/:psnid`) and
- * anonymous/tracked users never include a `setting` block. Present once the
- * account is registered.
+ * Private per-account settings. Only the authenticated user carries these —
+ * the public profile (`/profile/:psnid`) and anonymous/tracked users never
+ * include a `settings` block.
  */
-export interface AccountSetting {
-  email: string | null
+export interface AccountSettings {
   social_account: string | null
   timezone: string | null
   calendar_enabled: boolean
   milestones_enabled: boolean
-  /** Whether `avatar_url` is a user-uploaded/custom image vs. the synced PSN one. */
+  /** Whether `avatar_url` currently holds a custom image rather than the synced PSN one. */
   has_custom_avatar: boolean
+  /** The user's `use_custom_avatar` toggle (see `PATCH /user/setting` in `~/services/account`). */
+  use_custom_avatar: boolean
 }
 
 /**
- * The authenticated user as returned by `GET /auth/me`. Shares the public
- * {@link Profile} fields, plus `role` and the private {@link AccountSetting}
- * block that only exists for the logged-in account.
+ * The authenticated account. Structurally the public {@link Profile} minus the
+ * viewer-relative fields the backend omits when the profile *is* you
+ * (follow flags, milestones, calendar), plus the private `email` and
+ * `settings` only the logged-in user receives. `role` is inherited from
+ * {@link Profile}.
  */
-export type AuthUser = Omit<Partial<Profile>, 'admin_level'> & {
-  id: number
-  psnid: string
-  avatar_url?: string
-  role?: string
-  setting?: AccountSetting
-  [key: string]: unknown
+export interface AuthUser
+  extends Omit<Profile, 'can_follow' | 'is_following' | 'is_follower' | 'milestones' | 'calendar' | 'social_account'> {
+  email: string | null
+  settings: AccountSettings
 }
 
 export interface AuthTokenMeta {
@@ -37,13 +40,7 @@ export interface AuthTokenMeta {
   last_used_at?: string | null
 }
 
-export type LoginToken = AuthTokenMeta & {
-  value?: string
-  token?: string
-  access_token?: string
-  plain_text_token?: string
-}
-
+/** The resolved session shared by `login()` and `fetchMe()`. */
 export interface AuthSession {
   user: AuthUser
   roles: string[]
@@ -64,24 +61,63 @@ export interface LogoutResponse {
   revoked: number
 }
 
-export interface LoginResponse {
-  token: string | LoginToken
-  token_type?: 'Bearer' | string
-  expires_at?: string
-  roles?: string[]
-  permissions?: string[]
-  user: AuthUser & { password?: unknown; admin_level?: unknown }
-}
-
+/** Route-guard requirement declared via `definePageMeta({ auth })`; see `middleware/auth.global.ts`. */
 export interface AuthRequirement {
   roles?: string | string[]
   permissions?: string | string[]
   requireAll?: boolean
 }
 
-export function sanitizeAuthUser(user: LoginResponse['user'] | AuthSession['user']): AuthUser {
-  const { password: _password, admin_level: _adminLevel, ...safe } = user as Record<string, unknown>
-  return safe as AuthUser
+// ---------------------------------------------------------------------------
+// Wire shapes + normalization
+//
+// `login()` and `/auth/me` disagree on a couple of details, so a single
+// `normalizeUser` reconciles both into one `AuthUser` — nothing downstream has
+// to special-case which endpoint the data came from:
+//   • `email`/`settings` arrive flat on `user` (login) or nested under a
+//     legacy `setting` block (`/auth/me`).
+//   • the server may leak `password`/`admin_level`, which we strip.
+// ---------------------------------------------------------------------------
+
+/** A `user` object straight off the wire, before {@link normalizeUser}. */
+type RawUser = Record<string, unknown> & {
+  email?: string | null
+  settings?: AccountSettings
+  setting?: { email?: string | null, settings?: AccountSettings }
+}
+
+function normalizeUser(raw: RawUser): AuthUser {
+  const { setting, password: _password, admin_level: _adminLevel, ...user } = raw
+  return {
+    ...user,
+    email: raw.email ?? setting?.email ?? null,
+    settings: raw.settings ?? setting?.settings,
+  } as AuthUser
+}
+
+/** `GET /auth/me` envelope: a `user` plus session `role`/`permissions`/`token`. */
+interface RawMeResponse {
+  user: RawUser
+  role?: string
+  roles?: string[]
+  permissions?: string[]
+  token: AuthTokenMeta
+}
+
+function toAuthSession(raw: RawMeResponse): AuthSession {
+  return {
+    user: normalizeUser(raw.user),
+    roles: raw.roles ?? (raw.role ? [raw.role] : []),
+    permissions: raw.permissions ?? [],
+    token: raw.token,
+  }
+}
+
+/** `POST /auth/login` envelope. We only consume the bearer token + its expiry. */
+interface LoginResponse {
+  token: string
+  token_type?: string
+  expires_at?: string
 }
 
 function parseBearerToken(value: string | null) {
@@ -89,61 +125,38 @@ function parseBearerToken(value: string | null) {
   return value.replace(/^Bearer\s+/i, '').trim() || null
 }
 
-function tokenValue(token: LoginResponse['token']) {
-  if (typeof token === 'string') return token
-  return token.value ?? token.token ?? token.access_token ?? token.plain_text_token ?? null
-}
-
-export function loginTokenMeta(res: LoginResponse): AuthTokenMeta {
-  if (typeof res.token === 'object') {
-    return {
-      expires_at: res.token.expires_at,
-      last_used_at: res.token.last_used_at,
-    }
-  }
-
-  return {
-    expires_at: res.expires_at ?? '',
-    last_used_at: null,
-  }
-}
-
-export function loginSession(res: LoginResponse): AuthSession {
-  return {
-    user: sanitizeAuthUser(res.user),
-    roles: res.roles ?? [],
-    permissions: res.permissions ?? [],
-    token: loginTokenMeta(res),
-  }
-}
+// ---------------------------------------------------------------------------
+// API
+// ---------------------------------------------------------------------------
 
 export function useAuthApi() {
   const { get, post } = useApi()
   const { $api } = useNuxtApp()
 
   return {
+    /** Authenticate and return just the bearer token; the caller loads the account via {@link me}. */
     async login(payload: LoginPayload) {
-      const response = await $api.raw<ApiSuccess<LoginResponse>>('/auth/login', {
+      const res = await $api.raw<ApiSuccess<LoginResponse>>('/auth/login', {
         method: 'POST',
         body: payload,
       })
-      const data = response._data?.data
-      if (!data) {
+      const data = res._data?.data
+      const token =
+        data?.token
+        ?? parseBearerToken(res.headers.get('Authorization'))
+        ?? parseBearerToken(res.headers.get('X-Auth-Token'))
+
+      if (!token) {
         throw new ApiError({
           code: 'INTERNAL_ERROR',
-          message: 'Login succeeded, but the API response was empty.',
+          message: 'Login succeeded, but the API did not return a token.',
           status: 500,
         })
       }
 
-      const bearerToken =
-        tokenValue(data.token)
-        ?? parseBearerToken(response.headers.get('Authorization'))
-        ?? parseBearerToken(response.headers.get('X-Auth-Token'))
-
-      return { data, bearerToken }
+      return { token, expiresAt: data?.expires_at ?? null }
     },
-    me: () => get<AuthSession>('/auth/me'),
+    me: async () => toAuthSession(await get<RawMeResponse>('/auth/me')),
     logout: (payload?: LogoutPayload) => post<LogoutResponse>('/auth/logout', payload),
   }
 }

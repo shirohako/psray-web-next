@@ -28,24 +28,30 @@ const languages = TROPHY_LANGUAGE_CODES.map(code => ({
   label: `${langNameEn(code)} (${code})`,
 }))
 
+// The only invalid combination is picking the same code twice; leaving both
+// unset is allowed — on save it collapses into turning the preference off.
 const sameLanguage = computed(
   () => !!draft.value.primary && draft.value.primary === draft.value.secondary,
 )
-const incomplete = computed(
-  () => draft.value.enabled && (!draft.value.primary || !draft.value.secondary),
-)
-const invalid = computed(() => draft.value.enabled && (incomplete.value || sameLanguage.value))
+const invalid = computed(() => draft.value.enabled && sameLanguage.value)
 
 const error = computed(() => {
   if (!draft.value.enabled) return ''
-  if (incomplete.value) return '启用后需同时选择首选语言和备选语言。'
   if (sameLanguage.value) return '首选语言与备选语言不能相同。'
   return ''
 })
 
 function save() {
   if (invalid.value) return
-  saveTrophyLang(draft.value)
+  // Drop unset slots (and any dupe) and promote what remains: with the toggle
+  // on but no language chosen, the preference saves as disabled — same as
+  // flipping the switch off.
+  const [primary = '', secondary = ''] = [...new Set([draft.value.primary, draft.value.secondary].filter(Boolean))]
+  saveTrophyLang(
+    draft.value.enabled && primary
+      ? { enabled: true, primary, secondary }
+      : { enabled: false, primary: '', secondary: '' },
+  )
   saveRateBasis(rateDraft.value)
   open.value = false
   toast.success({ title: '设置已保存', description: '偏好已保存到本地。' })
@@ -92,18 +98,18 @@ function save() {
               v-model="draft.primary"
               class="w-full cursor-pointer rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-900 transition focus:border-slate-400 focus:outline-none"
             >
-              <option value="" disabled>请选择…</option>
+              <option value="">不设置</option>
               <option v-for="l in languages" :key="l.code" :value="l.code">{{ l.label }}</option>
             </select>
           </label>
 
           <label class="block">
-            <span class="mb-1 block text-xs font-medium text-slate-600">备选语言</span>
+            <span class="mb-1 block text-xs font-medium text-slate-600">备选语言（可选）</span>
             <select
               v-model="draft.secondary"
               class="w-full cursor-pointer rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-900 transition focus:border-slate-400 focus:outline-none"
             >
-              <option value="" disabled>请选择…</option>
+              <option value="">不设置</option>
               <option
                 v-for="l in languages"
                 :key="l.code"

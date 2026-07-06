@@ -3,19 +3,19 @@
  * shared across the app via `useState`.
  *
  * Currently just the trophy-language preference: when enabled, the user picks a
- * primary + secondary language, and every API request carries a browser-style
- * `Accept-Language` header (`primary,secondary;q=0.9`) so the backend best-
- * matches trophy text to them. When it's off, we fall back to the user's own
- * browser languages, so requests always carry an `Accept-Language`. See the
- * `$api` plugin + the settings drawer.
+ * primary language (and optionally a secondary), and every API request carries
+ * a browser-style `Accept-Language` header (`primary` or `primary,secondary;q=0.9`)
+ * so the backend best-matches trophy text to them. When it's off, we fall back
+ * to the user's own browser languages, so requests always carry an
+ * `Accept-Language`. See the `$api` plugin + the settings drawer.
  */
 
-/** Trophy-language preference. When `enabled`, both codes are required. */
+/** Trophy-language preference. When `enabled`, `primary` is required; `secondary` is optional. */
 export interface TrophyLangPref {
   enabled: boolean
   /** Primary language code (implicit q=1.0). */
   primary: string
-  /** Fallback language code (q=0.9). */
+  /** Optional fallback language code (q=0.9); empty string when unset. */
   secondary: string
 }
 
@@ -71,12 +71,13 @@ export function usePreferences() {
 
   /**
    * Effective `Accept-Language` for API requests:
-   * - the trophy-language preference (`primary,secondary;q=0.9`) when enabled,
+   * - the trophy-language preference when enabled — `primary` alone, or
+   *   `primary,secondary;q=0.9` when a secondary is set,
    * - otherwise the user's browser languages, so a header is always sent.
    */
   const acceptLanguage = computed(() => {
     const { enabled, primary, secondary } = trophyLang.value
-    if (enabled && primary && secondary) return `${primary},${secondary};q=0.9`
+    if (enabled && primary) return toAcceptLanguage([primary, secondary])
     return browserAcceptLanguage()
   })
 

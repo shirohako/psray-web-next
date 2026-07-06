@@ -1,6 +1,6 @@
 import { ApiError } from '~/utils/ApiError'
 import type { AuthRequirement, AuthSession, AuthUser, LoginPayload } from '~/services/auth'
-import { loginSession, sanitizeAuthUser, useAuthApi } from '~/services/auth'
+import { useAuthApi } from '~/services/auth'
 
 function toList(value?: string | string[]) {
   if (!value) return []
@@ -27,7 +27,7 @@ export function useAuth() {
   const hasToken = computed(() => !!token.value)
 
   function applySession(session: AuthSession) {
-    user.value = sanitizeAuthUser(session.user)
+    user.value = session.user
     roles.value = session.roles ?? []
     permissions.value = session.permissions ?? []
     tokenMeta.value = session.token
@@ -95,25 +95,28 @@ export function useAuth() {
     }
   }
 
+  // Login only yields a bearer token; the account itself is loaded through the
+  // same `fetchMe()` path a normal session refresh uses, so login and refresh
+  // always resolve to an identical `AuthUser` with no shapes to keep in sync.
   async function login(payload: LoginPayload) {
     loading.value = true
     try {
-      const res = await useAuthApi().login(payload)
-      const session = loginSession(res.data)
-      const bearerToken = res.bearerToken ?? token.value
-
-      if (!bearerToken) {
-        clearToken()
-        clearState()
+      const { token: bearerToken, expiresAt } = await useAuthApi().login(payload)
+      setToken(bearerToken, expiresAt)
+      // `setToken` writes the `auth_token` cookie through a `useCookie` ref,
+      // whose actual `document.cookie` write is flushed by a watcher on the
+      // next tick, not synchronously. Without this wait the immediate
+      // `fetchMe()` below can fire before the new cookie lands, so its
+      // Authorization header re-reads the old (or absent) token and 401s.
+      await nextTick()
+      const session = await fetchMe()
+      if (!session) {
         throw new ApiError({
           code: 'INTERNAL_ERROR',
-          message: 'Login succeeded, but the API did not return a bearer token.',
+          message: 'Login succeeded, but loading the account failed.',
           status: 500,
         })
       }
-
-      setToken(bearerToken, session.token.expires_at)
-      applySession(session)
       return session
     }
     finally {
