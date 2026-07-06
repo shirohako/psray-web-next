@@ -152,9 +152,9 @@ export function useAuthApi() {
   const { get, post } = useApi()
   const { $api } = useNuxtApp()
 
-  /** POST a token-issuing endpoint (`/auth/login`, `/auth/register`) and pull the bearer token off it. */
-  async function authenticate(url: string, body: unknown): Promise<IssuedToken> {
-    const res = await $api.raw<ApiSuccess<TokenResponse>>(url, { method: 'POST', body })
+  /** POST `/auth/login` and pull the bearer token off it (the caller loads the account via {@link me}). */
+  async function login(payload: LoginPayload): Promise<IssuedToken> {
+    const res = await $api.raw<ApiSuccess<TokenResponse>>('/auth/login', { method: 'POST', body: payload })
     const data = res._data?.data
     const token =
       data?.token
@@ -164,7 +164,7 @@ export function useAuthApi() {
     if (!token) {
       throw new ApiError({
         code: 'INTERNAL_ERROR',
-        message: 'Authentication succeeded, but the API did not return a token.',
+        message: 'Login succeeded, but the API did not return a token.',
         status: 500,
       })
     }
@@ -172,12 +172,19 @@ export function useAuthApi() {
     return { token, expiresAt: data?.expires_at ?? null }
   }
 
+  /**
+   * Verify email + PSN-profile ownership and register. Returns only a message —
+   * registration does NOT log in; the user signs in afterwards (see `useRegisterFlow`).
+   */
+  const register = (payload: RegisterPayload) => post<{ message: string }>('/auth/register', payload)
+
+  /** Email a verification code for the given `type` (register / change-email). */
+  const sendCode = (payload: SendCodePayload) => post<{ message: string }>('/auth/send-code', payload)
+
   return {
-    login: (payload: LoginPayload) => authenticate('/auth/login', payload),
-    /** Verify email + PSN-profile ownership and register; on success the backend auto-issues a token. */
-    register: (payload: RegisterPayload) => authenticate('/auth/register', payload),
-    /** Email a verification code for the given `type` (register / change-email). */
-    sendCode: (payload: SendCodePayload) => post<{ message: string }>('/auth/send-code', payload),
+    login,
+    register,
+    sendCode,
     me: async () => toAuthSession(await get<RawMeResponse>('/auth/me')),
     logout: (payload?: LogoutPayload) => post<LogoutResponse>('/auth/logout', payload),
   }

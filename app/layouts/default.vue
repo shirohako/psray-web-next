@@ -215,15 +215,14 @@ async function onLogout() {
           <UiButton1
             to="/auth/login"
             label="登录"
-            hover-label="进入"
             :icon="LogIn"
             class="max-sm:hidden"
           />
           <NuxtLink
             to="/auth/register"
-            class="hidden h-9 items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-4 text-sm font-semibold text-slate-700 shadow-sm shadow-slate-900/5 transition hover:border-slate-400 hover:bg-slate-50 hover:text-slate-900 sm:inline-flex"
+            class="hidden h-7 items-center gap-1 rounded-lg border border-slate-300 bg-white px-2.5 text-xs font-semibold text-slate-700 shadow-sm shadow-slate-900/5 transition hover:border-slate-400 hover:bg-slate-50 hover:text-slate-900 sm:inline-flex"
           >
-            <LucideIcon :icon="UserPlus" class="size-4" stroke-width="1.75" />
+            <LucideIcon :icon="UserPlus" class="size-3.5" stroke-width="1.75" />
             注册
           </NuxtLink>
         </template>

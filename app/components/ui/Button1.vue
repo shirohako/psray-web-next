@@ -50,11 +50,11 @@ const sweep = computed(() => {
     :is="to ? NuxtLink : 'button'"
     :to="to || undefined"
     :type="to ? undefined : 'button'"
-    class="group relative z-0 inline-flex h-9 cursor-pointer items-center justify-center overflow-hidden rounded-lg bg-slate-950 px-4 text-sm font-semibold text-white"
+    class="group relative z-0 inline-flex h-7 cursor-pointer items-center justify-center overflow-hidden rounded-lg bg-slate-950 px-2.5 text-xs font-semibold text-white"
   >
     <!-- Resting label (covered by the sweep on hover) -->
-    <span class="inline-flex items-center gap-1.5">
-      <LucideIcon v-if="icon" :icon="icon" class="size-4" stroke-width="1.75" />
+    <span class="inline-flex items-center gap-1">
+      <LucideIcon v-if="icon" :icon="icon" class="size-3.5" stroke-width="1.75" />
       {{ label }}
     </span>
 
@@ -62,8 +62,8 @@ const sweep = computed(() => {
     <span v-for="(cls, i) in sweep" :key="i" :class="cls" />
 
     <!-- Hover label, on top of the sweep -->
-    <span class="absolute inset-0 z-10 flex items-center justify-center gap-1.5 opacity-0 duration-100 group-hover:opacity-100 group-hover:duration-1000">
-      <LucideIcon v-if="icon" :icon="icon" class="size-4" stroke-width="1.75" />
+    <span class="absolute inset-0 z-10 flex items-center justify-center gap-1 opacity-0 duration-100 group-hover:opacity-100 group-hover:duration-1000">
+      <LucideIcon v-if="icon" :icon="icon" class="size-3.5" stroke-width="1.75" />
       {{ reveal }}
     </span>
   </component>
