@@ -58,10 +58,10 @@ const qrMeta = computed(() => [
             <span
               v-for="platform in platformList(trophySet.platform)"
               :key="platform"
-              class="shrink-0 rounded px-1.5 py-0.5 text-[10px] font-bold"
+              class="inline-flex h-4 shrink-0 items-center rounded px-1.5 text-[10px] font-bold leading-none"
               :class="platformBadgeClass(platform)"
             >
-              {{ platform }}
+              {{ platformLabel(platform) }}
             </span>
           </div>
           <p v-if="trophySet.detail" class="mt-1.5 line-clamp-2 max-w-prose text-sm text-slate-300">

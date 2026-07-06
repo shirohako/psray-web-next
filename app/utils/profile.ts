@@ -128,6 +128,11 @@ export function platformList(platform: PlatformValue): string[] {
   return platform ? [platform] : []
 }
 
+/** Compact platform label for badges. */
+export function platformLabel(platform: string): string {
+  return platform === 'PSVITA' ? 'PSV' : platform
+}
+
 /**
  * Tailwind classes for a platform badge (filled, white text). Cohesive palette:
  * PS5 stays near-black (brand), the rest are distinct same-weight hues.
@@ -137,7 +142,8 @@ export function platformBadgeClass(platform: string): string {
     case 'PS5': return 'bg-slate-900 text-white'
     case 'PS4': return 'bg-sky-600 text-white'
     case 'PS3': return 'bg-teal-600 text-white'
-    case 'PSVITA': return 'bg-rose-500 text-white'
+    case 'PSVITA':
+    case 'PSV': return 'bg-rose-500 text-white'
     case 'PSP': return 'bg-amber-600 text-white'
     default: return 'bg-slate-600 text-white'
   }

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { animate, stagger, type JSAnimation } from 'animejs'
+import { animate, type JSAnimation } from 'animejs'
 import { Clock, ChevronDown, ChevronRight, Globe } from 'lucide'
 import type { PlayedTrophySet } from '~/services/profile'
 
@@ -15,10 +15,9 @@ interface PageMeta {
 const page = ref(1)
 const expanded = ref(false)
 const animatedReady = ref(false)
+const toggleIconTouched = ref(false)
 const listEl = ref<HTMLElement | null>(null)
-const toggleIconEl = ref<HTMLElement | null>(null)
 const listAnimation = shallowRef<JSAnimation | null>(null)
-const toggleIconAnimation = shallowRef<JSAnimation | null>(null)
 const collapsedListHeight = 400
 
 // `page` is read inside the URL getter, so changing it re-fetches.
@@ -79,35 +78,9 @@ function syncListHeight() {
   el.style.opacity = ''
 }
 
-function syncToggleIcon() {
-  const el = toggleIconEl.value
-  if (!el) return
-
-  toggleIconAnimation.value?.cancel()
-  toggleIconAnimation.value = null
-  el.style.transform = `rotate(${expanded.value ? 180 : 0}deg)`
-}
-
-function animateToggleIcon(isExpanded: boolean) {
-  const el = toggleIconEl.value
-  if (!el) return
-
-  if (!animatedReady.value || prefersReducedMotion()) {
-    syncToggleIcon()
-    return
-  }
-
-  toggleIconAnimation.value?.cancel()
-  toggleIconAnimation.value = animate(el, {
-    rotateZ: isExpanded ? 180 : 0,
-    translateY: isExpanded ? [0, 3, 0] : [0, -3, 0],
-    scale: [1, 1.28, 0.92, 1],
-    duration: 560,
-    ease: 'outBack(1.8)',
-    onComplete: () => {
-      toggleIconAnimation.value = null
-    },
-  })
+function toggleExpanded() {
+  toggleIconTouched.value = true
+  expanded.value = !expanded.value
 }
 
 async function animateListHeight(isExpanded: boolean) {
@@ -130,19 +103,6 @@ async function animateListHeight(isExpanded: boolean) {
   await nextTick()
 
   const toHeight = isExpanded ? el.scrollHeight : Math.min(collapsedListHeight, el.scrollHeight)
-  const rows = Array.from(el.querySelectorAll(':scope > a')).slice(4)
-
-  animate(rows, {
-    translateX: isExpanded ? [48, 0] : [0, -18],
-    translateY: isExpanded ? [22, 0] : [0, -6],
-    rotateZ: isExpanded ? [1.5, 0] : [0, -0.5],
-    scale: isExpanded ? [0.92, 1] : [1, 0.98],
-    opacity: isExpanded ? [0, 1] : [1, 0],
-    filter: isExpanded ? ['blur(5px)', 'blur(0px)'] : ['blur(0px)', 'blur(2px)'],
-    duration: isExpanded ? 980 : 620,
-    delay: isExpanded ? stagger(95) : stagger(48, { from: 'last' }),
-    ease: isExpanded ? 'outBack(1.35)' : 'inOutCubic',
-  })
 
   listAnimation.value = animate(el, {
     height: `${toHeight}px`,
@@ -152,12 +112,6 @@ async function animateListHeight(isExpanded: boolean) {
       el.style.height = isExpanded ? 'auto' : `${toHeight}px`
       el.style.overflow = 'hidden'
       el.style.opacity = ''
-      rows.forEach((row) => {
-        const item = row as HTMLElement
-        item.style.transform = ''
-        item.style.opacity = ''
-        item.style.filter = ''
-      })
       listAnimation.value = null
     },
   })
@@ -167,10 +121,7 @@ watch(() => props.psnid, () => {
   expanded.value = false
 })
 
-watch(expanded, (isExpanded) => {
-  animateToggleIcon(isExpanded)
-  animateListHeight(isExpanded)
-})
+watch(expanded, animateListHeight)
 
 watch([recent, canCollapse], async () => {
   await nextTick()
@@ -181,12 +132,10 @@ onMounted(async () => {
   await nextTick()
   animatedReady.value = true
   syncListHeight()
-  syncToggleIcon()
 })
 
 onBeforeUnmount(() => {
   listAnimation.value?.cancel()
-  toggleIconAnimation.value?.cancel()
 })
 </script>
 
@@ -248,10 +197,10 @@ onBeforeUnmount(() => {
             <span
               v-for="platform in platformList(g.trophy_set.platform)"
               :key="platform"
-              class="shrink-0 rounded px-1.5 py-0.5 text-[10px] font-bold leading-none"
+              class="inline-flex h-4 shrink-0 items-center rounded px-1.5 text-[10px] font-bold leading-none"
               :class="platformBadgeClass(platform)"
             >
-              {{ platform }}
+              {{ platformLabel(platform) }}
             </span>
             <span
               v-if="g.trophy_set.region"
@@ -272,10 +221,10 @@ onBeforeUnmount(() => {
             <span
               v-for="platform in platformList(g.trophy_set.platform)"
               :key="platform"
-              class="hidden shrink-0 rounded px-1.5 py-0.5 text-[10px] font-bold leading-none sm:inline-flex"
+              class="hidden h-4 shrink-0 items-center rounded px-1.5 text-[10px] font-bold leading-none sm:inline-flex"
               :class="platformBadgeClass(platform)"
             >
-              {{ platform }}
+              {{ platformLabel(platform) }}
             </span>
             <span
               v-if="g.trophy_set.region"
@@ -323,10 +272,16 @@ onBeforeUnmount(() => {
       <button
         type="button"
         class="pointer-events-auto flex w-full items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-800 shadow-sm shadow-slate-900/5 transition active:scale-[0.99]"
-        @click="expanded = !expanded"
+        @click="toggleExpanded"
       >
         {{ expanded ? '收起最近玩过' : '展开最近玩过' }}
-        <span ref="toggleIconEl" class="inline-flex size-4 items-center justify-center">
+        <span
+          class="profile-toggle-chevron inline-flex size-4 items-center justify-center"
+          :class="[
+            expanded ? 'is-expanded' : 'is-collapsed',
+            toggleIconTouched ? 'is-animated' : '',
+          ]"
+        >
           <LucideIcon :icon="ChevronDown" class="size-4" />
         </span>
       </button>
@@ -343,3 +298,60 @@ onBeforeUnmount(() => {
   </div>
   </div>
 </template>
+
+<style scoped>
+.profile-toggle-chevron {
+  transform: rotate(0deg);
+  transform-origin: center;
+  will-change: transform;
+}
+
+.profile-toggle-chevron.is-expanded {
+  transform: rotate(180deg);
+}
+
+.profile-toggle-chevron.is-animated.is-expanded {
+  animation: profile-toggle-chevron-expand 620ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.profile-toggle-chevron.is-animated.is-collapsed {
+  animation: profile-toggle-chevron-collapse 620ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes profile-toggle-chevron-expand {
+  0% {
+    transform: translateY(0) rotate(0deg) scale(1);
+  }
+  38% {
+    transform: translateY(3px) rotate(130deg) scale(1.24);
+  }
+  62% {
+    transform: translateY(-1px) rotate(205deg) scale(0.92);
+  }
+  100% {
+    transform: translateY(0) rotate(180deg) scale(1);
+  }
+}
+
+@keyframes profile-toggle-chevron-collapse {
+  0% {
+    transform: translateY(0) rotate(180deg) scale(1);
+  }
+  38% {
+    transform: translateY(-3px) rotate(48deg) scale(1.24);
+  }
+  62% {
+    transform: translateY(1px) rotate(-18deg) scale(0.92);
+  }
+  100% {
+    transform: translateY(0) rotate(0deg) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .profile-toggle-chevron.is-animated.is-expanded,
+  .profile-toggle-chevron.is-animated.is-collapsed {
+    animation: none;
+  }
+}
+</style>

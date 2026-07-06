@@ -49,10 +49,10 @@ const groups = computed(() => {
           <span
             v-for="platform in g.platforms"
             :key="platform"
-            class="inline-block rounded px-1.5 py-0.5 text-[10px] font-bold leading-none"
+            class="inline-flex h-4 items-center rounded px-1.5 text-[10px] font-bold leading-none"
             :class="platformBadgeClass(platform)"
           >
-            {{ platform }}
+            {{ platformLabel(platform) }}
           </span>
           <span class="text-xs text-slate-400">{{ g.sets.length }} 套奖杯</span>
         </div>

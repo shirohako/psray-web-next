@@ -125,10 +125,10 @@ onBeforeUnmount(() => {
                 <span
                   v-for="platform in platformList(set.platform)"
                   :key="platform"
-                  class="inline-block rounded px-1.5 py-0.5 text-[10px] font-bold leading-none"
+                  class="inline-flex h-4 items-center rounded px-1.5 text-[10px] font-bold leading-none"
                   :class="platformBadgeClass(platform)"
                 >
-                  {{ platform }}
+                  {{ platformLabel(platform) }}
                 </span>
                 <span v-if="set.region" class="inline-flex items-center gap-0.5 text-[11px] font-medium text-slate-500">
                   <LucideIcon :icon="Globe" class="size-3 text-slate-400" />{{ set.region }}
