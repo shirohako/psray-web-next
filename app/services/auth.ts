@@ -2,10 +2,33 @@ import type { ApiSuccess } from '~/types/api'
 import type { Profile } from '~/services/profile'
 import { ApiError } from '~/utils/ApiError'
 
+/**
+ * Private per-account settings. Only the authenticated user carries these, and
+ * only `GET /auth/me` returns them — the public profile (`/profile/:psnid`) and
+ * anonymous/tracked users never include a `setting` block. Present once the
+ * account is registered.
+ */
+export interface AccountSetting {
+  email: string | null
+  social_account: string | null
+  timezone: string | null
+  calendar_enabled: boolean
+  milestones_enabled: boolean
+  /** Whether `avatar_url` is a user-uploaded/custom image vs. the synced PSN one. */
+  has_custom_avatar: boolean
+}
+
+/**
+ * The authenticated user as returned by `GET /auth/me`. Shares the public
+ * {@link Profile} fields, plus `role` and the private {@link AccountSetting}
+ * block that only exists for the logged-in account.
+ */
 export type AuthUser = Omit<Partial<Profile>, 'admin_level'> & {
   id: number
   psnid: string
   avatar_url?: string
+  role?: string
+  setting?: AccountSetting
   [key: string]: unknown
 }
 

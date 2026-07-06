@@ -20,6 +20,8 @@ export interface Profile {
   country: string
   language: string[]
   avatar_url: string
+  /** Custom profile banner image URL; `null` if the user hasn't set one. */
+  banner_url: string | null
   about_me: string
   is_plus: boolean
 

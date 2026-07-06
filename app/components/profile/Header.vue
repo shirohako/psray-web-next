@@ -11,10 +11,9 @@ defineEmits<{ toggleFollow: [] }>()
 const auth = useAuth()
 const route = useRoute()
 
-// Banner image: per-user banner when the API exposes one, else the global
-// default from `app.config.ts`.
+// Banner image: per-user custom banner, else the global default from `app.config.ts`.
 const appConfig = useAppConfig()
-const bannerImage = computed(() => appConfig.profile.defaultBanner)
+const bannerImage = computed(() => props.profile.banner_url || appConfig.profile.defaultBanner)
 
 const total = computed(() => sumTrophies(props.profile))
 

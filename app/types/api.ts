@@ -17,6 +17,12 @@ export type ErrorCode =
   | 'PSN_LEVEL_TOO_LOW'
   | 'RATE_LIMITED'
   | 'INTERNAL_ERROR'
+  // Account settings — email change (send-code / confirm) flow.
+  | 'EMAIL_ALREADY_USED'
+  | 'TOO_MANY_REQUESTS'
+  | 'EMAIL_SEND_FAILED'
+  | 'VERIFICATION_CODE_INVALID'
+  | 'VERIFICATION_CODE_EXPIRED'
   // eslint-disable-next-line @typescript-eslint/ban-types
   | (string & {})
 

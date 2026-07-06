@@ -160,6 +160,14 @@ async function onLogout() {
               <LucideIcon :icon="RefreshCw" class="size-4 text-slate-400" />
               同步账户
             </NuxtLink>
+            <NuxtLink
+              to="/settings"
+              class="flex items-center gap-2.5 px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-50 hover:text-slate-900"
+              @click="close"
+            >
+              <LucideIcon :icon="Settings" class="size-4 text-slate-400" />
+              用户设置
+            </NuxtLink>
             <button
               type="button"
               class="flex w-full items-center gap-2.5 px-3 py-2 text-left text-sm font-medium text-slate-600 transition hover:bg-slate-50 hover:text-slate-900"
