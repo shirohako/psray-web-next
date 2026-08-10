@@ -58,3 +58,460 @@
   -webkit-box-shadow: 0 0 0 1000px var(--color-slate-50) inset;
   caret-color: var(--color-slate-900);
 }
+
+/* Community Markdown containers. Kept outside Tailwind's prose selectors so
+   the same markup looks identical in live preview, published tips and help. */
+@layer components {
+  .markdown-container {
+    margin-block: 1rem;
+    border-radius: 0.75rem;
+  }
+
+  .markdown-container-body > :first-child {
+    margin-top: 0 !important;
+  }
+
+  .markdown-container-body > :last-child {
+    margin-bottom: 0 !important;
+  }
+
+  .markdown-container-details {
+    overflow: hidden;
+    border: 1px solid var(--color-slate-200);
+    background: color-mix(in srgb, var(--color-slate-50) 75%, transparent);
+  }
+
+  .markdown-container-details > summary {
+    display: flex;
+    cursor: pointer;
+    list-style: none;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.7rem 0.9rem;
+    font-weight: 650;
+    color: var(--color-slate-700);
+    user-select: none;
+  }
+
+  .markdown-container-details > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .markdown-container-details > summary::before {
+    content: "";
+    width: 0.45rem;
+    height: 0.45rem;
+    flex: none;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(-45deg);
+    transition: transform 150ms ease;
+  }
+
+  .markdown-container-details[open] > summary::before {
+    transform: rotate(45deg) translate(-1px, -1px);
+  }
+
+  .markdown-container-details > .markdown-container-body {
+    box-sizing: border-box;
+    border-top: 1px solid var(--color-slate-200);
+    padding: 0.85rem 0.95rem;
+    background: white;
+  }
+
+  .markdown-container-spoiler > summary {
+    background: var(--color-slate-900);
+    color: white;
+  }
+
+  .markdown-container-spoiler > summary::before {
+    display: none;
+  }
+
+  .markdown-spoiler-icons,
+  .markdown-spoiler-eye {
+    width: 1.05rem;
+    height: 1.05rem;
+    flex: none;
+  }
+
+  .markdown-spoiler-icons {
+    display: inline-grid;
+  }
+
+  .markdown-spoiler-eye {
+    grid-area: 1 / 1;
+    transition: opacity 160ms ease, transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .markdown-spoiler-eye-open {
+    opacity: 0;
+    transform: scale(0.72) rotate(-8deg);
+  }
+
+  .markdown-container-spoiler.is-spoiler-revealed .markdown-spoiler-eye-closed {
+    opacity: 0;
+    transform: scale(0.72) rotate(8deg);
+  }
+
+  .markdown-container-spoiler.is-spoiler-revealed .markdown-spoiler-eye-open {
+    opacity: 1;
+    transform: scale(1) rotate(0);
+  }
+
+  .markdown-inline-spoiler {
+    display: inline;
+    vertical-align: baseline;
+    cursor: pointer;
+    border-radius: 0.3rem;
+    background:
+      repeating-linear-gradient(135deg, rgb(51 65 85 / 94%) 0 3px, rgb(71 85 105 / 94%) 3px 6px);
+    padding-inline: 0.32em;
+    color: white;
+    font-size: inherit;
+    line-height: inherit;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+    transition: background 160ms ease, color 160ms ease;
+  }
+
+  .markdown-inline-spoiler-content {
+    display: inline;
+    font-size: inherit;
+    line-height: inherit;
+    filter: blur(0.28rem);
+    opacity: 0.5;
+    user-select: none;
+    transition: filter 160ms ease, opacity 160ms ease;
+  }
+
+  .markdown-inline-spoiler:hover .markdown-inline-spoiler-content {
+    opacity: 0.65;
+  }
+
+  .markdown-inline-spoiler:focus-visible {
+    outline: 2px solid var(--color-sky-500);
+    outline-offset: 2px;
+  }
+
+  .markdown-inline-spoiler.is-revealed {
+    cursor: text;
+    background: var(--color-slate-100);
+    color: inherit;
+  }
+
+  .markdown-inline-spoiler.is-revealed .markdown-inline-spoiler-content {
+    filter: none;
+    opacity: 1;
+    user-select: text;
+  }
+
+  .prose img {
+    display: block;
+    max-width: 100%;
+  }
+
+  .markdown-image-example img {
+    margin-block: 0.35rem;
+    object-fit: contain;
+  }
+
+  .markdown-image-example img:not(.markdown-sized-image) {
+    width: 4rem;
+  }
+
+  .markdown-container-callout {
+    border-width: 1px;
+    padding: 0.72rem 0.95rem;
+  }
+
+  .markdown-container-callout .markdown-container-body > p {
+    margin-block: 0.3rem !important;
+  }
+
+  .markdown-container-callout .markdown-container-body > p:first-child {
+    margin-top: 0 !important;
+  }
+
+  .markdown-container-callout .markdown-container-body > p:last-child {
+    margin-bottom: 0 !important;
+  }
+
+  .markdown-container-checklist {
+    overflow: hidden;
+    border: 1px solid var(--color-slate-200);
+    background: white;
+    transition: border-color 180ms ease, box-shadow 180ms ease;
+  }
+
+  .markdown-container-checklist.is-complete {
+    border-color: var(--color-emerald-200);
+    box-shadow: 0 0 0 3px rgb(16 185 129 / 6%);
+  }
+
+  .markdown-checklist-heading {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    border-bottom: 1px solid var(--color-slate-200);
+    background: var(--color-slate-50);
+    padding: 0.65rem 0.8rem;
+    color: var(--color-slate-800);
+  }
+
+  .markdown-checklist-icon {
+    width: 1rem;
+    height: 1rem;
+    flex: none;
+    color: var(--color-slate-600);
+    transition: color 180ms ease, transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .markdown-container-checklist.is-complete .markdown-checklist-icon {
+    color: var(--color-emerald-600);
+    transform: scale(1.1);
+  }
+
+  .markdown-checklist-progress {
+    margin-left: auto;
+    border-radius: 999px;
+    background: var(--color-slate-200);
+    padding: 0.15rem 0.5rem;
+    color: var(--color-slate-600);
+    font-size: 0.68rem;
+    font-weight: 750;
+    line-height: 1.35;
+    transition: background-color 180ms ease, color 180ms ease;
+  }
+
+  .markdown-container-checklist.is-complete .markdown-checklist-progress {
+    background: var(--color-emerald-100);
+    color: var(--color-emerald-700);
+  }
+
+  .markdown-checklist-body {
+    padding: 0.35rem;
+  }
+
+  .prose .markdown-container-checklist ul.contains-task-list {
+    margin: 0;
+    border: 0;
+    background: transparent;
+    padding: 0 !important;
+  }
+
+  .markdown-container-heading {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.32rem;
+  }
+
+  .markdown-container-icon {
+    display: inline-grid;
+    width: 1.25rem;
+    height: 1.25rem;
+    place-items: center;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 800;
+  }
+
+  .markdown-container-steps {
+    border: 1px solid var(--color-slate-200);
+    background: color-mix(in srgb, var(--color-slate-50) 65%, white);
+    padding: 0.5rem 0.65rem;
+  }
+
+  .markdown-container-steps > ol {
+    counter-reset: markdown-step;
+    margin: 0 !important;
+    padding: 0 !important;
+    list-style: none !important;
+  }
+
+  .markdown-container-steps > ol > li {
+    counter-increment: markdown-step;
+    position: relative;
+    min-height: 1.15rem;
+    margin: 0 !important;
+    padding: 0 0 0.4rem 1.55rem !important;
+  }
+
+  .markdown-container-steps > ol > li:last-child {
+    padding-bottom: 0 !important;
+  }
+
+  .markdown-container-steps > ol > li::marker {
+    content: "";
+  }
+
+  .markdown-container-steps > ol > li::before {
+    content: counter(markdown-step);
+    position: absolute;
+    left: 0;
+    /* Center the 1rem badge against prose's roughly 1.5rem first line. */
+    top: 0.25rem;
+    display: grid;
+    width: 1rem;
+    height: 1rem;
+    place-items: center;
+    border-radius: 999px;
+    background: var(--color-slate-800);
+    color: white;
+    box-shadow: 0 0 0 1px white;
+    font-size: 0.55rem;
+    font-weight: 700;
+    line-height: 1;
+    z-index: 1;
+  }
+
+  /* Loose Markdown lists wrap each item in a paragraph. Neutralize prose's
+     paragraph margins so those wrappers do not create large empty gaps. */
+  .markdown-container-steps > ol > li > p {
+    margin: 0 !important;
+  }
+
+  .prose ul.contains-task-list {
+    display: grid;
+    gap: 0.2rem;
+    margin-block: 0.75rem;
+    border: 1px solid var(--color-slate-200);
+    border-radius: 0.8rem;
+    background: color-mix(in srgb, var(--color-slate-50) 60%, white);
+    padding: 0.4rem !important;
+    list-style: none;
+  }
+
+  .prose .task-list-item {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    margin: 0;
+    border: 1px solid transparent;
+    border-radius: 0.65rem;
+    background: color-mix(in srgb, var(--color-slate-50) 72%, white);
+    padding: 0.55rem 0.7rem;
+    list-style: none;
+    transition: border-color 160ms ease, background-color 160ms ease, transform 160ms ease;
+  }
+
+  .prose .task-list-item:hover {
+    border-color: var(--color-slate-300);
+    background: white;
+  }
+
+  .prose .task-list-item:has(.task-list-item-checkbox:checked) {
+    border-color: transparent;
+    background: color-mix(in srgb, var(--color-slate-100) 70%, transparent);
+  }
+
+  .task-list-item-checkbox {
+    width: 1.25rem;
+    height: 1.25rem;
+    flex: none;
+    cursor: pointer;
+    appearance: none;
+    border: 2px solid var(--color-slate-300);
+    border-radius: 999px;
+    background-color: white;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 0.7rem;
+    transition: border-color 160ms ease, background-color 160ms ease, box-shadow 160ms ease, transform 120ms ease;
+  }
+
+  .task-list-item-checkbox:hover {
+    border-color: var(--color-slate-500);
+  }
+
+  .task-list-item-checkbox:active {
+    transform: scale(0.82);
+  }
+
+  .task-list-item-checkbox:focus-visible {
+    outline: 2px solid var(--color-sky-500);
+    outline-offset: 2px;
+  }
+
+  .task-list-item-checkbox:checked {
+    border-color: var(--color-slate-900);
+    background-color: var(--color-slate-900);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='m3 8.3 3.1 3L13 4.8' stroke='white' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    animation: markdown-task-check 320ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .task-list-item-label {
+    min-width: 0;
+    flex: 1;
+    cursor: pointer;
+    line-height: 1.5;
+    transition: color 160ms ease, opacity 160ms ease;
+  }
+
+  .task-list-item-checkbox:checked + .task-list-item-label {
+    color: var(--color-slate-500);
+    text-decoration: line-through;
+    text-decoration-color: var(--color-slate-300);
+  }
+
+  @keyframes markdown-task-check {
+    0% {
+      transform: scale(0.72);
+      box-shadow: 0 0 0 0 rgb(15 23 42 / 35%);
+    }
+    55% {
+      transform: scale(1.12);
+      box-shadow: 0 0 0 0.35rem rgb(15 23 42 / 8%);
+    }
+    100% {
+      transform: scale(1);
+      box-shadow: 0 0 0 0.55rem transparent;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .task-list-item-checkbox:checked {
+      animation: none;
+    }
+  }
+
+  .prose mark {
+    border-radius: 0.2rem;
+    background: var(--color-yellow-200);
+    color: var(--color-yellow-950);
+    padding: 0.08em 0.18em;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+  }
+
+  .markdown-text-underline {
+    padding-inline: 0.04em;
+    background-image: linear-gradient(
+      to bottom,
+      transparent 52%,
+      var(--markdown-underline-color) 52%,
+      var(--markdown-underline-color) 94%,
+      transparent 94%
+    );
+    background-repeat: no-repeat;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+  }
+
+  .markdown-underline-slate { --markdown-underline-color: rgb(100 116 139 / 26%); }
+  .markdown-underline-red { --markdown-underline-color: rgb(244 63 94 / 26%); }
+  .markdown-underline-orange { --markdown-underline-color: rgb(249 115 22 / 26%); }
+  .markdown-underline-yellow { --markdown-underline-color: rgb(245 158 11 / 28%); }
+  .markdown-underline-green { --markdown-underline-color: rgb(16 185 129 / 26%); }
+  .markdown-underline-blue { --markdown-underline-color: rgb(14 165 233 / 26%); }
+  .markdown-underline-purple { --markdown-underline-color: rgb(139 92 246 / 26%); }
+  .markdown-underline-pink { --markdown-underline-color: rgb(236 72 153 / 26%); }
+
+  @media (forced-colors: active) {
+    .markdown-text-underline {
+      text-decoration: underline 3px;
+      text-underline-offset: 0.12em;
+    }
+  }
+}

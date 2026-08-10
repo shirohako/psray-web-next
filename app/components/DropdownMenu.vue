@@ -56,7 +56,7 @@ function toggle() {
       observer.observe(panel.value)
     }
   })
-  window.addEventListener('scroll', close, true)
+  window.addEventListener('scroll', onScroll, true)
   window.addEventListener('resize', close)
   window.addEventListener('keydown', onKey)
 }
@@ -78,12 +78,20 @@ function onKey(e: KeyboardEvent) {
   if (e.key === 'Escape') close()
 }
 
+// Scrolling an ancestor invalidates the captured trigger position, but a long
+// menu must be allowed to scroll internally without closing itself.
+function onScroll(e: Event) {
+  const target = e.target
+  if (target instanceof Node && panel.value?.contains(target)) return
+  close()
+}
+
 function close() {
   if (!open.value) return
   open.value = false
   observer?.disconnect()
   observer = null
-  window.removeEventListener('scroll', close, true)
+  window.removeEventListener('scroll', onScroll, true)
   window.removeEventListener('resize', close)
   window.removeEventListener('keydown', onKey)
   emit('close')
@@ -107,7 +115,7 @@ onUnmounted(close)
         <div
           ref="panel"
           role="menu"
-          class="fixed min-w-44 overflow-hidden rounded-xl border border-slate-200 bg-white py-1 text-sm shadow-lg ring-1 ring-slate-900/5"
+          class="fixed max-h-[calc(100vh-1rem)] min-w-44 overflow-y-auto overscroll-contain rounded-xl border border-slate-200 bg-white py-1 text-sm shadow-lg ring-1 ring-slate-900/5"
           :class="[align === 'right' ? 'origin-top-right' : 'origin-top-left', panelClass]"
           :style="{ top: `${position.top}px`, left: `${position.left}px` }"
           @click.stop

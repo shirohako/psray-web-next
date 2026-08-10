@@ -3,6 +3,9 @@ import tailwindcss from "@tailwindcss/vite";
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
+  routeRules: {
+    '/help/markdown': { redirect: { to: '/docs/markdown', statusCode: 301 } },
+  },
   // Module id, not a path relative to this file — Nuxt 4.5 warns on the latter.
   css: ['~/assets/css/main.css'],
   devtools: { enabled: true },

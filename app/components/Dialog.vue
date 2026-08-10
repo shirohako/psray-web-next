@@ -12,7 +12,7 @@ import { X } from 'lucide'
  * </Dialog>
  * ```
  */
-type Size = 'sm' | 'md' | 'lg' | 'xl' | '2xl'
+type Size = 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '4xl'
 
 const props = withDefaults(defineProps<{
   open: boolean
@@ -20,7 +20,10 @@ const props = withDefaults(defineProps<{
   size?: Size
 }>(), { size: 'lg' })
 
-const emit = defineEmits<{ 'update:open': [v: boolean] }>()
+const emit = defineEmits<{
+  'update:open': [v: boolean]
+  closed: []
+}>()
 
 const close = () => emit('update:open', false)
 
@@ -30,6 +33,7 @@ const SIZE: Record<Size, string> = {
   lg: 'max-w-lg',
   xl: 'max-w-xl',
   '2xl': 'max-w-2xl',
+  '4xl': 'max-w-4xl',
 }
 
 function onKey(e: KeyboardEvent) {
@@ -69,6 +73,7 @@ onUnmounted(() => {
         enter-from-class="opacity-0 scale-95"
         leave-active-class="transition duration-150 ease-in"
         leave-to-class="opacity-0 scale-95"
+        @after-leave="emit('closed')"
       >
         <div v-if="open" class="pointer-events-none fixed inset-0 z-50 grid place-items-center p-4">
           <div

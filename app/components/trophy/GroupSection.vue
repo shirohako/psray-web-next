@@ -12,6 +12,7 @@ const props = defineProps<{
   showSpoilers: boolean
   /** Continuous serial number per trophy (db id → number). */
   numbers: Map<number, number>
+  displayLanguage: string
 }>()
 
 const { t } = useI18n()
@@ -101,6 +102,7 @@ const displayTrophies = computed(() => {
         :earned-gap="earnedGap(trophy)"
         :show-spoilers="showSpoilers"
         :number="numbers.get(trophy.id) ?? 0"
+        :display-language="displayLanguage"
       />
     </div>
   </section>

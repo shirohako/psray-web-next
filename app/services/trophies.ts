@@ -269,8 +269,16 @@ export interface TrophyTip {
   user: TipUser
 }
 
+/** Authenticated payload for `POST /trophies/trophy/:id/tips`. */
+export interface CreateTrophyTipPayload {
+  content: string
+  content_type: 'markdown'
+  language: string
+  spoiler: boolean
+}
+
 export function useTrophies() {
-  const { get, raw } = useApi()
+  const { get, post, raw } = useApi()
 
   return {
     /** Trophy-set detail. Pass `psnid` to embed a user's progress. */
@@ -302,5 +310,9 @@ export function useTrophies() {
     /** Community tips/guides for a single trophy (returns the `{ data, meta }` envelope). */
     trophyTips: (trophyId: number | string, query?: { page?: number }) =>
       raw.get<TrophyTip[], PlayersMeta>(`/trophies/trophy/${trophyId}/tips`, { query }),
+
+    /** Publish a Markdown tip. Requires an authenticated bearer session. */
+    createTrophyTip: (trophyId: number | string, payload: CreateTrophyTipPayload) =>
+      post<TrophyTip>(`/trophies/trophy/${trophyId}/tips`, payload),
   }
 }

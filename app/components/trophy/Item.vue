@@ -18,6 +18,8 @@ const props = defineProps<{
   showSpoilers: boolean
   /** Continuous serial number across all groups. */
   number: number
+  /** Language currently used for the trophy names and new-tip default. */
+  displayLanguage: string
 }>()
 
 const { t } = useI18n()
@@ -89,6 +91,36 @@ async function copy(text: string, label: string) {
 const detailOpen = ref(false)
 const earnersOpen = ref(false)
 const tipsOpen = ref(false)
+const composerOpen = ref(false)
+const dialogDestination = ref<'tips' | 'composer' | null>(null)
+const displayedTipCount = ref(props.trophy.tip_count)
+watch(() => props.trophy.tip_count, value => { displayedTipCount.value = value })
+
+function openTipComposer() {
+  dialogDestination.value = 'composer'
+  tipsOpen.value = false
+}
+
+function onTipsClosed() {
+  if (dialogDestination.value !== 'composer') return
+  dialogDestination.value = null
+  composerOpen.value = true
+}
+
+function returnToTips() {
+  dialogDestination.value = 'tips'
+}
+
+function onComposerClosed() {
+  if (dialogDestination.value !== 'tips') return
+  dialogDestination.value = null
+  tipsOpen.value = true
+}
+
+function onTipPublished() {
+  displayedTipCount.value += 1
+  returnToTips()
+}
 </script>
 
 <template>
@@ -215,9 +247,9 @@ const tipsOpen = ref(false)
         <LucideIcon :icon="MessageSquare" class="size-3 sm:size-3.5" />
         <span
           class="absolute -right-1 -top-1 grid h-3.5 min-w-3.5 place-items-center rounded-full px-1 text-[9px] font-bold leading-none text-white"
-          :class="trophy.tip_count > 0 ? 'bg-slate-900' : 'bg-slate-300'"
+          :class="displayedTipCount > 0 ? 'bg-slate-900' : 'bg-slate-300'"
         >
-          {{ trophy.tip_count }}
+          {{ displayedTipCount }}
         </span>
       </button>
     </div>
@@ -264,5 +296,20 @@ const tipsOpen = ref(false)
 
   <TrophyDetailDialog :trophy="trophy" v-model:open="detailOpen" />
   <TrophyEarnersDialog :trophy-id="trophy.id" :trophy-name="name" v-model:open="earnersOpen" />
-  <TrophyTipsDialog :trophy-id="trophy.id" :trophy-name="name" v-model:open="tipsOpen" />
+  <TrophyTipsDialog
+    :trophy-id="trophy.id"
+    :trophy-name="name"
+    v-model:open="tipsOpen"
+    @compose="openTipComposer"
+    @closed="onTipsClosed"
+  />
+  <TrophyTipComposerDialog
+    :trophy-id="trophy.id"
+    :trophy-name="name"
+    :display-language="displayLanguage"
+    v-model:open="composerOpen"
+    @published="onTipPublished"
+    @cancelled="returnToTips"
+    @closed="onComposerClosed"
+  />
 </template>

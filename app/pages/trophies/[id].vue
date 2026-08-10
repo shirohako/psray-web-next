@@ -99,6 +99,7 @@
                 :sort="sort"
                 :show-spoilers="showSpoilers"
                 :numbers="trophyNumbers"
+                :display-language="data.display_language"
               />
             </div>
 
