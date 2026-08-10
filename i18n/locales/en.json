@@ -43,9 +43,34 @@
   "home": {
     "lookup": {
       "heading": "Look up a profile",
-      "hint": "Enter a PSN ID to open that player’s profile page.",
+      "hint": "Enter a PSN ID to open that player's profile.",
       "view": "View",
-      "sync": "Sync"
+      "sync": "Sync",
+      "placeholder": "Enter a PSN ID"
+    },
+    "hero": {
+      "title": "Your PSN gaming assistant",
+      "lead": "PSRay organizes PlayStation trophy progress by player. Enter a PSN ID to review earned trophies, create your one-of-a-kind PSN profile page, and see recent play history in one place."
+    },
+    "features": {
+      "title": "What PSRay Shows",
+      "lead": "Profiles, trophy set details, leaderboards, and player tips give you a clearer view of any trophy collection.",
+      "profile": {
+        "title": "Player profiles",
+        "description": "Check trophy counts, level, global and regional ranks, a one-year activity calendar, platinum milestones, and trophies in unlock order."
+      },
+      "trophies": {
+        "title": "Trophy set details",
+        "description": "Browse trophies grouped by base game and DLC, with PSN and PSRay earn rates, rarity, hidden trophy controls, player-written tips, and fastest or first-completion rankings."
+      },
+      "leaderboard": {
+        "title": "Leaderboards",
+        "description": "Compare overall and regional trophy point rankings, and see which players contribute the most through tips and other community activity."
+      },
+      "tips": {
+        "title": "Share trophy tips",
+        "description": "Each trophy can include notes from other players. Spoilers stay hidden until opened, useful tips collect votes, and contributors appear on the helpfulness leaderboard."
+      }
     }
   },
   "auth": {
@@ -572,8 +597,8 @@
   },
   "seo": {
     "home": {
-      "title": "PSRay",
-      "description": "PSRay tracks PSN trophies — look up player profiles, browse trophy sets, and check the leaderboards."
+      "title": "PSRay — PSN trophy tracker",
+      "description": "Explore PSN trophy progress with player profiles, trophy sets with earn rates and rarity, and leaderboards for points and community contributions."
     },
     "leaderboard": {
       "title": "Leaderboard · PSRay",
