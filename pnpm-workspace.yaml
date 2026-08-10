@@ -4,11 +4,3 @@ allowBuilds:
 
 overrides:
   '@types/node': 26.0.0
-  # pnpm's minimum-release-age policy rejects the newest matches of these
-  # transitive deps (@nuxt/kit 4.5.2 -> errx@^0.1.2; @vue/compiler-sfc 3.5.41
-  # -> @vue/shared@3.5.41). Pin to the newest versions that pass the policy —
-  # 4.5.1 satisfies @nuxtjs/i18n's ^4.4.8, and 3.5.39 matches our own `vue`.
-  # Drop these once the newer releases age in.
-  '@nuxt/kit': 4.4.8
-  '@vue/compiler-sfc': 3.5.39
-  '@vue/shared': 3.5.39

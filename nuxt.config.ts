@@ -3,7 +3,8 @@ import tailwindcss from "@tailwindcss/vite";
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
-  css: ['./app/assets/css/main.css'],
+  // Module id, not a path relative to this file — Nuxt 4.5 warns on the latter.
+  css: ['~/assets/css/main.css'],
   devtools: { enabled: true },
   app: {
     head: {

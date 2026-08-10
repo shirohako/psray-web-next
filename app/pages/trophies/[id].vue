@@ -26,7 +26,7 @@
             </h2>
             <div v-if="availableLanguages.length" class="flex items-center gap-2.5">
               <span class="hidden items-center gap-1 text-xs font-medium text-slate-400 sm:inline-flex">
-                <i18n-t keypath="trophy.lang.available" tag="span" class="inline-flex items-center gap-1" :plural="availableLanguages.length">
+                <i18n-t keypath="trophy.lang.available" scope="global" tag="span" class="inline-flex items-center gap-1" :plural="availableLanguages.length">
                   <template #badge>
                     <span class="rounded-full bg-slate-100 px-1.5 py-0.5 font-semibold tabular-nums text-slate-600">{{ availableLanguages.length }}</span>
                   </template>

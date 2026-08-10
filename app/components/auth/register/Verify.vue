@@ -13,7 +13,7 @@ const guideKeys = [1, 2, 3].map(n => `auth.register.verify.step${n}`)
   <div class="space-y-4">
     <div class="flex items-start gap-2.5 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
       <LucideIcon :icon="MailCheck" class="mt-0.5 size-4.5 shrink-0" />
-      <i18n-t keypath="auth.register.verify.sentTo" tag="span">
+      <i18n-t keypath="auth.register.verify.sentTo" scope="global" tag="span">
         <template #email>
           <span class="font-semibold">{{ email.trim() }}</span>
         </template>

@@ -305,7 +305,7 @@ onMounted(() => {
         class="mt-3 flex items-center gap-2 text-sm text-slate-500"
       >
         <LucideIcon :icon="ListOrdered" class="size-4 text-slate-400" />
-        <i18n-t keypath="sync.queueAhead" tag="span" :plural="info.queue_ahead">
+        <i18n-t keypath="sync.queueAhead" scope="global" tag="span" :plural="info.queue_ahead">
           <template #badge>
             <span class="font-semibold text-slate-700">{{ info.queue_ahead }}</span>
           </template>
@@ -361,7 +361,7 @@ onMounted(() => {
       <div class="mt-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-1 text-xs text-slate-400">
         <span class="inline-flex items-center gap-1.5">
           <LucideIcon :icon="Activity" class="size-3.5" />
-          <i18n-t keypath="sync.queueOverview" tag="span">
+          <i18n-t keypath="sync.queueOverview" scope="global" tag="span">
             <template #active>
               <span class="font-semibold tabular-nums text-sky-600">{{ info.active_queue_count }}</span>
             </template>

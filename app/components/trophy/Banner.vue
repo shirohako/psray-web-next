@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Trophy, Users, Gauge, CheckCircle2, Timer, Flag } from 'lucide'
+import { Trophy, Users, Gauge, CheckCircle2, Timer, Flag, Globe } from 'lucide'
 import type { TrophySetDetailInfo, PlayerRankType } from '~/services/trophies'
 
 const props = defineProps<{ trophySet: TrophySetDetailInfo }>()
@@ -63,6 +63,18 @@ const qrMeta = computed(() => [
               :class="platformBadgeClass(platform)"
             >
               {{ platformLabel(platform) }}
+            </span>
+            <!-- Store region, when this set is a regional variant. Shown as the
+                 raw code with a globe, matching `SimilarChip`: these aren't
+                 country codes — values like `AS` mean Asia, not American Samoa —
+                 so no flag and no ISO name lookup. Neutral treatment keeps it
+                 reading as metadata rather than another platform. -->
+            <span
+              v-if="trophySet.region"
+              class="inline-flex h-4 shrink-0 items-center gap-1 rounded bg-white/15 px-1.5 text-[10px] font-bold uppercase leading-none text-white ring-1 ring-white/20"
+            >
+              <LucideIcon :icon="Globe" class="size-2.5" />
+              {{ trophySet.region }}
             </span>
           </div>
           <p v-if="trophySet.detail" class="mt-1.5 line-clamp-2 max-w-prose text-sm text-slate-300">
