@@ -10,19 +10,23 @@ import QRCode from 'qrcode'
  * The QR is rendered with the `qrcode` library into a data URL on the client
  * when the dialog opens, so it always reflects the live page (incl. query).
  */
-withDefaults(defineProps<{
+const props = withDefaults(defineProps<{
   /** Dialog heading. */
   title?: string
   /** Optional caption shown above the URL (e.g. the page's name). */
   caption?: string
   /** Optional detail rows shown below the caption. */
   meta?: { label: string, value: string | number | null | undefined, copyable?: boolean }[]
-}>(), { title: '页面二维码' })
+}>(), { title: '' })
 
+const { t } = useI18n()
 const open = ref(false)
 const url = ref('')
 const dataUrl = ref('')
 const toast = useToast()
+
+/** Falls back to the generic "page QR code" heading when no title is given. */
+const resolvedTitle = computed(() => props.title || t('qr.title'))
 
 async function show() {
   open.value = true
@@ -37,7 +41,7 @@ async function show() {
       color: { dark: '#0f172a', light: '#ffffff' },
     })
   } catch {
-    toast.error({ title: '二维码生成失败' })
+    toast.error({ title: t('qr.generateFailed') })
   }
 }
 
@@ -45,9 +49,9 @@ async function copyLink() {
   if (!import.meta.client || !url.value) return
   try {
     await navigator.clipboard.writeText(url.value)
-    toast.success({ title: '已复制链接' })
+    toast.success({ title: t('qr.linkCopied') })
   } catch {
-    toast.error({ title: '复制失败', description: '请检查浏览器的剪贴板权限。' })
+    toast.error({ title: t('toast.copyFailed.title'), description: t('toast.copyFailed.description') })
   }
 }
 
@@ -55,9 +59,9 @@ async function copyMeta(value: string | number | null | undefined) {
   if (!import.meta.client || value == null) return
   try {
     await navigator.clipboard.writeText(String(value))
-    toast.success({ title: '已复制' })
+    toast.success({ title: t('qr.copied') })
   } catch {
-    toast.error({ title: '复制失败', description: '请检查浏览器的剪贴板权限。' })
+    toast.error({ title: t('toast.copyFailed.title'), description: t('toast.copyFailed.description') })
   }
 }
 </script>
@@ -65,8 +69,8 @@ async function copyMeta(value: string | number | null | undefined) {
 <template>
   <button
     type="button"
-    title="页面二维码"
-    aria-label="页面二维码"
+    :title="resolvedTitle"
+    :aria-label="resolvedTitle"
     class="inline-flex size-8 items-center justify-center rounded-lg bg-white/15 text-white ring-1 ring-white/20 backdrop-blur-md transition hover:bg-white/25"
     @click="show"
   >
@@ -76,7 +80,7 @@ async function copyMeta(value: string | number | null | undefined) {
   <Dialog v-model:open="open" :title="title" size="sm">
     <div class="flex flex-col items-center gap-3.5 px-6 py-5">
       <div class="rounded-lg bg-white p-2.5 ring-1 ring-slate-200">
-        <img v-if="dataUrl" :src="dataUrl" alt="二维码" width="152" height="152" class="size-38" />
+        <img v-if="dataUrl" :src="dataUrl" :alt="resolvedTitle" width="152" height="152" class="size-38" />
         <div v-else class="size-38 animate-pulse rounded bg-slate-100" />
       </div>
       <p v-if="caption" class="max-w-full truncate text-center text-sm font-semibold text-slate-800">{{ caption }}</p>
@@ -92,7 +96,7 @@ async function copyMeta(value: string | number | null | undefined) {
               v-if="item.copyable && item.value != null"
               type="button"
               class="grid size-5 shrink-0 place-items-center rounded text-slate-400 transition hover:bg-white hover:text-slate-700"
-              title="复制"
+              :title="$t('common.copy')"
               @click="copyMeta(item.value)"
             >
               <LucideIcon :icon="Copy" class="size-3" />
@@ -108,7 +112,7 @@ async function copyMeta(value: string | number | null | undefined) {
         @click="copyLink"
       >
         <LucideIcon :icon="Copy" class="size-4 text-slate-400" />
-        复制链接
+        {{ $t('qr.copyLink') }}
       </button>
     </div>
   </Dialog>

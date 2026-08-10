@@ -16,16 +16,17 @@ function fmtRate(rate: number | string) {
   return Number.isFinite(n) ? `${n.toFixed(1)}%` : '—'
 }
 
+/** Tier → message key; translated where it's rendered. */
 const TYPE_LABEL: Record<TrophyData['type'], string> = {
-  platinum: '白金',
-  gold: '黄金',
-  silver: '白银',
-  bronze: '青铜',
+  platinum: 'trophy.tier.platinum',
+  gold: 'trophy.tier.gold',
+  silver: 'trophy.tier.silver',
+  bronze: 'trophy.tier.bronze',
 }
 </script>
 
 <template>
-  <Dialog :open="open" size="xl" title="奖杯详情" @update:open="emit('update:open', $event)">
+  <Dialog :open="open" size="xl" :title="$t('trophy.detail.title')" @update:open="emit('update:open', $event)">
     <div class="p-5">
       <!-- Icon + name + tier/rarity -->
       <div class="flex gap-4">
@@ -43,7 +44,7 @@ const TYPE_LABEL: Record<TrophyData['type'], string> = {
           <h3 class="font-semibold text-slate-900">{{ name }}</h3>
           <div class="mt-2 flex flex-wrap items-center gap-1.5">
             <span class="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-600">
-              {{ TYPE_LABEL[trophy.type] }}
+              {{ $t(TYPE_LABEL[trophy.type]) }}
             </span>
             <span class="rounded-full px-2 py-0.5 text-xs font-medium" :class="rarity.pill">
               {{ rarity.label }}
@@ -52,7 +53,7 @@ const TYPE_LABEL: Record<TrophyData['type'], string> = {
               v-if="trophy.is_hidden"
               class="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-600"
             >
-              隐藏奖杯
+              {{ $t('trophy.item.hidden') }}
             </span>
           </div>
         </div>
@@ -64,19 +65,19 @@ const TYPE_LABEL: Record<TrophyData['type'], string> = {
       <!-- Stats -->
       <dl class="mt-5 grid grid-cols-2 gap-x-4 gap-y-3 border-t border-slate-100 pt-4 text-sm">
         <div class="flex items-center justify-between gap-2">
-          <dt class="text-slate-400">奖杯 ID</dt>
+          <dt class="text-slate-400">{{ $t('trophy.detail.id') }}</dt>
           <dd class="font-semibold tabular-nums text-slate-900">{{ trophy.id }}</dd>
         </div>
         <div class="flex items-center justify-between gap-2">
-          <dt class="text-slate-400">留言数</dt>
+          <dt class="text-slate-400">{{ $t('trophy.detail.tipCount') }}</dt>
           <dd class="font-semibold tabular-nums text-slate-900">{{ trophy.tip_count }}</dd>
         </div>
         <div class="flex items-center justify-between gap-2">
-          <dt class="text-slate-400">PSN 完成率</dt>
+          <dt class="text-slate-400">{{ $t('trophy.item.psnRate') }}</dt>
           <dd class="font-semibold tabular-nums text-slate-900">{{ fmtRate(trophy.psn_earned_rate) }}</dd>
         </div>
         <div class="flex items-center justify-between gap-2">
-          <dt class="text-slate-400">PSRay 完成率</dt>
+          <dt class="text-slate-400">{{ $t('trophy.item.psrayRate') }}</dt>
           <dd class="font-semibold tabular-nums text-slate-900">{{ fmtRate(trophy.psray_rate) }}</dd>
         </div>
       </dl>

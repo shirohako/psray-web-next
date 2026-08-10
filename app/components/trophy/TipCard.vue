@@ -46,7 +46,7 @@ const masked = computed(() => props.tip.spoiler === 1 && !revealed.value)
         @click="revealed = true"
       >
         <LucideIcon :icon="EyeOff" class="size-4" />
-        包含剧透，点击显示
+        {{ $t('trophy.tips.spoiler') }}
       </button>
       <RichContent v-else class="mt-1.5" :content="tip.content" :format="tip.content_type" />
 

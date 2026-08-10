@@ -25,7 +25,7 @@ const total = computed(() => sumTrophies(props.profile))
       </div>
       <div class="leading-tight">
         <div class="text-xl font-bold text-slate-900">{{ profile.trophy_level }}</div>
-        <div class="text-xs text-slate-500">账户等级 · {{ profile.progress }}%</div>
+        <div class="text-xs text-slate-500">{{ $t('profile.summary.level', { progress: profile.progress }) }}</div>
       </div>
     </div>
     <div class="h-8 w-px bg-slate-200" />
@@ -36,7 +36,7 @@ const total = computed(() => sumTrophies(props.profile))
       </span>
       <div class="leading-tight">
         <div class="text-xl font-bold text-slate-900">{{ fmt(total) }}</div>
-        <div class="text-xs text-slate-400">奖杯总数</div>
+        <div class="text-xs text-slate-400">{{ $t('profile.stats.trophies') }}</div>
       </div>
     </div>
     <div class="h-8 w-px bg-slate-200" />
@@ -44,7 +44,7 @@ const total = computed(() => sumTrophies(props.profile))
       <span v-for="t in trophyKinds" :key="t.key" class="inline-flex items-baseline gap-1.5">
         <span class="size-3 translate-y-0.5 rounded-full" :class="t.dot" />
         <span class="text-sm font-bold text-slate-900">{{ fmt(profile[t.key]) }}</span>
-        <span class="text-xs" :class="t.text">{{ t.label }}</span>
+        <span class="text-xs" :class="t.text">{{ $t(t.labelKey) }}</span>
       </span>
     </div>
   </div>

@@ -8,25 +8,25 @@ const total = computed(() => sumTrophies(props.profile))
 
 <template>
   <div class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-    <h2 class="mb-4 text-sm font-semibold text-slate-900">统计概览</h2>
+    <h2 class="mb-4 text-sm font-semibold text-slate-900">{{ $t('profile.stats.title') }}</h2>
     <dl class="grid grid-cols-2 gap-y-4">
       <div>
-        <dt class="text-xs text-slate-400">游戏总数</dt>
+        <dt class="text-xs text-slate-400">{{ $t('profile.stats.games') }}</dt>
         <dd class="mt-0.5 text-lg font-bold text-slate-900">{{ fmt(profile.played_game_count) }}</dd>
       </div>
       <div>
-        <dt class="text-xs text-slate-400">奖杯总数</dt>
+        <dt class="text-xs text-slate-400">{{ $t('profile.stats.trophies') }}</dt>
         <dd class="mt-0.5 text-lg font-bold text-slate-900">{{ fmt(total) }}</dd>
       </div>
       <div>
         <dt class="inline-flex items-center gap-1 text-xs text-slate-400">
-          <LucideIcon :icon="CheckCircle2" class="size-3.5 text-emerald-400" />完美
+          <LucideIcon :icon="CheckCircle2" class="size-3.5 text-emerald-400" />{{ $t('profile.stats.perfect') }}
         </dt>
         <dd class="mt-0.5 text-lg font-bold text-slate-900">{{ fmt(profile.completed_game_count) }}</dd>
       </div>
       <div>
         <dt class="inline-flex items-center gap-1 text-xs text-slate-400">
-          <LucideIcon :icon="XCircle" class="size-3.5 text-rose-400" />低完成率
+          <LucideIcon :icon="XCircle" class="size-3.5 text-rose-400" />{{ $t('profile.stats.lowCompletion') }}
         </dt>
         <dd class="mt-0.5 text-lg font-bold text-slate-900">{{ fmt(profile.abandoned_game_count) }}</dd>
       </div>
@@ -37,14 +37,14 @@ const total = computed(() => sumTrophies(props.profile))
         <LucideIcon :icon="Heart" class="size-4 text-rose-400" />
         <div class="leading-tight">
           <div class="text-sm font-semibold text-slate-900">{{ fmt(profile.favorite_game_count) }}</div>
-          <div class="text-xs text-slate-400">收藏游戏</div>
+          <div class="text-xs text-slate-400">{{ $t('profile.stats.favorites') }}</div>
         </div>
       </div>
       <div class="flex items-center gap-2">
         <LucideIcon :icon="Star" class="size-4 text-amber-400" />
         <div class="leading-tight">
           <div class="text-sm font-semibold text-slate-900">{{ fmt(profile.review_count) }}</div>
-          <div class="text-xs text-slate-400">游戏评测</div>
+          <div class="text-xs text-slate-400">{{ $t('profile.stats.reviews') }}</div>
         </div>
       </div>
     </div>

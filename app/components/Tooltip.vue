@@ -11,13 +11,13 @@ export default { inheritAttrs: false }
  * clip it. Position is controlled via `placement` (defaults to `bottom`).
  *
  * ```vue
- * <Tooltip content="已注册用户">
+ * <Tooltip content="Registered user">
  *   <LucideIcon :icon="BadgeCheck" class="size-4" />
  * </Tooltip>
  *
  * <Tooltip placement="right">
  *   <button>?</button>
- *   <template #content>富文本 <b>提示</b></template>
+ *   <template #content>Rich <b>content</b></template>
  * </Tooltip>
  * ```
  */

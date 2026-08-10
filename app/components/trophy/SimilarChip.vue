@@ -147,13 +147,13 @@ onBeforeUnmount(() => {
 
             <div class="flex items-center justify-between gap-2 border-t border-slate-100 px-3 py-2">
               <span class="inline-flex items-center gap-1 text-xs text-slate-400">
-                <LucideIcon :icon="Users" class="size-3.5" />{{ fmt(set.owners) }} 玩过
+                <LucideIcon :icon="Users" class="size-3.5" />{{ $t('trophy.similar.owners', { count: fmt(set.owners) }) }}
               </span>
               <NuxtLink
                 :to="`/trophies/${set.id}`"
                 class="inline-flex items-center gap-0.5 rounded-md bg-slate-900 py-1 pl-2.5 pr-1.5 text-xs font-semibold text-white transition hover:bg-slate-700"
               >
-                查看<LucideIcon :icon="ChevronRight" class="size-3.5" />
+                {{ $t('common.view') }}<LucideIcon :icon="ChevronRight" class="size-3.5" />
               </NuxtLink>
             </div>
           </div>

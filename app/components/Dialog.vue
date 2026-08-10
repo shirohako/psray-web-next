@@ -6,8 +6,8 @@ import { X } from 'lucide'
  * closes on backdrop click / Esc. Drive it with `v-model:open`.
  *
  * ```vue
- * <Dialog v-model:open="open" title="标题" size="lg">
- *   <p class="p-5">内容…</p>
+ * <Dialog v-model:open="open" title="Title" size="lg">
+ *   <p class="p-5">Body…</p>
  *   <template #footer> … </template>
  * </Dialog>
  * ```
@@ -85,7 +85,7 @@ onUnmounted(() => {
               <button
                 type="button"
                 class="-mr-1.5 grid size-8 shrink-0 place-items-center rounded-md text-slate-400 transition hover:bg-slate-100 hover:text-slate-700"
-                aria-label="关闭"
+                :aria-label="$t('common.close')"
                 @click="close"
               >
                 <LucideIcon :icon="X" class="size-5" />

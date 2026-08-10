@@ -1,0 +1,608 @@
+{
+  "common": {
+    "back": "Back",
+    "backHome": "Back to home",
+    "cancel": "Cancel",
+    "close": "Close",
+    "copy": "Copy",
+    "edit": "Edit",
+    "next": "Next",
+    "nextPage": "Next page",
+    "previousPage": "Previous page",
+    "retry": "Retry",
+    "save": "Save",
+    "saving": "Saving…",
+    "showMore": "Show more",
+    "sortAsc": "Oldest first",
+    "sortDesc": "Newest first",
+    "updated": "Updated",
+    "updatedAt": "Updated {time}",
+    "view": "View"
+  },
+  "nav": {
+    "home": "Home",
+    "leaderboard": "Leaderboard",
+    "login": "Sign in",
+    "register": "Sign up",
+    "sectionLabel": "Navigation",
+    "aria": {
+      "account": "Sign in or sign up",
+      "collapseMenu": "Collapse menu",
+      "expandMenu": "Expand menu",
+      "language": "Language",
+      "search": "Search",
+      "settings": "Settings"
+    },
+    "user": {
+      "logout": "Sign out",
+      "profile": "Profile",
+      "settings": "Settings",
+      "sync": "Sync account"
+    }
+  },
+  "home": {
+    "lookup": {
+      "heading": "Look up a profile",
+      "hint": "Enter a PSN ID to open that player’s profile page.",
+      "view": "View",
+      "sync": "Sync"
+    }
+  },
+  "auth": {
+    "field": {
+      "code": "Verification code",
+      "codePlaceholder": "6-digit code",
+      "email": "Email",
+      "password": "Password",
+      "passwordPlaceholder": "At least 8 characters",
+      "confirmPassword": "Confirm password",
+      "confirmPasswordPlaceholder": "Re-enter your password",
+      "currentPassword": "Current password",
+      "newPassword": "New password",
+      "confirmNewPassword": "Confirm new password",
+      "passwordMismatch": "Passwords do not match",
+      "showPassword": "Show password",
+      "hidePassword": "Hide password"
+    },
+    "login": {
+      "heading": "Welcome back",
+      "tagline": "The journey isn’t over — the stars are still ahead.",
+      "forgotPassword": "Forgot your password?",
+      "submitting": "Signing in…",
+      "noAccount": "Don’t have an account?",
+      "registerNow": "Sign up",
+      "errors": {
+        "generic": "Sign-in failed. Please try again later.",
+        "checkFields": "Please check your sign-in details."
+      }
+    },
+    "register": {
+      "heading": "Create an account",
+      "haveAccount": "Already have an account?",
+      "loginNow": "Sign in",
+      "codeSent": "Verification code sent — please check your email.",
+      "cta": {
+        "verifyPsnid": "Verify PSN ID",
+        "verifying": "Verifying…",
+        "sendCode": "Send code",
+        "sending": "Sending…",
+        "resendIn": "Resend in {seconds}s",
+        "submit": "Complete sign-up",
+        "submitting": "Signing up…"
+      },
+      "terms": {
+        "intro": "PSRay is a community site for PSN players.",
+        "needsPsn": "You’ll need a {icon} PlayStation (PSN) account.",
+        "agreeTerms": "I have read and agree to the {icon} {link}.",
+        "agreePrivacy": "I have read and agree to the {icon} {link}.",
+        "termsLink": "Terms of Service",
+        "privacyLink": "Privacy Policy"
+      },
+      "psnid": {
+        "placeholder": "Your PlayStation Network ID",
+        "requirementsTitle": "Requirements for new accounts",
+        "requirementsHint": "These keep out spam accounts and keep this a place for players.",
+        "requirement1": "Synced on this site at least once.",
+        "requirement2": "PSN trophy level above 100.",
+        "requirement3": "PSN game details set to public."
+      },
+      "password": {
+        "hint": "Choose a secure password for your account."
+      },
+      "email": {
+        "hint": "Once you tap “Send code”, we’ll email a 6-digit code to this address."
+      },
+      "verify": {
+        "sentTo": "We sent a code to {email}. Check your inbox — some providers file it as spam.",
+        "step1": "Open your email and find the 6-digit code.",
+        "step2": "Sign in to PSN in the PlayStation App or on the website, paste the code into your “About Me”, and save.",
+        "step3": "Come back here and tap “Complete sign-up”. Once verified, you can remove the code from your PSN profile.",
+        "resend": "Didn’t get it? Resend the code"
+      },
+      "done": {
+        "title": "All set",
+        "description": "Your PSRay account has been created.",
+        "cta": "Go to sign-in"
+      },
+      "errors": {
+        "checkFields": "Please check the details you entered.",
+        "psnidGeneric": "Couldn’t verify that PSN ID. Please try again later.",
+        "psnidNotSynced": "That PSN ID isn’t here yet. Sync it on this site once, then sign up.",
+        "profilePrivate": "Make your game details public in your PlayStation privacy settings.",
+        "sendGeneric": "Couldn’t send the code. Please try again later.",
+        "emailTaken": "That email is already in use. Please try another one.",
+        "emailTakenGoBack": "That email is already in use. Go back a step and change it.",
+        "psnAccountNotFound": "That PSN account wasn’t found. Check the PSN ID is correct and already indexed by PSRay.",
+        "registerGeneric": "Sign-up failed. Please try again later."
+      }
+    }
+  },
+  "errors": {
+    "notFound": {
+      "title": "Page not found",
+      "description": "The page you’re looking for doesn’t exist or has been removed."
+    },
+    "generic": {
+      "title": "Something went wrong",
+      "description": "Please try again in a moment."
+    },
+    "api": {
+      "ALREADY_REGISTERED": "That PSN account is already registered — just sign in.",
+      "PSN_LEVEL_TOO_LOW": "Your PSN trophy level must be above 100.",
+      "TOO_MANY_REQUESTS": "Too many requests. Please try again later.",
+      "EMAIL_SEND_FAILED": "The email couldn’t be delivered. Please try again later.",
+      "PSN_PROFILE_FAILED": "Couldn’t fetch your PSN profile. Please try again later.",
+      "VERIFICATION_CODE_INVALID": "We couldn’t find the right code in your PSN “About Me”. Check it’s saved and not deleted.",
+      "VERIFICATION_CODE_EXPIRED": "That code has expired. Send a new one and try again.",
+      "INVALID_CREDENTIALS": "Incorrect account or password.",
+      "ACCOUNT_TERMINATED": "This account has been suspended."
+    }
+  },
+  "toast": {
+    "copied": "Copied {label}",
+    "copyFailed": {
+      "title": "Copy failed",
+      "description": "Check your browser’s clipboard permissions."
+    },
+    "followed": {
+      "title": "Now following",
+      "description": "You’re now following {psnid}"
+    }
+  },
+  "qr": {
+    "title": "Page QR code",
+    "copyLink": "Copy link",
+    "copied": "Copied",
+    "linkCopied": "Link copied",
+    "generateFailed": "Couldn’t generate the QR code"
+  },
+  "time": {
+    "dayHour": "{d}d {h}h",
+    "hourMinute": "{h}h {m}m",
+    "minuteSecond": "{m}m {s}s",
+    "second": "{s}s"
+  },
+  "trophy": {
+    "tier": {
+      "platinum": "Platinum",
+      "gold": "Gold",
+      "silver": "Silver",
+      "bronze": "Bronze"
+    },
+    "tierShort": {
+      "gold": "Gold",
+      "silver": "Silver",
+      "bronze": "Bronze"
+    },
+    "rarity": {
+      "common": "Common",
+      "uncommon": "Uncommon",
+      "rare": "Rare",
+      "veryRare": "Very rare",
+      "ultraRare": "Ultra rare"
+    },
+    "list": {
+      "heading": "Trophies",
+      "count": "no trophies | {n} trophy | {n} trophies",
+      "showHidden": "Show hidden trophies",
+      "expand": "Show all trophies",
+      "collapse": "Collapse trophy list"
+    },
+    "filter": {
+      "all": "All",
+      "earned": "Earned",
+      "unearned": "Not earned",
+      "needsPsnid": "Available once you enter a PSN ID"
+    },
+    "sort": {
+      "label": "Sort",
+      "default": "Default",
+      "earned": "Earned time",
+      "rarity": "PSN rarity"
+    },
+    "lang": {
+      "available": "{badge} language | {badge} languages",
+      "pickerTitle": "Choose display language",
+      "pickerHint": "Pick the language for trophy names and descriptions.",
+      "default": "Default"
+    },
+    "item": {
+      "hidden": "Hidden trophy",
+      "earned": "Earned",
+      "reveal": "Reveal this hidden trophy",
+      "mask": "Hide this trophy",
+      "earnedAt": "Earned at",
+      "earnedOrder": "Earned order",
+      "firstEarned": "First earned",
+      "sincePrevious": "Since previous trophy",
+      "psnRate": "PSN earn rate",
+      "psrayRate": "PSRay earn rate",
+      "tips": "Tips",
+      "menu": {
+        "view": "View trophy",
+        "copyTitle": "Copy trophy name",
+        "copyDetail": "Copy trophy description",
+        "titleLabel": "trophy name",
+        "detailLabel": "trophy description",
+        "recentEarners": "See who recently earned it"
+      }
+    },
+    "detail": {
+      "title": "Trophy details",
+      "id": "Trophy ID",
+      "tipCount": "Tips"
+    },
+    "group": {
+      "baseGame": "Base game",
+      "noMatches": "No trophies match these filters."
+    },
+    "banner": {
+      "owners": "Players",
+      "averageProgress": "Avg. progress",
+      "completed": "Completed",
+      "platinums": "Platinums",
+      "setId": "Trophy set ID",
+      "version": "Version",
+      "qrTitle": "Trophy set QR code"
+    },
+    "progress": {
+      "title": "Your progress",
+      "earnedLabel": "Earned",
+      "trophiesUnit": "trophies",
+      "complete": "Completed",
+      "duration": "Time taken",
+      "lastTrophy": "Last trophy"
+    },
+    "players": {
+      "title": "Player rankings",
+      "recent": "Recently playing",
+      "progress": "First to complete",
+      "speedrun": "Fastest completion",
+      "empty": "No player records yet."
+    },
+    "earners": {
+      "title": "Recent earners",
+      "newestFirst": "Newest first",
+      "oldestFirst": "Oldest first",
+      "empty": "No one has earned this trophy yet.",
+      "earnedAt": "Earned {time}"
+    },
+    "tips": {
+      "title": "Trophy tips",
+      "empty": "No tips yet.",
+      "total": "{count} tips in total",
+      "spoiler": "Contains spoilers — tap to reveal"
+    },
+    "similar": {
+      "title": "Linked trophy sets",
+      "subtitle": "The same game on other platforms or in other regions",
+      "setCount": "{n} set | {n} sets",
+      "owners": "{count} players"
+    },
+    "recentPlayers": {
+      "title": "Recent players",
+      "empty": "No player records yet.",
+      "hasPlatinum": "Has the platinum"
+    }
+  },
+  "leaderboard": {
+    "boards": "Boards",
+    "registeredOnly": "Registered users only",
+    "totalPlayers": "{count} players",
+    "pickBoard": "Choose a board",
+    "empty": "No ranking data yet.",
+    "column": {
+      "rank": "Rank",
+      "user": "Player",
+      "level": "Level",
+      "points": "Points",
+      "tipCount": "Tips",
+      "voteUp": "Upvotes",
+      "contribution": "Contribution"
+    },
+    "board": {
+      "points": {
+        "label": "Global points",
+        "description": "Site-wide ranking by PSN points"
+      },
+      "pointsRegion": {
+        "label": "Regional points",
+        "description": "Points ranking for players in the selected region"
+      },
+      "tips": {
+        "label": "Most helpful",
+        "description": "Players who post the most — and best-received — trophy tips"
+      },
+      "contribution": {
+        "label": "Contributions",
+        "description": "Overall ranking by contribution points"
+      }
+    }
+  },
+  "profile": {
+    "qrTitle": "Profile QR code",
+    "tabs": {
+      "recent": "Recently played",
+      "trophies": "Earned trophies",
+      "milestones": "Milestones"
+    },
+    "identity": {
+      "registered": "Registered user",
+      "unregistered": "Not registered (PSN profile synced only)",
+      "noAboutMe": "This player hasn’t written anything yet.",
+      "views": "{count} views",
+      "notRealtime": "Not real-time data"
+    },
+    "actions": {
+      "interact": "Actions",
+      "sync": "Sync",
+      "follow": "Follow",
+      "unfollow": "Unfollow",
+      "following": "Following"
+    },
+    "social": {
+      "title": "Social",
+      "followers": "Followers",
+      "following": "Following",
+      "followsYou": "Follows you",
+      "mutual": "Mutual"
+    },
+    "stats": {
+      "title": "Stats overview",
+      "games": "Games",
+      "trophies": "Total trophies",
+      "perfect": "Perfect",
+      "lowCompletion": "Low completion",
+      "favorites": "Favorites",
+      "reviews": "Reviews",
+      "globalRank": "Global rank",
+      "regionRank": "Regional rank",
+      "points": "Trophy points",
+      "unranked": "Unranked"
+    },
+    "summary": {
+      "level": "Account level · {progress}%"
+    },
+    "account": {
+      "title": "Account details",
+      "region": "Region",
+      "language": "Language",
+      "firstTrophy": "First trophy",
+      "lastTrophy": "Latest trophy",
+      "joined": "Joined",
+      "syncInterval": "Auto-sync interval",
+      "nextSync": "Next sync",
+      "hours": "{n} hours"
+    },
+    "calendar": {
+      "title": "Activity over the past year",
+      "trophiesEarned": "Trophies earned",
+      "activeDays": "Active days",
+      "bestDay": "Best day",
+      "earnedCount": "{n} trophy earned | {n} trophies earned",
+      "earnedNone": "No trophies",
+      "less": "Less",
+      "more": "More"
+    },
+    "milestones": {
+      "title": "Trophy milestones",
+      "subtitle": "The landmark moments in this collection",
+      "nthPlatinum": "Platinum #{n}",
+      "nthTrophy": "Trophy #{n}",
+      "loadFailed": "Couldn’t load milestones. Please try again later.",
+      "empty": "No milestones unlocked yet.",
+      "collapse": "Collapse milestones",
+      "showMore": "Show more ({count} remaining)"
+    },
+    "earned": {
+      "title": "Earned trophies",
+      "subtitle": "Trophies in the order they were unlocked",
+      "total": "{count} in total",
+      "empty": "No trophies earned yet.",
+      "gapTitle": "Time since the previous trophy",
+      "gap": "{duration} gap"
+    },
+    "recent": {
+      "empty": "No play history yet.",
+      "expand": "Show all recently played",
+      "collapse": "Collapse recently played"
+    },
+    "log": {
+      "comingSoon": "The trophy log is coming soon."
+    },
+    "private": {
+      "title": "This profile is private",
+      "line1": "This player’s trophy data is private, so no details can be shown.",
+      "line2": "It can be changed in the PlayStation privacy settings."
+    }
+  },
+  "sync": {
+    "heading": "Sync a PSN profile",
+    "subheading": "Submit a PSN ID to add it to the sync queue; requests are processed in order.",
+    "cta": {
+      "submit": "Submit",
+      "submitting": "Submitting…"
+    },
+    "status": {
+      "queued": "Queued",
+      "calculating": "Calculating",
+      "syncing": "Syncing",
+      "completed": "Completed",
+      "failed": "Failed"
+    },
+    "poll": {
+      "refreshing": "Refreshing progress",
+      "countdown": "Refreshing in {seconds}s"
+    },
+    "gamesUnit": "games",
+    "waitingWorker": "Waiting for a worker to pick this up…",
+    "calculating": "Working out which games need syncing…",
+    "queueAhead": "{badge} job ahead | {badge} jobs ahead",
+    "currentGame": "Syncing",
+    "failedCount": "{count} failed",
+    "skippedCount": "{count} skipped",
+    "goToProfile": "Go to profile",
+    "queueOverview": "{active} syncs running, {waiting} waiting in the queue.",
+    "updatedAt": "Updated {time}",
+    "private": {
+      "title": "Private profiles can’t be synced",
+      "line1": "This PSN profile is private, so its trophy data can’t be synced.",
+      "line2": "Make trophies public in your PlayStation privacy settings, then try again."
+    },
+    "errors": {
+      "status": "Couldn’t fetch sync progress.",
+      "submit": "Couldn’t submit the sync request.",
+      "submitRetry": "Couldn’t submit the sync request. Please try again later.",
+      "workerUnavailable": "The sync service is temporarily unavailable. Please try again later."
+    }
+  },
+  "settings": {
+    "heading": "Settings",
+    "subheading": "Manage your account details and security.",
+    "nav": {
+      "profile": "Profile",
+      "security": "Security"
+    },
+    "profile": {
+      "heading": "Profile",
+      "subheading": "Customise the banner and avatar on your profile page.",
+      "loadFailed": "Couldn’t load your settings. Please retry.",
+      "updatePreview": "Update preview",
+      "noChanges": "Nothing to save",
+      "saved": "Settings updated",
+      "saveFailed": "Save failed",
+      "banner": {
+        "title": "Profile banner",
+        "hint": "The image shown at the top of your profile page.",
+        "urlLabel": "Banner image URL",
+        "sizeHint": "A wide image of roughly 4.5:1 (e.g. 1440×320) works best; small images look blurry on large screens.",
+        "uploadHint": "Upload to an image host and paste the link here. Direct uploads are in the works."
+      },
+      "avatar": {
+        "title": "Avatar",
+        "hint": "Use your synced PSN avatar, or point to your own image.",
+        "usePsn": "Use PSN avatar",
+        "useCustom": "Use a custom image",
+        "urlLabel": "Avatar image URL",
+        "urlRequired": "Please enter an avatar image URL",
+        "uploadHint": "Any image host works. Direct uploads are in the works."
+      }
+    },
+    "security": {
+      "heading": "Account security",
+      "subheading": "Manage the details used to sign in and verify your identity.",
+      "status": {
+        "email": "Email status",
+        "bound": "Verified",
+        "password": "Password",
+        "set": "Set"
+      },
+      "errors": {
+        "generic": "That didn’t work. Please try again later."
+      },
+      "email": {
+        "label": "Sign-in email",
+        "unbound": "No email linked",
+        "editTitle": "Change sign-in email",
+        "current": "Current: {email}",
+        "new": "New email",
+        "save": "Update email",
+        "saving": "Updating…",
+        "updated": "Your email has been updated."
+      },
+      "password": {
+        "label": "Account password",
+        "hint": "Set. Change it regularly and avoid reusing passwords from other sites.",
+        "editTitle": "Change account password",
+        "editHint": "Once saved, sign in with the new password.",
+        "save": "Change password",
+        "saving": "Changing…",
+        "updated": "Your password has been changed.",
+        "updatedDetail": "Other devices were signed out; this one stays signed in."
+      },
+      "strength": {
+        "label": "Password strength",
+        "empty": "Waiting for input",
+        "weak": "Weak",
+        "fair": "Fair",
+        "good": "Good",
+        "strong": "Strong",
+        "tip": "Use at least 8 characters, mixing upper and lower case, digits and symbols."
+      }
+    },
+    "prefs": {
+      "title": "Preferences",
+      "lang": {
+        "title": "Trophy language",
+        "hint": "When on, every request carries your chosen language and the server prefers that trophy translation.",
+        "primary": "Primary language",
+        "secondary": "Fallback language (optional)",
+        "unset": "Not set",
+        "sameError": "The primary and fallback languages must differ."
+      },
+      "rate": {
+        "title": "Trophy earn-rate basis",
+        "hint": "Choose which earn rate leads in trophy lists: PSN’s official rate, or PSRay’s site-wide rate."
+      },
+      "saved": {
+        "title": "Preferences saved",
+        "description": "Saved on this device."
+      }
+    }
+  },
+  "seo": {
+    "home": {
+      "title": "PSRay",
+      "description": "PSRay tracks PSN trophies — look up player profiles, browse trophy sets, and check the leaderboards."
+    },
+    "leaderboard": {
+      "title": "Leaderboard · PSRay",
+      "description": "PSN trophy points, regional rankings, and community contribution boards."
+    },
+    "profile": {
+      "title": "{psnid} · Profile · PSRay",
+      "titleFallback": "Profile · PSRay",
+      "description": "PSN trophy stats for {psnid} — earned trophies, milestones, and recent play history."
+    },
+    "trophy": {
+      "title": "{name} Trophies · PSRay",
+      "titleFallback": "Trophy set · PSRay",
+      "description": "All {count} trophies for {name} ({platform}) — earn rates, rarity, and tips."
+    },
+    "login": {
+      "title": "Sign in · PSRay",
+      "description": "Sign in to your PSRay account."
+    },
+    "register": {
+      "title": "Sign up · PSRay",
+      "description": "Create a PSRay account with your PSN account."
+    },
+    "sync": {
+      "title": "Sync profile · PSRay",
+      "description": "Sync your PSN trophy data into PSRay."
+    },
+    "settings": {
+      "title": "Settings · PSRay"
+    }
+  }
+}

@@ -8,7 +8,7 @@ import { Trophy } from 'lucide'
       <div class="mx-auto grid size-12 place-items-center rounded-full bg-slate-100 text-slate-400">
         <LucideIcon :icon="Trophy" class="size-6" />
       </div>
-      <p class="text-sm text-slate-500">奖杯记录功能敬请期待。</p>
+      <p class="text-sm text-slate-500">{{ $t('profile.log.comingSoon') }}</p>
     </div>
   </div>
 </template>

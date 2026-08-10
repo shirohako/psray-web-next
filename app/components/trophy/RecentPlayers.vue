@@ -9,10 +9,10 @@ const dialogOpen = ref(false)
 
 <template>
   <div class="rounded-lg border border-slate-200 bg-white shadow-sm">
-    <h2 class="border-b border-slate-100 px-4 py-2.5 text-sm font-semibold text-slate-900">最近玩家</h2>
+    <h2 class="border-b border-slate-100 px-4 py-2.5 text-sm font-semibold text-slate-900">{{ $t('trophy.recentPlayers.title') }}</h2>
 
     <p v-if="!players.length" class="px-4 py-8 text-center text-sm text-slate-400">
-      还没有玩家记录。
+      {{ $t('trophy.recentPlayers.empty') }}
     </p>
 
     <ul v-else class="divide-y divide-slate-100">
@@ -23,7 +23,7 @@ const dialogOpen = ref(false)
             <div class="flex items-center gap-1.5 leading-none">
               <RegionFlag :country="p.country" class="text-xs" />
               <span class="min-w-0 truncate text-sm font-semibold leading-none text-slate-900 group-hover:text-slate-700">{{ p.psnid }}</span>
-              <LucideIcon v-if="p.earned_platinum > 0" :icon="Trophy" class="size-3.5 shrink-0 text-cyan-500" title="已获白金" />
+              <LucideIcon v-if="p.earned_platinum > 0" :icon="Trophy" class="size-3.5 shrink-0 text-cyan-500" :title="$t('trophy.recentPlayers.hasPlatinum')" />
             </div>
             <div class="mt-1 text-xs text-slate-400 tabular-nums">
               {{ fmtDateTime(p.last_earned_at) }}
@@ -49,7 +49,7 @@ const dialogOpen = ref(false)
         class="flex w-full items-center justify-center gap-1 rounded-md py-1.5 text-sm font-medium text-slate-600 transition hover:bg-slate-50 hover:text-slate-900"
         @click="dialogOpen = true"
       >
-        查看更多
+        {{ $t('common.showMore') }}
         <LucideIcon :icon="ChevronRight" class="size-4" />
       </button>
     </div>

@@ -16,6 +16,20 @@ import { ApiError } from '~/utils/ApiError'
 export function useRegisterFlow() {
   const toast = useToast()
   const route = useRoute()
+  const { t, te } = useI18n()
+
+  /**
+   * Copy for a failed request, preferring our own wording over the server's:
+   * a flow-specific override, then the shared `errors.api.<CODE>` map, then the
+   * server's own message, then the caller's generic fallback.
+   */
+  function apiMessage(error: ApiError, fallbackKey: string, overrides: Record<string, string> = {}) {
+    const override = overrides[error.code]
+    if (override) return t(override)
+    const shared = `errors.api.${error.code}`
+    if (te(shared)) return t(shared)
+    return error.message || t(fallbackKey)
+  }
 
   const step = ref(1)
   // Three independent consents on step 1; all must be checked to advance.
@@ -119,9 +133,9 @@ export function useRegisterFlow() {
       const profile = await useProfiles().find(id)
       const failures: string[] = []
 
-      if (profile.registered_at != null) failures.push('该 PSN 账号已注册，请直接登录。')
-      if (profile.trophy_level <= 100) failures.push('PSN 奖杯等级需大于 100。')
-      if (!profile.is_profile_public) failures.push('请先在 PlayStation 隐私设置中公开游戏资料。')
+      if (profile.registered_at != null) failures.push(t('errors.api.ALREADY_REGISTERED'))
+      if (profile.trophy_level <= 100) failures.push(t('errors.api.PSN_LEVEL_TOO_LOW'))
+      if (!profile.is_profile_public) failures.push(t('auth.register.errors.profilePrivate'))
 
       if (failures.length > 0) {
         fieldErrors.value = { psnid: failures.join(' ') }
@@ -147,7 +161,7 @@ export function useRegisterFlow() {
     fieldErrors.value = {}
     try {
       const res = await useAuthApi().sendCode({ email: email.value.trim(), type: 'register' })
-      toast.success({ title: res.message || '验证码已发送，请查收邮件。' })
+      toast.success({ title: res.message || t('auth.register.codeSent') })
       sentEmail.value = email.value.trim()
       sentPsnid.value = psnid.value.trim()
       startCooldown(60)
@@ -226,21 +240,21 @@ export function useRegisterFlow() {
     return submitting.value
   })
   // `sending` only belongs to the primary CTA on step 4; on step 5 it drives
-  // the separate resend button, so it must not spin the 完成注册 button.
+  // the separate resend button, so it must not spin the submit button.
   const primaryBusy = computed(() =>
     (step.value === 2 && checkingPsnid.value)
     || (step.value === 4 && sending.value)
     || submitting.value,
   )
   const primaryLabel = computed(() => {
-    if (step.value === 2) return checkingPsnid.value ? '验证中…' : '验证 PSN ID'
+    if (step.value === 2) return t(checkingPsnid.value ? 'auth.register.cta.verifying' : 'auth.register.cta.verifyPsnid')
     if (step.value === 4) {
-      if (codeAlreadySent.value) return '下一步'
-      if (cooldown.value > 0) return `${cooldown.value}s 后可重发`
-      return sending.value ? '发送中…' : '发送验证码'
+      if (codeAlreadySent.value) return t('common.next')
+      if (cooldown.value > 0) return t('auth.register.cta.resendIn', { seconds: cooldown.value })
+      return t(sending.value ? 'auth.register.cta.sending' : 'auth.register.cta.sendCode')
     }
-    if (step.value === 5) return submitting.value ? '注册中…' : '完成注册'
-    return '下一步'
+    if (step.value === 5) return t(submitting.value ? 'auth.register.cta.submitting' : 'auth.register.cta.submit')
+    return t('common.next')
   })
   // Show the paper-plane only when actually dispatching a new code.
   const primaryTrailingIsSend = computed(() => step.value === 4 && !codeAlreadySent.value)
@@ -249,98 +263,67 @@ export function useRegisterFlow() {
   function handlePsnidError(error: unknown) {
     fieldErrors.value = {}
     if (!(error instanceof ApiError)) {
-      fieldErrors.value = { psnid: 'PSN ID 验证失败，请稍后再试。' }
+      fieldErrors.value = { psnid: t('auth.register.errors.psnidGeneric') }
       return
     }
     if (error.isValidation) {
       fieldErrors.value = error.fieldErrors()
       return
     }
-    switch (error.code) {
-      case 'NOT_FOUND':
-      case 'USER_NOT_FOUND':
-        fieldErrors.value = { psnid: '未找到该 PSN ID。请先在站内同步至少一次后再注册。' }
-        break
-      case 'ALREADY_REGISTERED':
-        fieldErrors.value = { psnid: '该 PSN 账号已注册，请直接登录。' }
-        break
-      case 'PSN_LEVEL_TOO_LOW':
-        fieldErrors.value = { psnid: 'PSN 奖杯等级需大于 100。' }
-        break
-      default:
-        fieldErrors.value = { psnid: error.message || 'PSN ID 验证失败，请稍后再试。' }
+    fieldErrors.value = {
+      psnid: apiMessage(error, 'auth.register.errors.psnidGeneric', {
+        // An unsynced PSN ID reads as "not found" here, so point at the fix.
+        NOT_FOUND: 'auth.register.errors.psnidNotSynced',
+        USER_NOT_FOUND: 'auth.register.errors.psnidNotSynced',
+      }),
     }
   }
 
   function handleSendError(error: unknown) {
     fieldErrors.value = {}
     if (!(error instanceof ApiError)) {
-      errorMessage.value = '验证码发送失败，请稍后再试。'
+      errorMessage.value = t('auth.register.errors.sendGeneric')
       return
     }
     if (error.isValidation) {
       fieldErrors.value = error.fieldErrors()
-      errorMessage.value = '请检查填写的信息。'
+      errorMessage.value = t('auth.register.errors.checkFields')
       return
     }
-    switch (error.code) {
-      case 'EMAIL_ALREADY_USED':
-        errorMessage.value = '该邮箱已被占用，请更换后重试。'
-        break
-      case 'TOO_MANY_REQUESTS':
-        errorMessage.value = '验证码发送过于频繁，请稍后再试。'
-        startCooldown(60)
-        break
-      case 'EMAIL_SEND_FAILED':
-        errorMessage.value = '邮件投递失败，请稍后重试。'
-        break
-      default:
-        errorMessage.value = error.message || '验证码发送失败，请稍后再试。'
-    }
+    // Mirror the server's own throttling so the resend button stays disabled.
+    if (error.code === 'TOO_MANY_REQUESTS') startCooldown(60)
+    errorMessage.value = apiMessage(error, 'auth.register.errors.sendGeneric', {
+      EMAIL_ALREADY_USED: 'auth.register.errors.emailTaken',
+    })
+  }
+
+  /** Codes the user can only fix by going back to an earlier step. */
+  const REGISTER_ERROR_STEP: Record<string, number> = {
+    EMAIL_ALREADY_USED: 4,
+    USER_NOT_FOUND: 2,
+    ALREADY_REGISTERED: 2,
+    PSN_LEVEL_TOO_LOW: 2,
   }
 
   function handleRegisterError(error: unknown) {
     fieldErrors.value = {}
     if (!(error instanceof ApiError)) {
-      errorMessage.value = '注册失败，请稍后再试。'
+      errorMessage.value = t('auth.register.errors.registerGeneric')
       return
     }
     if (error.isValidation) {
       fieldErrors.value = error.fieldErrors()
-      errorMessage.value = '请检查填写的信息。'
+      errorMessage.value = t('auth.register.errors.checkFields')
       if (fieldErrors.value.psnid) step.value = 2
       else if (fieldErrors.value.email) step.value = 4
       return
     }
-    switch (error.code) {
-      case 'EMAIL_ALREADY_USED':
-        errorMessage.value = '该邮箱已被占用，请返回上一步更换。'
-        step.value = 4
-        break
-      case 'USER_NOT_FOUND':
-        errorMessage.value = '未找到该 PSN 账号，请确认 PSN ID 正确且已被 PSRay 收录。'
-        step.value = 2
-        break
-      case 'ALREADY_REGISTERED':
-        errorMessage.value = '该 PSN 账号已注册，请直接登录。'
-        step.value = 2
-        break
-      case 'PSN_LEVEL_TOO_LOW':
-        errorMessage.value = 'PSN 奖杯等级需大于 100。'
-        step.value = 2
-        break
-      case 'PSN_PROFILE_FAILED':
-        errorMessage.value = '拉取 PSN 资料失败，请稍后重试。'
-        break
-      case 'VERIFICATION_CODE_INVALID':
-        errorMessage.value = '未在 PSN 简介中找到正确的验证码，请确认已填入且未删除。'
-        break
-      case 'VERIFICATION_CODE_EXPIRED':
-        errorMessage.value = '验证码已过期，请重新发送后再试。'
-        break
-      default:
-        errorMessage.value = error.message || '注册失败，请稍后再试。'
-    }
+    errorMessage.value = apiMessage(error, 'auth.register.errors.registerGeneric', {
+      EMAIL_ALREADY_USED: 'auth.register.errors.emailTakenGoBack',
+      USER_NOT_FOUND: 'auth.register.errors.psnAccountNotFound',
+    })
+    const backTo = REGISTER_ERROR_STEP[error.code]
+    if (backTo) step.value = backTo
   }
 
   return {

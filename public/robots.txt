@@ -1,2 +1,7 @@
 User-Agent: *
-Disallow:
+# Account-scoped and transactional pages: nothing to index, and they need a
+# session to render anything meaningful. Public pages carry their own
+# canonical / hreflang links (see app/composables/useSeo.ts).
+Disallow: /settings
+Disallow: /sync
+Disallow: /auth

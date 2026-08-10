@@ -3,9 +3,15 @@ import { RefreshCw, Search, Clock, Loader, CheckCircle2, XCircle, SkipForward, A
 import { ApiError } from '~/utils/ApiError'
 import { useSync, type SyncStatus, type SyncStatusInfo } from '~/services/sync'
 
-useHead({ title: '同步资料 · PSRay' })
-
+const { t } = useI18n()
 const sync = useSync()
+
+useSeo({
+  title: () => t('seo.sync.title'),
+  description: () => t('seo.sync.description'),
+  // Queue-submission tooling, not content: nothing here belongs in an index.
+  noindex: true,
+})
 
 const psnid = ref('')
 const submitting = ref(false)
@@ -28,12 +34,12 @@ const canSubmit = computed(() => psnid.value.trim() !== '' && !submitting.value)
 const progress = computed(() => Math.max(0, Math.min(100, info.value?.progress ?? 0)))
 
 /** Badge / progress-bar / accent styling per lifecycle state. */
-const STATUS_META: Record<SyncStatus, { label: string; pill: string; bar: string; text: string; icon: typeof Clock; spin?: boolean }> = {
-  queued: { label: '排队中', pill: 'bg-slate-100 text-slate-600', bar: 'bg-slate-400', text: 'text-slate-500', icon: Clock },
-  calculating: { label: '计算中', pill: 'bg-amber-50 text-amber-600', bar: 'bg-amber-500', text: 'text-amber-600', icon: Loader, spin: true },
-  syncing: { label: '同步中', pill: 'bg-sky-50 text-sky-600', bar: 'bg-sky-500', text: 'text-sky-600', icon: Loader, spin: true },
-  completed: { label: '已完成', pill: 'bg-emerald-50 text-emerald-600', bar: 'bg-emerald-500', text: 'text-emerald-600', icon: CheckCircle2 },
-  failed: { label: '失败', pill: 'bg-rose-50 text-rose-600', bar: 'bg-rose-500', text: 'text-rose-600', icon: XCircle },
+const STATUS_META: Record<SyncStatus, { labelKey: string; pill: string; bar: string; text: string; icon: typeof Clock; spin?: boolean }> = {
+  queued: { labelKey: 'sync.status.queued', pill: 'bg-slate-100 text-slate-600', bar: 'bg-slate-400', text: 'text-slate-500', icon: Clock },
+  calculating: { labelKey: 'sync.status.calculating', pill: 'bg-amber-50 text-amber-600', bar: 'bg-amber-500', text: 'text-amber-600', icon: Loader, spin: true },
+  syncing: { labelKey: 'sync.status.syncing', pill: 'bg-sky-50 text-sky-600', bar: 'bg-sky-500', text: 'text-sky-600', icon: Loader, spin: true },
+  completed: { labelKey: 'sync.status.completed', pill: 'bg-emerald-50 text-emerald-600', bar: 'bg-emerald-500', text: 'text-emerald-600', icon: CheckCircle2 },
+  failed: { labelKey: 'sync.status.failed', pill: 'bg-rose-50 text-rose-600', bar: 'bg-rose-500', text: 'text-rose-600', icon: XCircle },
 }
 const meta = computed(() => info.value ? STATUS_META[info.value.status] : null)
 const inProgress = computed(() =>
@@ -97,7 +103,7 @@ async function pollOnce() {
   catch (error) {
     // Right after submit the status row may not exist yet — keep polling.
     if (error instanceof ApiError && error.code === 'NOT_FOUND') return
-    errorMessage.value = error instanceof ApiError ? error.message : '获取同步进度失败。'
+    errorMessage.value = error instanceof ApiError ? error.message : t('sync.errors.status')
     stopPolling()
   }
 }
@@ -142,11 +148,11 @@ async function onSubmit() {
       }
 
       errorMessage.value = error.code === 'SYNC_WORKER_UNAVAILABLE'
-        ? '同步服务暂时不可用，请稍后再试。'
-        : error.message || '提交同步请求失败。'
+        ? t('sync.errors.workerUnavailable')
+        : error.message || t('sync.errors.submit')
     }
     else {
-      errorMessage.value = '提交同步请求失败，请稍后再试。'
+      errorMessage.value = t('sync.errors.submitRetry')
     }
   }
   finally {
@@ -175,8 +181,8 @@ onMounted(() => {
           <LucideIcon :icon="RefreshCw" class="size-5" />
         </span>
         <div>
-          <h2 class="text-base font-semibold text-slate-900">同步 PSN 资料</h2>
-          <p class="mt-1 text-sm text-slate-500">输入 PSN ID 提交同步至服务器同步队列，后台会按顺序处理您的请求。</p>
+          <h2 class="text-base font-semibold text-slate-900">{{ $t('sync.heading') }}</h2>
+          <p class="mt-1 text-sm text-slate-500">{{ $t('sync.subheading') }}</p>
         </div>
       </div>
 
@@ -206,7 +212,7 @@ onMounted(() => {
             class="size-3.5"
             :class="{ 'animate-spin': submitting }"
           />
-          {{ submitting ? '提交中…' : '提交' }}
+          {{ submitting ? $t('sync.cta.submitting') : $t('sync.cta.submit') }}
         </button>
       </form>
 
@@ -217,9 +223,9 @@ onMounted(() => {
         {{ errorMessage }}
       </p>
 
-      <PrivateProfileNotice v-if="profilePrivate" class="mt-4" title="无法同步非公开的资料">
-        该 PSN 资料为私密，无法同步奖杯数据。<br>
-        请在 PlayStation 隐私设置中将奖杯设为公开后重试。
+      <PrivateProfileNotice v-if="profilePrivate" class="mt-4" :title="$t('sync.private.title')">
+        {{ $t('sync.private.line1') }}<br>
+        {{ $t('sync.private.line2') }}
       </PrivateProfileNotice>
     </section>
 
@@ -233,7 +239,7 @@ onMounted(() => {
             :class="meta.pill"
           >
             <LucideIcon :icon="meta.icon" class="size-3.5" :class="{ 'animate-spin': meta.spin }" />
-            {{ meta.label }}
+            {{ $t(meta.labelKey) }}
           </span>
         </div>
         <span
@@ -249,11 +255,11 @@ onMounted(() => {
           >
             <span v-if="refreshing" key="refreshing" class="inline-flex items-center gap-1.5 text-slate-500">
               <LucideIcon :icon="RefreshCw" class="size-3.5 animate-spin text-slate-400" />
-              正在刷新进度
+              {{ $t('sync.poll.refreshing') }}
             </span>
             <span v-else key="countdown" class="inline-flex items-center gap-1.5">
               <span class="size-1.5 animate-pulse rounded-full bg-emerald-500" />
-              {{ countdown }} 秒后刷新
+              {{ $t('sync.poll.countdown', { seconds: countdown }) }}
             </span>
           </Transition>
         </span>
@@ -274,11 +280,11 @@ onMounted(() => {
             <span class="text-sm text-slate-400">
               /
               <AnimatedNumber :value="info.total" />
-              个游戏
+              {{ $t('sync.gamesUnit') }}
             </span>
           </div>
           <span v-else class="text-sm text-slate-400">
-            {{ info.status === 'queued' ? '等待 worker 领取…' : '正在计算需要同步的游戏…' }}
+            {{ info.status === 'queued' ? $t('sync.waitingWorker') : $t('sync.calculating') }}
           </span>
           <span class="text-2xl font-bold tabular-nums" :class="meta.text">
             <AnimatedNumber :value="progress" />%
@@ -299,14 +305,18 @@ onMounted(() => {
         class="mt-3 flex items-center gap-2 text-sm text-slate-500"
       >
         <LucideIcon :icon="ListOrdered" class="size-4 text-slate-400" />
-        前方还有 <span class="font-semibold text-slate-700">{{ info.queue_ahead }}</span> 个任务
+        <i18n-t keypath="sync.queueAhead" tag="span" :plural="info.queue_ahead">
+          <template #badge>
+            <span class="font-semibold text-slate-700">{{ info.queue_ahead }}</span>
+          </template>
+        </i18n-t>
       </p>
       <p
         v-else-if="info.status === 'syncing' && info.current_game"
         class="mt-3 flex min-w-0 items-center gap-2 text-sm text-slate-500"
       >
         <LucideIcon :icon="Gamepad2" class="size-4 shrink-0 text-slate-400" />
-        <span class="shrink-0">正在同步</span>
+        <span class="shrink-0">{{ $t('sync.currentGame') }}</span>
         <span class="truncate font-mono text-xs text-slate-700">{{ info.current_game }}</span>
       </p>
 
@@ -317,14 +327,14 @@ onMounted(() => {
           class="inline-flex items-center gap-1 rounded-md border border-rose-200 bg-rose-50 px-2.5 py-1 text-xs font-medium text-rose-600"
         >
           <LucideIcon :icon="XCircle" class="size-3.5" />
-          失败 {{ info.failed }}
+          {{ $t('sync.failedCount', { count: info.failed }) }}
         </span>
         <span
           v-if="info.skipped > 0"
           class="inline-flex items-center gap-1 rounded-md border border-amber-200 bg-amber-50 px-2.5 py-1 text-xs font-medium text-amber-600"
         >
           <LucideIcon :icon="SkipForward" class="size-3.5" />
-          跳过 {{ info.skipped }}
+          {{ $t('sync.skippedCount', { count: info.skipped }) }}
         </span>
       </div>
 
@@ -342,7 +352,7 @@ onMounted(() => {
         :to="`/p/${encodeURIComponent(info.psnid)}`"
         class="mt-4 flex w-full items-center justify-center gap-2 rounded-lg bg-slate-900 py-2.5 text-sm font-semibold text-white shadow-sm shadow-slate-900/30 transition hover:bg-slate-800 active:bg-slate-950"
       >
-        前往个人资料
+        {{ $t('sync.goToProfile') }}
         <LucideIcon :icon="ArrowRight" class="size-4" />
       </NuxtLink>
 
@@ -351,11 +361,16 @@ onMounted(() => {
       <div class="mt-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-1 text-xs text-slate-400">
         <span class="inline-flex items-center gap-1.5">
           <LucideIcon :icon="Activity" class="size-3.5" />
-          <span>
-            <span class="font-semibold tabular-nums text-sky-600">{{ info.active_queue_count }}</span> 个同步任务正在执行，<span class="font-semibold tabular-nums text-slate-600">{{ info.waiting_queue_count }}</span> 人在排队。
-          </span>
+          <i18n-t keypath="sync.queueOverview" tag="span">
+            <template #active>
+              <span class="font-semibold tabular-nums text-sky-600">{{ info.active_queue_count }}</span>
+            </template>
+            <template #waiting>
+              <span class="font-semibold tabular-nums text-slate-600">{{ info.waiting_queue_count }}</span>
+            </template>
+          </i18n-t>
         </span>
-        <span v-if="info.updated_at">更新于 {{ fmtDateTime(info.updated_at) }}</span>
+        <span v-if="info.updated_at">{{ $t('sync.updatedAt', { time: fmtDateTime(info.updated_at) }) }}</span>
       </div>
     </section>
   </div>

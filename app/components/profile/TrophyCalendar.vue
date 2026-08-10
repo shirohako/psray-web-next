@@ -3,6 +3,7 @@ import { CalendarDays } from 'lucide'
 import type { CalendarDay } from '~/services/profile'
 
 const props = defineProps<{ calendar: CalendarDay[] }>()
+const { t } = useI18n()
 
 type DayCell = {
   date: string
@@ -24,8 +25,11 @@ const previousYearAnniversary = (date: Date) => {
   const day = Math.min(date.getUTCDate(), new Date(Date.UTC(year, month + 1, 0)).getUTCDate())
   return new Date(Date.UTC(year, month, day))
 }
+// UTC-based so a cell's label matches the UTC date key it was bucketed under.
 const fmtCalendarDate = (date: Date) =>
-  `${date.getUTCFullYear()}年${date.getUTCMonth() + 1}月${date.getUTCDate()}日`
+  date.toLocaleDateString(currentLocale(), {
+    year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC',
+  })
 
 const countByDate = computed(() => {
   const counts = new Map<string, number>()
@@ -53,7 +57,9 @@ const days = computed<DayCell[]>(() =>
     return {
       date: key,
       count,
-      label: `${fmtCalendarDate(date)} · ${count ? `获取 ${count} 个奖杯` : '没有获取奖杯'}`,
+      label: `${fmtCalendarDate(date)} · ${count
+        ? t('profile.calendar.earnedCount', count)
+        : t('profile.calendar.earnedNone')}`,
     }
   }),
 )
@@ -99,7 +105,7 @@ function activityClass(count: number) {
             <LucideIcon :icon="CalendarDays" class="size-4" />
           </span>
           <div>
-            <h2 class="text-sm font-semibold text-slate-900">最近一年的活动</h2>
+            <h2 class="text-sm font-semibold text-slate-900">{{ $t('profile.calendar.title') }}</h2>
             <p class="text-xs text-slate-400">{{ dateRange }}</p>
           </div>
         </div>
@@ -107,15 +113,15 @@ function activityClass(count: number) {
       <div class="flex items-center gap-5 text-right">
         <div>
           <div class="text-base font-bold text-slate-900">{{ fmt(total) }}</div>
-          <div class="text-[11px] text-slate-400">获得奖杯</div>
+          <div class="text-[11px] text-slate-400">{{ $t('profile.calendar.trophiesEarned') }}</div>
         </div>
         <div>
           <div class="text-base font-bold text-slate-900">{{ fmt(activeDays) }}</div>
-          <div class="text-[11px] text-slate-400">活跃天数</div>
+          <div class="text-[11px] text-slate-400">{{ $t('profile.calendar.activeDays') }}</div>
         </div>
         <div class="max-sm:hidden">
           <div class="text-base font-bold text-slate-900">{{ fmt(maxCount) }}</div>
-          <div class="text-[11px] text-slate-400">单日最高</div>
+          <div class="text-[11px] text-slate-400">{{ $t('profile.calendar.bestDay') }}</div>
         </div>
       </div>
     </div>
@@ -162,9 +168,9 @@ function activityClass(count: number) {
 
     <div class="flex flex-wrap items-center justify-end gap-3 border-t border-slate-100 bg-slate-50/60 px-4 py-2.5 text-xs text-slate-400 sm:px-5">
       <span class="inline-flex items-center gap-1.5">
-        少
+        {{ $t('profile.calendar.less') }}
         <i v-for="level in [0, 1, 5, 10, 20]" :key="level" class="size-2.75 rounded-[3px] ring-1 ring-inset" :class="activityClass(level)" />
-        多
+        {{ $t('profile.calendar.more') }}
       </span>
     </div>
   </section>

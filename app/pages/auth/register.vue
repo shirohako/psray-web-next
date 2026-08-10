@@ -1,8 +1,15 @@
 <script setup lang="ts">
 import { ArrowLeft, ArrowRight, Loader2, Send } from 'lucide'
 
-useHead({ title: '注册 · PSRay' })
 definePageMeta({ guestOnly: true })
+
+const { t } = useI18n()
+
+useSeo({
+  title: () => t('seo.register.title'),
+  description: () => t('seo.register.description'),
+  noindex: true,
+})
 
 const {
   step, agreedNotice, agreedTerms, agreedPrivacy, password, confirmPassword, psnid, email,
@@ -20,7 +27,7 @@ const {
     <div v-else class="space-y-6">
       <div class="animate-rise space-y-3" style="animation-delay: 0.05s">
         <AuthStepper :count="5" :current="step" />
-        <h1 class="text-2xl font-bold tracking-tight text-slate-900">创建账号</h1>
+        <h1 class="text-2xl font-bold tracking-tight text-slate-900">{{ $t('auth.register.heading') }}</h1>
       </div>
 
       <form class="space-y-5" @submit.prevent="primaryAction">
@@ -78,7 +85,7 @@ const {
             @click="back"
           >
             <LucideIcon :icon="ArrowLeft" class="size-4" />
-            上一步
+            {{ $t('common.back') }}
           </button>
 
           <button
@@ -99,9 +106,9 @@ const {
       </form>
 
       <p v-if="step === 1" class="text-center text-sm text-slate-500 animate-rise" style="animation-delay: 0.36s">
-        已有账号？
+        {{ $t('auth.register.haveAccount') }}
         <NuxtLink to="/auth/login" class="font-semibold text-slate-900 transition hover:underline">
-          直接登录
+          {{ $t('auth.register.loginNow') }}
         </NuxtLink>
       </p>
     </div>

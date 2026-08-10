@@ -47,7 +47,7 @@ watch(() => props.open, (v) => {
 <template>
   <Dialog :open="open" size="xl" @update:open="emit('update:open', $event)">
     <template #title>
-      奖杯留言
+      {{ $t('trophy.tips.title') }}
       <span v-if="trophyName" class="ml-1 font-normal text-slate-400">· {{ trophyName }}</span>
     </template>
 
@@ -66,7 +66,7 @@ watch(() => props.open, (v) => {
     <!-- Empty -->
     <div v-else-if="!tips.length" class="flex flex-col items-center gap-2 px-5 py-16 text-center text-slate-400">
       <LucideIcon :icon="MessageSquare" class="size-8" />
-      <p class="text-sm">还没有玩家留言。</p>
+      <p class="text-sm">{{ $t('trophy.tips.empty') }}</p>
     </div>
 
     <!-- List -->
@@ -78,7 +78,7 @@ watch(() => props.open, (v) => {
 
     <template #footer>
       <div class="flex items-center justify-between gap-3">
-        <span class="text-xs text-slate-400">共 {{ fmt(meta?.total) }} 条留言</span>
+        <span class="text-xs text-slate-400">{{ $t('trophy.tips.total', { count: fmt(meta?.total) }) }}</span>
         <Pagination :page="page" :total-pages="totalPages" @update:page="setPage" />
       </div>
     </template>

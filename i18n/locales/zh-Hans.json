@@ -1,0 +1,608 @@
+{
+  "common": {
+    "back": "上一步",
+    "backHome": "返回首页",
+    "cancel": "取消",
+    "close": "关闭",
+    "copy": "复制",
+    "edit": "修改",
+    "next": "下一步",
+    "nextPage": "下一页",
+    "previousPage": "上一页",
+    "retry": "重试",
+    "save": "保存",
+    "saving": "保存中…",
+    "showMore": "显示更多",
+    "sortAsc": "正序",
+    "sortDesc": "倒序",
+    "updated": "更新时间",
+    "updatedAt": "更新于 {time}",
+    "view": "查看"
+  },
+  "nav": {
+    "home": "首页",
+    "leaderboard": "排行榜",
+    "login": "登录",
+    "register": "注册",
+    "sectionLabel": "导航",
+    "aria": {
+      "account": "登录或注册",
+      "collapseMenu": "折叠菜单",
+      "expandMenu": "展开菜单",
+      "language": "语言",
+      "search": "搜索",
+      "settings": "设置"
+    },
+    "user": {
+      "logout": "退出登录",
+      "profile": "个人资料",
+      "settings": "用户设置",
+      "sync": "同步账户"
+    }
+  },
+  "home": {
+    "lookup": {
+      "heading": "查看个人资料",
+      "hint": "输入 PSN ID 进入对应的个人资料页面。",
+      "view": "查看",
+      "sync": "同步"
+    }
+  },
+  "auth": {
+    "field": {
+      "code": "验证码",
+      "codePlaceholder": "6 位验证码",
+      "email": "邮箱",
+      "password": "密码",
+      "passwordPlaceholder": "至少 8 位字符",
+      "confirmPassword": "确认密码",
+      "confirmPasswordPlaceholder": "再次输入密码",
+      "currentPassword": "当前密码",
+      "newPassword": "新密码",
+      "confirmNewPassword": "确认新密码",
+      "passwordMismatch": "两次输入的密码不一致",
+      "showPassword": "显示密码",
+      "hidePassword": "隐藏密码"
+    },
+    "login": {
+      "heading": "欢迎回来",
+      "tagline": "旅途还没有结束，尽头是星辰大海。",
+      "forgotPassword": "忘记密码？",
+      "submitting": "登录中…",
+      "noAccount": "还没有账号？",
+      "registerNow": "立即注册",
+      "errors": {
+        "generic": "登录失败，请稍后再试。",
+        "checkFields": "请检查登录信息。"
+      }
+    },
+    "register": {
+      "heading": "创建账号",
+      "haveAccount": "已有账号？",
+      "loginNow": "直接登录",
+      "codeSent": "验证码已发送，请查收邮件。",
+      "cta": {
+        "verifyPsnid": "验证 PSN ID",
+        "verifying": "验证中…",
+        "sendCode": "发送验证码",
+        "sending": "发送中…",
+        "resendIn": "{seconds}s 后可重发",
+        "submit": "完成注册",
+        "submitting": "注册中…"
+      },
+      "terms": {
+        "intro": "PSRay 是一个 PSN 用户交流网站。",
+        "needsPsn": "您需要一个 {icon} PlayStation (PSN) 账户。",
+        "agreeTerms": "我已阅读并同意 {icon} {link}。",
+        "agreePrivacy": "我已阅读并同意 {icon} {link}。",
+        "termsLink": "使用条款",
+        "privacyLink": "隐私协议"
+      },
+      "psnid": {
+        "placeholder": "你的 PlayStation Network ID",
+        "requirementsTitle": "新用户需要满足",
+        "requirementsHint": "我们希望过滤掉垃圾账户，创造一个真正属于玩家的聚集地。",
+        "requirement1": "已在站内至少同步过一次。",
+        "requirement2": "PSN 奖杯等级大于 100。",
+        "requirement3": "PSN 游戏资料隐私设置为公开。"
+      },
+      "password": {
+        "hint": "为你的账号设置一个安全的登录密码。"
+      },
+      "email": {
+        "hint": "点击「发送验证码」后，我们会向该邮箱发送一个 6 位验证码。"
+      },
+      "verify": {
+        "sentTo": "验证码已发送至 {email}，请查收邮件。部分服务商可能被标记为 SPAM，请检查垃圾箱。",
+        "step1": "打开邮箱，查收 6 位验证码。",
+        "step2": "打开 PlayStation App 或官网，登录您的 PSN 账户，把验证码填入「关于我 / About Me」个人简介并保存。",
+        "step3": "回到本页点击「完成注册」。验证成功后，您可以删除 PSN 账户简介中的临时验证码。",
+        "resend": "没收到？重新发送验证码"
+      },
+      "done": {
+        "title": "一切很顺利",
+        "description": "您的 PSRay 账号已创建完成。",
+        "cta": "前往登录"
+      },
+      "errors": {
+        "checkFields": "请检查填写的信息。",
+        "psnidGeneric": "PSN ID 验证失败，请稍后再试。",
+        "psnidNotSynced": "未找到该 PSN ID。请先在站内同步至少一次后再注册。",
+        "profilePrivate": "请先在 PlayStation 隐私设置中公开游戏资料。",
+        "sendGeneric": "验证码发送失败，请稍后再试。",
+        "emailTaken": "该邮箱已被占用，请更换后重试。",
+        "emailTakenGoBack": "该邮箱已被占用，请返回上一步更换。",
+        "psnAccountNotFound": "未找到该 PSN 账号，请确认 PSN ID 正确且已被 PSRay 收录。",
+        "registerGeneric": "注册失败，请稍后再试。"
+      }
+    }
+  },
+  "errors": {
+    "notFound": {
+      "title": "找不到该页面",
+      "description": "你要找的页面不存在，或者已经被移除。"
+    },
+    "generic": {
+      "title": "出了点问题",
+      "description": "请稍后再试。"
+    },
+    "api": {
+      "ALREADY_REGISTERED": "该 PSN 账号已注册，请直接登录。",
+      "PSN_LEVEL_TOO_LOW": "PSN 奖杯等级需大于 100。",
+      "TOO_MANY_REQUESTS": "请求过于频繁，请稍后再试。",
+      "EMAIL_SEND_FAILED": "邮件投递失败，请稍后重试。",
+      "PSN_PROFILE_FAILED": "拉取 PSN 资料失败，请稍后重试。",
+      "VERIFICATION_CODE_INVALID": "未在 PSN 简介中找到正确的验证码，请确认已填入且未删除。",
+      "VERIFICATION_CODE_EXPIRED": "验证码已过期，请重新发送后再试。",
+      "INVALID_CREDENTIALS": "账号或密码错误。",
+      "ACCOUNT_TERMINATED": "账号已被封禁。"
+    }
+  },
+  "toast": {
+    "copied": "已复制{label}",
+    "copyFailed": {
+      "title": "复制失败",
+      "description": "请检查浏览器的剪贴板权限。"
+    },
+    "followed": {
+      "title": "关注成功",
+      "description": "已关注 {psnid}"
+    }
+  },
+  "qr": {
+    "title": "页面二维码",
+    "copyLink": "复制链接",
+    "copied": "已复制",
+    "linkCopied": "已复制链接",
+    "generateFailed": "二维码生成失败"
+  },
+  "time": {
+    "dayHour": "{d}天{h}小时",
+    "hourMinute": "{h}小时{m}分",
+    "minuteSecond": "{m}分{s}秒",
+    "second": "{s}秒"
+  },
+  "trophy": {
+    "tier": {
+      "platinum": "白金",
+      "gold": "黄金",
+      "silver": "白银",
+      "bronze": "青铜"
+    },
+    "tierShort": {
+      "gold": "金",
+      "silver": "银",
+      "bronze": "铜"
+    },
+    "rarity": {
+      "common": "普通",
+      "uncommon": "罕见",
+      "rare": "稀有",
+      "veryRare": "非常稀有",
+      "ultraRare": "极为稀有"
+    },
+    "list": {
+      "heading": "奖杯",
+      "count": "共 {n} 个",
+      "showHidden": "显示隐藏奖杯",
+      "expand": "展开全部奖杯",
+      "collapse": "收起奖杯列表"
+    },
+    "filter": {
+      "all": "全部",
+      "earned": "已获得",
+      "unearned": "未获得",
+      "needsPsnid": "输入 PSN ID 后可用"
+    },
+    "sort": {
+      "label": "排序",
+      "default": "默认",
+      "earned": "获得时间",
+      "rarity": "PSN 稀有度"
+    },
+    "lang": {
+      "available": "支持 {badge} 种语言",
+      "pickerTitle": "选择显示语言",
+      "pickerHint": "选择奖杯名称与描述的显示语言。",
+      "default": "默认"
+    },
+    "item": {
+      "hidden": "隐藏奖杯",
+      "earned": "已获得",
+      "reveal": "显示该隐藏奖杯",
+      "mask": "隐藏该奖杯",
+      "earnedAt": "获得时间",
+      "earnedOrder": "获得顺序",
+      "firstEarned": "首个获得",
+      "sincePrevious": "相对上一个奖杯",
+      "psnRate": "PSN 完成率",
+      "psrayRate": "PSRay 完成率",
+      "tips": "留言",
+      "menu": {
+        "view": "查看奖杯",
+        "copyTitle": "复制奖杯标题",
+        "copyDetail": "复制奖杯描述",
+        "titleLabel": "奖杯标题",
+        "detailLabel": "奖杯描述",
+        "recentEarners": "查看近期获得的玩家"
+      }
+    },
+    "detail": {
+      "title": "奖杯详情",
+      "id": "奖杯 ID",
+      "tipCount": "留言数"
+    },
+    "group": {
+      "baseGame": "本篇",
+      "noMatches": "没有符合条件的奖杯。"
+    },
+    "banner": {
+      "owners": "玩过",
+      "averageProgress": "平均进度",
+      "completed": "完成人数",
+      "platinums": "白金人数",
+      "setId": "奖杯组 ID",
+      "version": "版本号",
+      "qrTitle": "奖杯组二维码"
+    },
+    "progress": {
+      "title": "你的进度",
+      "earnedLabel": "已获得",
+      "trophiesUnit": "个奖杯",
+      "complete": "已完成",
+      "duration": "耗时",
+      "lastTrophy": "最后奖杯"
+    },
+    "players": {
+      "title": "玩家排行",
+      "recent": "最近在玩",
+      "progress": "最先完成",
+      "speedrun": "耗时最短",
+      "empty": "暂无玩家记录。"
+    },
+    "earners": {
+      "title": "近期获得的玩家",
+      "newestFirst": "最近获得在前",
+      "oldestFirst": "最早获得在前",
+      "empty": "还没有玩家获得这个奖杯。",
+      "earnedAt": "{time} 获得"
+    },
+    "tips": {
+      "title": "奖杯留言",
+      "empty": "还没有玩家留言。",
+      "total": "共 {count} 条留言",
+      "spoiler": "包含剧透，点击显示"
+    },
+    "similar": {
+      "title": "已关联的奖杯组",
+      "subtitle": "同款游戏其他平台/其他地区的奖杯组",
+      "setCount": "{n} 套奖杯",
+      "owners": "{count} 玩过"
+    },
+    "recentPlayers": {
+      "title": "最近玩家",
+      "empty": "还没有玩家记录。",
+      "hasPlatinum": "已获白金"
+    }
+  },
+  "leaderboard": {
+    "boards": "榜单",
+    "registeredOnly": "仅注册用户",
+    "totalPlayers": "共 {count} 名玩家",
+    "pickBoard": "选择榜单",
+    "empty": "暂无排名数据。",
+    "column": {
+      "rank": "排名",
+      "user": "玩家",
+      "level": "等级",
+      "points": "点数",
+      "tipCount": "心得数",
+      "voteUp": "获赞",
+      "contribution": "贡献点数"
+    },
+    "board": {
+      "points": {
+        "label": "全站点数排名",
+        "description": "按 PSN 点数计算的全站总排名"
+      },
+      "pointsRegion": {
+        "label": "地区点数排名",
+        "description": "按所选地区的玩家点数排名"
+      },
+      "tips": {
+        "label": "乐于助人排名",
+        "description": "贡献奖杯心得最多、最受认可的玩家"
+      },
+      "contribution": {
+        "label": "贡献排名",
+        "description": "按贡献点数计算的总排名"
+      }
+    }
+  },
+  "profile": {
+    "qrTitle": "个人资料二维码",
+    "tabs": {
+      "recent": "最近玩过",
+      "trophies": "获得的奖杯",
+      "milestones": "里程碑"
+    },
+    "identity": {
+      "registered": "已注册用户",
+      "unregistered": "未注册（仅同步 PSN 资料）",
+      "noAboutMe": "这个人很神秘，什么都没留下。",
+      "views": "{count} 次浏览",
+      "notRealtime": "非实时数据"
+    },
+    "actions": {
+      "interact": "互动",
+      "sync": "更新",
+      "follow": "关注",
+      "unfollow": "取消关注",
+      "following": "已关注"
+    },
+    "social": {
+      "title": "社交",
+      "followers": "粉丝",
+      "following": "关注",
+      "followsYou": "关注了你",
+      "mutual": "互相关注"
+    },
+    "stats": {
+      "title": "统计概览",
+      "games": "游戏总数",
+      "trophies": "奖杯总数",
+      "perfect": "完美",
+      "lowCompletion": "低完成率",
+      "favorites": "收藏游戏",
+      "reviews": "游戏评测",
+      "globalRank": "全球排名",
+      "regionRank": "地区排名",
+      "points": "奖杯点数",
+      "unranked": "暂无排名"
+    },
+    "summary": {
+      "level": "账户等级 · {progress}%"
+    },
+    "account": {
+      "title": "账号信息",
+      "region": "地区",
+      "language": "语言",
+      "firstTrophy": "首个奖杯",
+      "lastTrophy": "最近奖杯",
+      "joined": "加入于",
+      "syncInterval": "自动同步间隔",
+      "nextSync": "预计下次同步",
+      "hours": "{n} 小时"
+    },
+    "calendar": {
+      "title": "最近一年的活动",
+      "trophiesEarned": "获得奖杯",
+      "activeDays": "活跃天数",
+      "bestDay": "单日最高",
+      "earnedCount": "获取 {n} 个奖杯",
+      "earnedNone": "没有获取奖杯",
+      "less": "少",
+      "more": "多"
+    },
+    "milestones": {
+      "title": "奖杯里程碑",
+      "subtitle": "记录奖杯收藏中的重要时刻",
+      "nthPlatinum": "第 {n} 个白金",
+      "nthTrophy": "第 {n} 个奖杯",
+      "loadFailed": "里程碑加载失败，请稍后重试。",
+      "empty": "还没有解锁里程碑。",
+      "collapse": "收起里程碑",
+      "showMore": "查看更多里程碑（还有 {count} 条）"
+    },
+    "earned": {
+      "title": "获得的奖杯",
+      "subtitle": "按解锁时间排序的奖杯记录",
+      "total": "共 {count} 个",
+      "empty": "还没有获得奖杯。",
+      "gapTitle": "距上一个奖杯的获取间隔",
+      "gap": "间隔 {duration}"
+    },
+    "recent": {
+      "empty": "还没有游玩记录。",
+      "expand": "展开最近玩过",
+      "collapse": "收起最近玩过"
+    },
+    "log": {
+      "comingSoon": "奖杯记录功能敬请期待。"
+    },
+    "private": {
+      "title": "这是一个非公开的账户",
+      "line1": "该用户的奖杯资料为私密，无法展示详细信息。",
+      "line2": "可在 PlayStation 隐私设置中更改此设定。"
+    }
+  },
+  "sync": {
+    "heading": "同步 PSN 资料",
+    "subheading": "输入 PSN ID 提交同步至服务器同步队列，后台会按顺序处理您的请求。",
+    "cta": {
+      "submit": "提交",
+      "submitting": "提交中…"
+    },
+    "status": {
+      "queued": "排队中",
+      "calculating": "计算中",
+      "syncing": "同步中",
+      "completed": "已完成",
+      "failed": "失败"
+    },
+    "poll": {
+      "refreshing": "正在刷新进度",
+      "countdown": "{seconds} 秒后刷新"
+    },
+    "gamesUnit": "个游戏",
+    "waitingWorker": "等待 worker 领取…",
+    "calculating": "正在计算需要同步的游戏…",
+    "queueAhead": "前方还有 {badge} 个任务",
+    "currentGame": "正在同步",
+    "failedCount": "失败 {count}",
+    "skippedCount": "跳过 {count}",
+    "goToProfile": "前往个人资料",
+    "queueOverview": "{active} 个同步任务正在执行，{waiting} 人在排队。",
+    "updatedAt": "更新于 {time}",
+    "private": {
+      "title": "无法同步非公开的资料",
+      "line1": "该 PSN 资料为私密，无法同步奖杯数据。",
+      "line2": "请在 PlayStation 隐私设置中将奖杯设为公开后重试。"
+    },
+    "errors": {
+      "status": "获取同步进度失败。",
+      "submit": "提交同步请求失败。",
+      "submitRetry": "提交同步请求失败，请稍后再试。",
+      "workerUnavailable": "同步服务暂时不可用，请稍后再试。"
+    }
+  },
+  "settings": {
+    "heading": "用户设置",
+    "subheading": "管理你的账号资料与安全设置。",
+    "nav": {
+      "profile": "个人资料",
+      "security": "账号安全"
+    },
+    "profile": {
+      "heading": "个人资料",
+      "subheading": "自定义个人主页的横幅与头像展示。",
+      "loadFailed": "设置加载失败，请重试。",
+      "updatePreview": "更新预览",
+      "noChanges": "没有需要保存的更改",
+      "saved": "设置已更新",
+      "saveFailed": "保存失败",
+      "banner": {
+        "title": "个人横幅 Banner",
+        "hint": "展示在个人主页顶部的横幅图片。",
+        "urlLabel": "横幅图片 URL",
+        "sizeHint": "建议使用约 4.5:1 的宽幅图片（如 1440×320），过小的图片在大屏上可能模糊。",
+        "uploadHint": "可先用第三方图床上传图片，再把链接填到这里。直接上传功能开发中。"
+      },
+      "avatar": {
+        "title": "头像",
+        "hint": "使用同步的 PSN 头像，或填写自定义图片链接。",
+        "usePsn": "使用 PSN 头像",
+        "useCustom": "使用自定义头像",
+        "urlLabel": "头像图片 URL",
+        "urlRequired": "请填写头像图片 URL",
+        "uploadHint": "可以使用第三方图床。直接上传功能开发中。"
+      }
+    },
+    "security": {
+      "heading": "账户安全",
+      "subheading": "管理用于登录与验证身份的关键信息。",
+      "status": {
+        "email": "邮箱状态",
+        "bound": "已绑定",
+        "password": "密码",
+        "set": "已设定"
+      },
+      "errors": {
+        "generic": "操作失败，请稍后再试。"
+      },
+      "email": {
+        "label": "登录邮箱",
+        "unbound": "未绑定邮箱",
+        "editTitle": "修改登录邮箱",
+        "current": "当前：{email}",
+        "new": "新邮箱",
+        "save": "更新邮箱",
+        "saving": "更新中…",
+        "updated": "邮箱已更新。"
+      },
+      "password": {
+        "label": "账号密码",
+        "hint": "已设定，建议定期更新并避免复用其他网站密码。",
+        "editTitle": "修改账号密码",
+        "editHint": "新密码保存后，后续登录需要使用新密码。",
+        "save": "修改密码",
+        "saving": "修改中…",
+        "updated": "密码已修改。",
+        "updatedDetail": "其它设备已退出登录，当前设备无需重新登录。"
+      },
+      "strength": {
+        "label": "密码强度",
+        "empty": "等待输入",
+        "weak": "较弱",
+        "fair": "一般",
+        "good": "良好",
+        "strong": "很强",
+        "tip": "推荐使用至少 8 位，并混合大小写字母、数字和符号。"
+      }
+    },
+    "prefs": {
+      "title": "设置",
+      "lang": {
+        "title": "奖杯语言偏好",
+        "hint": "启用后，所有请求将携带你选择的语言，服务器会据此优先返回对应的奖杯翻译。",
+        "primary": "首选语言",
+        "secondary": "备选语言（可选）",
+        "unset": "不设置",
+        "sameError": "首选语言与备选语言不能相同。"
+      },
+      "rate": {
+        "title": "奖杯获取率基准",
+        "hint": "选择奖杯列表中主要显示的获取率来源：PSN 官方获取率，或 PSRay 站内获取率。"
+      },
+      "saved": {
+        "title": "设置已保存",
+        "description": "偏好已保存到本地。"
+      }
+    }
+  },
+  "seo": {
+    "home": {
+      "title": "PSRay",
+      "description": "PSRay 是一个 PSN 奖杯追踪站点：查询玩家资料、浏览奖杯组、查看排行榜。"
+    },
+    "leaderboard": {
+      "title": "排行榜 · PSRay",
+      "description": "PSN 奖杯点数、地区排名与社区贡献排行榜。"
+    },
+    "profile": {
+      "title": "{psnid} · 个人资料 · PSRay",
+      "titleFallback": "个人资料 · PSRay",
+      "description": "{psnid} 的 PSN 奖杯战绩：已获奖杯、里程碑与最近游玩记录。"
+    },
+    "trophy": {
+      "title": "{name} · 奖杯 · PSRay",
+      "titleFallback": "奖杯组 · PSRay",
+      "description": "{name}（{platform}）的全部 {count} 个奖杯：获取率、稀有度与攻略心得。"
+    },
+    "login": {
+      "title": "登录 · PSRay",
+      "description": "登录你的 PSRay 账号。"
+    },
+    "register": {
+      "title": "注册 · PSRay",
+      "description": "使用 PSN 账户注册 PSRay。"
+    },
+    "sync": {
+      "title": "同步资料 · PSRay",
+      "description": "将 PSN 奖杯数据同步到 PSRay。"
+    },
+    "settings": {
+      "title": "用户设置 · PSRay"
+    }
+  }
+}

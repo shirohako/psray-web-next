@@ -20,12 +20,14 @@ const props = defineProps<{
   number: number
 }>()
 
+const { t } = useI18n()
+
 const name = computed(() => props.trophy.localized_name || props.trophy.name)
 const detail = computed(() => props.trophy.localized_detail || props.trophy.detail)
 const showEarned = computed(() => props.hasViewer && props.earned)
 
-// Headline earn rate follows the site-wide "获取率基准" preference; the tooltip
-// still lists both PSN and PSRay rates regardless.
+// Headline earn rate follows the site-wide earn-rate-basis preference; the
+// tooltip still lists both PSN and PSRay rates regardless.
 const { rateBasis } = usePreferences()
 const primaryRateLabel = computed(() => (rateBasis.value === 'psray' ? 'PSRay' : 'PSN'))
 const primaryRate = computed(() =>
@@ -50,7 +52,7 @@ const masked = computed(() => {
 function toggleMask() {
   override.value = !masked.value
 }
-const displayName = computed(() => (masked.value ? '隐藏奖杯' : name.value))
+const displayName = computed(() => (masked.value ? t('trophy.item.hidden') : name.value))
 const displayDetail = computed(() => (masked.value ? '' : detail.value))
 function fmtRate(rate: number | string) {
   const n = Number(rate)
@@ -74,9 +76,12 @@ async function copy(text: string, label: string) {
   if (!text || !import.meta.client) return
   try {
     await navigator.clipboard.writeText(text)
-    toast.success({ title: `已复制${label}` })
+    toast.success({ title: t('toast.copied', { label }) })
   } catch {
-    toast.error({ title: '复制失败', description: '请检查浏览器的剪贴板权限。' })
+    toast.error({
+      title: t('toast.copyFailed.title'),
+      description: t('toast.copyFailed.description'),
+    })
   }
 }
 
@@ -113,7 +118,7 @@ const tipsOpen = ref(false)
         <span
           v-if="showEarned"
           class="absolute -right-1.5 -top-1.5 grid size-5 place-items-center rounded-full border-2 border-white bg-slate-900 text-white shadow-sm"
-          title="已获得"
+          :title="$t('trophy.item.earned')"
         >
           <LucideIcon :icon="Check" class="size-3" stroke-width="3" />
         </span>
@@ -128,7 +133,7 @@ const tipsOpen = ref(false)
           v-if="trophy.is_hidden && !earned"
           type="button"
           class="inline-flex items-center rounded bg-slate-100 p-1 text-slate-500 transition hover:bg-slate-200 hover:text-slate-700"
-          :title="masked ? '显示该隐藏奖杯' : '隐藏该奖杯'"
+          :title="masked ? $t('trophy.item.reveal') : $t('trophy.item.mask')"
           @click.stop="toggleMask"
         >
           <LucideIcon :icon="masked ? EyeOff : Eye" class="size-3" />
@@ -140,7 +145,7 @@ const tipsOpen = ref(false)
         class="mt-1 flex max-w-full flex-wrap items-center gap-x-2.5 gap-y-1 text-[11px] font-medium leading-none text-slate-400"
       >
         <!-- When the viewer earned it -->
-        <span class="inline-flex min-w-0 items-center gap-1" title="获得时间">
+        <span class="inline-flex min-w-0 items-center gap-1" :title="$t('trophy.item.earnedAt')">
           <LucideIcon :icon="Clock3" class="size-3 shrink-0" />
           <span class="truncate tabular-nums">{{ fmtDateTime(earnedAt) }}</span>
         </span>
@@ -157,9 +162,9 @@ const tipsOpen = ref(false)
               <div class="min-w-0">
                 <div class="flex items-center gap-1.5 text-[10px] font-medium text-slate-400">
                   <LucideIcon :icon="Medal" class="size-3" />
-                  获得顺序
+                  {{ $t('trophy.item.earnedOrder') }}
                 </div>
-                <div class="mt-1.5 text-sm font-semibold leading-none text-white">首个获得</div>
+                <div class="mt-1.5 text-sm font-semibold leading-none text-white">{{ $t('trophy.item.firstEarned') }}</div>
               </div>
               <div class="shrink-0 text-base font-bold tabular-nums text-slate-300">#{{ earnedOrder }}</div>
             </div>
@@ -167,7 +172,7 @@ const tipsOpen = ref(false)
               <div class="min-w-0">
                 <div class="flex items-center gap-1.5 text-[10px] font-medium text-slate-400">
                   <LucideIcon :icon="Timer" class="size-3" />
-                  相对上一个奖杯
+                  {{ $t('trophy.item.sincePrevious') }}
                 </div>
                 <div class="mt-1.5 text-sm font-semibold leading-none text-white tabular-nums">+ {{ fmtEarnGap(earnedGap) }}</div>
               </div>
@@ -188,11 +193,11 @@ const tipsOpen = ref(false)
         <template #content>
           <div class="space-y-1">
             <div class="flex items-center justify-between gap-4">
-              <span class="text-slate-300">PSN 完成率</span>
+              <span class="text-slate-300">{{ $t('trophy.item.psnRate') }}</span>
               <span class="font-semibold tabular-nums">{{ fmtRate(trophy.psn_earned_rate) }}</span>
             </div>
             <div class="flex items-center justify-between gap-4">
-              <span class="text-slate-300">PSRay 完成率</span>
+              <span class="text-slate-300">{{ $t('trophy.item.psrayRate') }}</span>
               <span class="font-semibold tabular-nums">{{ fmtRate(trophy.psray_rate) }}</span>
             </div>
           </div>
@@ -204,7 +209,7 @@ const tipsOpen = ref(false)
       <button
         type="button"
         class="relative grid size-6 place-items-center rounded-full border border-slate-200 bg-white text-slate-500 shadow-sm transition hover:border-slate-300 hover:bg-slate-50 hover:text-slate-900 sm:size-7"
-        title="留言"
+        :title="$t('trophy.item.tips')"
         @click.stop="tipsOpen = true"
       >
         <LucideIcon :icon="MessageSquare" class="size-3 sm:size-3.5" />
@@ -225,25 +230,25 @@ const tipsOpen = ref(false)
         @click="detailOpen = true; close()"
       >
         <LucideIcon :icon="Info" class="size-4 text-slate-400" />
-        查看奖杯
+        {{ $t('trophy.item.menu.view') }}
       </button>
       <button
         type="button"
         role="menuitem"
         class="flex w-full items-center gap-2.5 px-3 py-2 text-left text-slate-700 transition hover:bg-slate-50"
-        @click="copy(name, '奖杯标题'); close()"
+        @click="copy(name, $t('trophy.item.menu.titleLabel')); close()"
       >
         <LucideIcon :icon="Copy" class="size-4 text-slate-400" />
-        复制奖杯标题
+        {{ $t('trophy.item.menu.copyTitle') }}
       </button>
       <button
         type="button"
         role="menuitem"
         class="flex w-full items-center gap-2.5 px-3 py-2 text-left text-slate-700 transition hover:bg-slate-50"
-        @click="copy(detail, '奖杯描述'); close()"
+        @click="copy(detail, $t('trophy.item.menu.detailLabel')); close()"
       >
         <LucideIcon :icon="FileText" class="size-4 text-slate-400" />
-        复制奖杯描述
+        {{ $t('trophy.item.menu.copyDetail') }}
       </button>
       <button
         type="button"
@@ -252,7 +257,7 @@ const tipsOpen = ref(false)
         @click="earnersOpen = true; close()"
       >
         <LucideIcon :icon="Users" class="size-4 text-slate-400" />
-        查看近期获得的玩家
+        {{ $t('trophy.item.menu.recentEarners') }}
       </button>
     </template>
   </Popover>

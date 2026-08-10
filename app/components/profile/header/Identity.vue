@@ -28,25 +28,25 @@ const isRegistered = computed(() => props.profile.registered_at != null)
           :icon="BadgeCheck"
           class="size-4 shrink-0"
           :class="isRegistered ? 'text-sky-600' : 'text-slate-300'"
-          :title="isRegistered ? '已注册用户' : '未注册（仅同步 PSN 资料）'"
+          :title="isRegistered ? $t('profile.identity.registered') : $t('profile.identity.unregistered')"
         />
         <span
           v-if="profile.is_follower"
           class="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-500"
-        >关注了你</span>
+        >{{ $t('profile.social.followsYou') }}</span>
       </div>
       <p class="mt-1 max-w-prose text-sm text-slate-500">
-        {{ profile.about_me || '这个人很神秘，什么都没留下。' }}
+        {{ profile.about_me || $t('profile.identity.noAboutMe') }}
       </p>
       <div class="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-500">
         <span class="inline-flex items-center gap-1">
           <RegionFlag :country="profile.country" /> {{ regionName(profile.country) }}
         </span>
         <span class="inline-flex items-center gap-1">
-          <LucideIcon :icon="Eye" class="size-3.5 text-slate-400" /> {{ fmt(profile.page_view_count) }} 次浏览
+          <LucideIcon :icon="Eye" class="size-3.5 text-slate-400" /> {{ $t('profile.identity.views', { count: fmt(profile.page_view_count) }) }}
         </span>
         <span class="inline-flex items-center gap-1">
-          <LucideIcon :icon="RefreshCw" class="size-3.5 text-slate-400" /> 更新于 {{ fmtDateTime(profile.updated_at) }}
+          <LucideIcon :icon="RefreshCw" class="size-3.5 text-slate-400" /> {{ $t('common.updatedAt', { time: fmtDateTime(profile.updated_at) }) }}
         </span>
       </div>
     </div>

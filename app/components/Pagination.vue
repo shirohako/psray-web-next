@@ -49,7 +49,7 @@ function goto(p: number) {
       :disabled="page <= 1"
       @click="goto(page - 1)"
       class="grid size-7 place-items-center rounded-md text-slate-500 transition hover:bg-slate-100 hover:text-slate-900 disabled:opacity-30 disabled:hover:bg-transparent"
-      aria-label="上一页"
+      :aria-label="$t('common.previousPage')"
     >
       <LucideIcon :icon="ChevronLeft" class="size-3.5" />
     </button>
@@ -74,7 +74,7 @@ function goto(p: number) {
       :disabled="page >= totalPages"
       @click="goto(page + 1)"
       class="grid size-7 place-items-center rounded-md text-slate-500 transition hover:bg-slate-100 hover:text-slate-900 disabled:opacity-30 disabled:hover:bg-transparent"
-      aria-label="下一页"
+      :aria-label="$t('common.nextPage')"
     >
       <LucideIcon :icon="ChevronRight" class="size-3.5" />
     </button>

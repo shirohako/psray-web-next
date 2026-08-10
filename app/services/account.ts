@@ -1,7 +1,7 @@
 import type { ApiSuccess } from '~/types/api'
 
 /**
- * Account self-service mutations for the 用户设置 (settings) pages: banner +
+ * Account self-service mutations for the user-settings pages: banner +
  * avatar settings, avatar upload, email + password changes.
  *
  * Mirrors `useAuthApi()` in `~/services/auth` — thin wrappers over `useApi()`.

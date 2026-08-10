@@ -2,7 +2,12 @@
 import { CircleCheck, Circle, Ellipsis, Check } from 'lucide'
 import type { LeaderboardRow, LeaderboardMeta } from '~/services/leaderboard'
 
-useHead({ title: '排行榜 · PSRay' })
+const { t } = useI18n()
+
+useSeo({
+  title: () => t('seo.leaderboard.title'),
+  description: () => t('seo.leaderboard.description'),
+})
 
 // All available boards (registry). Each owns its label, icon, filters, columns
 // and fetcher — see `useRankingBoards`.
@@ -24,6 +29,9 @@ const registeredOnly = ref(false)
 const page = ref(1)
 
 // One fetcher driven by the active board; SSR-rendered, re-run via `reload()`.
+// The key is static and carries no locale: leaderboard rows are PSN IDs and
+// numbers, with no localized body text to refetch on a language switch. Add the
+// locale to the key if the backend ever starts translating anything here.
 const { data, status, refresh } = await useAsyncData('leaderboard', () =>
   board.value.fetch({ page: page.value, registeredOnly: registeredOnly.value, region: region.value }),
 )
@@ -59,7 +67,7 @@ watch([region, registeredOnly], () => reload())
     <!-- Left: vertical board switcher -->
     <aside class="lg:w-48 lg:shrink-0">
       <nav class="flex flex-col gap-1 rounded-xl border border-slate-200/80 bg-white p-2 shadow-sm">
-        <p class="px-2 pb-1.5 pt-1 text-[10px] font-semibold uppercase tracking-wider text-slate-400">榜单</p>
+        <p class="px-2 pb-1.5 pt-1 text-[10px] font-semibold uppercase tracking-wider text-slate-400">{{ $t('leaderboard.boards') }}</p>
         <button
           v-for="(b, idx) in boards"
           :key="b.key"
@@ -81,7 +89,7 @@ watch([region, registeredOnly], () => reload())
           >
             <LucideIcon :icon="b.icon" class="size-3.5" />
           </span>
-          <span class="truncate">{{ b.label }}</span>
+          <span class="truncate">{{ $t(b.labelKey) }}</span>
         </button>
 
         <!-- Mobile: reveal the collapsed boards in a picker -->
@@ -100,7 +108,7 @@ watch([region, registeredOnly], () => reload())
           >
             <LucideIcon :icon="Ellipsis" class="size-3.5" />
           </span>
-          <span class="truncate">显示更多</span>
+          <span class="truncate">{{ $t('common.showMore') }}</span>
         </button>
       </nav>
     </aside>
@@ -114,8 +122,8 @@ watch([region, registeredOnly], () => reload())
             <LucideIcon :icon="board.icon" class="size-5" />
           </span>
           <div class="min-w-0">
-            <h2 class="text-base font-bold text-slate-900">{{ board.label }}</h2>
-            <p class="truncate text-xs text-slate-400">{{ board.description }}</p>
+            <h2 class="text-base font-bold text-slate-900">{{ $t(board.labelKey) }}</h2>
+            <p class="truncate text-xs text-slate-400">{{ $t(board.descriptionKey) }}</p>
           </div>
         </div>
 
@@ -131,7 +139,7 @@ watch([region, registeredOnly], () => reload())
             @click="registeredOnly = !registeredOnly"
           >
             <LucideIcon :icon="registeredOnly ? CircleCheck : Circle" class="size-4" />
-            仅注册用户
+            {{ $t('leaderboard.registeredOnly') }}
           </button>
         </div>
       </div>
@@ -139,7 +147,7 @@ watch([region, registeredOnly], () => reload())
       <LeaderboardTable :columns="board.columns" :rows="rows" :pending="pending">
         <template #footer>
           <div class="flex items-center justify-between gap-3">
-            <span class="text-xs text-slate-400">共 {{ fmt(meta?.total) }} 名玩家</span>
+            <span class="text-xs text-slate-400">{{ $t('leaderboard.totalPlayers', { count: fmt(meta?.total) }) }}</span>
             <Pagination :page="page" :total-pages="totalPages" @update:page="setPage" />
           </div>
         </template>
@@ -148,7 +156,7 @@ watch([region, registeredOnly], () => reload())
   </div>
 
   <!-- Mobile board picker -->
-  <Dialog v-model:open="pickerOpen" title="选择榜单" size="sm">
+  <Dialog v-model:open="pickerOpen" :title="$t('leaderboard.pickBoard')" size="sm">
     <div class="p-2">
       <button
         v-for="b in boards"
@@ -161,8 +169,8 @@ watch([region, registeredOnly], () => reload())
           <LucideIcon :icon="b.icon" class="size-4" />
         </span>
         <span class="min-w-0 flex-1">
-          <span class="block truncate text-sm font-semibold text-slate-900">{{ b.label }}</span>
-          <span class="block truncate text-xs text-slate-400">{{ b.description }}</span>
+          <span class="block truncate text-sm font-semibold text-slate-900">{{ $t(b.labelKey) }}</span>
+          <span class="block truncate text-xs text-slate-400">{{ $t(b.descriptionKey) }}</span>
         </span>
         <LucideIcon v-if="b.key === activeKey" :icon="Check" class="size-4 shrink-0 text-slate-900" />
       </button>

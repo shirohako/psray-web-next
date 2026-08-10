@@ -4,6 +4,7 @@ import { useAccountApi } from '~/services/account'
 import { ApiError } from '~/utils/ApiError'
 
 const { user, fetchMe } = useAuth()
+const { t } = useI18n()
 const toast = useToast()
 const api = useAccountApi()
 
@@ -14,7 +15,7 @@ const api = useAccountApi()
  */
 function mapError(error: unknown, byCode: Record<string, string> = {}): Record<string, string> {
   if (!(error instanceof ApiError)) {
-    toast.error({ title: '操作失败，请稍后再试。' })
+    toast.error({ title: t('settings.security.errors.generic') })
     return {}
   }
   const fields = error.isValidation ? error.fieldErrors() : {}
@@ -35,7 +36,7 @@ const emailErrors = ref<Record<string, string>>({})
 
 let cooldownTimer: ReturnType<typeof setInterval> | undefined
 
-const currentEmail = computed(() => user.value?.email || '未绑定邮箱')
+const currentEmail = computed(() => user.value?.email || t('settings.security.email.unbound'))
 const canSendCode = computed(() => newEmail.value.trim() !== '' && codeCooldown.value === 0 && !codeSending.value)
 const canSaveEmail = computed(() =>
   newEmail.value.trim() !== '' && emailCode.value.trim() !== '' && emailPassword.value !== '',
@@ -75,7 +76,7 @@ async function sendCode() {
   emailErrors.value = {}
   try {
     const res = await api.sendEmailCode({ email: newEmail.value.trim() })
-    toast.success({ title: res.message || '验证码已发送，请查收邮件。' })
+    toast.success({ title: res.message || t('auth.register.codeSent') })
     startCooldown(60)
   }
   catch (error) {
@@ -96,7 +97,7 @@ async function saveEmail() {
       email: newEmail.value.trim(),
       code: emailCode.value.trim(),
     })
-    toast.success({ title: res.message || '邮箱已更新。' })
+    toast.success({ title: res.message || t('settings.security.email.updated') })
     await fetchMe()
     cancelEmail()
   }
@@ -135,11 +136,11 @@ const passwordStrength = computed(() => {
   if (/\d/.test(value)) score += 1
   if (/[^A-Za-z0-9]/.test(value)) score += 1
 
-  if (!value) return { score: 0, label: '等待输入', color: 'bg-slate-200', text: 'text-slate-400' }
-  if (score <= 1) return { score, label: '较弱', color: 'bg-rose-400', text: 'text-rose-500' }
-  if (score === 2) return { score, label: '一般', color: 'bg-amber-400', text: 'text-amber-500' }
-  if (score === 3) return { score, label: '良好', color: 'bg-sky-500', text: 'text-sky-600' }
-  return { score, label: '很强', color: 'bg-emerald-500', text: 'text-emerald-600' }
+  if (!value) return { score: 0, label: t('settings.security.strength.empty'), color: 'bg-slate-200', text: 'text-slate-400' }
+  if (score <= 1) return { score, label: t('settings.security.strength.weak'), color: 'bg-rose-400', text: 'text-rose-500' }
+  if (score === 2) return { score, label: t('settings.security.strength.fair'), color: 'bg-amber-400', text: 'text-amber-500' }
+  if (score === 3) return { score, label: t('settings.security.strength.good'), color: 'bg-sky-500', text: 'text-sky-600' }
+  return { score, label: t('settings.security.strength.strong'), color: 'bg-emerald-500', text: 'text-emerald-600' }
 })
 
 function cancelPassword() {
@@ -153,14 +154,17 @@ function cancelPassword() {
 async function savePassword() {
   if (pwSaving.value) return
   if (pwMismatch.value) {
-    pwErrors.value = { confirm: '两次输入的密码不一致' }
+    pwErrors.value = { confirm: t('auth.field.passwordMismatch') }
     return
   }
   pwSaving.value = true
   pwErrors.value = {}
   try {
     const res = await api.changePassword({ current_password: currentPassword.value, new_password: newPassword.value })
-    toast.success({ title: res.message || '密码已修改。', description: '其它设备已退出登录，当前设备无需重新登录。' })
+    toast.success({
+      title: res.message || t('settings.security.password.updated'),
+      description: t('settings.security.password.updatedDetail'),
+    })
     cancelPassword()
   }
   catch (error) {
@@ -183,25 +187,25 @@ async function savePassword() {
             </span>
             <div class="min-w-0">
               <p class="text-xs font-semibold uppercase tracking-wide text-sky-200">Security center</p>
-              <h3 class="mt-1 text-xl font-bold tracking-tight text-white">账户安全</h3>
+              <h3 class="mt-1 text-xl font-bold tracking-tight text-white">{{ $t('settings.security.heading') }}</h3>
               <p class="mt-1 max-w-xl text-sm leading-relaxed text-stone-300">
-                管理用于登录与验证身份的关键信息。
+                {{ $t('settings.security.subheading') }}
               </p>
             </div>
           </div>
           <div class="grid grid-cols-2 gap-2 sm:w-48">
             <div class="rounded-lg bg-white/8 p-3 ring-1 ring-white/10">
-              <p class="text-[11px] font-medium text-stone-400">邮箱状态</p>
+              <p class="text-[11px] font-medium text-stone-400">{{ $t('settings.security.status.email') }}</p>
               <p class="mt-1 flex items-center gap-1.5 text-sm font-semibold text-emerald-300">
                 <LucideIcon :icon="BadgeCheck" class="size-4" />
-                已绑定
+                {{ $t('settings.security.status.bound') }}
               </p>
             </div>
             <div class="rounded-lg bg-white/8 p-3 ring-1 ring-white/10">
-              <p class="text-[11px] font-medium text-stone-400">密码</p>
+              <p class="text-[11px] font-medium text-stone-400">{{ $t('settings.security.status.password') }}</p>
               <p class="mt-1 flex items-center gap-1.5 text-sm font-semibold text-emerald-300">
                 <LucideIcon :icon="BadgeCheck" class="size-4" />
-                已设定
+                {{ $t('settings.security.status.set') }}
               </p>
             </div>
           </div>
@@ -221,13 +225,13 @@ async function savePassword() {
               <LucideIcon :icon="AtSign" class="size-5" />
             </span>
             <span class="min-w-0">
-              <span class="block text-sm font-semibold text-slate-900">登录邮箱</span>
+              <span class="block text-sm font-semibold text-slate-900">{{ $t('settings.security.email.label') }}</span>
               <span class="mt-1 block truncate text-sm text-slate-500">{{ currentEmail }}</span>
             </span>
           </span>
           <span class="inline-flex shrink-0 items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-600 shadow-sm transition group-hover:border-sky-200 group-hover:text-sky-700">
             <LucideIcon :icon="Pencil" class="size-4" />
-            修改
+            {{ $t('common.edit') }}
             <LucideIcon :icon="ChevronRight" class="size-4 text-slate-400" />
           </span>
         </button>
@@ -238,8 +242,8 @@ async function savePassword() {
               <LucideIcon :icon="AtSign" class="size-5" />
             </span>
             <div class="min-w-0">
-              <h4 class="text-sm font-semibold text-slate-900">修改登录邮箱</h4>
-              <p class="mt-1 truncate text-sm text-slate-500">当前：{{ currentEmail }}</p>
+              <h4 class="text-sm font-semibold text-slate-900">{{ $t('settings.security.email.editTitle') }}</h4>
+              <p class="mt-1 truncate text-sm text-slate-500">{{ $t('settings.security.email.current', { email: currentEmail }) }}</p>
             </div>
           </div>
 
@@ -250,7 +254,7 @@ async function savePassword() {
                 v-model="newEmail"
                 class="flex-1"
                 compact
-                label="新邮箱"
+                :label="$t('settings.security.email.new')"
                 type="email"
                 :icon="Mail"
                 placeholder="you@example.com"
@@ -264,7 +268,9 @@ async function savePassword() {
                 @click="sendCode"
               >
                 <LucideIcon :icon="codeSending ? Loader2 : Send" class="size-4" :class="codeSending && 'animate-spin'" />
-                {{ codeCooldown > 0 ? `${codeCooldown}s 后重试` : (codeSending ? '发送中…' : '发送验证码') }}
+                {{ codeCooldown > 0
+                  ? $t('auth.register.cta.resendIn', { seconds: codeCooldown })
+                  : (codeSending ? $t('auth.register.cta.sending') : $t('auth.register.cta.sendCode')) }}
               </button>
             </div>
 
@@ -273,17 +279,17 @@ async function savePassword() {
               <AuthField
                 v-model="emailCode"
                 compact
-                label="验证码"
+                :label="$t('auth.field.code')"
                 type="text"
                 :icon="KeyRound"
-                placeholder="6 位验证码"
+                :placeholder="$t('auth.field.codePlaceholder')"
                 autocomplete="one-time-code"
                 :error="emailErrors.code"
               />
               <AuthField
                 v-model="emailPassword"
                 compact
-                label="当前密码"
+                :label="$t('auth.field.currentPassword')"
                 type="password"
                 :icon="Lock"
                 placeholder="••••••••"
@@ -298,7 +304,7 @@ async function savePassword() {
                 class="inline-flex items-center rounded-lg px-4 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-100 hover:text-slate-900"
                 @click="cancelEmail"
               >
-                取消
+                {{ $t('common.cancel') }}
               </button>
               <button
                 type="submit"
@@ -306,7 +312,7 @@ async function savePassword() {
                 class="inline-flex items-center gap-1.5 rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm shadow-slate-900/20 transition hover:bg-slate-800 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50"
               >
                 <LucideIcon v-if="emailSaving" :icon="Loader2" class="size-4 animate-spin" />
-                {{ emailSaving ? '更新中…' : '更新邮箱' }}
+                {{ emailSaving ? $t('settings.security.email.saving') : $t('settings.security.email.save') }}
               </button>
             </div>
           </form>
@@ -326,13 +332,13 @@ async function savePassword() {
               <LucideIcon :icon="KeyRound" class="size-5" />
             </span>
             <span class="min-w-0">
-              <span class="block text-sm font-semibold text-slate-900">账号密码</span>
-              <span class="mt-1 block text-sm text-slate-500">已设定，建议定期更新并避免复用其他网站密码。</span>
+              <span class="block text-sm font-semibold text-slate-900">{{ $t('settings.security.password.label') }}</span>
+              <span class="mt-1 block text-sm text-slate-500">{{ $t('settings.security.password.hint') }}</span>
             </span>
           </span>
           <span class="inline-flex shrink-0 items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-600 shadow-sm transition group-hover:border-violet-200 group-hover:text-violet-700">
             <LucideIcon :icon="Pencil" class="size-4" />
-            修改
+            {{ $t('common.edit') }}
             <LucideIcon :icon="ChevronRight" class="size-4 text-slate-400" />
           </span>
         </button>
@@ -343,8 +349,8 @@ async function savePassword() {
               <LucideIcon :icon="KeyRound" class="size-5" />
             </span>
             <div class="min-w-0">
-              <h4 class="text-sm font-semibold text-slate-900">修改账号密码</h4>
-              <p class="mt-1 text-sm text-slate-500">新密码保存后，后续登录需要使用新密码。</p>
+              <h4 class="text-sm font-semibold text-slate-900">{{ $t('settings.security.password.editTitle') }}</h4>
+              <p class="mt-1 text-sm text-slate-500">{{ $t('settings.security.password.editHint') }}</p>
             </div>
           </div>
 
@@ -353,7 +359,7 @@ async function savePassword() {
               <AuthField
                 v-model="currentPassword"
                 compact
-                label="当前密码"
+                :label="$t('auth.field.currentPassword')"
                 type="password"
                 :icon="Lock"
                 placeholder="••••••••"
@@ -363,7 +369,7 @@ async function savePassword() {
               <AuthField
                 v-model="newPassword"
                 compact
-                label="新密码"
+                :label="$t('auth.field.newPassword')"
                 type="password"
                 :icon="Lock"
                 placeholder="••••••••"
@@ -374,19 +380,19 @@ async function savePassword() {
                 <AuthField
                   v-model="confirmPassword"
                   compact
-                  label="确认新密码"
+                  :label="$t('auth.field.confirmNewPassword')"
                   type="password"
                   :icon="Lock"
                   placeholder="••••••••"
                   autocomplete="new-password"
-                  :error="pwErrors.confirm || (pwMismatch ? '两次输入的密码不一致' : undefined)"
+                  :error="pwErrors.confirm || (pwMismatch ? $t('auth.field.passwordMismatch') : undefined)"
                 />
               </div>
             </div>
 
             <div class="rounded-lg bg-slate-50 p-3 ring-1 ring-slate-200">
               <div class="mb-2 flex items-center justify-between gap-3">
-                <span class="text-xs font-medium text-slate-500">密码强度</span>
+                <span class="text-xs font-medium text-slate-500">{{ $t('settings.security.strength.label') }}</span>
                 <span class="text-xs font-semibold sm:hidden" :class="passwordStrength.text">{{ passwordStrength.label }}</span>
               </div>
               <div class="grid grid-cols-4 gap-1.5">
@@ -397,7 +403,7 @@ async function savePassword() {
                   :class="step <= passwordStrength.score ? passwordStrength.color : 'bg-slate-200'"
                 />
               </div>
-              <p class="mt-2 text-xs leading-relaxed text-slate-400">推荐使用至少 8 位，并混合大小写字母、数字和符号。</p>
+              <p class="mt-2 text-xs leading-relaxed text-slate-400">{{ $t('settings.security.strength.tip') }}</p>
             </div>
 
             <div class="flex justify-end gap-2">
@@ -406,7 +412,7 @@ async function savePassword() {
                 class="inline-flex items-center rounded-lg px-4 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-100 hover:text-slate-900"
                 @click="cancelPassword"
               >
-                取消
+                {{ $t('common.cancel') }}
               </button>
               <button
                 type="submit"
@@ -414,7 +420,7 @@ async function savePassword() {
                 class="inline-flex items-center gap-1.5 rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm shadow-slate-900/20 transition hover:bg-slate-800 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50"
               >
                 <LucideIcon v-if="pwSaving" :icon="Loader2" class="size-4 animate-spin" />
-                {{ pwSaving ? '修改中…' : '修改密码' }}
+                {{ pwSaving ? $t('settings.security.password.saving') : $t('settings.security.password.save') }}
               </button>
             </div>
           </form>

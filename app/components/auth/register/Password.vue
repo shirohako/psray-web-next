@@ -9,24 +9,24 @@ const confirmPassword = defineModel<string>('confirmPassword', { required: true 
 
 <template>
   <div class="space-y-5">
-    <p class="text-sm text-slate-500">为你的账号设置一个安全的登录密码。</p>
+    <p class="text-sm text-slate-500">{{ $t('auth.register.password.hint') }}</p>
     <AuthField
       v-model="password"
-      label="密码"
+      :label="$t('auth.field.password')"
       type="password"
       :icon="Lock"
-      placeholder="至少 8 位字符"
+      :placeholder="$t('auth.field.passwordPlaceholder')"
       autocomplete="new-password"
       :error="passwordError"
     />
     <AuthField
       v-model="confirmPassword"
-      label="确认密码"
+      :label="$t('auth.field.confirmPassword')"
       type="password"
       :icon="Lock"
-      placeholder="再次输入密码"
+      :placeholder="$t('auth.field.confirmPasswordPlaceholder')"
       autocomplete="new-password"
-      :error="mismatch ? '两次输入的密码不一致' : undefined"
+      :error="mismatch ? $t('auth.field.passwordMismatch') : undefined"
     />
   </div>
 </template>

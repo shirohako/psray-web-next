@@ -12,15 +12,16 @@ export interface LeaderboardCtx {
 
 /**
  * One ranking board. A board fully describes itself: how it looks in the nav
- * (`label` + `icon`), which filters it supports (`region` / `registered`),
+ * (`labelKey` + `icon`), which filters it supports (`region` / `registered`),
  * which columns it renders, and how to fetch its data. Adding a new board is a
  * single entry here — the page nav, filters and table all adapt.
  */
 export interface LeaderboardBoard {
   key: string
-  label: string
-  /** One-line subtitle shown in the board header. */
-  description: string
+  /** Message key for the nav label; resolved at render so it follows the locale. */
+  labelKey: string
+  /** Message key for the one-line subtitle shown in the board header. */
+  descriptionKey: string
   icon: IconNode
   columns: LeaderboardColumn[]
   /** Show the region picker and pass `region` to `fetch`. */
@@ -40,8 +41,8 @@ export function useRankingBoards(): LeaderboardBoard[] {
   return [
     {
       key: 'points',
-      label: '全站点数排名',
-      description: '按 PSN 点数计算的全站总排名',
+      labelKey: 'leaderboard.board.points.label',
+      descriptionKey: 'leaderboard.board.points.description',
       icon: Coins,
       columns: ['rank', 'user', 'level', 'platinum', 'gold', 'silver', 'bronze', 'points'],
       registered: true,
@@ -49,8 +50,8 @@ export function useRankingBoards(): LeaderboardBoard[] {
     },
     {
       key: 'points-region',
-      label: '地区点数排名',
-      description: '按所选地区的玩家点数排名',
+      labelKey: 'leaderboard.board.pointsRegion.label',
+      descriptionKey: 'leaderboard.board.pointsRegion.description',
       icon: Globe2,
       columns: ['rank', 'user', 'level', 'platinum', 'gold', 'silver', 'bronze', 'points'],
       region: true,
@@ -60,16 +61,16 @@ export function useRankingBoards(): LeaderboardBoard[] {
     },
     {
       key: 'tips',
-      label: '乐于助人排名',
-      description: '贡献奖杯心得最多、最受认可的玩家',
+      labelKey: 'leaderboard.board.tips.label',
+      descriptionKey: 'leaderboard.board.tips.description',
       icon: HeartHandshake,
       columns: ['rank', 'user', 'tipCount', 'voteUp'],
       fetch: ({ page }) => api.tips({ page }),
     },
     {
       key: 'contribution',
-      label: '贡献排名',
-      description: '按贡献点数计算的总排名',
+      labelKey: 'leaderboard.board.contribution.label',
+      descriptionKey: 'leaderboard.board.contribution.description',
       icon: Share2,
       columns: ['rank', 'user', 'contribution'],
       fetch: ({ page }) => api.contribution({ page }),

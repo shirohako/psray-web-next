@@ -2,11 +2,19 @@
 import { Mail, Lock, ArrowRight } from 'lucide'
 import { ApiError } from '~/utils/ApiError'
 
-useHead({ title: '登录 · PSRay' })
 definePageMeta({ guestOnly: true })
 
 const auth = useAuth()
 const route = useRoute()
+const { t } = useI18n()
+
+useSeo({
+  title: () => t('seo.login.title'),
+  description: () => t('seo.login.description'),
+  // A sign-in form has no content to rank for, and `?redirect=` would multiply
+  // it into near-duplicates.
+  noindex: true,
+})
 
 const loginId = ref('')
 const password = ref('')
@@ -30,27 +38,27 @@ function setLoginError(error: unknown) {
   fieldErrors.value = {}
 
   if (!(error instanceof ApiError)) {
-    errorMessage.value = '登录失败，请稍后再试。'
+    errorMessage.value = t('auth.login.errors.generic')
     return
   }
 
   if (error.isValidation) {
     fieldErrors.value = error.fieldErrors()
-    errorMessage.value = '请检查登录信息。'
+    errorMessage.value = t('auth.login.errors.checkFields')
     return
   }
 
   if (error.code === 'INVALID_CREDENTIALS') {
-    errorMessage.value = '账号或密码错误。'
+    errorMessage.value = t('errors.api.INVALID_CREDENTIALS')
     return
   }
 
   if (error.code === 'ACCOUNT_TERMINATED') {
-    errorMessage.value = '账号已被封禁。'
+    errorMessage.value = t('errors.api.ACCOUNT_TERMINATED')
     return
   }
 
-  errorMessage.value = error.message || '登录失败，请稍后再试。'
+  errorMessage.value = error.message || t('auth.login.errors.generic')
 }
 
 async function onSubmit() {
@@ -78,8 +86,8 @@ async function onSubmit() {
   <AuthShell>
     <div class="space-y-8">
       <header class="animate-rise" style="animation-delay: 0.05s">
-        <h1 class="text-2xl font-bold tracking-tight text-slate-900">欢迎回来</h1>
-        <p class="mt-2 text-sm text-slate-500">旅途还没有结束，尽头是星辰大海。</p>
+        <h1 class="text-2xl font-bold tracking-tight text-slate-900">{{ $t('auth.login.heading') }}</h1>
+        <p class="mt-2 text-sm text-slate-500">{{ $t('auth.login.tagline') }}</p>
       </header>
 
       <form class="space-y-5" @submit.prevent="onSubmit">
@@ -98,7 +106,7 @@ async function onSubmit() {
         <div class="animate-rise" style="animation-delay: 0.18s">
           <AuthField
             v-model="password"
-            label="密码"
+            :label="$t('auth.field.password')"
             type="password"
             :icon="Lock"
             placeholder="••••••••"
@@ -117,7 +125,7 @@ async function onSubmit() {
 
         <div class="flex items-center justify-end animate-rise" style="animation-delay: 0.24s">
           <a href="#" class="text-sm font-medium text-slate-500 transition hover:text-slate-900">
-            忘记密码？
+            {{ $t('auth.login.forgotPassword') }}
           </a>
         </div>
 
@@ -127,7 +135,7 @@ async function onSubmit() {
           class="group flex w-full items-center justify-center gap-2 rounded-xl bg-slate-900 py-3.5 text-sm font-semibold text-white shadow-sm shadow-slate-900/30 transition-all duration-200 hover:bg-slate-800 hover:shadow-md hover:shadow-slate-900/20 active:scale-[0.99] active:bg-slate-950 disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none disabled:hover:bg-slate-900 animate-rise"
           style="animation-delay: 0.3s"
         >
-          {{ submitting ? '登录中…' : '登录' }}
+          {{ submitting ? $t('auth.login.submitting') : $t('nav.login') }}
           <LucideIcon
             v-if="!submitting"
             :icon="ArrowRight"
@@ -137,9 +145,9 @@ async function onSubmit() {
       </form>
 
       <p class="text-center text-sm text-slate-500 animate-rise" style="animation-delay: 0.36s">
-        还没有账号？
+        {{ $t('auth.login.noAccount') }}
         <NuxtLink to="/auth/register" class="font-semibold text-slate-900 transition hover:underline">
-          立即注册
+          {{ $t('auth.login.registerNow') }}
         </NuxtLink>
       </p>
     </div>

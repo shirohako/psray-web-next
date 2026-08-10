@@ -23,7 +23,7 @@ export default { inheritAttrs: false }
  * <Popover class="flex cursor-pointer …">
  *   …trigger content…
  *   <template #menu="{ close }">
- *     <button class="…" @click="doThing(); close()">复制</button>
+ *     <button class="…" @click="doThing(); close()">Copy</button>
  *   </template>
  * </Popover>
  * ```

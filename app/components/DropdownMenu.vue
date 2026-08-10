@@ -12,14 +12,14 @@ export default { inheritAttrs: false }
  * resize. `$attrs` (class, etc.) bind to the trigger element, so style it like
  * any element.
  *
- * Use this for menus with a clear trigger button (avatar menu, "已关注" button).
+ * Use this for menus with a clear trigger button (avatar menu, follow button).
  * For a context menu that should open at the cursor, use `Popover` instead.
  *
  * ```vue
  * <DropdownMenu align="right" class="cursor-pointer …">
  *   …trigger content…
  *   <template #menu="{ close }">
- *     <button @click="doThing(); close()">退出登录</button>
+ *     <button @click="doThing(); close()">Sign out</button>
  *   </template>
  * </DropdownMenu>
  * ```

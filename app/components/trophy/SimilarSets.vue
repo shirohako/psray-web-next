@@ -38,8 +38,8 @@ const groups = computed(() => {
 <template>
   <div class="rounded-lg border border-slate-200 bg-white shadow-sm">
     <div class="border-b border-slate-100 px-4 py-2.5">
-      <h2 class="text-sm font-semibold text-slate-900">已关联的奖杯组</h2>
-      <p class="mt-0.5 text-xs text-slate-400">同款游戏其他平台/其他地区的奖杯组</p>
+      <h2 class="text-sm font-semibold text-slate-900">{{ $t('trophy.similar.title') }}</h2>
+      <p class="mt-0.5 text-xs text-slate-400">{{ $t('trophy.similar.subtitle') }}</p>
     </div>
 
     <div class="divide-y divide-slate-100">
@@ -54,7 +54,7 @@ const groups = computed(() => {
           >
             {{ platformLabel(platform) }}
           </span>
-          <span class="text-xs text-slate-400">{{ g.sets.length }} 套奖杯</span>
+          <span class="text-xs text-slate-400">{{ $t('trophy.similar.setCount', g.sets.length) }}</span>
         </div>
 
         <div class="mt-2.5 flex items-center gap-3">

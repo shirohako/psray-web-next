@@ -50,7 +50,7 @@ function isComplete(count: number, total: number | undefined) {
 
 <template>
   <div class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-    <h2 class="mb-4 text-sm font-semibold text-slate-900">你的进度</h2>
+    <h2 class="mb-4 text-sm font-semibold text-slate-900">{{ $t('trophy.progress.title') }}</h2>
 
     <div class="flex items-center gap-3">
       <NuxtLink
@@ -61,7 +61,7 @@ function isComplete(count: number, total: number | undefined) {
         <div class="min-w-0 flex-1">
           <div class="truncate font-semibold text-slate-900 group-hover:text-slate-700">{{ progress.psnid }}</div>
           <div class="mt-1 flex items-center gap-1.5 text-xs text-slate-400">
-            <span>已获得</span>
+            <span>{{ $t('trophy.progress.earnedLabel') }}</span>
             <span class="inline-flex items-baseline gap-1 rounded-md bg-slate-100 px-1.5 py-0.5 font-bold tabular-nums text-slate-800">
               <span>{{ fmt(earnedTotal) }}</span>
               <template v-if="total != null">
@@ -69,7 +69,7 @@ function isComplete(count: number, total: number | undefined) {
                 <span>{{ fmt(total) }}</span>
               </template>
             </span>
-            <span>个奖杯</span>
+            <span>{{ $t('trophy.progress.trophiesUnit') }}</span>
           </div>
         </div>
       </NuxtLink>
@@ -85,7 +85,7 @@ function isComplete(count: number, total: number | undefined) {
         <span
           v-if="isComplete(t.count, t.total)"
           class="absolute -left-0.5 -top-0.5 grid size-3 place-items-center rounded-full border border-white bg-slate-700 text-white shadow-sm"
-          title="已完成"
+          :title="$t('trophy.progress.complete')"
         >
           <LucideIcon :icon="Check" class="size-1.75" stroke-width="3" />
         </span>
@@ -103,7 +103,7 @@ function isComplete(count: number, total: number | undefined) {
     <div class="mt-4 grid grid-cols-[9.5rem_minmax(0,1fr)] gap-2.5 border-t border-slate-100 pt-4">
       <div class="flex min-h-full flex-col justify-center rounded-lg bg-slate-50 px-3.5 py-2.5">
         <div class="inline-flex items-center gap-1.5 text-xs text-slate-400">
-          <LucideIcon :icon="Clock" class="size-3.5" />耗时
+          <LucideIcon :icon="Clock" class="size-3.5" />{{ $t('trophy.progress.duration') }}
         </div>
         <div class="mt-1.5 text-base font-bold leading-tight tabular-nums text-slate-900">
           {{ duration == null ? '—' : formatDuration(duration) }}
@@ -112,7 +112,7 @@ function isComplete(count: number, total: number | undefined) {
       <div class="grid gap-2 rounded-lg bg-slate-50 px-3 py-2.5 text-xs">
         <div class="grid gap-0.5">
           <span class="inline-flex items-center gap-1.5 text-slate-400">
-            <LucideIcon :icon="Calendar" class="size-3.5" />首个奖杯
+            <LucideIcon :icon="Calendar" class="size-3.5" />{{ $t('profile.account.firstTrophy') }}
           </span>
           <span class="font-medium tabular-nums text-slate-700">
             {{ fmtDateTime(progress.first_earned_at) }}
@@ -120,7 +120,7 @@ function isComplete(count: number, total: number | undefined) {
         </div>
         <div class="grid gap-0.5">
           <span class="inline-flex items-center gap-1.5 text-slate-400">
-            <LucideIcon :icon="RefreshCw" class="size-3.5" />最后奖杯
+            <LucideIcon :icon="RefreshCw" class="size-3.5" />{{ $t('trophy.progress.lastTrophy') }}
           </span>
           <span class="font-medium tabular-nums text-slate-700">
             {{ fmtDateTime(progress.last_earned_at) }}

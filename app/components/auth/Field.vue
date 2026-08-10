@@ -56,7 +56,7 @@ const errorId = `${fieldId}-error`
       <button
         v-if="isPassword"
         type="button"
-        :aria-label="revealed ? '隐藏密码' : '显示密码'"
+        :aria-label="revealed ? $t('auth.field.hidePassword') : $t('auth.field.showPassword')"
         @click="revealed = !revealed"
         class="absolute top-1/2 grid -translate-y-1/2 place-items-center rounded-lg text-slate-400 transition hover:bg-slate-200/70 hover:text-slate-700 active:scale-95"
         :class="compact ? 'right-1.5 size-7' : 'right-2 size-8'"

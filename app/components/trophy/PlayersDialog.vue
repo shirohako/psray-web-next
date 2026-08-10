@@ -11,9 +11,9 @@ const props = withDefaults(defineProps<{
 const emit = defineEmits<{ 'update:open': [v: boolean] }>()
 
 const tabs: { value: PlayerRankType; label: string }[] = [
-  { value: 'recent', label: '最近在玩' },
-  { value: 'progress', label: '最先完成' },
-  { value: 'speedrun', label: '耗时最短' },
+  { value: 'recent', labelKey: 'trophy.players.recent' },
+  { value: 'progress', labelKey: 'trophy.players.progress' },
+  { value: 'speedrun', labelKey: 'trophy.players.speedrun' },
 ]
 
 const type = ref<PlayerRankType>('recent')
@@ -78,7 +78,7 @@ function rankClass(rank: number) {
   <Dialog
     :open="open"
     size="2xl"
-    title="玩家排行"
+    :title="$t('trophy.players.title')"
     @update:open="emit('update:open', $event)"
   >
     <!-- Sort tabs (sticky atop the scroll area) -->
@@ -94,7 +94,7 @@ function rankClass(rank: number) {
             : 'bg-slate-100 text-slate-500 hover:bg-slate-200 hover:text-slate-900'"
           @click="selectType(t.value)"
         >
-          {{ t.label }}
+          {{ $t(t.labelKey) }}
         </button>
       </div>
     </div>
@@ -113,7 +113,7 @@ function rankClass(rank: number) {
 
     <!-- Empty -->
     <p v-else-if="!players.length" class="px-5 py-16 text-center text-sm text-slate-400">
-      暂无玩家记录。
+      {{ $t('trophy.players.empty') }}
     </p>
 
     <!-- List -->
@@ -158,7 +158,7 @@ function rankClass(rank: number) {
 
     <template #footer>
       <div class="flex items-center justify-between gap-3">
-        <span class="text-xs text-slate-400">共 {{ fmt(meta?.total) }} 名玩家</span>
+        <span class="text-xs text-slate-400">{{ $t('leaderboard.totalPlayers', { count: fmt(meta?.total) }) }}</span>
         <Pagination v-if="totalPages > 1" :page="page" :total-pages="totalPages" @update:page="setPage" />
       </div>
     </template>

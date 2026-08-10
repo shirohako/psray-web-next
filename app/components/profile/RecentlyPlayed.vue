@@ -163,7 +163,7 @@ onBeforeUnmount(() => {
 
   <!-- Empty -->
   <div v-else-if="!recent.length" class="px-6 py-20 text-center text-sm text-slate-500">
-    还没有游玩记录。
+    {{ $t('profile.recent.empty') }}
   </div>
 
   <!-- List -->
@@ -274,7 +274,7 @@ onBeforeUnmount(() => {
         class="pointer-events-auto flex w-full items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-800 shadow-sm shadow-slate-900/5 transition active:scale-[0.99]"
         @click="toggleExpanded"
       >
-        {{ expanded ? '收起最近玩过' : '展开最近玩过' }}
+        {{ expanded ? $t('profile.recent.collapse') : $t('profile.recent.expand') }}
         <span
           class="profile-toggle-chevron inline-flex size-4 items-center justify-center"
           :class="[

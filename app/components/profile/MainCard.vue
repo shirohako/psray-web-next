@@ -7,9 +7,9 @@ const props = defineProps<{ psnid: string }>()
 // here as their components land.
 type TabKey = 'recent' | 'trophies' | 'milestones'
 const tabs: { key: TabKey; label: string; icon: IconNode }[] = [
-  { key: 'recent', label: '最近玩过', icon: Gamepad2 },
-  { key: 'trophies', label: '获得的奖杯', icon: Trophy },
-  { key: 'milestones', label: '里程碑', icon: Milestone },
+  { key: 'recent', labelKey: 'profile.tabs.recent', icon: Gamepad2 },
+  { key: 'trophies', labelKey: 'profile.tabs.trophies', icon: Trophy },
+  { key: 'milestones', labelKey: 'profile.tabs.milestones', icon: Milestone },
 ]
 type TabItem = (typeof tabs)[number]
 
@@ -32,7 +32,7 @@ const activeTabItem = computed<TabItem>(() => tabs.find(tab => tab.key === activ
       >
         <span class="inline-flex min-w-0 items-center gap-2">
           <LucideIcon :icon="activeTabItem.icon" class="size-4 shrink-0 text-slate-500" stroke-width="2" />
-          <span class="truncate">{{ activeTabItem.label }}</span>
+          <span class="truncate">{{ $t(activeTabItem.labelKey) }}</span>
         </span>
         <LucideIcon :icon="ChevronDown" class="size-4 shrink-0 text-slate-400" />
 
@@ -54,7 +54,7 @@ const activeTabItem = computed<TabItem>(() => tabs.find(tab => tab.key === activ
               :class="activeTab === tab.key ? 'text-slate-700' : 'text-slate-400'"
               stroke-width="2"
             />
-            <span class="min-w-0 flex-1">{{ tab.label }}</span>
+            <span class="min-w-0 flex-1">{{ $t(tab.labelKey) }}</span>
             <LucideIcon
               v-if="activeTab === tab.key"
               :icon="Check"
@@ -78,7 +78,7 @@ const activeTabItem = computed<TabItem>(() => tabs.find(tab => tab.key === activ
           : 'bg-slate-100 text-slate-500 hover:bg-slate-200 hover:text-slate-900'"
       >
         <LucideIcon :icon="tab.icon" class="size-4 shrink-0" stroke-width="2" />
-        {{ tab.label }}
+        {{ $t(tab.labelKey) }}
       </button>
     </div>
 

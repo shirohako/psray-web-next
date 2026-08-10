@@ -7,7 +7,7 @@ import { X } from 'lucide'
  * Drive it with `v-model:open`.
  *
  * ```vue
- * <Drawer v-model:open="open" title="设置" side="left">
+ * <Drawer v-model:open="open" title="Settings" side="left">
  *   <div class="p-5">…</div>
  *   <template #footer> … </template>
  * </Drawer>
@@ -82,7 +82,7 @@ onUnmounted(() => {
             <button
               type="button"
               class="-mr-1.5 grid size-8 shrink-0 place-items-center rounded-md text-slate-400 transition hover:bg-slate-100 hover:text-slate-700"
-              aria-label="关闭"
+              :aria-label="$t('common.close')"
               @click="close"
             >
               <LucideIcon :icon="X" class="size-5" />

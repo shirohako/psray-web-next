@@ -8,25 +8,8 @@
     </div>
   </div>
 
-  <!-- Error -->
-  <div
-    v-else-if="error || !profile"
-    class="grid place-items-center rounded-lg border border-slate-200 bg-white py-24 text-center shadow-sm"
-  >
-    <div class="space-y-2">
-      <div class="mx-auto grid size-14 place-items-center rounded-full bg-rose-50 text-rose-500">
-        <LucideIcon :icon="XCircle" class="size-7" />
-      </div>
-      <h1 class="text-lg font-semibold text-slate-900">找不到该用户</h1>
-      <p class="text-sm text-slate-500">PSN ID「{{ psnid }}」不存在或未公开资料。</p>
-      <NuxtLink to="/" class="inline-block pt-2 text-sm font-medium text-slate-900 hover:text-slate-700">
-        返回首页
-      </NuxtLink>
-    </div>
-  </div>
-
-  <!-- Profile -->
-  <div v-else class="space-y-6">
+  <!-- Profile. A missing PSN ID raises a real 404 via `error.vue`. -->
+  <div v-else-if="profile" class="space-y-6">
     <ProfileHeader :profile="profile" :follow-pending="followPending" @toggle-follow="toggleFollow" />
 
     <!-- Private profiles expose no trophy data: hide the calendar and the two columns below. -->
@@ -51,18 +34,33 @@
 </template>
 
 <script setup lang="ts">
-import { UserCheck, XCircle } from 'lucide'
+import { UserCheck } from 'lucide'
 import type { Profile } from '~/services/profile'
 import { useProfiles } from '~/services/profile'
 import { ApiError } from '~/utils/ApiError'
 
 const route = useRoute()
+const { t } = useI18n()
 const psnid = computed(() => String(route.params.psnid))
 const auth = useAuth()
 
 const { data: profile, pending, error } = await useApiFetch<Profile>(
   () => `/profile/${psnid.value}`,
 )
+
+// An unknown PSN ID must answer 404 rather than a 200 page that says so.
+// Watched, not checked once: moving between two profiles reuses this component.
+function raiseFetchError(err: typeof error.value) {
+  if (!err) return
+  const notFound = (err as { statusCode?: number }).statusCode === 404
+  showError(createError({
+    statusCode: notFound ? 404 : 502,
+    statusMessage: notFound ? 'Profile not found' : 'Profile service unavailable',
+    fatal: true,
+  }))
+}
+raiseFetchError(error.value)
+watch(error, raiseFetchError)
 
 const { follow, unfollow } = useProfiles()
 const followPending = ref(false)
@@ -101,8 +99,8 @@ async function toggleFollow() {
     }
     if (next && p.is_following) {
       toast.add({
-        title: '关注成功',
-        description: `已关注 ${p.psnid}`,
+        title: t('toast.followed.title'),
+        description: t('toast.followed.description', { psnid: p.psnid }),
         icon: UserCheck,
       })
     }
@@ -121,5 +119,15 @@ async function toggleFollow() {
   }
 }
 
-useHead(() => ({ title: profile.value ? `${profile.value.psnid} · 个人资料` : '个人资料' }))
+useSeo({
+  title: () => (profile.value
+    ? t('seo.profile.title', { psnid: profile.value.psnid })
+    : t('seo.profile.titleFallback')),
+  description: () => (profile.value
+    ? t('seo.profile.description', { psnid: profile.value.psnid })
+    : ''),
+  image: () => profile.value?.avatar_url ?? undefined,
+  // A private profile exposes no trophy data, so there is nothing worth indexing.
+  noindex: () => !profile.value?.is_profile_public,
+})
 </script>

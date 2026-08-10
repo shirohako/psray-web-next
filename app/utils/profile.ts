@@ -20,28 +20,29 @@ function toDate(value: DateLike) {
   return Number.isNaN(date.getTime()) ? null : date
 }
 
-/** Date only, e.g.「2026年5月29日」. */
+/** Date only, in the active language, e.g. `May 29, 2026`. */
 export function fmtDate(value: DateLike) {
   const date = toDate(value)
   if (!date) return '—'
-  return date.toLocaleDateString('zh-CN', {
+  return date.toLocaleDateString(currentLocale(), {
     year: 'numeric', month: 'long', day: 'numeric',
   })
 }
 
-/** Absolute date down to the minute, e.g.「2026/05/29 14:30」. */
+/** Absolute date down to the minute, e.g. `2026/05/29 14:30`. */
 export function fmtDateTime(value: DateLike) {
   const date = toDate(value)
   if (!date) return '—'
-  return date.toLocaleString('zh-CN', {
+  return date.toLocaleString(currentLocale(), {
     year: 'numeric', month: '2-digit', day: '2-digit',
     hour: '2-digit', minute: '2-digit', hour12: false,
   })
 }
 
 /**
- * A duration in seconds → compact zh label, e.g.「3天14小时」.「—」for null.
- * Always shows two units (天小时 / 小时分 / 分秒) unless it's under a minute.
+ * A duration in seconds → a compact two-unit label, e.g. `3d 14h`. Returns an
+ * em dash for null. `Intl.DurationFormat` isn't available across our
+ * Node/Safari floor, so the unit pairs come from the message catalog (`time.*`).
  */
 export function formatDuration(sec: number | null | undefined) {
   if (sec == null) return '—'
@@ -49,10 +50,10 @@ export function formatDuration(sec: number | null | undefined) {
   const h = Math.floor((sec % 86_400) / 3600)
   const m = Math.floor((sec % 3600) / 60)
   const s = Math.floor(sec % 60)
-  if (d > 0) return `${d}天${h}小时`
-  if (h > 0) return `${h}小时${m}分`
-  if (m > 0) return `${m}分${s}秒`
-  return `${s}秒`
+  if (d > 0) return tr('time.dayHour', { d, h })
+  if (h > 0) return tr('time.hourMinute', { h, m })
+  if (m > 0) return tr('time.minuteSecond', { m, s })
+  return tr('time.second', { s })
 }
 
 /**
@@ -76,17 +77,21 @@ export function fmtEarnGap(sec: number | null | undefined) {
   return parts.join(' ')
 }
 
-/** Coarse relative time, e.g.「3 天前」. */
+/**
+ * Coarse relative time, e.g. `3 days ago`.
+ *
+ * `numeric: 'auto'` is what makes today/yesterday come out as words in every
+ * language, so those cases need no special-casing here.
+ */
 export function fromNow(value: DateLike) {
   const date = toDate(value)
   if (!date) return '—'
-  const diff = Date.now() - date.getTime()
-  const day = 86_400_000
-  if (diff < day) return '今天'
-  if (diff < 2 * day) return '昨天'
-  if (diff < 30 * day) return `${Math.floor(diff / day)} 天前`
-  if (diff < 365 * day) return `${Math.floor(diff / (30 * day))} 个月前`
-  return `${Math.floor(diff / (365 * day))} 年前`
+  const days = Math.floor((Date.now() - date.getTime()) / 86_400_000)
+  const rtf = new Intl.RelativeTimeFormat(currentLocale(), { numeric: 'auto' })
+  if (days < 1) return rtf.format(0, 'day')
+  if (days < 30) return rtf.format(-days, 'day')
+  if (days < 365) return rtf.format(-Math.floor(days / 30), 'month')
+  return rtf.format(-Math.floor(days / 365), 'year')
 }
 
 const REGION_NAMES = Object.fromEntries(REGIONS.map(r => [r.code, r.name]))
@@ -107,15 +112,9 @@ export function regionName(c: string) {
   }
 }
 
-const LANG: Record<string, string> = {
-  'zh-CN': '简体中文', 'zh-TW': '繁体中文', 'ja': '日本語', 'en': 'English',
-  'ko': '한국어',
-}
-/** Language tag → localized label (falls back to the raw tag). */
-export const formatLang = (l: string) => LANG[l] ?? l
-
-/** A rank value:「#1,234」or「暂无排名」when the user isn't ranked yet. */
-export const rankText = (r: number | null | undefined) => (r == null ? '暂无排名' : `#${fmt(r)}`)
+/** A rank value: `#1,234`, or the "unranked" label when the user has no rank yet. */
+export const rankText = (r: number | null | undefined) =>
+  (r == null ? tr('profile.stats.unranked') : `#${fmt(r)}`)
 
 /** Sum of all four trophy tiers. */
 export const sumTrophies = (p: Profile) => p.platinum + p.gold + p.silver + p.bronze
@@ -151,10 +150,14 @@ export function platformBadgeClass(platform: string): string {
 
 export type TrophyKey = 'platinum' | 'gold' | 'silver' | 'bronze'
 
-/** Display metadata for the four trophy tiers (order = platinum → bronze). */
-export const trophyKinds: { key: TrophyKey; label: string; dot: string; text: string }[] = [
-  { key: 'platinum', label: '白金', dot: 'bg-cyan-400', text: 'text-cyan-600' },
-  { key: 'gold', label: '黄金', dot: 'bg-amber-400', text: 'text-amber-600' },
-  { key: 'silver', label: '白银', dot: 'bg-slate-400', text: 'text-slate-500' },
-  { key: 'bronze', label: '青铜', dot: 'bg-orange-400', text: 'text-orange-600' },
+/**
+ * Display metadata for the four trophy tiers (order = platinum → bronze).
+ * Pure data — the tier name is a message key, resolved at the call site so the
+ * label follows the active language.
+ */
+export const trophyKinds: { key: TrophyKey; labelKey: string; dot: string; text: string }[] = [
+  { key: 'platinum', labelKey: 'trophy.tier.platinum', dot: 'bg-cyan-400', text: 'text-cyan-600' },
+  { key: 'gold', labelKey: 'trophy.tier.gold', dot: 'bg-amber-400', text: 'text-amber-600' },
+  { key: 'silver', labelKey: 'trophy.tier.silver', dot: 'bg-slate-400', text: 'text-slate-500' },
+  { key: 'bronze', labelKey: 'trophy.tier.bronze', dot: 'bg-orange-400', text: 'text-orange-600' },
 ]

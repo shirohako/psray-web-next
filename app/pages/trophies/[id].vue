@@ -8,25 +8,9 @@
     </div>
   </div>
 
-  <!-- Error -->
-  <div
-    v-else-if="error || !data"
-    class="grid place-items-center rounded-lg border border-slate-200 bg-white py-24 text-center shadow-sm"
-  >
-    <div class="space-y-2">
-      <div class="mx-auto grid size-14 place-items-center rounded-full bg-rose-50 text-rose-500">
-        <LucideIcon :icon="XCircle" class="size-7" />
-      </div>
-      <h1 class="text-lg font-semibold text-slate-900">找不到该奖杯组</h1>
-      <p class="text-sm text-slate-500">奖杯组「{{ id }}」不存在。</p>
-      <NuxtLink to="/" class="inline-block pt-2 text-sm font-medium text-slate-900 hover:text-slate-700">
-        返回首页
-      </NuxtLink>
-    </div>
-  </div>
-
-  <!-- Content -->
-  <div v-else class="space-y-6">
+  <!-- Content. Failures never reach here: `raiseFetchError` shows `error.vue`
+       with a real HTTP status instead. -->
+  <div v-else-if="data" class="space-y-6">
     <TrophyBanner :trophy-set="data.trophy_set" />
 
     <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
@@ -35,19 +19,23 @@
         <div class="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
           <div class="flex items-center justify-between gap-3 border-b border-slate-200 px-4 py-3 sm:px-5">
             <h2 class="inline-flex items-baseline gap-2 font-semibold text-slate-900">
-              奖杯
-              <span class="text-sm font-normal text-slate-400">共 {{ totalDefined(data.trophy_set.defined_trophies) }} 个</span>
+              {{ $t('trophy.list.heading') }}
+              <span class="text-sm font-normal text-slate-400">
+                {{ $t('trophy.list.count', totalDefined(data.trophy_set.defined_trophies)) }}
+              </span>
             </h2>
             <div v-if="availableLanguages.length" class="flex items-center gap-2.5">
               <span class="hidden items-center gap-1 text-xs font-medium text-slate-400 sm:inline-flex">
-                支持
-                <span class="rounded-full bg-slate-100 px-1.5 py-0.5 font-semibold tabular-nums text-slate-600">{{ availableLanguages.length }}</span>
-                种语言
+                <i18n-t keypath="trophy.lang.available" tag="span" class="inline-flex items-center gap-1" :plural="availableLanguages.length">
+                  <template #badge>
+                    <span class="rounded-full bg-slate-100 px-1.5 py-0.5 font-semibold tabular-nums text-slate-600">{{ availableLanguages.length }}</span>
+                  </template>
+                </i18n-t>
               </span>
               <TrophyLanguagePicker
                 :languages="availableLanguages"
                 :current="data.display_language"
-                :loading="switching"
+                :loading="pending"
                 @select="switchLanguage"
               />
             </div>
@@ -61,12 +49,12 @@
                 :key="f.value"
                 type="button"
                 :disabled="f.value !== 'all' && !hasViewer"
-                :title="f.value !== 'all' && !hasViewer ? '输入 PSN ID 后可用' : undefined"
+                :title="f.value !== 'all' && !hasViewer ? $t('trophy.filter.needsPsnid') : undefined"
                 class="rounded-md px-3 py-1 text-sm font-medium transition disabled:cursor-not-allowed disabled:opacity-40"
                 :class="filter === f.value ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-900'"
                 @click="filter = f.value"
               >
-                {{ f.label }}
+                {{ $t(f.labelKey) }}
               </button>
             </div>
 
@@ -79,7 +67,7 @@
                 class="inline-flex items-center gap-2 text-sm font-medium text-slate-600"
                 @click="showSpoilers = !showSpoilers"
               >
-                <span>显示隐藏奖杯</span>
+                <span>{{ $t('trophy.list.showHidden') }}</span>
                 <span class="relative h-5 w-9 rounded-full transition-colors" :class="showSpoilers ? 'bg-slate-900' : 'bg-slate-300'">
                   <span class="absolute top-0.5 size-4 rounded-full bg-white shadow transition-all" :class="showSpoilers ? 'left-4.5' : 'left-0.5'" />
                 </span>
@@ -87,10 +75,10 @@
 
               <label class="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-sm text-slate-600 transition focus-within:border-slate-400">
                 <LucideIcon :icon="ArrowUpDown" class="size-4 text-slate-400" />
-                <select v-model="sort" class="cursor-pointer bg-transparent pr-1 font-medium text-slate-900 focus:outline-none" aria-label="排序">
-                  <option value="default">默认</option>
-                  <option value="earned" :disabled="!hasViewer">获得时间</option>
-                  <option value="rarity">PSN 稀有度</option>
+                <select v-model="sort" class="cursor-pointer bg-transparent pr-1 font-medium text-slate-900 focus:outline-none" :aria-label="$t('trophy.sort.label')">
+                  <option value="default">{{ $t('trophy.sort.default') }}</option>
+                  <option value="earned" :disabled="!hasViewer">{{ $t('trophy.sort.earned') }}</option>
+                  <option value="rarity">{{ $t('trophy.sort.rarity') }}</option>
                 </select>
               </label>
             </div>
@@ -124,7 +112,7 @@
                 class="pointer-events-auto flex w-full items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-800 shadow-sm shadow-slate-900/5 transition active:scale-[0.99]"
                 @click="trophyListExpanded = !trophyListExpanded"
               >
-                {{ trophyListExpanded ? '收起奖杯列表' : '展开全部奖杯' }}
+                {{ trophyListExpanded ? $t('trophy.list.collapse') : $t('trophy.list.expand') }}
                 <LucideIcon
                   :icon="ChevronDown"
                   class="size-4 transition-transform duration-300"
@@ -154,17 +142,18 @@
 </template>
 
 <script setup lang="ts">
-import { XCircle, ArrowUpDown, ChevronDown } from 'lucide'
-import { useTrophies, type Trophy, type TrophyGroup, type TrophySetDetail } from '~/services/trophies'
+import { ArrowUpDown, ChevronDown } from 'lucide'
+import type { Trophy, TrophyGroup, TrophySetDetail } from '~/services/trophies'
+import { DEFAULT_LOCALE, PSN_LANG, canonicalLang, isUiLocale, type UiLocale } from '#shared/locales'
 
 type FilterMode = 'all' | 'earned' | 'unearned'
 type SortMode = 'default' | 'earned' | 'rarity'
 
 const route = useRoute()
+const { t, locale } = useI18n()
 const id = computed(() => String(route.params.id))
 
-// Optional viewer progress is driven entirely by the `?psnid=` query param;
-// it's included in the fetch URL so the request re-runs when the param changes.
+// Optional viewer progress is driven entirely by the `?psnid=` query param.
 // The player may have no record for this title — the API decides via
 // `viewer_progress` (null when absent), so we just render what comes back.
 const psnid = computed(() =>
@@ -172,53 +161,62 @@ const psnid = computed(() =>
 )
 const hasViewer = computed(() => Boolean(psnid.value))
 
-// `deep: true` keeps the payload deeply reactive (Nuxt 4 defaults to a
-// shallowRef). The language switch patches `localized_*` onto nested groups /
-// trophies in place, and only deep reactivity propagates that to the children.
-const { data, pending, error } = await useApiFetch<TrophySetDetail>(() => {
-  const base = `/trophies/${id.value}`
-  return psnid.value ? `${base}?psnid=${encodeURIComponent(psnid.value)}` : base
-}, { deep: true })
+// Trophy body text has its own param, `?tlang=`, deliberately separate from the
+// interface language in `?lang=`: a set ships in up to 25 PSN languages, most of
+// which we have no interface for, and reading French trophy names shouldn't drag
+// the rest of the site out of the reader's own language.
+//
+// Without the param we ask for whatever the interface language implies, so a
+// bare URL renders identically for every visitor instead of following whatever
+// `Accept-Language` the browser happened to send.
+const uiContentLang = computed(() =>
+  PSN_LANG[isUiLocale(locale.value) ? locale.value as UiLocale : DEFAULT_LOCALE])
+const contentLangParam = computed(() => canonicalLang(route.query.tlang))
+const requestedLang = computed(() => contentLangParam.value || uiContentLang.value)
 
-// The detail payload arrives in the server's best-matched `display_language`.
-// Switching language re-fetches only the localized text and patches it onto
-// the rendered groups/trophies by id — progress, players and similar sets stay.
-const { localization } = useTrophies()
-const toast = useToast()
-const switching = ref(false)
+const { data, status, error } = await useApiFetch<TrophySetDetail>(
+  () => `/trophies/${id.value}`,
+  {
+    query: computed(() => ({
+      psnid: psnid.value || undefined,
+      lang: requestedLang.value,
+    })),
+  },
+)
+
+const pending = computed(() => status.value === 'pending')
+
+// A missing set has to answer 404, not a 200 page that says "not found".
+// Watched rather than checked once: navigating between two trophy pages reuses
+// this component, so setup doesn't re-run but `error` does change.
+function raiseFetchError(err: typeof error.value) {
+  if (!err) return
+  const notFound = (err as { statusCode?: number }).statusCode === 404
+  showError(createError({
+    statusCode: notFound ? 404 : 502,
+    statusMessage: notFound ? 'Trophy set not found' : 'Trophy service unavailable',
+    fatal: true,
+  }))
+}
+raiseFetchError(error.value)
+watch(error, raiseFetchError)
 
 const availableLanguages = computed(() => data.value?.available_languages ?? [])
 
-async function switchLanguage(code: string) {
-  const detail = data.value
-  if (!detail || switching.value || code === detail.display_language) return
-
-  switching.value = true
-  try {
-    const loc = await localization(id.value, { lang: code })
-
-    const groupById = new Map(detail.groups.map(g => [g.id, g]))
-    for (const lg of loc.groups) {
-      const group = groupById.get(lg.id)
-      if (!group) continue
-      group.localized_name = lg.localized_name
-      group.localized_detail = lg.localized_detail
-
-      const trophyById = new Map(group.trophies.map(t => [t.id, t]))
-      for (const lt of lg.trophies) {
-        const trophy = trophyById.get(lt.id)
-        if (!trophy) continue
-        trophy.localized_name = lt.localized_name
-        trophy.localized_detail = lt.localized_detail
-      }
-    }
-
-    detail.display_language = loc.display_language
-  } catch {
-    toast.error({ title: '语言切换失败', description: '请稍后再试。' })
-  } finally {
-    switching.value = false
-  }
+/**
+ * Switching the trophy language is a navigation, not a patch: the URL carries
+ * the choice, so the result is shareable, survives a reload, and gives each
+ * translation its own indexable address. It writes `?tlang=` only — `?lang=`,
+ * and with it the interface language, is left exactly as the reader set it.
+ */
+function switchLanguage(code: string) {
+  if (!code || code === data.value?.display_language) return
+  const query = { ...route.query }
+  // Back to what the interface language already implies: drop the param rather
+  // than spell it out, so each variant keeps a single canonical URL.
+  if (canonicalLang(code) === canonicalLang(uiContentLang.value)) delete query.tlang
+  else query.tlang = code
+  return navigateTo({ path: route.path, query, hash: route.hash })
 }
 
 // Parse an API date (unix seconds or ISO string) to epoch ms, or null.
@@ -230,7 +228,7 @@ function toMs(value: number | string | null): number | null {
 }
 
 // Maps each earned trophy's db id to its chronological earned position (0-based
-// `rank`, also drives the "获得时间" sort), timestamp, and seconds since the
+// `rank`, also drives the "by earned time" sort), timestamp, and seconds since the
 // previously earned trophy (`null` for the first). The raw `earned_trophies`
 // list isn't guaranteed to be time-sorted, so we order by `earned_trophies_at`
 // to get the true "this is the Nth trophy earned" sequence and gaps (trophies
@@ -324,10 +322,10 @@ const trophyNumbers = computed(() => {
 })
 
 // Filter + sort controls for the trophy list.
-const filterOptions: { value: FilterMode; label: string }[] = [
-  { value: 'all', label: '全部' },
-  { value: 'earned', label: '已获得' },
-  { value: 'unearned', label: '未获得' },
+const filterOptions: { value: FilterMode; labelKey: string }[] = [
+  { value: 'all', labelKey: 'trophy.filter.all' },
+  { value: 'earned', labelKey: 'trophy.filter.earned' },
+  { value: 'unearned', labelKey: 'trophy.filter.unearned' },
 ]
 const filter = ref<FilterMode>('all')
 const sort = ref<SortMode>('default')
@@ -353,9 +351,43 @@ watch([filter, sort, showSpoilers], () => {
   trophyListExpanded.value = false
 })
 
-useHead(() => ({
-  title: data.value
-    ? `${data.value.trophy_set.name} · 奖杯`
-    : '奖杯组',
-}))
+/**
+ * The set's title in the language actually being displayed. `available_languages`
+ * carries a localized `name` per language; `trophy_set.name` is the raw default.
+ */
+const displayName = computed(() => {
+  const detail = data.value
+  if (!detail) return ''
+  const match = detail.available_languages
+    ?.find(l => l.language_code === detail.display_language)
+  return match?.name || detail.trophy_set.name
+})
+
+useSeo({
+  title: () => (displayName.value
+    ? t('seo.trophy.title', { name: displayName.value })
+    : t('seo.trophy.titleFallback')),
+  description: () => (data.value
+    ? t('seo.trophy.description', {
+        name: displayName.value,
+        count: totalDefined(data.value.trophy_set.defined_trophies),
+        platform: data.value.trophy_set.platform.join(' / '),
+      })
+    : ''),
+  image: () => data.value?.trophy_set.icon_url,
+  // Spell the body language out only when it isn't what the interface language
+  // already implies, and go by what the server actually served rather than what
+  // we asked for — a `?tlang=` the API fell back on must not claim to be its
+  // own variant.
+  contentLang: () => {
+    const served = canonicalLang(data.value?.display_language)
+    return served && served !== canonicalLang(uiContentLang.value) ? served : ''
+  },
+  // Every PSN language this set exists in is a genuinely different page and
+  // worth advertising, on top of the five UI locales `useSeo` always emits.
+  altContentLangs: () => availableLanguages.value.map(l => l.language_code),
+  // `?psnid=` renders one visitor's progress: same set, personalised. Keep it
+  // out of the index rather than spending crawl budget on id × psnid.
+  noindex: () => hasViewer.value,
+})
 </script>

@@ -3,6 +3,7 @@ import { Trophy, Users, Gauge, CheckCircle2, Timer, Flag } from 'lucide'
 import type { TrophySetDetailInfo, PlayerRankType } from '~/services/trophies'
 
 const props = defineProps<{ trophySet: TrophySetDetailInfo }>()
+const { t } = useI18n()
 
 // Ranking shortcuts open the shared players dialog on a specific sort tab.
 const dialogOpen = ref(false)
@@ -14,17 +15,17 @@ function openRanking(type: PlayerRankType) {
 }
 
 const stats = computed(() => [
-  { icon: Users, label: '玩过', value: fmt(props.trophySet.owners), tint: 'text-slate-900' },
-  { icon: Gauge, label: '平均进度', value: `${props.trophySet.average_progress}%`, tint: 'text-sky-600' },
-  { icon: CheckCircle2, label: '完成人数', value: fmt(props.trophySet.completed_players), tint: 'text-emerald-600' },
-  { icon: Trophy, label: '白金人数', value: fmt(props.trophySet.platinum_achievers), tint: 'text-cyan-600' },
+  { icon: Users, labelKey: 'trophy.banner.owners', value: fmt(props.trophySet.owners), tint: 'text-slate-900' },
+  { icon: Gauge, labelKey: 'trophy.banner.averageProgress', value: `${props.trophySet.average_progress}%`, tint: 'text-sky-600' },
+  { icon: CheckCircle2, labelKey: 'trophy.banner.completed', value: fmt(props.trophySet.completed_players), tint: 'text-emerald-600' },
+  { icon: Trophy, labelKey: 'trophy.banner.platinums', value: fmt(props.trophySet.platinum_achievers), tint: 'text-cyan-600' },
 ])
 
 const qrMeta = computed(() => [
-  { label: '奖杯组 ID', value: props.trophySet.id },
+  { label: t('trophy.banner.setId'), value: props.trophySet.id },
   { label: 'NP Communication ID', value: props.trophySet.np_communication_id, copyable: true },
-  { label: '版本号', value: props.trophySet.version },
-  { label: '更新时间', value: fmtDateTime(props.trophySet.updated_at) },
+  { label: t('trophy.banner.version'), value: props.trophySet.version },
+  { label: t('common.updated'), value: fmtDateTime(props.trophySet.updated_at) },
 ])
 </script>
 
@@ -40,7 +41,7 @@ const qrMeta = computed(() => [
 
       <!-- Share via QR -->
       <div class="absolute right-3 top-3 z-10 sm:right-4 sm:top-4">
-        <QrCodeButton title="奖杯组二维码" :caption="trophySet.name" :meta="qrMeta" />
+        <QrCodeButton :title="$t('trophy.banner.qrTitle')" :caption="trophySet.name" :meta="qrMeta" />
       </div>
 
       <div class="relative flex flex-col items-center gap-5 p-5 text-center sm:flex-row sm:items-center sm:p-6 sm:text-left">
@@ -72,7 +73,7 @@ const qrMeta = computed(() => [
             <span v-for="t in trophyKinds" :key="t.key" class="inline-flex items-baseline gap-1.5">
               <span class="size-2.5 translate-y-0.5 rounded-full" :class="t.dot" />
               <span class="text-sm font-bold text-white">{{ trophySet.defined_trophies[t.key] }}</span>
-              <span class="text-xs text-slate-300">{{ t.label }}</span>
+              <span class="text-xs text-slate-300">{{ $t(t.labelKey) }}</span>
             </span>
           </div>
 
@@ -83,14 +84,14 @@ const qrMeta = computed(() => [
               class="inline-flex items-center gap-1.5 rounded-lg bg-white/10 px-3 py-1.5 text-xs font-medium text-white ring-1 ring-white/15 backdrop-blur transition hover:bg-white/20"
               @click="openRanking('speedrun')"
             >
-              <LucideIcon :icon="Timer" class="size-3.5" />最短耗时排行
+              <LucideIcon :icon="Timer" class="size-3.5" />{{ $t('trophy.players.speedrun') }}
             </button>
             <button
               type="button"
               class="inline-flex items-center gap-1.5 rounded-lg bg-white/10 px-3 py-1.5 text-xs font-medium text-white ring-1 ring-white/15 backdrop-blur transition hover:bg-white/20"
               @click="openRanking('progress')"
             >
-              <LucideIcon :icon="Flag" class="size-3.5" />最先完成排行
+              <LucideIcon :icon="Flag" class="size-3.5" />{{ $t('trophy.players.progress') }}
             </button>
           </div>
         </div>
@@ -101,13 +102,13 @@ const qrMeta = computed(() => [
 
     <!-- Aggregate stats strip -->
     <div class="grid grid-cols-2 divide-x divide-y divide-slate-100 sm:grid-cols-4 sm:divide-y-0">
-      <div v-for="s in stats" :key="s.label" class="flex items-center gap-2.5 px-4 py-3.5">
+      <div v-for="s in stats" :key="s.labelKey" class="flex items-center gap-2.5 px-4 py-3.5">
         <span class="grid size-9 shrink-0 place-items-center rounded-full bg-slate-50" :class="s.tint">
           <LucideIcon :icon="s.icon" class="size-4.5" />
         </span>
         <div class="leading-tight">
           <div class="text-lg font-bold text-slate-900">{{ s.value }}</div>
-          <div class="text-xs text-slate-400">{{ s.label }}</div>
+          <div class="text-xs text-slate-400">{{ $t(s.labelKey) }}</div>
         </div>
       </div>
     </div>

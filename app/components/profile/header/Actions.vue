@@ -6,7 +6,7 @@ import type { Profile } from '~/services/profile'
 
 /**
  * Sync + follow actions overlaid at the banner's bottom-right (needs a
- * `relative` banner parent). On mobile they collapse into a single "互动"
+ * `relative` banner parent). On mobile they collapse into a single "interact"
  * dropdown; on sm+ they render inline. Follow / unfollow only appear when the
  * viewer can actually follow (`profile.can_follow`).
  */
@@ -19,14 +19,14 @@ const actionButtonBase =
 
 <template>
   <div class="absolute bottom-4 right-4 z-20 flex items-center gap-2">
-    <!-- Mobile: everything behind a single "互动" dropdown -->
+    <!-- Mobile: everything behind a single "interact" dropdown -->
     <DropdownMenu
       align="right"
       panel-class="!min-w-36 !rounded-lg !py-1"
       :class="[actionButtonBase, 'h-9! gap-2! px-4! text-sm! cursor-pointer bg-zinc-900/90 text-white hover:bg-zinc-950 sm:hidden']"
     >
       <LucideIcon :icon="PawPrint" class="size-4" />
-      互动
+      {{ $t('profile.actions.interact') }}
       <LucideIcon :icon="ChevronDown" class="size-3.5 text-zinc-400" />
 
       <template #menu="{ close }">
@@ -36,7 +36,7 @@ const actionButtonBase =
           @click="close"
         >
           <LucideIcon :icon="RefreshCw" class="size-3.5 text-slate-400" />
-          更新
+          {{ $t('profile.actions.sync') }}
         </NuxtLink>
 
         <!-- Follow/unfollow only when the viewer can actually follow. -->
@@ -52,7 +52,7 @@ const actionButtonBase =
             @click="$emit('toggleFollow'); close()"
           >
             <LucideIcon :icon="UserMinus" class="size-3.5 text-rose-500" />
-            取消关注
+            {{ $t('profile.actions.unfollow') }}
           </button>
 
           <button
@@ -68,7 +68,7 @@ const actionButtonBase =
               class="size-3.5 text-slate-400"
               :class="followPending && 'animate-spin'"
             />
-            关注
+            {{ $t('profile.actions.follow') }}
           </button>
         </template>
       </template>
@@ -81,12 +81,12 @@ const actionButtonBase =
         :class="[actionButtonBase, 'bg-white text-slate-700 hover:bg-slate-100 hover:text-slate-900']"
       >
         <LucideIcon :icon="RefreshCw" class="size-4" />
-        更新
+        {{ $t('profile.actions.sync') }}
       </NuxtLink>
 
       <!-- Follow/unfollow only when the viewer can actually follow. -->
       <template v-if="profile.can_follow">
-        <!-- Following: a menu trigger; "取消关注" lives in the dropdown. -->
+        <!-- Following: a menu trigger; "unfollow" lives in the dropdown. -->
         <DropdownMenu
           v-if="profile.is_following"
           align="right"
@@ -98,7 +98,7 @@ const actionButtonBase =
             class="size-4"
             :class="followPending && 'animate-spin'"
           />
-          已关注
+          {{ $t('profile.actions.following') }}
           <LucideIcon :icon="ChevronDown" class="size-3.5 text-zinc-400" />
           <template #menu="{ close }">
             <button
@@ -109,7 +109,7 @@ const actionButtonBase =
               @click="$emit('toggleFollow'); close()"
             >
               <LucideIcon :icon="UserMinus" class="size-4 text-rose-500" />
-              取消关注
+              {{ $t('profile.actions.unfollow') }}
             </button>
           </template>
         </DropdownMenu>
@@ -127,7 +127,7 @@ const actionButtonBase =
             class="size-4"
             :class="followPending && 'animate-spin'"
           />
-          关注
+          {{ $t('profile.actions.follow') }}
         </button>
       </template>
     </div>

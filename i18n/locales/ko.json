@@ -1,0 +1,608 @@
+{
+  "common": {
+    "back": "이전",
+    "backHome": "홈으로",
+    "cancel": "취소",
+    "close": "닫기",
+    "copy": "복사",
+    "edit": "변경",
+    "next": "다음",
+    "nextPage": "다음 페이지",
+    "previousPage": "이전 페이지",
+    "retry": "다시 시도",
+    "save": "저장",
+    "saving": "저장 중…",
+    "showMore": "더 보기",
+    "sortAsc": "오름차순",
+    "sortDesc": "내림차순",
+    "updated": "업데이트",
+    "updatedAt": "{time} 업데이트",
+    "view": "보기"
+  },
+  "nav": {
+    "home": "홈",
+    "leaderboard": "랭킹",
+    "login": "로그인",
+    "register": "회원가입",
+    "sectionLabel": "내비게이션",
+    "aria": {
+      "account": "로그인 또는 회원가입",
+      "collapseMenu": "메뉴 접기",
+      "expandMenu": "메뉴 펼치기",
+      "language": "언어",
+      "search": "검색",
+      "settings": "설정"
+    },
+    "user": {
+      "logout": "로그아웃",
+      "profile": "프로필",
+      "settings": "계정 설정",
+      "sync": "계정 동기화"
+    }
+  },
+  "home": {
+    "lookup": {
+      "heading": "프로필 조회",
+      "hint": "PSN ID를 입력하면 해당 프로필 페이지로 이동합니다.",
+      "view": "보기",
+      "sync": "동기화"
+    }
+  },
+  "auth": {
+    "field": {
+      "code": "인증 코드",
+      "codePlaceholder": "6자리 코드",
+      "email": "이메일",
+      "password": "비밀번호",
+      "passwordPlaceholder": "8자 이상",
+      "confirmPassword": "비밀번호 확인",
+      "confirmPasswordPlaceholder": "비밀번호 재입력",
+      "currentPassword": "현재 비밀번호",
+      "newPassword": "새 비밀번호",
+      "confirmNewPassword": "새 비밀번호 확인",
+      "passwordMismatch": "비밀번호가 일치하지 않습니다",
+      "showPassword": "비밀번호 표시",
+      "hidePassword": "비밀번호 숨기기"
+    },
+    "login": {
+      "heading": "다시 오신 것을 환영합니다",
+      "tagline": "여정은 아직 끝나지 않았습니다. 그 끝에는 별바다가 있습니다.",
+      "forgotPassword": "비밀번호를 잊으셨나요?",
+      "submitting": "로그인 중…",
+      "noAccount": "계정이 없으신가요?",
+      "registerNow": "회원가입",
+      "errors": {
+        "generic": "로그인에 실패했습니다. 잠시 후 다시 시도해 주세요.",
+        "checkFields": "로그인 정보를 확인해 주세요."
+      }
+    },
+    "register": {
+      "heading": "계정 만들기",
+      "haveAccount": "이미 계정이 있으신가요?",
+      "loginNow": "로그인",
+      "codeSent": "인증 코드를 보냈습니다. 이메일을 확인해 주세요.",
+      "cta": {
+        "verifyPsnid": "PSN ID 확인",
+        "verifying": "확인 중…",
+        "sendCode": "인증 코드 보내기",
+        "sending": "보내는 중…",
+        "resendIn": "{seconds}초 후 재발송",
+        "submit": "가입 완료",
+        "submitting": "가입 중…"
+      },
+      "terms": {
+        "intro": "PSRay는 PSN 사용자를 위한 커뮤니티 사이트입니다.",
+        "needsPsn": "{icon} PlayStation (PSN) 계정이 필요합니다.",
+        "agreeTerms": "{icon} {link}을 읽고 동의합니다.",
+        "agreePrivacy": "{icon} {link}을 읽고 동의합니다.",
+        "termsLink": "이용약관",
+        "privacyLink": "개인정보 처리방침"
+      },
+      "psnid": {
+        "placeholder": "당신의 PlayStation Network ID",
+        "requirementsTitle": "신규 가입 조건",
+        "requirementsHint": "스팸 계정을 걸러내고 진짜 플레이어를 위한 공간을 지키기 위한 조건입니다.",
+        "requirement1": "사이트에서 최소 1회 동기화했을 것.",
+        "requirement2": "PSN 트로피 레벨이 100을 초과할 것.",
+        "requirement3": "PSN 게임 정보가 공개로 설정되어 있을 것."
+      },
+      "password": {
+        "hint": "계정에 사용할 안전한 비밀번호를 설정하세요."
+      },
+      "email": {
+        "hint": "‘인증 코드 보내기’를 누르면 이 주소로 6자리 코드를 보내드립니다."
+      },
+      "verify": {
+        "sentTo": "{email} 로 인증 코드를 보냈습니다. 일부 서비스에서는 스팸으로 분류될 수 있으니 스팸함도 확인해 주세요.",
+        "step1": "이메일을 열어 6자리 인증 코드를 확인합니다.",
+        "step2": "PlayStation 앱 또는 공식 사이트에서 PSN에 로그인한 뒤, 코드를 ‘자기소개 / About Me’에 입력하고 저장합니다.",
+        "step3": "이 페이지로 돌아와 ‘가입 완료’를 누릅니다. 인증 후에는 PSN 자기소개에서 코드를 지워도 됩니다.",
+        "resend": "못 받으셨나요? 인증 코드 재발송"
+      },
+      "done": {
+        "title": "모두 완료되었습니다",
+        "description": "PSRay 계정이 생성되었습니다.",
+        "cta": "로그인하러 가기"
+      },
+      "errors": {
+        "checkFields": "입력한 정보를 확인해 주세요.",
+        "psnidGeneric": "PSN ID 확인에 실패했습니다. 잠시 후 다시 시도해 주세요.",
+        "psnidNotSynced": "해당 PSN ID를 찾을 수 없습니다. 사이트에서 한 번 동기화한 뒤 가입해 주세요.",
+        "profilePrivate": "PlayStation 개인정보 설정에서 게임 정보를 공개로 변경해 주세요.",
+        "sendGeneric": "인증 코드 발송에 실패했습니다. 잠시 후 다시 시도해 주세요.",
+        "emailTaken": "이미 사용 중인 이메일입니다. 다른 주소를 사용해 주세요.",
+        "emailTakenGoBack": "이미 사용 중인 이메일입니다. 이전 단계로 돌아가 변경해 주세요.",
+        "psnAccountNotFound": "해당 PSN 계정을 찾을 수 없습니다. PSN ID가 정확하고 PSRay에 등록되어 있는지 확인해 주세요.",
+        "registerGeneric": "가입에 실패했습니다. 잠시 후 다시 시도해 주세요."
+      }
+    }
+  },
+  "errors": {
+    "notFound": {
+      "title": "페이지를 찾을 수 없습니다",
+      "description": "찾으시는 페이지가 없거나 삭제되었습니다."
+    },
+    "generic": {
+      "title": "문제가 발생했습니다",
+      "description": "잠시 후 다시 시도해 주세요."
+    },
+    "api": {
+      "ALREADY_REGISTERED": "이미 가입된 PSN 계정입니다. 바로 로그인해 주세요.",
+      "PSN_LEVEL_TOO_LOW": "PSN 트로피 레벨이 100을 초과해야 합니다.",
+      "TOO_MANY_REQUESTS": "요청이 너무 잦습니다. 잠시 후 다시 시도해 주세요.",
+      "EMAIL_SEND_FAILED": "메일 발송에 실패했습니다. 잠시 후 다시 시도해 주세요.",
+      "PSN_PROFILE_FAILED": "PSN 프로필을 가져오지 못했습니다. 잠시 후 다시 시도해 주세요.",
+      "VERIFICATION_CODE_INVALID": "PSN 자기소개에서 올바른 인증 코드를 찾지 못했습니다. 입력 후 저장되었는지 확인해 주세요.",
+      "VERIFICATION_CODE_EXPIRED": "인증 코드가 만료되었습니다. 다시 발송한 후 시도해 주세요.",
+      "INVALID_CREDENTIALS": "아이디 또는 비밀번호가 올바르지 않습니다.",
+      "ACCOUNT_TERMINATED": "이 계정은 정지되었습니다."
+    }
+  },
+  "toast": {
+    "copied": "{label}을(를) 복사했습니다",
+    "copyFailed": {
+      "title": "복사 실패",
+      "description": "브라우저의 클립보드 권한을 확인해 주세요."
+    },
+    "followed": {
+      "title": "팔로우했습니다",
+      "description": "{psnid}님을 팔로우합니다"
+    }
+  },
+  "qr": {
+    "title": "페이지 QR 코드",
+    "copyLink": "링크 복사",
+    "copied": "복사했습니다",
+    "linkCopied": "링크를 복사했습니다",
+    "generateFailed": "QR 코드 생성에 실패했습니다"
+  },
+  "time": {
+    "dayHour": "{d}일 {h}시간",
+    "hourMinute": "{h}시간 {m}분",
+    "minuteSecond": "{m}분 {s}초",
+    "second": "{s}초"
+  },
+  "trophy": {
+    "tier": {
+      "platinum": "플래티넘",
+      "gold": "골드",
+      "silver": "실버",
+      "bronze": "브론즈"
+    },
+    "tierShort": {
+      "gold": "금",
+      "silver": "은",
+      "bronze": "동"
+    },
+    "rarity": {
+      "common": "일반",
+      "uncommon": "조금 희귀",
+      "rare": "희귀",
+      "veryRare": "매우 희귀",
+      "ultraRare": "초희귀"
+    },
+    "list": {
+      "heading": "트로피",
+      "count": "총 {n}개",
+      "showHidden": "숨겨진 트로피 표시",
+      "expand": "모든 트로피 보기",
+      "collapse": "트로피 목록 접기"
+    },
+    "filter": {
+      "all": "전체",
+      "earned": "획득",
+      "unearned": "미획득",
+      "needsPsnid": "PSN ID를 입력하면 사용할 수 있습니다"
+    },
+    "sort": {
+      "label": "정렬",
+      "default": "기본",
+      "earned": "획득 시간",
+      "rarity": "PSN 희귀도"
+    },
+    "lang": {
+      "available": "{badge}개 언어 지원",
+      "pickerTitle": "표시 언어 선택",
+      "pickerHint": "트로피 이름과 설명을 표시할 언어를 선택하세요.",
+      "default": "기본"
+    },
+    "item": {
+      "hidden": "숨겨진 트로피",
+      "earned": "획득함",
+      "reveal": "이 숨겨진 트로피 표시",
+      "mask": "이 트로피 숨기기",
+      "earnedAt": "획득 시간",
+      "earnedOrder": "획득 순서",
+      "firstEarned": "첫 획득",
+      "sincePrevious": "이전 트로피 이후",
+      "psnRate": "PSN 획득률",
+      "psrayRate": "PSRay 획득률",
+      "tips": "댓글",
+      "menu": {
+        "view": "트로피 보기",
+        "copyTitle": "트로피 이름 복사",
+        "copyDetail": "트로피 설명 복사",
+        "titleLabel": "트로피 이름",
+        "detailLabel": "트로피 설명",
+        "recentEarners": "최근 획득한 플레이어 보기"
+      }
+    },
+    "detail": {
+      "title": "트로피 상세",
+      "id": "트로피 ID",
+      "tipCount": "댓글 수"
+    },
+    "group": {
+      "baseGame": "본편",
+      "noMatches": "조건에 맞는 트로피가 없습니다."
+    },
+    "banner": {
+      "owners": "플레이",
+      "averageProgress": "평균 진행률",
+      "completed": "완료 인원",
+      "platinums": "플래티넘 인원",
+      "setId": "트로피 세트 ID",
+      "version": "버전",
+      "qrTitle": "트로피 세트 QR 코드"
+    },
+    "progress": {
+      "title": "나의 진행 상황",
+      "earnedLabel": "획득",
+      "trophiesUnit": "개",
+      "complete": "완료",
+      "duration": "소요 시간",
+      "lastTrophy": "마지막 트로피"
+    },
+    "players": {
+      "title": "플레이어 랭킹",
+      "recent": "최근 플레이",
+      "progress": "가장 먼저 완료",
+      "speedrun": "최단 시간",
+      "empty": "아직 플레이어 기록이 없습니다."
+    },
+    "earners": {
+      "title": "최근 획득한 플레이어",
+      "newestFirst": "최신순",
+      "oldestFirst": "오래된순",
+      "empty": "아직 이 트로피를 획득한 플레이어가 없습니다.",
+      "earnedAt": "{time} 획득"
+    },
+    "tips": {
+      "title": "트로피 댓글",
+      "empty": "아직 댓글이 없습니다.",
+      "total": "총 {count}개",
+      "spoiler": "스포일러 포함 — 탭하여 표시"
+    },
+    "similar": {
+      "title": "연결된 트로피 세트",
+      "subtitle": "같은 게임의 다른 플랫폼 / 다른 지역 트로피 세트",
+      "setCount": "{n}세트",
+      "owners": "{count}명 플레이"
+    },
+    "recentPlayers": {
+      "title": "최근 플레이어",
+      "empty": "아직 플레이어 기록이 없습니다.",
+      "hasPlatinum": "플래티넘 획득"
+    }
+  },
+  "leaderboard": {
+    "boards": "랭킹",
+    "registeredOnly": "가입 사용자만",
+    "totalPlayers": "총 {count}명",
+    "pickBoard": "랭킹 선택",
+    "empty": "랭킹 데이터가 없습니다.",
+    "column": {
+      "rank": "순위",
+      "user": "플레이어",
+      "level": "레벨",
+      "points": "포인트",
+      "tipCount": "댓글 수",
+      "voteUp": "추천",
+      "contribution": "기여 점수"
+    },
+    "board": {
+      "points": {
+        "label": "전체 포인트 랭킹",
+        "description": "PSN 포인트 기준 전체 랭킹"
+      },
+      "pointsRegion": {
+        "label": "지역 포인트 랭킹",
+        "description": "선택한 지역 플레이어의 포인트 랭킹"
+      },
+      "tips": {
+        "label": "도움 랭킹",
+        "description": "트로피 댓글을 가장 많이 남기고 인정받은 플레이어"
+      },
+      "contribution": {
+        "label": "기여 랭킹",
+        "description": "기여 점수 기준 종합 랭킹"
+      }
+    }
+  },
+  "profile": {
+    "qrTitle": "프로필 QR 코드",
+    "tabs": {
+      "recent": "최근 플레이",
+      "trophies": "획득 트로피",
+      "milestones": "마일스톤"
+    },
+    "identity": {
+      "registered": "가입 사용자",
+      "unregistered": "미가입 (PSN 프로필 동기화만)",
+      "noAboutMe": "이 플레이어는 아무것도 남기지 않았습니다.",
+      "views": "조회 {count}회",
+      "notRealtime": "실시간 데이터가 아닙니다"
+    },
+    "actions": {
+      "interact": "상호작용",
+      "sync": "갱신",
+      "follow": "팔로우",
+      "unfollow": "팔로우 취소",
+      "following": "팔로우 중"
+    },
+    "social": {
+      "title": "소셜",
+      "followers": "팔로워",
+      "following": "팔로잉",
+      "followsYou": "나를 팔로우함",
+      "mutual": "맞팔로우"
+    },
+    "stats": {
+      "title": "통계 요약",
+      "games": "게임 수",
+      "trophies": "총 트로피",
+      "perfect": "완벽",
+      "lowCompletion": "낮은 완료율",
+      "favorites": "즐겨찾기",
+      "reviews": "리뷰",
+      "globalRank": "전체 순위",
+      "regionRank": "지역 순위",
+      "points": "트로피 포인트",
+      "unranked": "순위 없음"
+    },
+    "summary": {
+      "level": "계정 레벨 · {progress}%"
+    },
+    "account": {
+      "title": "계정 정보",
+      "region": "지역",
+      "language": "언어",
+      "firstTrophy": "첫 트로피",
+      "lastTrophy": "최근 트로피",
+      "joined": "가입일",
+      "syncInterval": "자동 동기화 주기",
+      "nextSync": "다음 동기화 예정",
+      "hours": "{n}시간"
+    },
+    "calendar": {
+      "title": "지난 1년간의 활동",
+      "trophiesEarned": "획득 트로피",
+      "activeDays": "활동 일수",
+      "bestDay": "하루 최고",
+      "earnedCount": "{n}개 획득",
+      "earnedNone": "획득 없음",
+      "less": "적음",
+      "more": "많음"
+    },
+    "milestones": {
+      "title": "트로피 마일스톤",
+      "subtitle": "트로피 수집의 중요한 순간들",
+      "nthPlatinum": "{n}번째 플래티넘",
+      "nthTrophy": "{n}번째 트로피",
+      "loadFailed": "마일스톤을 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.",
+      "empty": "아직 달성한 마일스톤이 없습니다.",
+      "collapse": "마일스톤 접기",
+      "showMore": "더 보기 (남은 {count}개)"
+    },
+    "earned": {
+      "title": "획득 트로피",
+      "subtitle": "획득 시간순 트로피 기록",
+      "total": "총 {count}개",
+      "empty": "아직 획득한 트로피가 없습니다.",
+      "gapTitle": "이전 트로피와의 간격",
+      "gap": "간격 {duration}"
+    },
+    "recent": {
+      "empty": "아직 플레이 기록이 없습니다.",
+      "expand": "최근 플레이 모두 보기",
+      "collapse": "최근 플레이 접기"
+    },
+    "log": {
+      "comingSoon": "트로피 기록 기능은 곧 제공됩니다."
+    },
+    "private": {
+      "title": "비공개 계정입니다",
+      "line1": "이 사용자의 트로피 정보는 비공개라 상세 내용을 표시할 수 없습니다.",
+      "line2": "PlayStation 개인정보 설정에서 변경할 수 있습니다."
+    }
+  },
+  "sync": {
+    "heading": "PSN 프로필 동기화",
+    "subheading": "PSN ID를 제출하면 동기화 대기열에 추가되어 순서대로 처리됩니다.",
+    "cta": {
+      "submit": "제출",
+      "submitting": "제출 중…"
+    },
+    "status": {
+      "queued": "대기 중",
+      "calculating": "계산 중",
+      "syncing": "동기화 중",
+      "completed": "완료",
+      "failed": "실패"
+    },
+    "poll": {
+      "refreshing": "진행 상황 갱신 중",
+      "countdown": "{seconds}초 후 갱신"
+    },
+    "gamesUnit": "개 게임",
+    "waitingWorker": "작업자 배정을 기다리는 중…",
+    "calculating": "동기화할 게임을 계산하는 중…",
+    "queueAhead": "앞에 {badge}개의 작업",
+    "currentGame": "동기화 중",
+    "failedCount": "실패 {count}",
+    "skippedCount": "건너뜀 {count}",
+    "goToProfile": "프로필로 이동",
+    "queueOverview": "{active}개 동기화 진행 중, {waiting}명 대기 중입니다.",
+    "updatedAt": "{time} 업데이트",
+    "private": {
+      "title": "비공개 프로필은 동기화할 수 없습니다",
+      "line1": "이 PSN 프로필은 비공개라 트로피 데이터를 동기화할 수 없습니다.",
+      "line2": "PlayStation 개인정보 설정에서 트로피를 공개로 변경한 뒤 다시 시도해 주세요."
+    },
+    "errors": {
+      "status": "동기화 진행 상황을 가져오지 못했습니다.",
+      "submit": "동기화 요청 제출에 실패했습니다.",
+      "submitRetry": "동기화 요청 제출에 실패했습니다. 잠시 후 다시 시도해 주세요.",
+      "workerUnavailable": "동기화 서비스를 일시적으로 사용할 수 없습니다. 잠시 후 다시 시도해 주세요."
+    }
+  },
+  "settings": {
+    "heading": "계정 설정",
+    "subheading": "계정 정보와 보안 설정을 관리합니다.",
+    "nav": {
+      "profile": "프로필",
+      "security": "계정 보안"
+    },
+    "profile": {
+      "heading": "프로필",
+      "subheading": "프로필 페이지의 배너와 아바타를 설정합니다.",
+      "loadFailed": "설정을 불러오지 못했습니다. 다시 시도해 주세요.",
+      "updatePreview": "미리보기 갱신",
+      "noChanges": "저장할 변경 사항이 없습니다",
+      "saved": "설정이 업데이트되었습니다",
+      "saveFailed": "저장 실패",
+      "banner": {
+        "title": "프로필 배너",
+        "hint": "프로필 페이지 상단에 표시되는 이미지입니다.",
+        "urlLabel": "배너 이미지 URL",
+        "sizeHint": "약 4.5:1 비율의 와이드 이미지(예: 1440×320)를 권장합니다. 너무 작은 이미지는 큰 화면에서 흐려집니다.",
+        "uploadHint": "외부 이미지 호스팅에 업로드한 뒤 링크를 붙여넣으세요. 직접 업로드는 준비 중입니다."
+      },
+      "avatar": {
+        "title": "아바타",
+        "hint": "동기화된 PSN 아바타를 쓰거나 직접 이미지 URL을 지정합니다.",
+        "usePsn": "PSN 아바타 사용",
+        "useCustom": "사용자 지정 이미지 사용",
+        "urlLabel": "아바타 이미지 URL",
+        "urlRequired": "아바타 이미지 URL을 입력해 주세요",
+        "uploadHint": "외부 이미지 호스팅을 사용할 수 있습니다. 직접 업로드는 준비 중입니다."
+      }
+    },
+    "security": {
+      "heading": "계정 보안",
+      "subheading": "로그인과 본인 확인에 사용하는 정보를 관리합니다.",
+      "status": {
+        "email": "이메일 상태",
+        "bound": "연결됨",
+        "password": "비밀번호",
+        "set": "설정됨"
+      },
+      "errors": {
+        "generic": "작업에 실패했습니다. 잠시 후 다시 시도해 주세요."
+      },
+      "email": {
+        "label": "로그인 이메일",
+        "unbound": "이메일 미등록",
+        "editTitle": "로그인 이메일 변경",
+        "current": "현재: {email}",
+        "new": "새 이메일",
+        "save": "이메일 업데이트",
+        "saving": "업데이트 중…",
+        "updated": "이메일이 업데이트되었습니다."
+      },
+      "password": {
+        "label": "계정 비밀번호",
+        "hint": "설정되어 있습니다. 주기적으로 변경하고 다른 사이트와 재사용하지 마세요.",
+        "editTitle": "계정 비밀번호 변경",
+        "editHint": "저장 후에는 새 비밀번호로 로그인해야 합니다.",
+        "save": "비밀번호 변경",
+        "saving": "변경 중…",
+        "updated": "비밀번호가 변경되었습니다.",
+        "updatedDetail": "다른 기기는 로그아웃되었으며, 현재 기기는 다시 로그인할 필요가 없습니다."
+      },
+      "strength": {
+        "label": "비밀번호 강도",
+        "empty": "입력 대기",
+        "weak": "약함",
+        "fair": "보통",
+        "good": "좋음",
+        "strong": "매우 강함",
+        "tip": "8자 이상, 대소문자·숫자·기호를 섞어 사용하는 것을 권장합니다."
+      }
+    },
+    "prefs": {
+      "title": "설정",
+      "lang": {
+        "title": "트로피 언어 설정",
+        "hint": "켜면 모든 요청에 선택한 언어가 함께 전송되어, 서버가 해당 언어의 트로피 번역을 우선 제공합니다.",
+        "primary": "기본 언어",
+        "secondary": "대체 언어 (선택)",
+        "unset": "설정 안 함",
+        "sameError": "기본 언어와 대체 언어는 같을 수 없습니다."
+      },
+      "rate": {
+        "title": "트로피 획득률 기준",
+        "hint": "트로피 목록에 주로 표시할 획득률을 선택합니다: PSN 공식 획득률 또는 PSRay 사이트 획득률."
+      },
+      "saved": {
+        "title": "설정이 저장되었습니다",
+        "description": "이 기기에 저장되었습니다."
+      }
+    }
+  },
+  "seo": {
+    "home": {
+      "title": "PSRay",
+      "description": "PSRay는 PSN 트로피 추적 사이트입니다. 플레이어 프로필을 검색하고 트로피 세트와 랭킹을 확인하세요."
+    },
+    "leaderboard": {
+      "title": "랭킹 · PSRay",
+      "description": "PSN 트로피 포인트, 지역별 랭킹, 커뮤니티 기여 랭킹."
+    },
+    "profile": {
+      "title": "{psnid} · 프로필 · PSRay",
+      "titleFallback": "프로필 · PSRay",
+      "description": "{psnid}의 PSN 트로피 기록 — 획득 트로피, 마일스톤, 최근 플레이 기록."
+    },
+    "trophy": {
+      "title": "{name} 트로피 · PSRay",
+      "titleFallback": "트로피 세트 · PSRay",
+      "description": "{name}({platform})의 트로피 {count}개 전체 — 획득률, 희귀도, 공략 팁."
+    },
+    "login": {
+      "title": "로그인 · PSRay",
+      "description": "PSRay 계정에 로그인합니다."
+    },
+    "register": {
+      "title": "회원가입 · PSRay",
+      "description": "PSN 계정으로 PSRay에 가입합니다."
+    },
+    "sync": {
+      "title": "프로필 동기화 · PSRay",
+      "description": "PSN 트로피 데이터를 PSRay에 동기화합니다."
+    },
+    "settings": {
+      "title": "계정 설정 · PSRay"
+    }
+  }
+}

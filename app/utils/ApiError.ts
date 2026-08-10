@@ -48,6 +48,15 @@ export class ApiError extends Error {
     })
   }
 
+  /**
+   * Alias of {@link status} under the name h3's `createError()` and Nuxt's
+   * `useFetch` error handling look for, so pages can forward a real HTTP status
+   * instead of rendering a "not found" card at 200.
+   */
+  get statusCode(): number {
+    return this.status
+  }
+
   /** True for field-level validation failures (has `details`). */
   get isValidation(): boolean {
     return this.code === 'VALIDATION_FAILED' || (this.details?.length ?? 0) > 0

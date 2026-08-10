@@ -10,7 +10,7 @@ const email = defineModel<string>('email', { required: true })
   <div class="space-y-5">
     <AuthField
       v-model="email"
-      label="邮箱"
+      :label="$t('auth.field.email')"
       type="email"
       :icon="Mail"
       placeholder="you@example.com"
@@ -18,7 +18,7 @@ const email = defineModel<string>('email', { required: true })
       :error="emailError"
     />
     <p class="text-xs leading-relaxed text-slate-400">
-      点击「发送验证码」后，我们会向该邮箱发送一个 6 位验证码。
+      {{ $t('auth.register.email.hint') }}
     </p>
   </div>
 </template>

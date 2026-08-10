@@ -1,0 +1,608 @@
+{
+  "common": {
+    "back": "戻る",
+    "backHome": "ホームへ戻る",
+    "cancel": "キャンセル",
+    "close": "閉じる",
+    "copy": "コピー",
+    "edit": "変更",
+    "next": "次へ",
+    "nextPage": "次のページ",
+    "previousPage": "前のページ",
+    "retry": "再試行",
+    "save": "保存",
+    "saving": "保存中…",
+    "showMore": "もっと見る",
+    "sortAsc": "昇順",
+    "sortDesc": "降順",
+    "updated": "更新日時",
+    "updatedAt": "{time} に更新",
+    "view": "見る"
+  },
+  "nav": {
+    "home": "ホーム",
+    "leaderboard": "ランキング",
+    "login": "ログイン",
+    "register": "新規登録",
+    "sectionLabel": "ナビゲーション",
+    "aria": {
+      "account": "ログインまたは新規登録",
+      "collapseMenu": "メニューを折りたたむ",
+      "expandMenu": "メニューを開く",
+      "language": "言語",
+      "search": "検索",
+      "settings": "設定"
+    },
+    "user": {
+      "logout": "ログアウト",
+      "profile": "プロフィール",
+      "settings": "アカウント設定",
+      "sync": "アカウント同期"
+    }
+  },
+  "home": {
+    "lookup": {
+      "heading": "プロフィールを見る",
+      "hint": "PSN ID を入力すると、そのプロフィールページに移動します。",
+      "view": "表示",
+      "sync": "同期"
+    }
+  },
+  "auth": {
+    "field": {
+      "code": "認証コード",
+      "codePlaceholder": "6 桁のコード",
+      "email": "メールアドレス",
+      "password": "パスワード",
+      "passwordPlaceholder": "8 文字以上",
+      "confirmPassword": "パスワードの確認",
+      "confirmPasswordPlaceholder": "パスワードを再入力",
+      "currentPassword": "現在のパスワード",
+      "newPassword": "新しいパスワード",
+      "confirmNewPassword": "新しいパスワードの確認",
+      "passwordMismatch": "パスワードが一致しません",
+      "showPassword": "パスワードを表示",
+      "hidePassword": "パスワードを非表示"
+    },
+    "login": {
+      "heading": "おかえりなさい",
+      "tagline": "旅はまだ終わらない。その先には満天の星が待っている。",
+      "forgotPassword": "パスワードをお忘れですか？",
+      "submitting": "ログイン中…",
+      "noAccount": "アカウントをお持ちでないですか？",
+      "registerNow": "新規登録",
+      "errors": {
+        "generic": "ログインに失敗しました。しばらくしてからもう一度お試しください。",
+        "checkFields": "入力内容をご確認ください。"
+      }
+    },
+    "register": {
+      "heading": "アカウントを作成",
+      "haveAccount": "すでにアカウントをお持ちですか？",
+      "loginNow": "ログイン",
+      "codeSent": "認証コードを送信しました。メールをご確認ください。",
+      "cta": {
+        "verifyPsnid": "PSN ID を確認",
+        "verifying": "確認中…",
+        "sendCode": "認証コードを送信",
+        "sending": "送信中…",
+        "resendIn": "{seconds} 秒後に再送信",
+        "submit": "登録を完了",
+        "submitting": "登録中…"
+      },
+      "terms": {
+        "intro": "PSRay は PSN ユーザーのためのコミュニティサイトです。",
+        "needsPsn": "{icon} PlayStation (PSN) アカウントが必要です。",
+        "agreeTerms": "{icon} {link} を読み、同意します。",
+        "agreePrivacy": "{icon} {link} を読み、同意します。",
+        "termsLink": "利用規約",
+        "privacyLink": "プライバシーポリシー"
+      },
+      "psnid": {
+        "placeholder": "あなたの PlayStation Network ID",
+        "requirementsTitle": "新規登録の条件",
+        "requirementsHint": "スパムアカウントを避け、プレイヤーのための場所を保つためです。",
+        "requirement1": "サイト上で 1 回以上同期していること。",
+        "requirement2": "PSN のトロフィーレベルが 100 を超えていること。",
+        "requirement3": "PSN のゲーム情報が公開設定になっていること。"
+      },
+      "password": {
+        "hint": "アカウントの安全なログインパスワードを設定してください。"
+      },
+      "email": {
+        "hint": "「認証コードを送信」を押すと、このアドレスに 6 桁のコードをお送りします。"
+      },
+      "verify": {
+        "sentTo": "認証コードを {email} に送信しました。メールをご確認ください。迷惑メールに振り分けられる場合があります。",
+        "step1": "メールを開き、6 桁の認証コードを確認します。",
+        "step2": "PlayStation App または公式サイトで PSN にログインし、コードを「自己紹介 / About Me」に入力して保存します。",
+        "step3": "このページに戻って「登録を完了」を押します。認証後は PSN の自己紹介からコードを削除して構いません。",
+        "resend": "届きませんか？認証コードを再送信"
+      },
+      "done": {
+        "title": "すべて順調です",
+        "description": "PSRay アカウントの作成が完了しました。",
+        "cta": "ログインへ"
+      },
+      "errors": {
+        "checkFields": "入力内容をご確認ください。",
+        "psnidGeneric": "PSN ID の確認に失敗しました。しばらくしてからもう一度お試しください。",
+        "psnidNotSynced": "この PSN ID は見つかりませんでした。先にサイト上で 1 回同期してから登録してください。",
+        "profilePrivate": "PlayStation のプライバシー設定でゲーム情報を公開してください。",
+        "sendGeneric": "認証コードの送信に失敗しました。しばらくしてからもう一度お試しください。",
+        "emailTaken": "このメールアドレスは既に使用されています。別のアドレスをお試しください。",
+        "emailTakenGoBack": "このメールアドレスは既に使用されています。前の手順に戻って変更してください。",
+        "psnAccountNotFound": "この PSN アカウントが見つかりません。PSN ID が正しく、PSRay に収録されているかご確認ください。",
+        "registerGeneric": "登録に失敗しました。しばらくしてからもう一度お試しください。"
+      }
+    }
+  },
+  "errors": {
+    "notFound": {
+      "title": "ページが見つかりません",
+      "description": "お探しのページは存在しないか、削除された可能性があります。"
+    },
+    "generic": {
+      "title": "問題が発生しました",
+      "description": "しばらくしてからもう一度お試しください。"
+    },
+    "api": {
+      "ALREADY_REGISTERED": "この PSN アカウントは登録済みです。そのままログインしてください。",
+      "PSN_LEVEL_TOO_LOW": "PSN のトロフィーレベルが 100 を超えている必要があります。",
+      "TOO_MANY_REQUESTS": "リクエストが多すぎます。しばらくしてからもう一度お試しください。",
+      "EMAIL_SEND_FAILED": "メールの配信に失敗しました。しばらくしてからもう一度お試しください。",
+      "PSN_PROFILE_FAILED": "PSN プロフィールの取得に失敗しました。しばらくしてからもう一度お試しください。",
+      "VERIFICATION_CODE_INVALID": "PSN の自己紹介に正しい認証コードが見つかりませんでした。入力済みで、削除されていないかご確認ください。",
+      "VERIFICATION_CODE_EXPIRED": "認証コードの有効期限が切れています。再送信してからもう一度お試しください。",
+      "INVALID_CREDENTIALS": "アカウントまたはパスワードが違います。",
+      "ACCOUNT_TERMINATED": "このアカウントは停止されています。"
+    }
+  },
+  "toast": {
+    "copied": "{label} をコピーしました",
+    "copyFailed": {
+      "title": "コピーに失敗しました",
+      "description": "ブラウザのクリップボード権限をご確認ください。"
+    },
+    "followed": {
+      "title": "フォローしました",
+      "description": "{psnid} をフォローしました"
+    }
+  },
+  "qr": {
+    "title": "ページの QR コード",
+    "copyLink": "リンクをコピー",
+    "copied": "コピーしました",
+    "linkCopied": "リンクをコピーしました",
+    "generateFailed": "QR コードの生成に失敗しました"
+  },
+  "time": {
+    "dayHour": "{d}日{h}時間",
+    "hourMinute": "{h}時間{m}分",
+    "minuteSecond": "{m}分{s}秒",
+    "second": "{s}秒"
+  },
+  "trophy": {
+    "tier": {
+      "platinum": "プラチナ",
+      "gold": "ゴールド",
+      "silver": "シルバー",
+      "bronze": "ブロンズ"
+    },
+    "tierShort": {
+      "gold": "金",
+      "silver": "銀",
+      "bronze": "銅"
+    },
+    "rarity": {
+      "common": "コモン",
+      "uncommon": "アンコモン",
+      "rare": "レア",
+      "veryRare": "ベリーレア",
+      "ultraRare": "ウルトラレア"
+    },
+    "list": {
+      "heading": "トロフィー",
+      "count": "全 {n} 個",
+      "showHidden": "隠しトロフィーを表示",
+      "expand": "すべてのトロフィーを表示",
+      "collapse": "トロフィー一覧を折りたたむ"
+    },
+    "filter": {
+      "all": "すべて",
+      "earned": "獲得済み",
+      "unearned": "未獲得",
+      "needsPsnid": "PSN ID を入力すると使えます"
+    },
+    "sort": {
+      "label": "並び替え",
+      "default": "既定",
+      "earned": "獲得日時",
+      "rarity": "PSN レアリティ"
+    },
+    "lang": {
+      "available": "{badge} 言語に対応",
+      "pickerTitle": "表示言語を選択",
+      "pickerHint": "トロフィー名と説明を表示する言語を選びます。",
+      "default": "既定"
+    },
+    "item": {
+      "hidden": "隠しトロフィー",
+      "earned": "獲得済み",
+      "reveal": "この隠しトロフィーを表示",
+      "mask": "このトロフィーを隠す",
+      "earnedAt": "獲得日時",
+      "earnedOrder": "獲得順",
+      "firstEarned": "最初の獲得",
+      "sincePrevious": "前のトロフィーから",
+      "psnRate": "PSN 獲得率",
+      "psrayRate": "PSRay 獲得率",
+      "tips": "コメント",
+      "menu": {
+        "view": "トロフィーを見る",
+        "copyTitle": "トロフィー名をコピー",
+        "copyDetail": "トロフィーの説明をコピー",
+        "titleLabel": "トロフィー名",
+        "detailLabel": "トロフィーの説明",
+        "recentEarners": "最近獲得したプレイヤーを見る"
+      }
+    },
+    "detail": {
+      "title": "トロフィーの詳細",
+      "id": "トロフィー ID",
+      "tipCount": "コメント数"
+    },
+    "group": {
+      "baseGame": "本編",
+      "noMatches": "条件に合うトロフィーがありません。"
+    },
+    "banner": {
+      "owners": "プレイ人数",
+      "averageProgress": "平均進捗",
+      "completed": "コンプ人数",
+      "platinums": "プラチナ人数",
+      "setId": "トロフィーセット ID",
+      "version": "バージョン",
+      "qrTitle": "トロフィーセットの QR コード"
+    },
+    "progress": {
+      "title": "あなたの進捗",
+      "earnedLabel": "獲得",
+      "trophiesUnit": "個",
+      "complete": "コンプリート",
+      "duration": "所要時間",
+      "lastTrophy": "最後のトロフィー"
+    },
+    "players": {
+      "title": "プレイヤーランキング",
+      "recent": "最近プレイ",
+      "progress": "コンプが早い順",
+      "speedrun": "最短クリア時間",
+      "empty": "プレイヤー記録がまだありません。"
+    },
+    "earners": {
+      "title": "最近獲得したプレイヤー",
+      "newestFirst": "新しい順",
+      "oldestFirst": "古い順",
+      "empty": "このトロフィーを獲得したプレイヤーはまだいません。",
+      "earnedAt": "{time} に獲得"
+    },
+    "tips": {
+      "title": "トロフィーのコメント",
+      "empty": "コメントはまだありません。",
+      "total": "全 {count} 件",
+      "spoiler": "ネタバレを含みます。タップして表示"
+    },
+    "similar": {
+      "title": "関連するトロフィーセット",
+      "subtitle": "同じゲームの別プラットフォーム / 別地域のトロフィーセット",
+      "setCount": "{n} セット",
+      "owners": "{count} 人がプレイ"
+    },
+    "recentPlayers": {
+      "title": "最近のプレイヤー",
+      "empty": "プレイヤー記録がまだありません。",
+      "hasPlatinum": "プラチナ獲得済み"
+    }
+  },
+  "leaderboard": {
+    "boards": "ランキング",
+    "registeredOnly": "登録ユーザーのみ",
+    "totalPlayers": "全 {count} 人",
+    "pickBoard": "ランキングを選択",
+    "empty": "ランキングデータがありません。",
+    "column": {
+      "rank": "順位",
+      "user": "プレイヤー",
+      "level": "レベル",
+      "points": "ポイント",
+      "tipCount": "コメント数",
+      "voteUp": "高評価",
+      "contribution": "貢献ポイント"
+    },
+    "board": {
+      "points": {
+        "label": "総合ポイントランキング",
+        "description": "PSN ポイントによるサイト全体のランキング"
+      },
+      "pointsRegion": {
+        "label": "地域別ポイントランキング",
+        "description": "選択した地域のプレイヤーのポイントランキング"
+      },
+      "tips": {
+        "label": "貢献度ランキング",
+        "description": "トロフィーのコメントを最も多く投稿し、評価されたプレイヤー"
+      },
+      "contribution": {
+        "label": "コントリビューションランキング",
+        "description": "貢献ポイントによる総合ランキング"
+      }
+    }
+  },
+  "profile": {
+    "qrTitle": "プロフィールの QR コード",
+    "tabs": {
+      "recent": "最近プレイ",
+      "trophies": "獲得トロフィー",
+      "milestones": "マイルストーン"
+    },
+    "identity": {
+      "registered": "登録ユーザー",
+      "unregistered": "未登録（PSN プロフィールの同期のみ）",
+      "noAboutMe": "この人は何も書き残していません。",
+      "views": "{count} 回閲覧",
+      "notRealtime": "リアルタイムのデータではありません"
+    },
+    "actions": {
+      "interact": "操作",
+      "sync": "更新",
+      "follow": "フォロー",
+      "unfollow": "フォロー解除",
+      "following": "フォロー中"
+    },
+    "social": {
+      "title": "ソーシャル",
+      "followers": "フォロワー",
+      "following": "フォロー",
+      "followsYou": "あなたをフォロー中",
+      "mutual": "相互フォロー"
+    },
+    "stats": {
+      "title": "統計サマリー",
+      "games": "ゲーム数",
+      "trophies": "トロフィー総数",
+      "perfect": "コンプリート",
+      "lowCompletion": "低進捗",
+      "favorites": "お気に入り",
+      "reviews": "レビュー",
+      "globalRank": "世界ランキング",
+      "regionRank": "地域ランキング",
+      "points": "トロフィーポイント",
+      "unranked": "ランキング外"
+    },
+    "summary": {
+      "level": "アカウントレベル · {progress}%"
+    },
+    "account": {
+      "title": "アカウント情報",
+      "region": "地域",
+      "language": "言語",
+      "firstTrophy": "最初のトロフィー",
+      "lastTrophy": "最新のトロフィー",
+      "joined": "登録日",
+      "syncInterval": "自動同期の間隔",
+      "nextSync": "次回の同期予定",
+      "hours": "{n} 時間"
+    },
+    "calendar": {
+      "title": "直近 1 年の活動",
+      "trophiesEarned": "獲得トロフィー",
+      "activeDays": "アクティブ日数",
+      "bestDay": "1 日の最高",
+      "earnedCount": "{n} 個獲得",
+      "earnedNone": "獲得なし",
+      "less": "少",
+      "more": "多"
+    },
+    "milestones": {
+      "title": "トロフィーのマイルストーン",
+      "subtitle": "コレクションの節目を記録します",
+      "nthPlatinum": "{n} 個目のプラチナ",
+      "nthTrophy": "{n} 個目のトロフィー",
+      "loadFailed": "マイルストーンの読み込みに失敗しました。しばらくしてからもう一度お試しください。",
+      "empty": "まだマイルストーンがありません。",
+      "collapse": "マイルストーンを折りたたむ",
+      "showMore": "さらに表示（残り {count} 件）"
+    },
+    "earned": {
+      "title": "獲得トロフィー",
+      "subtitle": "獲得日時順のトロフィー記録",
+      "total": "全 {count} 個",
+      "empty": "まだトロフィーを獲得していません。",
+      "gapTitle": "前のトロフィーからの間隔",
+      "gap": "間隔 {duration}"
+    },
+    "recent": {
+      "empty": "プレイ記録がまだありません。",
+      "expand": "最近プレイをすべて表示",
+      "collapse": "最近プレイを折りたたむ"
+    },
+    "log": {
+      "comingSoon": "トロフィーログは近日公開予定です。"
+    },
+    "private": {
+      "title": "非公開のアカウントです",
+      "line1": "このユーザーのトロフィー情報は非公開のため、詳細を表示できません。",
+      "line2": "PlayStation のプライバシー設定から変更できます。"
+    }
+  },
+  "sync": {
+    "heading": "PSN プロフィールを同期",
+    "subheading": "PSN ID を送信すると同期キューに追加され、順番に処理されます。",
+    "cta": {
+      "submit": "送信",
+      "submitting": "送信中…"
+    },
+    "status": {
+      "queued": "順番待ち",
+      "calculating": "計算中",
+      "syncing": "同期中",
+      "completed": "完了",
+      "failed": "失敗"
+    },
+    "poll": {
+      "refreshing": "進捗を更新中",
+      "countdown": "{seconds} 秒後に更新"
+    },
+    "gamesUnit": "タイトル",
+    "waitingWorker": "ワーカーの受け取りを待っています…",
+    "calculating": "同期対象のゲームを計算中…",
+    "queueAhead": "あと {badge} 件の順番待ち",
+    "currentGame": "同期中",
+    "failedCount": "失敗 {count}",
+    "skippedCount": "スキップ {count}",
+    "goToProfile": "プロフィールへ",
+    "queueOverview": "{active} 件の同期が実行中、{waiting} 人が順番待ちです。",
+    "updatedAt": "{time} に更新",
+    "private": {
+      "title": "非公開のプロフィールは同期できません",
+      "line1": "この PSN プロフィールは非公開のため、トロフィーデータを同期できません。",
+      "line2": "PlayStation のプライバシー設定でトロフィーを公開してから、もう一度お試しください。"
+    },
+    "errors": {
+      "status": "同期の進捗を取得できませんでした。",
+      "submit": "同期リクエストの送信に失敗しました。",
+      "submitRetry": "同期リクエストの送信に失敗しました。しばらくしてからもう一度お試しください。",
+      "workerUnavailable": "同期サービスが一時的に利用できません。しばらくしてからもう一度お試しください。"
+    }
+  },
+  "settings": {
+    "heading": "アカウント設定",
+    "subheading": "アカウント情報とセキュリティを管理します。",
+    "nav": {
+      "profile": "プロフィール",
+      "security": "アカウントのセキュリティ"
+    },
+    "profile": {
+      "heading": "プロフィール",
+      "subheading": "プロフィールページのバナーとアバターをカスタマイズします。",
+      "loadFailed": "設定の読み込みに失敗しました。再試行してください。",
+      "updatePreview": "プレビューを更新",
+      "noChanges": "保存する変更はありません",
+      "saved": "設定を更新しました",
+      "saveFailed": "保存に失敗しました",
+      "banner": {
+        "title": "プロフィールバナー",
+        "hint": "プロフィールページ上部に表示される画像です。",
+        "urlLabel": "バナー画像の URL",
+        "sizeHint": "横長（およそ 4.5:1、例: 1440×320）の画像を推奨します。小さすぎる画像は大画面でぼやけます。",
+        "uploadHint": "外部の画像ホスティングにアップロードし、そのリンクを貼り付けてください。直接アップロードは準備中です。"
+      },
+      "avatar": {
+        "title": "アバター",
+        "hint": "同期した PSN のアバターを使うか、画像の URL を指定します。",
+        "usePsn": "PSN のアバターを使う",
+        "useCustom": "カスタム画像を使う",
+        "urlLabel": "アバター画像の URL",
+        "urlRequired": "アバター画像の URL を入力してください",
+        "uploadHint": "外部の画像ホスティングも利用できます。直接アップロードは準備中です。"
+      }
+    },
+    "security": {
+      "heading": "アカウントのセキュリティ",
+      "subheading": "ログインと本人確認に使う重要な情報を管理します。",
+      "status": {
+        "email": "メールの状態",
+        "bound": "登録済み",
+        "password": "パスワード",
+        "set": "設定済み"
+      },
+      "errors": {
+        "generic": "操作に失敗しました。しばらくしてからもう一度お試しください。"
+      },
+      "email": {
+        "label": "ログイン用メールアドレス",
+        "unbound": "メール未登録",
+        "editTitle": "ログイン用メールアドレスを変更",
+        "current": "現在: {email}",
+        "new": "新しいメールアドレス",
+        "save": "メールを更新",
+        "saving": "更新中…",
+        "updated": "メールアドレスを更新しました。"
+      },
+      "password": {
+        "label": "アカウントのパスワード",
+        "hint": "設定済みです。定期的な変更と、他サイトとの使い回しを避けることをおすすめします。",
+        "editTitle": "アカウントのパスワードを変更",
+        "editHint": "保存後は、新しいパスワードでログインしてください。",
+        "save": "パスワードを変更",
+        "saving": "変更中…",
+        "updated": "パスワードを変更しました。",
+        "updatedDetail": "他のデバイスはログアウトされました。このデバイスは再ログイン不要です。"
+      },
+      "strength": {
+        "label": "パスワードの強度",
+        "empty": "入力待ち",
+        "weak": "弱い",
+        "fair": "普通",
+        "good": "良い",
+        "strong": "とても強い",
+        "tip": "8 文字以上で、大文字・小文字・数字・記号を混ぜることをおすすめします。"
+      }
+    },
+    "prefs": {
+      "title": "設定",
+      "lang": {
+        "title": "トロフィーの言語設定",
+        "hint": "有効にすると、すべてのリクエストに選択した言語が付き、サーバーはその言語のトロフィー翻訳を優先して返します。",
+        "primary": "第一希望の言語",
+        "secondary": "第二希望の言語（任意）",
+        "unset": "指定しない",
+        "sameError": "第一希望と第二希望に同じ言語は指定できません。"
+      },
+      "rate": {
+        "title": "トロフィー獲得率の基準",
+        "hint": "トロフィー一覧で主に表示する獲得率を選びます: PSN 公式の獲得率か、PSRay サイト内の獲得率か。"
+      },
+      "saved": {
+        "title": "設定を保存しました",
+        "description": "この端末に保存されました。"
+      }
+    }
+  },
+  "seo": {
+    "home": {
+      "title": "PSRay",
+      "description": "PSRay は PSN のトロフィーを追跡するサイトです。プロフィールを検索し、トロフィーセットを調べ、ランキングを見られます。"
+    },
+    "leaderboard": {
+      "title": "ランキング · PSRay",
+      "description": "PSN のトロフィーポイント、地域別ランキング、コミュニティへの貢献度ランキング。"
+    },
+    "profile": {
+      "title": "{psnid} のプロフィール · PSRay",
+      "titleFallback": "プロフィール · PSRay",
+      "description": "{psnid} の PSN トロフィー実績 — 獲得トロフィー、マイルストーン、最近のプレイ記録。"
+    },
+    "trophy": {
+      "title": "{name} のトロフィー · PSRay",
+      "titleFallback": "トロフィーセット · PSRay",
+      "description": "{name}（{platform}）の全 {count} 個のトロフィー一覧 — 獲得率、レアリティ、攻略のヒント。"
+    },
+    "login": {
+      "title": "ログイン · PSRay",
+      "description": "PSRay アカウントにログインします。"
+    },
+    "register": {
+      "title": "新規登録 · PSRay",
+      "description": "PSN アカウントで PSRay に登録します。"
+    },
+    "sync": {
+      "title": "プロフィールを同期 · PSRay",
+      "description": "PSN のトロフィーデータを PSRay に同期します。"
+    },
+    "settings": {
+      "title": "アカウント設定 · PSRay"
+    }
+  }
+}

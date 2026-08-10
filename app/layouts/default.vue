@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { House, Menu, Gamepad2, Trophy, LogOut, LogIn, UserPlus, User, RefreshCw, Settings, Languages, Search, type IconNode } from 'lucide'
+import { House, Menu, Gamepad2, Trophy, LogOut, LogIn, UserPlus, User, RefreshCw, Settings, Search, type IconNode } from 'lucide'
 
 const route = useRoute()
 const appConfig = useAppConfig()
@@ -36,14 +36,15 @@ function toggleSidebar() {
 }
 
 type MenuItem = {
-  label: string
+  /** Message key, resolved at render so the label follows the active locale. */
+  labelKey: string
   to: string
   icon: IconNode
 }
 
 const menu: MenuItem[] = [
-  { label: '首页', to: '/', icon: House },
-  { label: '排行榜', to: '/leaderboard', icon: Trophy },
+  { labelKey: 'nav.home', to: '/', icon: House },
+  { labelKey: 'nav.leaderboard', to: '/leaderboard', icon: Trophy },
 ]
 
 function isActive(to: string) {
@@ -69,7 +70,7 @@ async function onLogout() {
         <button
           type="button"
           @click="toggleSidebar"
-          :aria-label="collapsed ? '展开菜单' : '折叠菜单'"
+          :aria-label="collapsed ? $t('nav.aria.expandMenu') : $t('nav.aria.collapseMenu')"
           class="grid size-10 place-items-center rounded-lg text-slate-500 transition hover:bg-slate-100 hover:text-slate-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-900"
         >
           <LucideIcon :icon="Menu" class="size-6" stroke-width="1.75" />
@@ -99,24 +100,17 @@ async function onLogout() {
         <div class="flex items-center gap-1">
           <button
             type="button"
-            aria-label="搜索"
-            title="搜索"
+            :aria-label="$t('nav.aria.search')"
+            :title="$t('nav.aria.search')"
             class="grid size-10 place-items-center rounded-lg text-slate-500 transition hover:bg-slate-100 hover:text-slate-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-900"
           >
             <LucideIcon :icon="Search" class="size-5" stroke-width="1.75" />
           </button>
+          <LanguageSwitcher />
           <button
             type="button"
-            aria-label="翻译"
-            title="翻译"
-            class="grid size-10 place-items-center rounded-lg text-slate-500 transition hover:bg-slate-100 hover:text-slate-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-900"
-          >
-            <LucideIcon :icon="Languages" class="size-5" stroke-width="1.75" />
-          </button>
-          <button
-            type="button"
-            aria-label="设置"
-            title="设置"
+            :aria-label="$t('nav.aria.settings')"
+            :title="$t('nav.aria.settings')"
             class="grid size-10 place-items-center rounded-lg text-slate-500 transition hover:bg-slate-100 hover:text-slate-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-900"
             @click="settingsOpen = true"
           >
@@ -150,7 +144,7 @@ async function onLogout() {
               @click="close"
             >
               <LucideIcon :icon="User" class="size-4 text-slate-400" />
-              个人资料
+              {{ $t('nav.user.profile') }}
             </NuxtLink>
             <NuxtLink
               :to="{ path: '/sync', query: { psnid: user.psnid } }"
@@ -158,7 +152,7 @@ async function onLogout() {
               @click="close"
             >
               <LucideIcon :icon="RefreshCw" class="size-4 text-slate-400" />
-              同步账户
+              {{ $t('nav.user.sync') }}
             </NuxtLink>
             <NuxtLink
               to="/settings"
@@ -166,7 +160,7 @@ async function onLogout() {
               @click="close"
             >
               <LucideIcon :icon="Settings" class="size-4 text-slate-400" />
-              用户设置
+              {{ $t('nav.user.settings') }}
             </NuxtLink>
             <button
               type="button"
@@ -174,7 +168,7 @@ async function onLogout() {
               @click="close(); onLogout()"
             >
               <LucideIcon :icon="LogOut" class="size-4 text-slate-400" />
-              退出登录
+              {{ $t('nav.user.logout') }}
             </button>
           </template>
         </DropdownMenu>
@@ -184,8 +178,8 @@ async function onLogout() {
           <DropdownMenu align="right" class="sm:hidden">
             <button
               type="button"
-              aria-label="登录或注册"
-              title="登录或注册"
+              :aria-label="$t('nav.aria.account')"
+              :title="$t('nav.aria.account')"
               class="grid size-10 cursor-pointer place-items-center rounded-lg text-slate-500 transition hover:bg-slate-100 hover:text-slate-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-900"
             >
               <LucideIcon :icon="User" class="size-5" stroke-width="1.75" />
@@ -198,7 +192,7 @@ async function onLogout() {
                 @click="close"
               >
                 <LucideIcon :icon="LogIn" class="size-4 text-slate-400" />
-                登录
+                {{ $t('nav.login') }}
               </NuxtLink>
               <NuxtLink
                 to="/auth/register"
@@ -206,7 +200,7 @@ async function onLogout() {
                 @click="close"
               >
                 <LucideIcon :icon="UserPlus" class="size-4 text-slate-400" />
-                注册
+                {{ $t('nav.register') }}
               </NuxtLink>
             </template>
           </DropdownMenu>
@@ -214,7 +208,7 @@ async function onLogout() {
           <!-- Desktop (sm+): inline login + register buttons -->
           <UiButton1
             to="/auth/login"
-            label="登录"
+            :label="$t('nav.login')"
             :icon="LogIn"
             class="max-sm:hidden"
           />
@@ -223,7 +217,7 @@ async function onLogout() {
             class="hidden h-7 items-center gap-1 rounded-lg border border-slate-300 bg-white px-2.5 text-xs font-semibold text-slate-700 shadow-sm shadow-slate-900/5 transition hover:border-slate-400 hover:bg-slate-50 hover:text-slate-900 sm:inline-flex"
           >
             <LucideIcon :icon="UserPlus" class="size-3.5" stroke-width="1.75" />
-            注册
+            {{ $t('nav.register') }}
           </NuxtLink>
         </template>
       </div>
@@ -256,13 +250,13 @@ async function onLogout() {
           class="mb-2 px-3 text-xs font-semibold uppercase tracking-wider text-slate-400"
           :class="collapsed ? 'lg:hidden' : ''"
         >
-          导航
+          {{ $t('nav.sectionLabel') }}
         </p>
         <ul class="space-y-1">
           <li v-for="item in menu" :key="item.to">
             <NuxtLink
               :to="item.to"
-              :title="collapsed ? item.label : undefined"
+              :title="collapsed ? $t(item.labelKey) : undefined"
               @click="mobileOpen = false"
               class="group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition"
               :class="[
@@ -278,7 +272,7 @@ async function onLogout() {
                 class="size-6 shrink-0 transition-colors"
                 :class="isActive(item.to) ? 'text-slate-900' : 'text-slate-400 group-hover:text-slate-600'"
               />
-              <span class="truncate" :class="collapsed ? 'lg:hidden' : ''">{{ item.label }}</span>
+              <span class="truncate" :class="collapsed ? 'lg:hidden' : ''">{{ $t(item.labelKey) }}</span>
             </NuxtLink>
           </li>
         </ul>

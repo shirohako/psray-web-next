@@ -14,13 +14,15 @@ const props = defineProps<{
   numbers: Map<number, number>
 }>()
 
+const { t } = useI18n()
+
 const title = computed(() => {
-  if (props.group.psn_group_id === 'default') return '本篇'
+  if (props.group.psn_group_id === 'default') return t('trophy.group.baseGame')
   return props.group.localized_name || props.group.name
 })
 
-function isEarned(t: Trophy) {
-  return props.hasViewer && (t.earned_by_viewer ?? props.earnedInfo.has(t.id))
+function isEarned(trophy: Trophy) {
+  return props.hasViewer && (trophy.earned_by_viewer ?? props.earnedInfo.has(trophy.id))
 }
 
 function earnedAt(t: Trophy) {
@@ -84,7 +86,7 @@ const displayTrophies = computed(() => {
     </header>
 
     <p v-if="!displayTrophies.length" class="px-5 py-10 text-center text-sm text-slate-400">
-      没有符合条件的奖杯。
+      {{ $t('trophy.group.noMatches') }}
     </p>
 
     <div v-else class="divide-y divide-slate-200">

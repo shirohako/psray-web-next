@@ -11,7 +11,7 @@ const props = withDefaults(defineProps<{
   duration: 700,
   from: 0,
   animateInitial: true,
-  locale: 'zh-CN',
+  locale: 'en-US',
   minimumFractionDigits: 0,
   maximumFractionDigits: 0,
 })

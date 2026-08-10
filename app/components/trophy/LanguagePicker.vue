@@ -61,12 +61,12 @@ function isActive(code: string) {
         <span class="grid size-7 place-items-center rounded-lg bg-slate-100 text-slate-600">
           <LucideIcon :icon="Languages" class="size-4" />
         </span>
-        选择显示语言
+        {{ $t('trophy.lang.pickerTitle') }}
       </span>
     </template>
 
     <p class="px-5 pb-1 pt-1 text-xs text-slate-400">
-      选择奖杯名称与描述的显示语言。
+      {{ $t('trophy.lang.pickerHint') }}
     </p>
 
     <ul class="space-y-0.5 p-2 pt-1">
@@ -105,7 +105,7 @@ function isActive(code: string) {
                 v-if="l.is_default"
                 class="shrink-0 rounded-full bg-amber-50 px-1.5 py-0.5 text-[10px] font-medium leading-none text-amber-600"
               >
-                默认
+                {{ $t('trophy.lang.default') }}
               </span>
             </span>
             <span class="mt-1 flex items-center gap-1.5 text-xs text-slate-400">

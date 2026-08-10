@@ -24,18 +24,18 @@ const props = defineProps<{
 
 // Single source of truth for each column's header + layout. Boards only choose
 // which keys to pass in `columns`; rendering for each key lives in the template.
-const META: Record<LeaderboardColumn, { label: string; align: 'left' | 'center' | 'right'; class?: string }> = {
-  rank: { label: '排名', align: 'center', class: 'w-14' },
-  user: { label: '玩家', align: 'left' },
-  level: { label: '等级', align: 'center', class: 'w-16' },
-  platinum: { label: '白金', align: 'right', class: 'w-14' },
-  gold: { label: '金', align: 'right', class: 'w-12' },
-  silver: { label: '银', align: 'right', class: 'w-12' },
-  bronze: { label: '铜', align: 'right', class: 'w-14' },
-  points: { label: '点数', align: 'right', class: 'w-24' },
-  tipCount: { label: '心得数', align: 'right', class: 'w-20' },
-  voteUp: { label: '获赞', align: 'right', class: 'w-20' },
-  contribution: { label: '贡献点数', align: 'right', class: 'w-24' },
+const META: Record<LeaderboardColumn, { labelKey: string; align: 'left' | 'center' | 'right'; class?: string }> = {
+  rank: { labelKey: 'leaderboard.column.rank', align: 'center', class: 'w-14' },
+  user: { labelKey: 'leaderboard.column.user', align: 'left' },
+  level: { labelKey: 'leaderboard.column.level', align: 'center', class: 'w-16' },
+  platinum: { labelKey: 'trophy.tier.platinum', align: 'right', class: 'w-14' },
+  gold: { labelKey: 'trophy.tierShort.gold', align: 'right', class: 'w-12' },
+  silver: { labelKey: 'trophy.tierShort.silver', align: 'right', class: 'w-12' },
+  bronze: { labelKey: 'trophy.tierShort.bronze', align: 'right', class: 'w-14' },
+  points: { labelKey: 'leaderboard.column.points', align: 'right', class: 'w-24' },
+  tipCount: { labelKey: 'leaderboard.column.tipCount', align: 'right', class: 'w-20' },
+  voteUp: { labelKey: 'leaderboard.column.voteUp', align: 'right', class: 'w-20' },
+  contribution: { labelKey: 'leaderboard.column.contribution', align: 'right', class: 'w-24' },
 }
 
 const ALIGN = { left: 'text-left', center: 'text-center', right: 'text-right' } as const
@@ -81,7 +81,7 @@ function rankClass(rank: number) {
               class="px-3 py-3"
               :class="[ALIGN[META[c].align], META[c].class]"
             >
-              {{ META[c].label }}
+              {{ $t(META[c].labelKey) }}
             </th>
           </tr>
         </thead>
@@ -158,7 +158,7 @@ function rankClass(rank: number) {
     </div>
 
     <!-- Empty -->
-    <p v-else class="px-5 py-16 text-center text-sm text-slate-400">暂无排名数据。</p>
+    <p v-else class="px-5 py-16 text-center text-sm text-slate-400">{{ $t('leaderboard.empty') }}</p>
 
     <!-- Footer (count + pagination), kept inside the card -->
     <div v-if="$slots.footer" class="border-t border-slate-100 px-4 py-3">

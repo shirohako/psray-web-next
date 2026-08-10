@@ -4,9 +4,10 @@ import { Lock } from 'lucide'
 // Empty-state shown when a PSN profile is private: its trophy data can't be
 // displayed (profile page) or synced (sync page). Title is overridable; the
 // default slot holds the description so callers can tailor the wording.
-withDefaults(defineProps<{ title?: string }>(), {
-  title: '这是一个非公开的账户',
-})
+const props = withDefaults(defineProps<{ title?: string }>(), { title: '' })
+const { t } = useI18n()
+
+const resolvedTitle = computed(() => props.title || t('profile.private.title'))
 </script>
 
 <template>
@@ -15,11 +16,11 @@ withDefaults(defineProps<{ title?: string }>(), {
       <LucideIcon :icon="Lock" class="size-5" />
     </div>
     <div class="space-y-1">
-      <p class="text-sm font-semibold text-slate-900">{{ title }}</p>
+      <p class="text-sm font-semibold text-slate-900">{{ resolvedTitle }}</p>
       <p class="text-xs leading-relaxed text-slate-500">
         <slot>
-          该用户的奖杯资料为私密，无法展示详细信息。<br>
-          可在 PlayStation 隐私设置中更改此设定。
+          {{ $t('profile.private.line1') }}<br>
+          {{ $t('profile.private.line2') }}
         </slot>
       </p>
     </div>

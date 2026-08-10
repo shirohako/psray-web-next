@@ -1,0 +1,608 @@
+{
+  "common": {
+    "back": "上一步",
+    "backHome": "返回首頁",
+    "cancel": "取消",
+    "close": "關閉",
+    "copy": "複製",
+    "edit": "修改",
+    "next": "下一步",
+    "nextPage": "下一頁",
+    "previousPage": "上一頁",
+    "retry": "重試",
+    "save": "儲存",
+    "saving": "儲存中…",
+    "showMore": "顯示更多",
+    "sortAsc": "正序",
+    "sortDesc": "倒序",
+    "updated": "更新時間",
+    "updatedAt": "更新於 {time}",
+    "view": "查看"
+  },
+  "nav": {
+    "home": "首頁",
+    "leaderboard": "排行榜",
+    "login": "登入",
+    "register": "註冊",
+    "sectionLabel": "導覽",
+    "aria": {
+      "account": "登入或註冊",
+      "collapseMenu": "收合選單",
+      "expandMenu": "展開選單",
+      "language": "語言",
+      "search": "搜尋",
+      "settings": "設定"
+    },
+    "user": {
+      "logout": "登出",
+      "profile": "個人資料",
+      "settings": "使用者設定",
+      "sync": "同步帳號"
+    }
+  },
+  "home": {
+    "lookup": {
+      "heading": "查看個人資料",
+      "hint": "輸入 PSN ID 進入對應的個人資料頁面。",
+      "view": "查看",
+      "sync": "同步"
+    }
+  },
+  "auth": {
+    "field": {
+      "code": "驗證碼",
+      "codePlaceholder": "6 位驗證碼",
+      "email": "電子郵件",
+      "password": "密碼",
+      "passwordPlaceholder": "至少 8 個字元",
+      "confirmPassword": "確認密碼",
+      "confirmPasswordPlaceholder": "再次輸入密碼",
+      "currentPassword": "目前密碼",
+      "newPassword": "新密碼",
+      "confirmNewPassword": "確認新密碼",
+      "passwordMismatch": "兩次輸入的密碼不一致",
+      "showPassword": "顯示密碼",
+      "hidePassword": "隱藏密碼"
+    },
+    "login": {
+      "heading": "歡迎回來",
+      "tagline": "旅途還沒有結束，盡頭是星辰大海。",
+      "forgotPassword": "忘記密碼？",
+      "submitting": "登入中…",
+      "noAccount": "還沒有帳號？",
+      "registerNow": "立即註冊",
+      "errors": {
+        "generic": "登入失敗，請稍後再試。",
+        "checkFields": "請檢查登入資訊。"
+      }
+    },
+    "register": {
+      "heading": "建立帳號",
+      "haveAccount": "已有帳號？",
+      "loginNow": "直接登入",
+      "codeSent": "驗證碼已發送，請查收郵件。",
+      "cta": {
+        "verifyPsnid": "驗證 PSN ID",
+        "verifying": "驗證中…",
+        "sendCode": "發送驗證碼",
+        "sending": "發送中…",
+        "resendIn": "{seconds}s 後可重發",
+        "submit": "完成註冊",
+        "submitting": "註冊中…"
+      },
+      "terms": {
+        "intro": "PSRay 是一個 PSN 使用者交流網站。",
+        "needsPsn": "您需要一個 {icon} PlayStation (PSN) 帳號。",
+        "agreeTerms": "我已閱讀並同意 {icon} {link}。",
+        "agreePrivacy": "我已閱讀並同意 {icon} {link}。",
+        "termsLink": "使用條款",
+        "privacyLink": "隱私協議"
+      },
+      "psnid": {
+        "placeholder": "你的 PlayStation Network ID",
+        "requirementsTitle": "新使用者需要滿足",
+        "requirementsHint": "我們希望過濾掉垃圾帳號，創造一個真正屬於玩家的聚集地。",
+        "requirement1": "已在站內至少同步過一次。",
+        "requirement2": "PSN 獎盃等級大於 100。",
+        "requirement3": "PSN 遊戲資料隱私設定為公開。"
+      },
+      "password": {
+        "hint": "為你的帳號設定一個安全的登入密碼。"
+      },
+      "email": {
+        "hint": "點擊「發送驗證碼」後，我們會向該信箱發送一個 6 位驗證碼。"
+      },
+      "verify": {
+        "sentTo": "驗證碼已發送至 {email}，請查收郵件。部分服務商可能被標記為 SPAM，請檢查垃圾桶。",
+        "step1": "打開信箱，查收 6 位驗證碼。",
+        "step2": "打開 PlayStation App 或官網，登入您的 PSN 帳號，把驗證碼填入「關於我 / About Me」個人簡介並儲存。",
+        "step3": "回到本頁點擊「完成註冊」。驗證成功後，您可以刪除 PSN 帳號簡介中的臨時驗證碼。",
+        "resend": "沒收到？重新發送驗證碼"
+      },
+      "done": {
+        "title": "一切很順利",
+        "description": "您的 PSRay 帳號已建立完成。",
+        "cta": "前往登入"
+      },
+      "errors": {
+        "checkFields": "請檢查填寫的資訊。",
+        "psnidGeneric": "PSN ID 驗證失敗，請稍後再試。",
+        "psnidNotSynced": "未找到該 PSN ID。請先在站內同步至少一次後再註冊。",
+        "profilePrivate": "請先在 PlayStation 隱私設定中公開遊戲資料。",
+        "sendGeneric": "驗證碼發送失敗，請稍後再試。",
+        "emailTaken": "該信箱已被占用，請更換後重試。",
+        "emailTakenGoBack": "該信箱已被占用，請返回上一步更換。",
+        "psnAccountNotFound": "未找到該 PSN 帳號，請確認 PSN ID 正確且已被 PSRay 收錄。",
+        "registerGeneric": "註冊失敗，請稍後再試。"
+      }
+    }
+  },
+  "errors": {
+    "notFound": {
+      "title": "找不到該頁面",
+      "description": "你要找的頁面不存在，或者已經被移除。"
+    },
+    "generic": {
+      "title": "出了點問題",
+      "description": "請稍後再試。"
+    },
+    "api": {
+      "ALREADY_REGISTERED": "該 PSN 帳號已註冊，請直接登入。",
+      "PSN_LEVEL_TOO_LOW": "PSN 獎盃等級需大於 100。",
+      "TOO_MANY_REQUESTS": "請求過於頻繁，請稍後再試。",
+      "EMAIL_SEND_FAILED": "郵件投遞失敗，請稍後重試。",
+      "PSN_PROFILE_FAILED": "擷取 PSN 資料失敗，請稍後重試。",
+      "VERIFICATION_CODE_INVALID": "未在 PSN 簡介中找到正確的驗證碼，請確認已填入且未刪除。",
+      "VERIFICATION_CODE_EXPIRED": "驗證碼已過期，請重新發送後再試。",
+      "INVALID_CREDENTIALS": "帳號或密碼錯誤。",
+      "ACCOUNT_TERMINATED": "帳號已被封禁。"
+    }
+  },
+  "toast": {
+    "copied": "已複製{label}",
+    "copyFailed": {
+      "title": "複製失敗",
+      "description": "請檢查瀏覽器的剪貼簿權限。"
+    },
+    "followed": {
+      "title": "追蹤成功",
+      "description": "已追蹤 {psnid}"
+    }
+  },
+  "qr": {
+    "title": "頁面 QR 碼",
+    "copyLink": "複製連結",
+    "copied": "已複製",
+    "linkCopied": "已複製連結",
+    "generateFailed": "QR 碼產生失敗"
+  },
+  "time": {
+    "dayHour": "{d}天{h}小時",
+    "hourMinute": "{h}小時{m}分",
+    "minuteSecond": "{m}分{s}秒",
+    "second": "{s}秒"
+  },
+  "trophy": {
+    "tier": {
+      "platinum": "白金",
+      "gold": "黃金",
+      "silver": "白銀",
+      "bronze": "青銅"
+    },
+    "tierShort": {
+      "gold": "金",
+      "silver": "銀",
+      "bronze": "銅"
+    },
+    "rarity": {
+      "common": "普通",
+      "uncommon": "罕見",
+      "rare": "稀有",
+      "veryRare": "非常稀有",
+      "ultraRare": "極為稀有"
+    },
+    "list": {
+      "heading": "獎盃",
+      "count": "共 {n} 個",
+      "showHidden": "顯示隱藏獎盃",
+      "expand": "展開全部獎盃",
+      "collapse": "收合獎盃列表"
+    },
+    "filter": {
+      "all": "全部",
+      "earned": "已獲得",
+      "unearned": "未獲得",
+      "needsPsnid": "輸入 PSN ID 後可用"
+    },
+    "sort": {
+      "label": "排序",
+      "default": "預設",
+      "earned": "獲得時間",
+      "rarity": "PSN 稀有度"
+    },
+    "lang": {
+      "available": "支援 {badge} 種語言",
+      "pickerTitle": "選擇顯示語言",
+      "pickerHint": "選擇獎盃名稱與描述的顯示語言。",
+      "default": "預設"
+    },
+    "item": {
+      "hidden": "隱藏獎盃",
+      "earned": "已獲得",
+      "reveal": "顯示該隱藏獎盃",
+      "mask": "隱藏該獎盃",
+      "earnedAt": "獲得時間",
+      "earnedOrder": "獲得順序",
+      "firstEarned": "首個獲得",
+      "sincePrevious": "相對上一個獎盃",
+      "psnRate": "PSN 完成率",
+      "psrayRate": "PSRay 完成率",
+      "tips": "留言",
+      "menu": {
+        "view": "查看獎盃",
+        "copyTitle": "複製獎盃標題",
+        "copyDetail": "複製獎盃描述",
+        "titleLabel": "獎盃標題",
+        "detailLabel": "獎盃描述",
+        "recentEarners": "查看近期獲得的玩家"
+      }
+    },
+    "detail": {
+      "title": "獎盃詳情",
+      "id": "獎盃 ID",
+      "tipCount": "留言數"
+    },
+    "group": {
+      "baseGame": "本篇",
+      "noMatches": "沒有符合條件的獎盃。"
+    },
+    "banner": {
+      "owners": "玩過",
+      "averageProgress": "平均進度",
+      "completed": "完成人數",
+      "platinums": "白金人數",
+      "setId": "獎盃組 ID",
+      "version": "版本號",
+      "qrTitle": "獎盃組 QR 碼"
+    },
+    "progress": {
+      "title": "你的進度",
+      "earnedLabel": "已獲得",
+      "trophiesUnit": "個獎盃",
+      "complete": "已完成",
+      "duration": "耗時",
+      "lastTrophy": "最後獎盃"
+    },
+    "players": {
+      "title": "玩家排行",
+      "recent": "最近在玩",
+      "progress": "最先完成",
+      "speedrun": "耗時最短",
+      "empty": "暫無玩家記錄。"
+    },
+    "earners": {
+      "title": "近期獲得的玩家",
+      "newestFirst": "最近獲得在前",
+      "oldestFirst": "最早獲得在前",
+      "empty": "還沒有玩家獲得這個獎盃。",
+      "earnedAt": "{time} 獲得"
+    },
+    "tips": {
+      "title": "獎盃留言",
+      "empty": "還沒有玩家留言。",
+      "total": "共 {count} 則留言",
+      "spoiler": "包含劇透，點擊顯示"
+    },
+    "similar": {
+      "title": "已關聯的獎盃組",
+      "subtitle": "同款遊戲其他平台/其他地區的獎盃組",
+      "setCount": "{n} 套獎盃",
+      "owners": "{count} 玩過"
+    },
+    "recentPlayers": {
+      "title": "最近玩家",
+      "empty": "還沒有玩家記錄。",
+      "hasPlatinum": "已獲白金"
+    }
+  },
+  "leaderboard": {
+    "boards": "榜單",
+    "registeredOnly": "僅註冊使用者",
+    "totalPlayers": "共 {count} 名玩家",
+    "pickBoard": "選擇榜單",
+    "empty": "暫無排名資料。",
+    "column": {
+      "rank": "排名",
+      "user": "玩家",
+      "level": "等級",
+      "points": "點數",
+      "tipCount": "心得數",
+      "voteUp": "獲讚",
+      "contribution": "貢獻點數"
+    },
+    "board": {
+      "points": {
+        "label": "全站點數排名",
+        "description": "按 PSN 點數計算的全站總排名"
+      },
+      "pointsRegion": {
+        "label": "地區點數排名",
+        "description": "按所選地區的玩家點數排名"
+      },
+      "tips": {
+        "label": "樂於助人排名",
+        "description": "貢獻獎盃心得最多、最受認可的玩家"
+      },
+      "contribution": {
+        "label": "貢獻排名",
+        "description": "按貢獻點數計算的總排名"
+      }
+    }
+  },
+  "profile": {
+    "qrTitle": "個人資料 QR 碼",
+    "tabs": {
+      "recent": "最近玩過",
+      "trophies": "獲得的獎盃",
+      "milestones": "里程碑"
+    },
+    "identity": {
+      "registered": "已註冊使用者",
+      "unregistered": "未註冊（僅同步 PSN 資料）",
+      "noAboutMe": "這個人很神秘，什麼都沒留下。",
+      "views": "{count} 次瀏覽",
+      "notRealtime": "非即時資料"
+    },
+    "actions": {
+      "interact": "互動",
+      "sync": "更新",
+      "follow": "追蹤",
+      "unfollow": "取消追蹤",
+      "following": "已追蹤"
+    },
+    "social": {
+      "title": "社交",
+      "followers": "粉絲",
+      "following": "追蹤",
+      "followsYou": "追蹤了你",
+      "mutual": "互相追蹤"
+    },
+    "stats": {
+      "title": "統計概覽",
+      "games": "遊戲總數",
+      "trophies": "獎盃總數",
+      "perfect": "完美",
+      "lowCompletion": "低完成率",
+      "favorites": "收藏遊戲",
+      "reviews": "遊戲評測",
+      "globalRank": "全球排名",
+      "regionRank": "地區排名",
+      "points": "獎盃點數",
+      "unranked": "暫無排名"
+    },
+    "summary": {
+      "level": "帳號等級 · {progress}%"
+    },
+    "account": {
+      "title": "帳號資訊",
+      "region": "地區",
+      "language": "語言",
+      "firstTrophy": "首個獎盃",
+      "lastTrophy": "最近獎盃",
+      "joined": "加入於",
+      "syncInterval": "自動同步間隔",
+      "nextSync": "預計下次同步",
+      "hours": "{n} 小時"
+    },
+    "calendar": {
+      "title": "最近一年的活動",
+      "trophiesEarned": "獲得獎盃",
+      "activeDays": "活躍天數",
+      "bestDay": "單日最高",
+      "earnedCount": "獲取 {n} 個獎盃",
+      "earnedNone": "沒有獲取獎盃",
+      "less": "少",
+      "more": "多"
+    },
+    "milestones": {
+      "title": "獎盃里程碑",
+      "subtitle": "記錄獎盃收藏中的重要時刻",
+      "nthPlatinum": "第 {n} 個白金",
+      "nthTrophy": "第 {n} 個獎盃",
+      "loadFailed": "里程碑載入失敗，請稍後重試。",
+      "empty": "還沒有解鎖里程碑。",
+      "collapse": "收合里程碑",
+      "showMore": "查看更多里程碑（還有 {count} 則）"
+    },
+    "earned": {
+      "title": "獲得的獎盃",
+      "subtitle": "按解鎖時間排序的獎盃記錄",
+      "total": "共 {count} 個",
+      "empty": "還沒有獲得獎盃。",
+      "gapTitle": "距上一個獎盃的獲取間隔",
+      "gap": "間隔 {duration}"
+    },
+    "recent": {
+      "empty": "還沒有遊玩記錄。",
+      "expand": "展開最近玩過",
+      "collapse": "收合最近玩過"
+    },
+    "log": {
+      "comingSoon": "獎盃記錄功能敬請期待。"
+    },
+    "private": {
+      "title": "這是一個非公開的帳號",
+      "line1": "該使用者的獎盃資料為私密，無法展示詳細資訊。",
+      "line2": "可在 PlayStation 隱私設定中變更此設定。"
+    }
+  },
+  "sync": {
+    "heading": "同步 PSN 資料",
+    "subheading": "輸入 PSN ID 提交同步至伺服器同步佇列，後台會按順序處理您的請求。",
+    "cta": {
+      "submit": "提交",
+      "submitting": "提交中…"
+    },
+    "status": {
+      "queued": "排隊中",
+      "calculating": "計算中",
+      "syncing": "同步中",
+      "completed": "已完成",
+      "failed": "失敗"
+    },
+    "poll": {
+      "refreshing": "正在重新整理進度",
+      "countdown": "{seconds} 秒後重新整理"
+    },
+    "gamesUnit": "個遊戲",
+    "waitingWorker": "等待 worker 領取…",
+    "calculating": "正在計算需要同步的遊戲…",
+    "queueAhead": "前方還有 {badge} 個任務",
+    "currentGame": "正在同步",
+    "failedCount": "失敗 {count}",
+    "skippedCount": "跳過 {count}",
+    "goToProfile": "前往個人資料",
+    "queueOverview": "{active} 個同步任務正在執行，{waiting} 人在排隊。",
+    "updatedAt": "更新於 {time}",
+    "private": {
+      "title": "無法同步非公開的資料",
+      "line1": "該 PSN 資料為私密，無法同步獎盃資料。",
+      "line2": "請在 PlayStation 隱私設定中將獎盃設為公開後重試。"
+    },
+    "errors": {
+      "status": "取得同步進度失敗。",
+      "submit": "提交同步請求失敗。",
+      "submitRetry": "提交同步請求失敗，請稍後再試。",
+      "workerUnavailable": "同步服務暫時無法使用，請稍後再試。"
+    }
+  },
+  "settings": {
+    "heading": "使用者設定",
+    "subheading": "管理你的帳號資料與安全設定。",
+    "nav": {
+      "profile": "個人資料",
+      "security": "帳號安全"
+    },
+    "profile": {
+      "heading": "個人資料",
+      "subheading": "自訂個人首頁的橫幅與頭像展示。",
+      "loadFailed": "設定載入失敗，請重試。",
+      "updatePreview": "更新預覽",
+      "noChanges": "沒有需要儲存的變更",
+      "saved": "設定已更新",
+      "saveFailed": "儲存失敗",
+      "banner": {
+        "title": "個人橫幅 Banner",
+        "hint": "展示在個人首頁頂部的橫幅圖片。",
+        "urlLabel": "橫幅圖片 URL",
+        "sizeHint": "建議使用約 4.5:1 的寬幅圖片（如 1440×320），過小的圖片在大螢幕上可能模糊。",
+        "uploadHint": "可先用第三方圖床上傳圖片，再把連結填到這裡。直接上傳功能開發中。"
+      },
+      "avatar": {
+        "title": "頭像",
+        "hint": "使用同步的 PSN 頭像，或填寫自訂圖片連結。",
+        "usePsn": "使用 PSN 頭像",
+        "useCustom": "使用自訂頭像",
+        "urlLabel": "頭像圖片 URL",
+        "urlRequired": "請填寫頭像圖片 URL",
+        "uploadHint": "可以使用第三方圖床。直接上傳功能開發中。"
+      }
+    },
+    "security": {
+      "heading": "帳號安全",
+      "subheading": "管理用於登入與驗證身分的關鍵資訊。",
+      "status": {
+        "email": "信箱狀態",
+        "bound": "已綁定",
+        "password": "密碼",
+        "set": "已設定"
+      },
+      "errors": {
+        "generic": "操作失敗，請稍後再試。"
+      },
+      "email": {
+        "label": "登入信箱",
+        "unbound": "未綁定信箱",
+        "editTitle": "修改登入信箱",
+        "current": "目前：{email}",
+        "new": "新信箱",
+        "save": "更新信箱",
+        "saving": "更新中…",
+        "updated": "信箱已更新。"
+      },
+      "password": {
+        "label": "帳號密碼",
+        "hint": "已設定，建議定期更新並避免重複使用其他網站密碼。",
+        "editTitle": "修改帳號密碼",
+        "editHint": "新密碼儲存後，後續登入需要使用新密碼。",
+        "save": "修改密碼",
+        "saving": "修改中…",
+        "updated": "密碼已修改。",
+        "updatedDetail": "其他裝置已登出，目前裝置無需重新登入。"
+      },
+      "strength": {
+        "label": "密碼強度",
+        "empty": "等待輸入",
+        "weak": "較弱",
+        "fair": "一般",
+        "good": "良好",
+        "strong": "很強",
+        "tip": "建議使用至少 8 位，並混合大小寫字母、數字和符號。"
+      }
+    },
+    "prefs": {
+      "title": "設定",
+      "lang": {
+        "title": "獎盃語言偏好",
+        "hint": "啟用後，所有請求將攜帶你選擇的語言，伺服器會據此優先返回對應的獎盃翻譯。",
+        "primary": "首選語言",
+        "secondary": "備選語言（可選）",
+        "unset": "不設定",
+        "sameError": "首選語言與備選語言不能相同。"
+      },
+      "rate": {
+        "title": "獎盃獲取率基準",
+        "hint": "選擇獎盃列表中主要顯示的獲取率來源：PSN 官方獲取率，或 PSRay 站內獲取率。"
+      },
+      "saved": {
+        "title": "設定已儲存",
+        "description": "偏好已儲存到本機。"
+      }
+    }
+  },
+  "seo": {
+    "home": {
+      "title": "PSRay",
+      "description": "PSRay 是一個 PSN 獎盃追蹤站點：查詢玩家資料、瀏覽獎盃組、查看排行榜。"
+    },
+    "leaderboard": {
+      "title": "排行榜 · PSRay",
+      "description": "PSN 獎盃點數、地區排名與社群貢獻排行榜。"
+    },
+    "profile": {
+      "title": "{psnid} · 個人資料 · PSRay",
+      "titleFallback": "個人資料 · PSRay",
+      "description": "{psnid} 的 PSN 獎盃戰績：已獲獎盃、里程碑與最近遊玩記錄。"
+    },
+    "trophy": {
+      "title": "{name} · 獎盃 · PSRay",
+      "titleFallback": "獎盃組 · PSRay",
+      "description": "{name}（{platform}）的全部 {count} 個獎盃：獲取率、稀有度與攻略心得。"
+    },
+    "login": {
+      "title": "登入 · PSRay",
+      "description": "登入你的 PSRay 帳號。"
+    },
+    "register": {
+      "title": "註冊 · PSRay",
+      "description": "使用 PSN 帳號註冊 PSRay。"
+    },
+    "sync": {
+      "title": "同步資料 · PSRay",
+      "description": "將 PSN 獎盃資料同步到 PSRay。"
+    },
+    "settings": {
+      "title": "使用者設定 · PSRay"
+    }
+  }
+}

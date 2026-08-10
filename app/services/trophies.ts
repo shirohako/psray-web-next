@@ -278,9 +278,12 @@ export function useTrophies() {
       get<TrophySetDetail>(`/trophies/${id}`, { query }),
 
     /**
-     * Localized text only, for switching the display language without
-     * re-fetching progress / players / similar sets. Patch the returned
-     * `localized_name` / `localized_detail` onto the rendered data by id.
+     * Localized text only — `localized_name` / `localized_detail` keyed by id,
+     * without progress / players / similar sets.
+     *
+     * @deprecated The trophy page now re-fetches `find()` with `?lang=` instead,
+     * so the chosen language lives in the URL and each translation gets its own
+     * shareable, indexable address.
      */
     localization: (id: number | string, query?: { lang?: string }) =>
       get<TrophyLocalization>(`/trophies/${id}/localization`, { query }),

@@ -12,11 +12,13 @@ const agreedPrivacy = defineModel<boolean>('agreedPrivacy', { required: true })
     <label class="flex cursor-pointer items-center gap-3 rounded-xl border border-slate-200 bg-slate-50/70 p-4 text-sm leading-relaxed text-slate-600 transition hover:border-slate-300">
       <UiCheckbox1 v-model="agreedNotice" />
       <span>
-        <span class="block">PSRay 是一个 PSN 用户交流网站。</span>
+        <span class="block">{{ $t('auth.register.terms.intro') }}</span>
         <span class="flex items-center gap-1">
-          您需要一个
-          <LucideIcon :icon="Gamepad2" class="size-4 text-slate-400" />
-          PlayStation (PSN) 账户。
+          <i18n-t keypath="auth.register.terms.needsPsn" tag="span" class="flex items-center gap-1">
+            <template #icon>
+              <LucideIcon :icon="Gamepad2" class="size-4 text-slate-400" />
+            </template>
+          </i18n-t>
         </span>
       </span>
     </label>
@@ -24,18 +26,28 @@ const agreedPrivacy = defineModel<boolean>('agreedPrivacy', { required: true })
     <label class="flex cursor-pointer items-center gap-3 rounded-xl border border-slate-200 bg-slate-50/70 p-4 text-sm leading-relaxed text-slate-600 transition hover:border-slate-300">
       <UiCheckbox1 v-model="agreedTerms" />
       <span class="flex flex-wrap items-center gap-x-1">
-        我已阅读并同意
-        <LucideIcon :icon="FileText" class="size-4 text-slate-400" />
-        <a href="#" class="font-semibold text-slate-900 hover:underline" @click.stop>使用条款</a>。
+        <i18n-t keypath="auth.register.terms.agreeTerms" tag="span" class="flex flex-wrap items-center gap-x-1">
+          <template #icon>
+            <LucideIcon :icon="FileText" class="size-4 text-slate-400" />
+          </template>
+          <template #link>
+            <a href="#" class="font-semibold text-slate-900 hover:underline" @click.stop>{{ $t('auth.register.terms.termsLink') }}</a>
+          </template>
+        </i18n-t>
       </span>
     </label>
 
     <label class="flex cursor-pointer items-center gap-3 rounded-xl border border-slate-200 bg-slate-50/70 p-4 text-sm leading-relaxed text-slate-600 transition hover:border-slate-300">
       <UiCheckbox1 v-model="agreedPrivacy" />
       <span class="flex flex-wrap items-center gap-x-1">
-        我已阅读并同意
-        <LucideIcon :icon="ShieldCheck" class="size-4 text-slate-400" />
-        <a href="#" class="font-semibold text-slate-900 hover:underline" @click.stop>隐私协议</a>。
+        <i18n-t keypath="auth.register.terms.agreePrivacy" tag="span" class="flex flex-wrap items-center gap-x-1">
+          <template #icon>
+            <LucideIcon :icon="ShieldCheck" class="size-4 text-slate-400" />
+          </template>
+          <template #link>
+            <a href="#" class="font-semibold text-slate-900 hover:underline" @click.stop>{{ $t('auth.register.terms.privacyLink') }}</a>
+          </template>
+        </i18n-t>
       </span>
     </label>
   </div>

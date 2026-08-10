@@ -280,7 +280,7 @@ const fallbackIcons = {
               v-if="toast.close !== false"
               type="button"
               class="-m-1 grid size-6 shrink-0 place-items-center rounded-md text-slate-400 transition hover:text-slate-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-900"
-              aria-label="关闭"
+              :aria-label="$t('common.close')"
               @click="dismiss(toast.id)"
             >
               <LucideIcon :icon="X" class="size-5" />

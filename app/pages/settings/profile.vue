@@ -5,6 +5,7 @@ import { useAccountApi } from '~/services/account'
 import { ApiError } from '~/utils/ApiError'
 
 const { user, fetchMe } = useAuth()
+const { t } = useI18n()
 const appConfig = useAppConfig()
 const toast = useToast()
 const accountApi = useAccountApi()
@@ -24,10 +25,10 @@ interface AvatarBannerFields {
 }
 
 // `form` is what the inputs bind to. `preview` drives the header-bar preview
-// above — it only follows `form` on demand, via the 更新预览 buttons, so
-// typing doesn't cause a flickering live preview. `saved` is the last-synced
+// above — it only follows `form` on demand, via the "update preview" buttons,
+// so typing doesn't cause a flickering live preview. `saved` is the last-synced
 // snapshot from the server, used to diff against on save so we only send the
-// fields that actually changed (per the API's "只传要改的" convention).
+// fields that actually changed (the API expects changed fields only).
 const form = reactive<AvatarBannerFields>({ bannerUrl: '', avatarMode: 'psn', avatarUrl: '' })
 const preview = reactive<AvatarBannerFields>({ bannerUrl: '', avatarMode: 'psn', avatarUrl: '' })
 const saved = reactive<AvatarBannerFields>({ bannerUrl: '', avatarMode: 'psn', avatarUrl: '' })
@@ -36,8 +37,8 @@ const saving = ref(false)
 const fieldErrors = ref<Record<string, string>>({})
 
 const avatarOptions = [
-  { value: 'psn', label: '使用 PSN 头像' },
-  { value: 'custom', label: '使用自定义头像' },
+  { value: 'psn', labelKey: 'settings.profile.avatar.usePsn' },
+  { value: 'custom', labelKey: 'settings.profile.avatar.useCustom' },
 ] as const
 
 // Seed the form + preview once `/user/setting` loads; re-seed if it's
@@ -66,7 +67,7 @@ function applyBannerPreview() {
   preview.bannerUrl = form.bannerUrl
 }
 // The mode toggle is a discrete choice, so it applies to the preview instantly;
-// only the free-text URL waits for the 更新预览 button.
+// only the free-text URL waits for the "update preview" button.
 function selectAvatarMode(mode: 'psn' | 'custom') {
   form.avatarMode = mode
   preview.avatarMode = mode
@@ -89,7 +90,7 @@ async function save() {
   if (form.avatarMode === 'custom') {
     const trimmedAvatar = form.avatarUrl.trim()
     if (!trimmedAvatar) {
-      fieldErrors.value.avatar_url = '请填写头像图片 URL'
+      fieldErrors.value.avatar_url = t('settings.profile.avatar.urlRequired')
       return
     }
     if (trimmedAvatar !== saved.avatarUrl || saved.avatarMode !== 'custom') {
@@ -102,7 +103,7 @@ async function save() {
   }
 
   if (Object.keys(payload).length === 0) {
-    toast.success({ title: '没有需要保存的更改' })
+    toast.success({ title: t('settings.profile.noChanges') })
     return
   }
 
@@ -110,11 +111,14 @@ async function save() {
   try {
     await accountApi.updateSetting(payload)
     await Promise.all([fetchMe(), refreshSetting()])
-    toast.success({ title: '设置已更新' })
+    toast.success({ title: t('settings.profile.saved') })
   }
   catch (error) {
     if (error instanceof ApiError && error.isValidation) fieldErrors.value = error.fieldErrors()
-    toast.error({ title: '保存失败', description: error instanceof ApiError ? error.message : undefined })
+    toast.error({
+      title: t('settings.profile.saveFailed'),
+      description: error instanceof ApiError ? error.message : undefined,
+    })
   }
   finally {
     saving.value = false
@@ -133,9 +137,9 @@ async function save() {
             </span>
             <div class="min-w-0">
               <p class="text-xs font-semibold uppercase tracking-wide text-sky-200">Profile center</p>
-              <h3 class="mt-1 text-xl font-bold tracking-tight text-white">个人资料</h3>
+              <h3 class="mt-1 text-xl font-bold tracking-tight text-white">{{ $t('settings.profile.heading') }}</h3>
               <p class="mt-1 max-w-xl text-sm leading-relaxed text-stone-300">
-                自定义个人主页的横幅与头像展示。
+                {{ $t('settings.profile.subheading') }}
               </p>
             </div>
           </div>
@@ -156,7 +160,7 @@ async function save() {
     >
       <p class="flex items-center gap-2 text-sm font-medium text-rose-700">
         <LucideIcon :icon="AlertTriangle" class="size-4.5 shrink-0" />
-        设置加载失败，请重试。
+        {{ $t('settings.profile.loadFailed') }}
       </p>
       <button
         type="button"
@@ -164,7 +168,7 @@ async function save() {
         @click="refreshSetting()"
       >
         <LucideIcon :icon="RefreshCw" class="size-4" />
-        重试
+        {{ $t('common.retry') }}
       </button>
     </div>
 
@@ -203,13 +207,13 @@ async function save() {
             <LucideIcon :icon="Image" class="size-4.5" />
           </span>
           <div class="min-w-0">
-            <h4 class="text-sm font-semibold text-slate-900">个人横幅 Banner</h4>
-            <p class="mt-0.5 text-xs text-slate-500">展示在个人主页顶部的横幅图片。</p>
+            <h4 class="text-sm font-semibold text-slate-900">{{ $t('settings.profile.banner.title') }}</h4>
+            <p class="mt-0.5 text-xs text-slate-500">{{ $t('settings.profile.banner.hint') }}</p>
           </div>
         </div>
         <div class="mt-3 space-y-2">
           <div>
-            <label for="banner-url" class="mb-1.5 block text-sm font-medium text-slate-700">横幅图片 URL</label>
+            <label for="banner-url" class="mb-1.5 block text-sm font-medium text-slate-700">{{ $t('settings.profile.banner.urlLabel') }}</label>
             <div class="flex items-center gap-2">
               <input
                 id="banner-url"
@@ -227,16 +231,16 @@ async function save() {
                 @click="applyBannerPreview"
               >
                 <LucideIcon :icon="RefreshCw" class="size-4" />
-                更新预览
+                {{ $t('settings.profile.updatePreview') }}
               </button>
             </div>
             <p v-if="fieldErrors.banner_url" class="mt-1.5 text-xs font-medium text-rose-600">{{ fieldErrors.banner_url }}</p>
           </div>
           <p class="text-xs leading-relaxed text-slate-400">
-            建议使用约 4.5:1 的宽幅图片（如 1440×320），过小的图片在大屏上可能模糊。
+            {{ $t('settings.profile.banner.sizeHint') }}
           </p>
           <p class="flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs leading-relaxed text-slate-400">
-            可先用第三方图床上传图片，再把链接填到这里。直接上传功能开发中。
+            {{ $t('settings.profile.banner.uploadHint') }}
           </p>
         </div>
       </section>
@@ -248,8 +252,8 @@ async function save() {
             <LucideIcon :icon="IdCard" class="size-4.5" />
           </span>
           <div class="min-w-0">
-            <h4 class="text-sm font-semibold text-slate-900">头像</h4>
-            <p class="mt-0.5 text-xs text-slate-500">使用同步的 PSN 头像，或填写自定义图片链接。</p>
+            <h4 class="text-sm font-semibold text-slate-900">{{ $t('settings.profile.avatar.title') }}</h4>
+            <p class="mt-0.5 text-xs text-slate-500">{{ $t('settings.profile.avatar.hint') }}</p>
           </div>
         </div>
 
@@ -262,13 +266,13 @@ async function save() {
             :class="form.avatarMode === opt.value ? 'bg-white text-violet-700 shadow-sm' : 'text-slate-500 hover:text-slate-900'"
             @click="selectAvatarMode(opt.value)"
           >
-            {{ opt.label }}
+            {{ $t(opt.labelKey) }}
           </button>
         </div>
 
         <div v-if="form.avatarMode === 'custom'" class="mt-3 space-y-2">
           <div>
-            <label for="avatar-url" class="mb-1.5 block text-sm font-medium text-slate-700">头像图片 URL</label>
+            <label for="avatar-url" class="mb-1.5 block text-sm font-medium text-slate-700">{{ $t('settings.profile.avatar.urlLabel') }}</label>
             <div class="flex items-center gap-2">
               <input
                 id="avatar-url"
@@ -286,13 +290,13 @@ async function save() {
                 @click="applyAvatarPreview"
               >
                 <LucideIcon :icon="RefreshCw" class="size-4" />
-                更新预览
+                {{ $t('settings.profile.updatePreview') }}
               </button>
             </div>
             <p v-if="fieldErrors.avatar_url" class="mt-1.5 text-xs font-medium text-rose-600">{{ fieldErrors.avatar_url }}</p>
           </div>
           <p class="flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs leading-relaxed text-slate-400">
-            可以使用第三方图床。直接上传功能开发中。
+            {{ $t('settings.profile.avatar.uploadHint') }}
           </p>
         </div>
       </section>
@@ -307,7 +311,7 @@ async function save() {
         @click="save"
       >
         <LucideIcon v-if="saving" :icon="Loader2" class="size-4 animate-spin" />
-        {{ saving ? '保存中…' : '保存' }}
+        {{ saving ? $t('common.saving') : $t('common.save') }}
       </button>
     </div>
   </section>

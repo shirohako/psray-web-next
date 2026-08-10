@@ -21,12 +21,12 @@ const bannerImage = computed(() => props.profile.banner_url || appConfig.profile
 
       <!-- Top-right badges -->
       <div class="absolute right-4 top-4 z-10 flex items-center gap-2">
-        <Tooltip v-if="profile.is_plus" content="非实时数据" placement="bottom" class="cursor-help">
+        <Tooltip v-if="profile.is_plus" :content="$t('profile.identity.notRealtime')" placement="bottom" class="cursor-help">
           <span class="inline-flex items-center gap-1 rounded-md bg-amber-400/95 px-2.5 py-1 text-xs font-bold text-amber-950 shadow-sm backdrop-blur-md">
             <LucideIcon :icon="Crown" class="size-3.5" /> PS+
           </span>
         </Tooltip>
-        <QrCodeButton title="个人资料二维码" :caption="profile.psnid" />
+        <QrCodeButton :title="$t('profile.qrTitle')" :caption="profile.psnid" />
       </div>
 
       <ProfileHeaderActions

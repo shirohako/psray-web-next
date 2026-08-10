@@ -60,20 +60,20 @@ watch(() => props.open, (v) => {
     @update:open="emit('update:open', $event)"
   >
     <template #title>
-      近期获得的玩家
+      {{ $t('trophy.earners.title') }}
       <span v-if="trophyName" class="ml-1 font-normal text-slate-400">· {{ trophyName }}</span>
     </template>
 
     <!-- Count + sort toggle -->
     <div class="sticky top-0 z-10 flex items-center justify-between gap-3 border-b border-slate-100 bg-white/90 px-4 py-2.5 backdrop-blur sm:px-5">
-      <span class="text-xs text-slate-400">共 {{ fmt(meta?.total) }} 名玩家</span>
+      <span class="text-xs text-slate-400">{{ $t('leaderboard.totalPlayers', { count: fmt(meta?.total) }) }}</span>
       <button
         type="button"
         class="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1.5 text-xs font-medium text-slate-600 transition hover:bg-slate-200 hover:text-slate-900"
         @click="toggleOrder"
       >
         <LucideIcon :icon="order === 'desc' ? ArrowDownWideNarrow : ArrowUpNarrowWide" class="size-4" />
-        {{ order === 'desc' ? '最近获得在前' : '最早获得在前' }}
+        {{ order === 'desc' ? $t('trophy.earners.newestFirst') : $t('trophy.earners.oldestFirst') }}
       </button>
     </div>
 
@@ -90,7 +90,7 @@ watch(() => props.open, (v) => {
 
     <!-- Empty -->
     <p v-else-if="!players.length" class="px-5 py-16 text-center text-sm text-slate-400">
-      还没有玩家获得这个奖杯。
+      {{ $t('trophy.earners.empty') }}
     </p>
 
     <!-- List -->
@@ -107,7 +107,7 @@ watch(() => props.open, (v) => {
               <RegionFlag :country="p.country" class="text-xs" />
               <span class="truncate text-sm font-semibold text-slate-900 group-hover:text-slate-700">{{ p.psnid }}</span>
             </div>
-            <div class="mt-0.5 text-xs tabular-nums text-slate-400">{{ fmtDateTime(p.earned_at) }} 获得</div>
+            <div class="mt-0.5 text-xs tabular-nums text-slate-400">{{ $t('trophy.earners.earnedAt', { time: fmtDateTime(p.earned_at) }) }}</div>
           </div>
         </NuxtLink>
       </li>

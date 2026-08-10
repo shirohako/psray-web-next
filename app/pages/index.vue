@@ -15,7 +15,12 @@ function goToSync() {
   navigateTo(`/sync?psnid=${encodeURIComponent(id)}`)
 }
 
-useHead({ title: 'PSRay' })
+const { t } = useI18n()
+
+useSeo({
+  title: () => t('seo.home.title'),
+  description: () => t('seo.home.description'),
+})
 </script>
 
 <template>
@@ -39,8 +44,8 @@ useHead({ title: 'PSRay' })
 
     <!-- Profile lookup -->
     <section class="rounded-lg border border-slate-200 bg-white p-4 shadow-sm sm:p-6">
-      <h2 class="text-base font-semibold text-slate-900">查看个人资料</h2>
-      <p class="mt-1 text-sm text-slate-500">输入 PSN ID 进入对应的个人资料页面。</p>
+      <h2 class="text-base font-semibold text-slate-900">{{ $t('home.lookup.heading') }}</h2>
+      <p class="mt-1 text-sm text-slate-500">{{ $t('home.lookup.hint') }}</p>
 
       <form class="mt-4 flex flex-col gap-2 sm:flex-row" @submit.prevent="goToProfile">
         <div class="relative flex-1">
@@ -61,7 +66,7 @@ useHead({ title: 'PSRay' })
             class="inline-flex min-w-0 items-center justify-center gap-1.5 rounded-lg bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white shadow-sm shadow-slate-900/30 transition hover:bg-slate-800 active:bg-slate-950 disabled:opacity-40 disabled:hover:bg-slate-900 sm:shrink-0"
           >
             <LucideIcon :icon="Search" class="size-4" />
-            查看
+            {{ $t('home.lookup.view') }}
           </button>
           <button
             type="button"
@@ -70,7 +75,7 @@ useHead({ title: 'PSRay' })
             class="inline-flex min-w-0 items-center justify-center gap-1.5 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 hover:text-slate-900 disabled:opacity-40 disabled:hover:bg-white sm:shrink-0"
           >
             <LucideIcon :icon="RefreshCw" class="size-4" />
-            同步
+            {{ $t('home.lookup.sync') }}
           </button>
         </div>
       </form>

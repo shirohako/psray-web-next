@@ -25,23 +25,32 @@ const TIER_TEXT: Record<TrophyType, string> = {
 }
 export const trophyTierColor = (t: TrophyType) => TIER_TEXT[t]
 
-/** Localized rarity label + a soft pill colour scheme. */
-const RARITY: Record<Rarity, { label: string; pill: string }> = {
-  COMMON: { label: '普通', pill: 'bg-slate-100 text-slate-600' },
-  UNCOMMON: { label: '罕见', pill: 'bg-emerald-50 text-emerald-600' },
-  RARE: { label: '稀有', pill: 'bg-sky-50 text-sky-600' },
-  'VERY RARE': { label: '非常稀有', pill: 'bg-violet-50 text-violet-600' },
-  'ULTRA RARE': { label: '极为稀有', pill: 'bg-amber-50 text-amber-600' },
+/** Rarity label (translated at read time) + a soft pill colour scheme. */
+const RARITY: Record<Rarity, { labelKey: string; pill: string }> = {
+  COMMON: { labelKey: 'trophy.rarity.common', pill: 'bg-slate-100 text-slate-600' },
+  UNCOMMON: { labelKey: 'trophy.rarity.uncommon', pill: 'bg-emerald-50 text-emerald-600' },
+  RARE: { labelKey: 'trophy.rarity.rare', pill: 'bg-sky-50 text-sky-600' },
+  'VERY RARE': { labelKey: 'trophy.rarity.veryRare', pill: 'bg-violet-50 text-violet-600' },
+  'ULTRA RARE': { labelKey: 'trophy.rarity.ultraRare', pill: 'bg-amber-50 text-amber-600' },
 }
-/** Falls back to a neutral pill for any unknown rarity string. */
-export const rarityMeta = (r: Rarity) =>
-  RARITY[r] ?? { label: r, pill: 'bg-slate-100 text-slate-600' }
+/** Falls back to the raw rarity string in a neutral pill when it's unknown. */
+export const rarityMeta = (r: Rarity) => {
+  const meta = RARITY[r]
+  return meta
+    ? { label: tr(meta.labelKey), pill: meta.pill }
+    : { label: r, pill: 'bg-slate-100 text-slate-600' }
+}
 
-/** Human-readable language name from a BCP-47 code, e.g. `zh-Hant → 繁体中文`. */
+/**
+ * Human-readable language name from a BCP-47 code, in the active UI language —
+ * e.g. `zh-Hant` reads as "Traditional Chinese" to an English visitor and
+ * `繁体字中国語` to a Japanese one. Built per call: a module-scoped
+ * `DisplayNames` would pin one
+ * request's locale for every later request.
+ */
 export function langLabel(code: string): string {
   try {
-    const dn = new Intl.DisplayNames(['zh-CN'], { type: 'language' })
-    return dn.of(code) ?? code
+    return new Intl.DisplayNames([currentLocale()], { type: 'language' }).of(code) ?? code
   } catch {
     return code
   }

@@ -24,10 +24,10 @@ onMounted(() => {
     </div>
 
     <h1 class="mt-2 text-xl font-bold tracking-tight text-slate-900 animate-rise" style="animation-delay: 0.1s">
-      一切很顺利
+      {{ $t('auth.register.done.title') }}
     </h1>
     <p class="mt-2 max-w-xs text-sm leading-relaxed text-slate-500 animate-rise" style="animation-delay: 0.16s">
-      您的 PSRay 账号已创建完成。
+      {{ $t('auth.register.done.description') }}
     </p>
 
     <button
@@ -36,7 +36,7 @@ onMounted(() => {
       style="animation-delay: 0.22s"
       @click="$emit('login')"
     >
-      前往登录
+      {{ $t('auth.register.done.cta') }}
       <LucideIcon :icon="ArrowRight" class="size-4 transition-transform group-hover:translate-x-0.5" />
     </button>
   </div>

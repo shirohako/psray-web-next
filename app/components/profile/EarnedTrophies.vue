@@ -61,12 +61,12 @@ function psnEarnedRate(item: RecentTrophy) {
       <div>
         <h2 class="inline-flex items-center gap-1.5 text-sm font-semibold text-slate-900">
           <LucideIcon :icon="Trophy" class="size-4 text-slate-500" />
-          获得的奖杯
+          {{ $t('profile.earned.title') }}
         </h2>
-        <p class="mt-0.5 text-xs text-slate-400">按解锁时间排序的奖杯记录</p>
+        <p class="mt-0.5 text-xs text-slate-400">{{ $t('profile.earned.subtitle') }}</p>
       </div>
       <span v-if="total" class="shrink-0 rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold tabular-nums text-slate-600">
-        共 {{ fmt(total) }} 个
+        {{ $t('profile.earned.total', { count: fmt(total) }) }}
       </span>
     </div>
 
@@ -95,7 +95,7 @@ function psnEarnedRate(item: RecentTrophy) {
       <div class="mx-auto grid size-12 place-items-center rounded-full bg-slate-100 text-slate-400">
         <LucideIcon :icon="Trophy" class="size-6" />
       </div>
-      <p class="mt-3 text-sm text-slate-500">还没有获得奖杯。</p>
+      <p class="mt-3 text-sm text-slate-500">{{ $t('profile.earned.empty') }}</p>
     </div>
 
     <!-- List -->
@@ -143,10 +143,10 @@ function psnEarnedRate(item: RecentTrophy) {
             <span
               v-if="elapsedSincePrev(index) != null"
               class="inline-flex items-center gap-1 tabular-nums"
-              title="距上一个奖杯的获取间隔"
+              :title="$t('profile.earned.gapTitle')"
             >
               <LucideIcon :icon="Hourglass" class="size-3 text-slate-400" />
-              间隔 {{ formatDuration(elapsedSincePrev(index)) }}
+              {{ $t('profile.earned.gap', { duration: formatDuration(elapsedSincePrev(index)) }) }}
             </span>
           </div>
         </div>
