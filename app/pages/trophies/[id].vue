@@ -330,7 +330,9 @@ const filterOptions: { value: FilterMode; labelKey: string }[] = [
 ]
 const filter = ref<FilterMode>('all')
 const sort = ref<SortMode>('default')
-const trophyListExpanded = ref(route.hash.startsWith('#trophy-'))
+// URL fragments are unavailable to SSR. Start collapsed on both server and
+// client, then reveal and re-scroll after hydration to avoid a class mismatch.
+const trophyListExpanded = ref(false)
 
 // Mask spoiler (PSN-hidden) trophies until toggled on; earned ones stay visible.
 // Persisted in a cookie so the preference survives reloads / navigation.
@@ -352,9 +354,15 @@ watch([filter, sort, showSpoilers], () => {
   trophyListExpanded.value = false
 })
 
-watch(() => route.hash, (hash) => {
-  if (hash.startsWith('#trophy-')) trophyListExpanded.value = true
-})
+async function revealHashTarget(hash: string) {
+  if (!/^#trophy-\d+$/.test(hash)) return
+  trophyListExpanded.value = true
+  await nextTick()
+  document.getElementById(hash.slice(1))?.scrollIntoView({ block: 'start' })
+}
+
+onMounted(() => revealHashTarget(route.hash))
+watch(() => route.hash, revealHashTarget)
 
 /**
  * The set's title in the language actually being displayed. `available_languages`

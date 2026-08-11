@@ -1,4 +1,9 @@
 import tailwindcss from "@tailwindcss/vite";
+import { REGIONS } from './app/utils/regions'
+
+// RegionFlag builds names dynamically, which @nuxt/icon's static scanner
+// cannot discover. Pre-bundle the supported catalogue for deterministic SSR.
+const regionFlagIcons = REGIONS.map(region => `flag:${region.code.toLowerCase()}-4x3`)
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -80,4 +85,12 @@ export default defineNuxtConfig({
   },
 
   modules: ['@nuxt/icon', '@nuxtjs/i18n'],
+  icon: {
+    serverBundle: { collections: ['flag'] },
+    clientBundle: {
+      icons: regionFlagIcons,
+      scan: false,
+      sizeLimitKb: 768,
+    },
+  },
 })
