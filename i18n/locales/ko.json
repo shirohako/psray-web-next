@@ -246,6 +246,10 @@
     "generateFailed": "QR 코드 생성에 실패했습니다"
   },
   "time": {
+    "year": "{y}년",
+    "yearMonth": "{y}년 {mo}개월",
+    "month": "{mo}개월",
+    "monthDay": "{mo}개월 {d}일",
     "dayHour": "{d}일 {h}시간",
     "hourMinute": "{h}시간 {m}분",
     "minuteSecond": "{m}분 {s}초",

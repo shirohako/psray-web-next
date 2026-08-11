@@ -246,6 +246,10 @@
     "generateFailed": "QR 碼產生失敗"
   },
   "time": {
+    "year": "{y}年",
+    "yearMonth": "{y}年{mo}個月",
+    "month": "{mo}個月",
+    "monthDay": "{mo}個月{d}天",
     "dayHour": "{d}天{h}小時",
     "hourMinute": "{h}小時{m}分",
     "minuteSecond": "{m}分{s}秒",

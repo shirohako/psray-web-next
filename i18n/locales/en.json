@@ -246,6 +246,10 @@
     "generateFailed": "Couldn’t generate the QR code"
   },
   "time": {
+    "year": "{y}y",
+    "yearMonth": "{y}y {mo}mo",
+    "month": "{mo}mo",
+    "monthDay": "{mo}mo {d}d",
     "dayHour": "{d}d {h}h",
     "hourMinute": "{h}h {m}m",
     "minuteSecond": "{m}m {s}s",

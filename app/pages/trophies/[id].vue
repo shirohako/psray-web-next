@@ -11,7 +11,7 @@
   <!-- Content. Failures never reach here: `raiseFetchError` shows `error.vue`
        with a real HTTP status instead. -->
   <div v-else-if="data" class="space-y-6">
-    <TrophyBanner :trophy-set="data.trophy_set" />
+    <TrophyBanner :trophy-set="data.trophy_set" :display-name="displayName" />
 
     <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
       <!-- Main: grouped trophy list -->
@@ -42,8 +42,8 @@
           </div>
 
           <!-- Filter + sort toolbar -->
-          <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 px-4 py-2.5 sm:px-5">
-            <div class="inline-flex rounded-lg bg-slate-100 p-0.5">
+          <div class="flex flex-col gap-2.5 border-b border-slate-200 px-4 py-2.5 sm:flex-row sm:items-center sm:justify-between sm:gap-3 sm:px-5">
+            <div class="grid grid-cols-3 rounded-lg bg-slate-100 p-0.5 sm:inline-flex">
               <button
                 v-for="f in filterOptions"
                 :key="f.value"
@@ -58,13 +58,13 @@
               </button>
             </div>
 
-            <div class="flex items-center gap-3">
+            <div class="flex min-w-0 flex-col items-stretch gap-2 sm:flex-row sm:items-center sm:gap-3">
               <!-- Spoiler toggle -->
               <button
                 type="button"
                 role="switch"
                 :aria-checked="showSpoilers"
-                class="inline-flex items-center gap-2 text-sm font-medium text-slate-600"
+                class="inline-flex min-w-0 items-center justify-between gap-2 rounded-lg px-1 py-1 text-sm font-medium text-slate-600 sm:justify-normal sm:p-0"
                 @click="showSpoilers = !showSpoilers"
               >
                 <span>{{ $t('trophy.list.showHidden') }}</span>
@@ -73,9 +73,9 @@
                 </span>
               </button>
 
-              <label class="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-sm text-slate-600 transition focus-within:border-slate-400">
+              <label class="inline-flex min-w-0 items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-sm text-slate-600 transition focus-within:border-slate-400 sm:shrink-0">
                 <LucideIcon :icon="ArrowUpDown" class="size-4 text-slate-400" />
-                <select v-model="sort" class="cursor-pointer bg-transparent pr-1 font-medium text-slate-900 focus:outline-none" :aria-label="$t('trophy.sort.label')">
+                <select v-model="sort" class="min-w-0 flex-1 cursor-pointer bg-transparent pr-1 font-medium text-slate-900 focus:outline-none sm:flex-none" :aria-label="$t('trophy.sort.label')">
                   <option value="default">{{ $t('trophy.sort.default') }}</option>
                   <option value="earned" :disabled="!hasViewer">{{ $t('trophy.sort.earned') }}</option>
                   <option value="rarity">{{ $t('trophy.sort.rarity') }}</option>
@@ -99,7 +99,10 @@
                 :sort="sort"
                 :show-spoilers="showSpoilers"
                 :numbers="trophyNumbers"
-                :display-language="data.display_language"
+                :tip-counts="tipCounts"
+                @detail="dialogHost?.open('detail', $event)"
+                @earners="dialogHost?.open('earners', $event)"
+                @tips="dialogHost?.open('tips', $event)"
               />
             </div>
 
@@ -130,6 +133,7 @@
         <TrophyViewerProgress
           v-if="data.viewer_progress"
           :progress="data.viewer_progress"
+          :country="viewerCountry"
           :total="totalDefined(data.trophy_set.defined_trophies)"
           :defined-trophies="data.trophy_set.defined_trophies"
         />
@@ -139,16 +143,33 @@
         <TrophyRecentPlayers :id="data.trophy_set.id" :players="data.recent_players" />
       </aside>
     </div>
+
+    <TrophyDialogHost
+      ref="dialogHost"
+      :trophies="allTrophies"
+      :display-language="data.display_language"
+      @count="updateTipCount"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ArrowUpDown, ChevronDown } from 'lucide'
 import type { Trophy, TrophyGroup, TrophySetDetail } from '~/services/trophies'
-import { DEFAULT_LOCALE, PSN_LANG, canonicalLang, isUiLocale, type UiLocale } from '#shared/locales'
+import { DEFAULT_LOCALE, PSN_LANG, canonicalContentLang, canonicalLang, isUiLocale, type UiLocale } from '#shared/locales'
 
 type FilterMode = 'all' | 'earned' | 'unearned'
 type SortMode = 'default' | 'earned' | 'rarity'
+type TrophyDialogKind = 'detail' | 'earners' | 'tips'
+
+const dialogHost = useTemplateRef<{
+  open: (kind: TrophyDialogKind, trophy: Trophy) => void
+}>('dialogHost')
+const tipCounts = reactive<Record<number, number>>({})
+
+function updateTipCount(trophyId: number, value: number) {
+  tipCounts[trophyId] = value
+}
 
 const route = useRoute()
 const { t, locale } = useI18n()
@@ -172,7 +193,7 @@ const hasViewer = computed(() => Boolean(psnid.value))
 // `Accept-Language` the browser happened to send.
 const uiContentLang = computed(() =>
   PSN_LANG[isUiLocale(locale.value) ? locale.value as UiLocale : DEFAULT_LOCALE])
-const contentLangParam = computed(() => canonicalLang(route.query.tlang))
+const contentLangParam = computed(() => canonicalContentLang(route.query.tlang))
 const requestedLang = computed(() => contentLangParam.value || uiContentLang.value)
 
 const { data, status, error } = await useApiFetch<TrophySetDetail>(
@@ -186,6 +207,14 @@ const { data, status, error } = await useApiFetch<TrophySetDetail>(
 )
 
 const pending = computed(() => status.value === 'pending')
+
+const viewerCountry = computed(() => {
+  const progress = data.value?.viewer_progress
+  if (!progress) return ''
+  return progress.country
+    || data.value?.recent_players.find(player => player.psnid === progress.psnid)?.country
+    || ''
+})
 
 // A missing set has to answer 404, not a 200 page that says "not found".
 // Watched rather than checked once: navigating between two trophy pages reuses
@@ -295,6 +324,8 @@ const sortedGroups = computed(() =>
     })),
 )
 
+const allTrophies = computed(() => sortedGroups.value.flatMap(group => group.trophies))
+
 function isTrophyEarned(trophy: Trophy) {
   return hasViewer.value && (trophy.earned_by_viewer ?? earnedInfo.value.has(trophy.id))
 }
@@ -393,8 +424,8 @@ useSeo({
   // we asked for — a `?tlang=` the API fell back on must not claim to be its
   // own variant.
   contentLang: () => {
-    const served = canonicalLang(data.value?.display_language)
-    return served && served !== canonicalLang(uiContentLang.value) ? served : ''
+    const served = canonicalContentLang(data.value?.display_language)
+    return served && canonicalLang(served) !== canonicalLang(uiContentLang.value) ? served : ''
   },
   // Every PSN language this set exists in is a genuinely different page and
   // worth advertising, on top of the five UI locales `useSeo` always emits.

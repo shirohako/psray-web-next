@@ -44,11 +44,13 @@ import { UserCheck } from 'lucide'
 import type { Profile } from '~/services/profile'
 import { useProfiles } from '~/services/profile'
 import { ApiError } from '~/utils/ApiError'
+import { DEFAULT_LOCALE, HTML_LANG, isUiLocale } from '#shared/locales'
 
 const route = useRoute()
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const psnid = computed(() => String(route.params.psnid))
 const auth = useAuth()
+const siteUrl = useRuntimeConfig().public.siteUrl.replace(/\/+$/, '')
 
 const { data: profile, pending, error } = await useApiFetch<Profile>(
   () => `/profile/${psnid.value}`,
@@ -125,6 +127,10 @@ async function toggleFollow() {
   }
 }
 
+const canonicalProfilePath = computed(() => profile.value
+  ? `/p/${encodeURIComponent(profile.value.psnid)}`
+  : route.path)
+
 useSeo({
   title: () => (profile.value
     ? t('seo.profile.title', { psnid: profile.value.psnid })
@@ -133,7 +139,73 @@ useSeo({
     ? t('seo.profile.description', { psnid: profile.value.psnid })
     : ''),
   image: () => profile.value?.avatar_url ?? undefined,
+  canonicalPath: () => canonicalProfilePath.value,
   // A private profile exposes no trophy data, so there is nothing worth indexing.
   noindex: () => !profile.value?.is_profile_public,
 })
+
+const canonicalProfileUrl = computed(() => {
+  const lang = isUiLocale(locale.value) ? locale.value : DEFAULT_LOCALE
+  return `${siteUrl}${canonicalProfilePath.value}${lang === DEFAULT_LOCALE ? '' : `?lang=${encodeURIComponent(lang)}`}`
+})
+
+function isoDate(value: Profile['registered_at']): string | undefined {
+  if (value == null || value === '') return undefined
+  const date = typeof value === 'number' ? new Date(value * 1000) : new Date(value)
+  return Number.isNaN(date.getTime()) ? undefined : date.toISOString()
+}
+
+// Only registered PSRay members are creators affiliated with this site. A
+// synced-only PSN record is useful content, but it is not a community profile.
+const profileJsonLd = computed(() => {
+  const p = profile.value
+  if (!p?.is_profile_public || p.registered_at == null) return null
+
+  const url = canonicalProfileUrl.value
+  const person: Record<string, unknown> = {
+    '@id': `${url}#person`,
+    '@type': 'Person',
+    'name': p.psnid,
+    'identifier': p.psnid,
+    'url': url,
+    'image': p.avatar_url,
+    'interactionStatistic': [{
+      '@type': 'InteractionCounter',
+      'interactionType': 'https://schema.org/FollowAction',
+      'userInteractionCount': p.follower_count,
+    }],
+    'agentInteractionStatistic': [
+      {
+        '@type': 'InteractionCounter',
+        'interactionType': 'https://schema.org/FollowAction',
+        'userInteractionCount': p.following_count,
+      },
+      {
+        '@type': 'InteractionCounter',
+        'interactionType': 'https://schema.org/WriteAction',
+        'userInteractionCount': p.tip_count,
+      },
+    ],
+  }
+  if (p.about_me) person.description = p.about_me
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ProfilePage',
+    'url': url,
+    'dateCreated': isoDate(p.registered_at),
+    'inLanguage': HTML_LANG[isUiLocale(locale.value) ? locale.value : DEFAULT_LOCALE],
+    'mainEntity': person,
+  }
+})
+
+useHead(() => ({
+  script: profileJsonLd.value
+    ? [{
+        key: 'profile-jsonld',
+        type: 'application/ld+json',
+        innerHTML: JSON.stringify(profileJsonLd.value).replace(/</g, '\\u003c'),
+      }]
+    : [],
+}))
 </script>

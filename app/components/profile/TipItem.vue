@@ -10,6 +10,13 @@ const props = withDefaults(defineProps<{
 const route = useRoute()
 const trophyName = computed(() => props.tip.trophy?.name || `#${props.tip.trophy_id}`)
 const edited = computed(() => isTipEdited(props.tip))
+const voteDigits = computed(() => Math.max(
+  String(props.tip.vote_up_count).length,
+  String(props.tip.vote_down_count).length,
+))
+const voteGrid = computed(() => ({
+  gridTemplateColumns: `0.875rem ${voteDigits.value}ch`,
+}))
 const trophyTarget = computed(() => {
   const trophySetId = props.tip.trophy_set_id
   if (!trophySetId) return null
@@ -56,14 +63,16 @@ const trophyTarget = computed(() => {
       <h3 class="truncate text-sm font-semibold text-slate-900">{{ trophyName }}</h3>
       <div class="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-slate-400">
         <span class="tabular-nums">{{ fmtDateTime(tip.updated_at) }}</span>
-        <span v-if="edited" class="font-medium text-slate-500">{{ $t('trophy.tips.edited') }}</span>
-        <span class="inline-flex items-center gap-1">
-          <LucideIcon :icon="ThumbsUp" class="size-3.5" />
-          <span class="tabular-nums">{{ tip.vote_up_count }}</span>
-        </span>
-        <span class="inline-flex items-center gap-1">
-          <LucideIcon :icon="ThumbsDown" class="size-3.5" />
-          <span class="tabular-nums">{{ tip.vote_down_count }}</span>
+        <span v-if="edited && !compact" class="font-medium text-slate-500">{{ $t('trophy.tips.edited') }}</span>
+        <span class="inline-flex items-center gap-2">
+          <span class="inline-grid items-center gap-0.5" :style="voteGrid">
+            <LucideIcon :icon="ThumbsUp" class="size-3.5" />
+            <span class="text-right tabular-nums">{{ tip.vote_up_count }}</span>
+          </span>
+          <span class="inline-grid items-center gap-0.5" :style="voteGrid">
+            <LucideIcon :icon="ThumbsDown" class="size-3.5" />
+            <span class="text-right tabular-nums">{{ tip.vote_down_count }}</span>
+          </span>
         </span>
       </div>
     </div>

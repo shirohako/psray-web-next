@@ -101,17 +101,16 @@ onUnmounted(hide)
     @focusout="hide"
   >
     <slot />
+    <Teleport v-if="hasContent && visible" to="body">
+      <span
+        role="tooltip"
+        class="pointer-events-none fixed z-50 w-max max-w-xs rounded-md bg-slate-900 px-2 py-1 text-xs font-medium text-white shadow-md transition-opacity duration-150"
+        :class="PANEL[placement]"
+        :style="panelStyle"
+      >
+        <slot name="content">{{ content }}</slot>
+        <span class="absolute size-2 rotate-45 bg-slate-900" :class="ARROW[placement]" />
+      </span>
+    </Teleport>
   </span>
-  <Teleport to="body">
-    <span
-      v-if="hasContent && visible"
-      role="tooltip"
-      class="pointer-events-none fixed z-50 w-max max-w-xs rounded-md bg-slate-900 px-2 py-1 text-xs font-medium text-white shadow-md transition-opacity duration-150"
-      :class="PANEL[placement]"
-      :style="panelStyle"
-    >
-      <slot name="content">{{ content }}</slot>
-      <span class="absolute size-2 rotate-45 bg-slate-900" :class="ARROW[placement]" />
-    </span>
-  </Teleport>
 </template>

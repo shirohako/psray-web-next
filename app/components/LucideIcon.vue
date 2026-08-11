@@ -1,9 +1,28 @@
 <script setup lang="ts">
 import type { IconNode } from 'lucide'
 
-// Renders a lucide `IconNode` (an array of [tag, attrs] pairs) as an inline SVG.
-// Usage: <LucideIcon :icon="Menu" class="size-6" />
-defineProps<{ icon: IconNode }>()
+const props = defineProps<{ icon: IconNode }>()
+
+function escapeAttribute(value: unknown) {
+  return String(value)
+    .replaceAll('&', '&amp;')
+    .replaceAll('"', '&quot;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+}
+
+/**
+ * Lucide icons are trusted, statically imported node definitions. Serializing
+ * those definitions as SVG children avoids the Fragment hydration markers that
+ * a template-level `v-for` would add around every icon.
+ */
+const paths = computed(() => props.icon.map(([tag, attrs]) => {
+  const attributes = Object.entries(attrs)
+    .filter(([name]) => name !== 'key')
+    .map(([name, value]) => `${name}="${escapeAttribute(value)}"`)
+    .join(' ')
+  return `<${tag}${attributes ? ` ${attributes}` : ''}></${tag}>`
+}).join(''))
 </script>
 
 <template>
@@ -18,7 +37,6 @@ defineProps<{ icon: IconNode }>()
     stroke-linecap="round"
     stroke-linejoin="round"
     aria-hidden="true"
-  >
-    <component :is="tag" v-for="([tag, attrs], i) in icon" :key="i" v-bind="attrs" />
-  </svg>
+    v-html="paths"
+  />
 </template>

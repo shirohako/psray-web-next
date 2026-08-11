@@ -40,9 +40,11 @@ export function fmtDateTime(value: DateLike) {
 }
 
 /**
- * A duration in seconds → a compact two-unit label, e.g. `3d 14h`. Returns an
- * em dash for null. `Intl.DurationFormat` isn't available across our
- * Node/Safari floor, so the unit pairs come from the message catalog (`time.*`).
+ * A duration in seconds → a compact two-unit label, e.g. `2y 3mo` or `3d 14h`.
+ * Month/year values deliberately use 30/365-day duration buckets rather than
+ * calendar arithmetic because callers provide elapsed seconds, not two dates.
+ * `Intl.DurationFormat` isn't available across our Node/Safari floor, so the
+ * unit pairs come from the message catalog (`time.*`).
  */
 export function formatDuration(sec: number | null | undefined) {
   if (sec == null) return '—'
@@ -50,6 +52,16 @@ export function formatDuration(sec: number | null | undefined) {
   const h = Math.floor((sec % 86_400) / 3600)
   const m = Math.floor((sec % 3600) / 60)
   const s = Math.floor(sec % 60)
+  if (d >= 365) {
+    const y = Math.floor(d / 365)
+    const mo = Math.floor((d % 365) / 30)
+    return mo > 0 ? tr('time.yearMonth', { y, mo }) : tr('time.year', { y })
+  }
+  if (d >= 30) {
+    const mo = Math.floor(d / 30)
+    const rest = d % 30
+    return rest > 0 ? tr('time.monthDay', { mo, d: rest }) : tr('time.month', { mo })
+  }
   if (d > 0) return tr('time.dayHour', { d, h })
   if (h > 0) return tr('time.hourMinute', { h, m })
   if (m > 0) return tr('time.minuteSecond', { m, s })

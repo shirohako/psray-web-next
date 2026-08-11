@@ -19,8 +19,14 @@ const props = defineProps<{
   showSpoilers: boolean
   /** Continuous serial number across all groups. */
   number: number
-  /** Language currently used for the trophy names and new-tip default. */
-  displayLanguage: string
+  /** Locally refreshed count supplied by the shared dialog host. */
+  tipCount?: number
+}>()
+
+const emit = defineEmits<{
+  detail: [trophy: TrophyData]
+  earners: [trophy: TrophyData]
+  tips: [trophy: TrophyData]
 }>()
 
 const { t } = useI18n()
@@ -141,7 +147,6 @@ function fmtEarnGap(sec: number) {
 }
 
 const toast = useToast()
-const route = useRoute()
 async function copy(text: string, label: string) {
   if (!text || !import.meta.client) return
   try {
@@ -155,60 +160,7 @@ async function copy(text: string, label: string) {
   }
 }
 
-// Dialogs opened from the row's menu / comment button.
-const detailOpen = ref(false)
-const earnersOpen = ref(false)
-const tipsOpen = ref(String(route.query.tips ?? '') === String(props.trophy.id))
-const composerOpen = ref(false)
-// Dialogs are expensive multiplied by every trophy row. Mount each one only
-// after its first open, then keep it alive until its leave transition finishes.
-const detailMounted = ref(false)
-const earnersMounted = ref(false)
-const tipsMounted = ref(tipsOpen.value)
-const composerMounted = ref(false)
-const composerMode = ref<'create' | 'edit'>('create')
-const dialogDestination = ref<'tips' | 'composer' | null>(null)
-const displayedTipCount = ref(props.trophy.tip_count)
-watch(() => props.trophy.tip_count, value => { displayedTipCount.value = value })
-watch(() => route.query.tips, (tipId) => {
-  if (String(tipId ?? '') === String(props.trophy.id)) tipsOpen.value = true
-})
-watch(detailOpen, value => { if (value) detailMounted.value = true })
-watch(earnersOpen, value => { if (value) earnersMounted.value = true })
-watch(tipsOpen, value => { if (value) tipsMounted.value = true })
-watch(composerOpen, value => { if (value) composerMounted.value = true })
-
-function openTipComposer(mode: 'create' | 'edit') {
-  composerMode.value = mode
-  dialogDestination.value = 'composer'
-  tipsOpen.value = false
-}
-
-function onTipsClosed() {
-  tipsMounted.value = false
-  if (dialogDestination.value !== 'composer') return
-  dialogDestination.value = null
-  composerOpen.value = true
-}
-
-function returnToTips() {
-  dialogDestination.value = 'tips'
-}
-
-function onComposerClosed() {
-  composerMounted.value = false
-  if (dialogDestination.value !== 'tips') return
-  dialogDestination.value = null
-  tipsOpen.value = true
-}
-
-function onTipPublished() {
-  returnToTips()
-}
-
-function onTipDeleted() {
-  returnToTips()
-}
+const displayedTipCount = computed(() => props.tipCount ?? props.trophy.tip_count)
 </script>
 
 <template>
@@ -218,10 +170,8 @@ function onTipDeleted() {
     :class="[density.row, showEarned ? 'bg-sky-50/60' : 'hover:bg-slate-50']"
   >
     <div class="flex shrink-0 items-center gap-2 sm:gap-3">
-      <!-- Continuous serial number -->
       <span class="text-right font-semibold tabular-nums text-slate-400" :class="density.number">#{{ number }}</span>
 
-      <!-- Icon + tier badge + earned check -->
       <div class="relative">
         <img
           :src="trophy.icon_url"
@@ -247,7 +197,6 @@ function onTipDeleted() {
       </div>
     </div>
 
-    <!-- Name + detail -->
     <div class="min-w-0 flex-1">
       <div class="flex flex-wrap items-center gap-2">
         <h3 class="min-w-0 truncate font-semibold text-slate-900" :class="[density.title, { 'text-slate-400': masked }]">{{ displayName }}</h3>
@@ -267,14 +216,11 @@ function onTipDeleted() {
         class="flex max-w-full flex-wrap items-center font-medium leading-none text-slate-400"
         :class="density.earnedMeta"
       >
-        <!-- When the viewer earned it -->
         <span class="inline-flex min-w-0 items-center gap-1" :title="$t('trophy.item.earnedAt')">
           <LucideIcon :icon="Clock3" class="size-3 shrink-0" />
           <span class="truncate tabular-nums">{{ fmtDateTime(earnedAt) }}</span>
         </span>
 
-        <!-- Earned-order badge; the tooltip carries the gap since the previously
-             earned trophy -->
         <Tooltip v-if="earnedOrder" placement="top" class="shrink-0 cursor-help text-slate-500">
           <span class="inline-flex items-center gap-1" @click.stop>
             <LucideIcon :icon="Medal" class="size-3 shrink-0" />
@@ -306,7 +252,6 @@ function onTipDeleted() {
       </div>
     </div>
 
-    <!-- PSN earn rate + actions -->
     <div class="flex shrink-0 items-center" :class="density.actions">
       <Tooltip placement="left">
         <div tabindex="0" class="flex cursor-pointer flex-col items-end leading-tight focus:outline-none" @click.stop>
@@ -327,14 +272,12 @@ function onTipDeleted() {
         </template>
       </Tooltip>
 
-      <!-- Comment button (badge = number of tips). Stops propagation so it
-           keeps its own action instead of opening the row menu. -->
       <button
         type="button"
         class="relative grid place-items-center rounded-full border border-slate-200 bg-white text-slate-500 shadow-sm transition hover:border-slate-300 hover:bg-slate-50 hover:text-slate-900"
         :class="density.commentButton"
         :title="$t('trophy.item.tips')"
-        @click.stop="tipsOpen = true"
+        @click.stop="emit('tips', trophy)"
       >
         <LucideIcon :icon="MessageSquare" :class="density.commentIcon" />
         <span
@@ -351,7 +294,7 @@ function onTipDeleted() {
         type="button"
         role="menuitem"
         class="flex w-full items-center gap-2.5 px-3 py-2 text-left text-slate-700 transition hover:bg-slate-50"
-        @click="detailOpen = true; close()"
+        @click="emit('detail', trophy); close()"
       >
         <LucideIcon :icon="Info" class="size-4 text-slate-400" />
         {{ $t('trophy.item.menu.view') }}
@@ -360,7 +303,7 @@ function onTipDeleted() {
         type="button"
         role="menuitem"
         class="flex w-full items-center gap-2.5 px-3 py-2 text-left text-slate-700 transition hover:bg-slate-50"
-        @click="tipsOpen = true; close()"
+        @click="emit('tips', trophy); close()"
       >
         <LucideIcon :icon="MessageSquare" class="size-4 text-slate-400" />
         {{ $t('trophy.item.menu.viewTips') }}
@@ -387,7 +330,7 @@ function onTipDeleted() {
         type="button"
         role="menuitem"
         class="flex w-full items-center gap-2.5 px-3 py-2 text-left text-slate-700 transition hover:bg-slate-50"
-        @click="earnersOpen = true; close()"
+        @click="emit('earners', trophy); close()"
       >
         <LucideIcon :icon="Users" class="size-4 text-slate-400" />
         {{ $t('trophy.item.menu.recentEarners') }}
@@ -395,38 +338,4 @@ function onTipDeleted() {
     </template>
   </Popover>
 
-  <LazyTrophyDetailDialog
-    v-if="detailMounted"
-    :trophy="trophy"
-    v-model:open="detailOpen"
-    @closed="detailMounted = false"
-  />
-  <LazyTrophyEarnersDialog
-    v-if="earnersMounted"
-    :trophy-id="trophy.id"
-    :trophy-name="name"
-    v-model:open="earnersOpen"
-    @closed="earnersMounted = false"
-  />
-  <LazyTrophyTipsDialog
-    v-if="tipsMounted"
-    :trophy-id="trophy.id"
-    :trophy-name="name"
-    v-model:open="tipsOpen"
-    @compose="openTipComposer"
-    @closed="onTipsClosed"
-    @count="displayedTipCount = $event"
-  />
-  <LazyTrophyTipComposerDialog
-    v-if="composerMounted"
-    :trophy-id="trophy.id"
-    :trophy-name="name"
-    :display-language="displayLanguage"
-    :editing="composerMode === 'edit'"
-    v-model:open="composerOpen"
-    @published="onTipPublished"
-    @deleted="onTipDeleted"
-    @cancelled="returnToTips"
-    @closed="onComposerClosed"
-  />
 </template>

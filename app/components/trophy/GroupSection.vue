@@ -12,7 +12,14 @@ const props = defineProps<{
   showSpoilers: boolean
   /** Continuous serial number per trophy (db id → number). */
   numbers: Map<number, number>
-  displayLanguage: string
+  /** Counts refreshed after publishing or deleting a tip. */
+  tipCounts: Record<number, number>
+}>()
+
+const emit = defineEmits<{
+  detail: [trophy: Trophy]
+  earners: [trophy: Trophy]
+  tips: [trophy: Trophy]
 }>()
 
 const { t } = useI18n()
@@ -102,7 +109,10 @@ const displayTrophies = computed(() => {
         :earned-gap="earnedGap(trophy)"
         :show-spoilers="showSpoilers"
         :number="numbers.get(trophy.id) ?? 0"
-        :display-language="displayLanguage"
+        :tip-count="tipCounts[trophy.id]"
+        @detail="emit('detail', $event)"
+        @earners="emit('earners', $event)"
+        @tips="emit('tips', $event)"
       />
     </div>
   </section>

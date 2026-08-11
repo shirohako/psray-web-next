@@ -105,6 +105,26 @@ export function canonicalLang(raw: LangParam): string {
 }
 
 /**
+ * Validate a trophy-content language without folding it onto a UI locale.
+ * API language codes are URL request values, so `en-US` must stay `en-US`
+ * even though it corresponds to the English UI locale.
+ */
+export function canonicalContentLang(raw: LangParam): string {
+  const value = first(raw)
+  if (!value) return ''
+  return /^[a-z]{2,3}(-[A-Za-z0-9]{2,4})?$/i.test(value) ? value : ''
+}
+
+/** Convert a PSN content language to a Google-supported hreflang value. */
+export function contentHreflang(raw: LangParam): string {
+  const code = canonicalContentLang(raw)
+  if (!code) return ''
+  // Google hreflang does not support the UN M49 `419` region.
+  if (code.toLowerCase() === 'es-419') return 'es'
+  return code
+}
+
+/**
  * Which of the five UI locales should render the chrome for this `?lang=` value,
  * or `''` when it names a language we have no interface for (callers then fall
  * back to the cookie, then {@link DEFAULT_LOCALE}).

@@ -107,26 +107,25 @@ onUnmounted(close)
 <template>
   <div v-bind="$attrs" @click="toggle">
     <slot />
-  </div>
-
-  <Teleport to="body">
-    <div v-if="open" class="fixed inset-0 z-50" @click="close" @contextmenu.prevent="close">
-      <Transition
-        appear
-        enter-active-class="transition duration-150 ease-out"
-        enter-from-class="opacity-0 scale-95"
-      >
-        <div
-          ref="panel"
-          role="menu"
-          class="fixed min-w-44 overflow-hidden rounded-xl border border-slate-200 bg-white py-1 text-sm shadow-lg ring-1 ring-slate-900/5"
-          :class="[align === 'right' ? 'origin-top-right' : 'origin-top-left', panelClass]"
-          :style="{ top: `${position.top}px`, left: `${position.left}px` }"
-          @click.stop
+    <Teleport v-if="open" to="body">
+      <div class="fixed inset-0 z-50" @click="close" @contextmenu.prevent="close">
+        <Transition
+          appear
+          enter-active-class="transition duration-150 ease-out"
+          enter-from-class="opacity-0 scale-95"
         >
-          <slot name="menu" :close="close" />
-        </div>
-      </Transition>
-    </div>
-  </Teleport>
+          <div
+            ref="panel"
+            role="menu"
+            class="fixed min-w-44 overflow-hidden rounded-xl border border-slate-200 bg-white py-1 text-sm shadow-lg ring-1 ring-slate-900/5"
+            :class="[align === 'right' ? 'origin-top-right' : 'origin-top-left', panelClass]"
+            :style="{ top: `${position.top}px`, left: `${position.left}px` }"
+            @click.stop
+          >
+            <slot name="menu" :close="close" />
+          </div>
+        </Transition>
+      </div>
+    </Teleport>
+  </div>
 </template>

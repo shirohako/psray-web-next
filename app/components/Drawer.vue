@@ -24,6 +24,7 @@ const props = withDefaults(defineProps<{
 const emit = defineEmits<{ 'update:open': [v: boolean] }>()
 
 const close = () => emit('update:open', false)
+const rendered = ref(props.open)
 
 const hiddenClass = computed(() =>
   props.side === 'left' ? '-translate-x-full' : 'translate-x-full',
@@ -34,11 +35,16 @@ function onKey(e: KeyboardEvent) {
 }
 
 watch(() => props.open, (v) => {
+  if (v) rendered.value = true
   if (!import.meta.client) return
   document.documentElement.style.overflow = v ? 'hidden' : ''
   if (v) window.addEventListener('keydown', onKey)
   else window.removeEventListener('keydown', onKey)
 })
+
+function afterLeave() {
+  if (!props.open) rendered.value = false
+}
 
 onUnmounted(() => {
   if (!import.meta.client) return
@@ -49,8 +55,7 @@ onUnmounted(() => {
 
 <template>
   <ClientOnly>
-    <Teleport to="body">
-      <!-- Backdrop -->
+    <Teleport v-if="rendered" to="body">
       <Transition
         enter-active-class="transition-opacity duration-300 ease-out"
         enter-from-class="opacity-0"
@@ -60,12 +65,12 @@ onUnmounted(() => {
         <div v-if="open" class="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm" @click="close" />
       </Transition>
 
-      <!-- Panel -->
       <Transition
         enter-active-class="transition-transform duration-300 ease-out"
         :enter-from-class="hiddenClass"
         leave-active-class="transition-transform duration-200 ease-in"
         :leave-to-class="hiddenClass"
+        @after-leave="afterLeave"
       >
         <div
           v-if="open"

@@ -246,6 +246,10 @@
     "generateFailed": "QR コードの生成に失敗しました"
   },
   "time": {
+    "year": "{y}年",
+    "yearMonth": "{y}年{mo}か月",
+    "month": "{mo}か月",
+    "monthDay": "{mo}か月{d}日",
     "dayHour": "{d}日{h}時間",
     "hourMinute": "{h}時間{m}分",
     "minuteSecond": "{m}分{s}秒",
@@ -336,11 +340,11 @@
       "qrTitle": "トロフィーセットの QR コード"
     },
     "progress": {
-      "title": "あなたの進捗",
+      "title": "トロフィー進捗",
       "earnedLabel": "獲得",
       "trophiesUnit": "個",
       "complete": "コンプリート",
-      "duration": "所要時間",
+      "duration": "経過時間",
       "lastTrophy": "最後のトロフィー"
     },
     "players": {

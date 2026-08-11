@@ -246,6 +246,10 @@
     "generateFailed": "二维码生成失败"
   },
   "time": {
+    "year": "{y}年",
+    "yearMonth": "{y}年{mo}个月",
+    "month": "{mo}个月",
+    "monthDay": "{mo}个月{d}天",
     "dayHour": "{d}天{h}小时",
     "hourMinute": "{h}小时{m}分",
     "minuteSecond": "{m}分{s}秒",

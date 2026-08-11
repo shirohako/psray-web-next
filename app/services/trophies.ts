@@ -144,6 +144,8 @@ export interface RecentPlayer {
 export interface ViewerProgress {
   psnid: string
   avatar_url: string
+  /** Optional ISO country code; older API responses may omit it. */
+  country?: string | null
   progress: number
   earned_bronze: number
   earned_silver: number

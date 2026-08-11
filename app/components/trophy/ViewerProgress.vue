@@ -6,7 +6,11 @@ const props = defineProps<{
   progress: ViewerProgress
   total?: number
   definedTrophies?: DefinedTrophies
+  /** Fallback when older viewer-progress responses omit the country. */
+  country?: string | null
 }>()
+
+const country = computed(() => props.progress.country || props.country || '')
 
 // Per-tier earned counts in display order (platinum → bronze).
 const earned = computed(() => {
@@ -59,7 +63,10 @@ function isComplete(count: number, total: number | undefined) {
       >
         <img :src="progress.avatar_url" :alt="progress.psnid" class="size-12 shrink-0 rounded-full bg-slate-100 object-cover" />
         <div class="min-w-0 flex-1">
-          <div class="truncate font-semibold text-slate-900 group-hover:text-slate-700">{{ progress.psnid }}</div>
+          <div class="truncate font-semibold leading-6 text-slate-900 group-hover:text-slate-700">
+            <RegionFlag v-if="country" :country="country" class="mr-1.5 text-sm align-[-0.125em]" />
+            <span>{{ progress.psnid }}</span>
+          </div>
           <div class="mt-1 flex items-center gap-1.5 text-xs text-slate-400">
             <span>{{ $t('trophy.progress.earnedLabel') }}</span>
             <span class="inline-flex items-baseline gap-1 rounded-md bg-slate-100 px-1.5 py-0.5 font-bold tabular-nums text-slate-800">
@@ -105,7 +112,7 @@ function isComplete(count: number, total: number | undefined) {
         <div class="inline-flex items-center gap-1.5 text-xs text-slate-400">
           <LucideIcon :icon="Clock" class="size-3.5" />{{ $t('trophy.progress.duration') }}
         </div>
-        <div class="mt-1.5 text-base font-bold leading-tight tabular-nums text-slate-900">
+        <div class="mt-1.5 whitespace-nowrap text-base font-bold leading-tight tabular-nums tracking-tight text-slate-900">
           {{ duration == null ? '—' : formatDuration(duration) }}
         </div>
       </div>

@@ -26,6 +26,7 @@ const emit = defineEmits<{
 }>()
 
 const close = () => emit('update:open', false)
+const rendered = ref(props.open)
 
 const SIZE: Record<Size, string> = {
   sm: 'max-w-sm',
@@ -41,11 +42,18 @@ function onKey(e: KeyboardEvent) {
 }
 
 watch(() => props.open, (v) => {
+  if (v) rendered.value = true
   if (!import.meta.client) return
   document.documentElement.style.overflow = v ? 'hidden' : ''
   if (v) window.addEventListener('keydown', onKey)
   else window.removeEventListener('keydown', onKey)
 })
+
+function afterLeave() {
+  if (props.open) return
+  rendered.value = false
+  emit('closed')
+}
 
 onUnmounted(() => {
   if (!import.meta.client) return
@@ -56,8 +64,7 @@ onUnmounted(() => {
 
 <template>
   <ClientOnly>
-    <Teleport to="body">
-      <!-- Backdrop -->
+    <Teleport v-if="rendered" to="body">
       <Transition
         enter-active-class="transition-opacity duration-200 ease-out"
         enter-from-class="opacity-0"
@@ -67,13 +74,12 @@ onUnmounted(() => {
         <div v-if="open" class="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm" @click="close" />
       </Transition>
 
-      <!-- Panel -->
       <Transition
         enter-active-class="transition duration-200 ease-out"
         enter-from-class="opacity-0 scale-95"
         leave-active-class="transition duration-150 ease-in"
         leave-to-class="opacity-0 scale-95"
-        @after-leave="emit('closed')"
+        @after-leave="afterLeave"
       >
         <div v-if="open" class="pointer-events-none fixed inset-0 z-50 grid place-items-center p-4">
           <div

@@ -2,7 +2,9 @@ import {
   DEFAULT_LOCALE,
   OG_LOCALE,
   UI_LOCALES,
+  canonicalContentLang,
   canonicalLang,
+  contentHreflang,
   isUiLocale,
   type UiLocale,
 } from '#shared/locales'
@@ -45,6 +47,8 @@ const read = <T>(source: Source<T> | undefined): T | undefined =>
 
 export interface SeoInput {
   title: Source<string>
+  /** Canonical pathname. Defaults to the current route path. */
+  canonicalPath?: Source<string>
   description?: Source<string>
   /** Absolute image URL for `og:image` / `twitter:image`. */
   image?: Source<string | undefined>
@@ -89,7 +93,8 @@ export function useSeo(input: SeoInput) {
     if (lang && lang !== DEFAULT_LOCALE) params.set('lang', lang)
     if (contentLang) params.set('tlang', contentLang)
     const search = params.toString()
-    return `${siteUrl}${route.path}${search ? `?${search}` : ''}`
+    const path = read(input.canonicalPath) || route.path
+    return `${siteUrl}${path}${search ? `?${search}` : ''}`
   }
 
   const activeLocale = computed<UiLocale>(() =>
@@ -99,7 +104,7 @@ export function useSeo(input: SeoInput) {
     canonicalLang(read(input.canonicalLang)) || activeLocale.value)
 
   const canonical = computed(() =>
-    urlFor(currentLang.value, canonicalLang(read(input.contentLang))))
+    urlFor(currentLang.value, canonicalContentLang(read(input.contentLang))))
 
   const alternates = computed(() => {
     const links = [
@@ -115,13 +120,15 @@ export function useSeo(input: SeoInput) {
     // default interface language with only the body swapped.
     const seen = new Set<string>(UI_LOCALES)
     for (const code of read(input.altContentLangs) ?? []) {
-      const canonicalized = canonicalLang(code)
-      if (!canonicalized || seen.has(canonicalized)) continue
-      seen.add(canonicalized)
+      const contentCode = canonicalContentLang(code)
+      const hreflang = contentHreflang(code)
+      const uiEquivalent = canonicalLang(code)
+      if (!contentCode || !hreflang || seen.has(hreflang) || seen.has(uiEquivalent)) continue
+      seen.add(hreflang)
       links.push({
         rel: 'alternate' as const,
-        hreflang: canonicalized,
-        href: urlFor(DEFAULT_LOCALE, canonicalized),
+        hreflang,
+        href: urlFor(DEFAULT_LOCALE, contentCode),
       })
     }
 

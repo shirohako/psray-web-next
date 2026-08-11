@@ -2,8 +2,9 @@
 import { Trophy, Users, Gauge, CheckCircle2, Timer, Flag, Globe } from 'lucide'
 import type { TrophySetDetailInfo, PlayerRankType } from '~/services/trophies'
 
-const props = defineProps<{ trophySet: TrophySetDetailInfo }>()
+const props = defineProps<{ trophySet: TrophySetDetailInfo, displayName?: string }>()
 const { t } = useI18n()
+const name = computed(() => props.displayName || props.trophySet.name)
 
 // Ranking shortcuts open the shared players dialog on a specific sort tab.
 const dialogOpen = ref(false)
@@ -41,20 +42,20 @@ const qrMeta = computed(() => [
 
       <!-- Share via QR -->
       <div class="absolute right-3 top-3 z-10 sm:right-4 sm:top-4">
-        <QrCodeButton :title="$t('trophy.banner.qrTitle')" :caption="trophySet.name" :meta="qrMeta" />
+        <QrCodeButton :title="$t('trophy.banner.qrTitle')" :caption="name" :meta="qrMeta" />
       </div>
 
       <div class="relative flex flex-col items-center gap-5 p-5 text-center sm:flex-row sm:items-center sm:p-6 sm:text-left">
         <!-- PS5 icons are square; PS4 are 320×176 landscape — keep natural aspect. -->
         <img
           :src="trophySet.icon_url"
-          :alt="trophySet.name"
+          :alt="name"
           class="h-24 w-auto min-w-24 max-w-50 shrink-0 rounded-lg border border-white/15 bg-white/10 object-contain shadow-lg sm:h-28 sm:min-w-28 sm:rounded-xl"
         />
         <div class="min-w-0 flex-1">
           <div class="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 sm:justify-start">
             <h1 class="text-base font-bold leading-tight tracking-tight text-white sm:text-2xl">
-              {{ trophySet.name }}
+              {{ name }}
             </h1>
             <span
               v-for="platform in platformList(trophySet.platform)"
