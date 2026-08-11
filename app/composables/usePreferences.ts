@@ -2,9 +2,11 @@
  * Site-wide user preferences, persisted locally and shared across the app via
  * `useState`.
  *
- * Language preferences live in localStorage because they only affect API
- * requests. Visual preferences use cookies so SSR and the client render the
- * same row dimensions on first paint.
+ * Language preferences are mirrored to a cookie so SSR API requests and client
+ * navigation use the same Accept-Language value. localStorage is retained as a
+ * migration fallback for visitors who saved the preference before the cookie
+ * was introduced. Visual preferences also use cookies so their first render is
+ * stable across server and client.
  */
 
 /** Trophy-language preference. When `enabled`, `primary` is required; `secondary` is optional. */
@@ -29,6 +31,16 @@ const TROPHY_DENSITY_KEY = 'prefs:trophy-density'
 
 function defaultTrophyLang(): TrophyLangPref {
   return { enabled: false, primary: '', secondary: '' }
+}
+
+function normalizeTrophyLang(value: unknown): TrophyLangPref {
+  if (!value || typeof value !== 'object') return defaultTrophyLang()
+  const stored = value as Partial<TrophyLangPref>
+  const primary = typeof stored.primary === 'string' ? stored.primary : ''
+  const secondary = typeof stored.secondary === 'string' ? stored.secondary : ''
+  return stored.enabled === true && primary
+    ? { enabled: true, primary, secondary: secondary === primary ? '' : secondary }
+    : defaultTrophyLang()
 }
 
 function defaultRateBasis(): RateBasis {
@@ -68,7 +80,14 @@ function browserAcceptLanguage(): string {
 }
 
 export function usePreferences() {
-  const trophyLang = useState<TrophyLangPref>('prefs:trophyLang', defaultTrophyLang)
+  const trophyLangCookie = useCookie<TrophyLangPref | null>(STORAGE_KEY, {
+    maxAge: 60 * 60 * 24 * 365,
+    sameSite: 'lax',
+  })
+  const trophyLang = useState<TrophyLangPref>(
+    'prefs:trophyLang',
+    () => normalizeTrophyLang(trophyLangCookie.value),
+  )
 
   // Seeded from a cookie so SSR renders the chosen basis (it's shown on every
   // trophy row, so a client-only load would flash on hydration). `useState`
@@ -99,20 +118,33 @@ export function usePreferences() {
     return browserAcceptLanguage()
   })
 
-  /** Hydrate state from localStorage (call once on the client at startup). */
+  /** Hydrate from the cookie, or migrate legacy localStorage. Returns true when SSR must be replayed. */
   function load() {
-    if (!import.meta.client) return
+    if (!import.meta.client) return false
+    if (trophyLangCookie.value != null) {
+      trophyLang.value = normalizeTrophyLang(trophyLangCookie.value)
+      return false
+    }
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
-      if (raw) trophyLang.value = { ...defaultTrophyLang(), ...JSON.parse(raw) }
+      if (raw) {
+        trophyLang.value = normalizeTrophyLang(JSON.parse(raw))
+        trophyLangCookie.value = { ...trophyLang.value }
+        // The page currently displayed was rendered before the server could
+        // see this legacy preference. Ask the startup plugin for one reload so
+        // its profile/trophy API calls are immediately rendered consistently.
+        return true
+      }
     } catch {
       // Corrupt/blocked storage — fall back to defaults.
     }
+    return false
   }
 
-  /** Commit a new trophy-language preference to state + localStorage. */
+  /** Commit a new trophy-language preference for both SSR and the browser. */
   function saveTrophyLang(pref: TrophyLangPref) {
-    trophyLang.value = { ...pref }
+    trophyLang.value = normalizeTrophyLang(pref)
+    trophyLangCookie.value = { ...trophyLang.value }
     if (import.meta.client) {
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(trophyLang.value))

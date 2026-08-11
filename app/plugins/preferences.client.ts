@@ -1,8 +1,9 @@
 /**
- * Hydrates site-wide preferences from localStorage at client startup, before
- * the first API requests fire — so the `$api` plugin can attach the user's
- * `Accept-Language` from the very first call.
+ * Restores site-wide preferences at client startup. Current language settings
+ * already arrive through the SSR-readable cookie; `load()` also migrates the
+ * legacy localStorage-only format used by earlier releases.
  */
 export default defineNuxtPlugin(() => {
-  usePreferences().load()
+  const migrated = usePreferences().load()
+  if (migrated) window.location.reload()
 })
