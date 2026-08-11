@@ -403,7 +403,7 @@
       "level": "Level",
       "points": "Points",
       "tipCount": "Tips",
-      "voteUp": "Upvotes",
+      "voteUp": "Helpful",
       "contribution": "Contribution"
     },
     "board": {
@@ -417,7 +417,7 @@
       },
       "tips": {
         "label": "Most helpful",
-        "description": "Players who post the most — and best-received — trophy tips"
+        "description": "Players whose trophy tips help the community most"
       },
       "contribution": {
         "label": "Contributions",
@@ -460,7 +460,7 @@
       "perfect": "Perfect",
       "lowCompletion": "Low completion",
       "favorites": "Favorites",
-      "reviews": "Reviews",
+      "comments": "Comments",
       "globalRank": "Global rank",
       "regionRank": "Regional rank",
       "points": "Trophy points",

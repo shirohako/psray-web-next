@@ -403,7 +403,7 @@
       "level": "레벨",
       "points": "포인트",
       "tipCount": "댓글 수",
-      "voteUp": "추천",
+      "voteUp": "도움이 됨",
       "contribution": "기여 점수"
     },
     "board": {
@@ -417,7 +417,7 @@
       },
       "tips": {
         "label": "도움 랭킹",
-        "description": "트로피 댓글을 가장 많이 남기고 인정받은 플레이어"
+        "description": "트로피 댓글로 다른 플레이어에게 가장 많은 도움을 준 플레이어"
       },
       "contribution": {
         "label": "기여 랭킹",
@@ -460,7 +460,7 @@
       "perfect": "완벽",
       "lowCompletion": "낮은 완료율",
       "favorites": "즐겨찾기",
-      "reviews": "리뷰",
+      "comments": "댓글",
       "globalRank": "전체 순위",
       "regionRank": "지역 순위",
       "points": "트로피 포인트",

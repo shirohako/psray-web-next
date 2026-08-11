@@ -24,7 +24,7 @@ const pickerOpen = ref(false)
 const activeHidden = computed(() => boards.findIndex(b => b.key === activeKey.value) >= MOBILE_LIMIT)
 
 // Page-level filters. A board only consumes the ones it declares support for.
-const region = ref('US')
+const region = ref('JP')
 const registeredOnly = ref(false)
 const page = ref(1)
 

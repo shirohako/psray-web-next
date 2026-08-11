@@ -403,7 +403,7 @@
       "level": "等级",
       "points": "点数",
       "tipCount": "心得数",
-      "voteUp": "获赞",
+      "voteUp": "有帮助",
       "contribution": "贡献点数"
     },
     "board": {
@@ -417,7 +417,7 @@
       },
       "tips": {
         "label": "乐于助人排名",
-        "description": "贡献奖杯心得最多、最受认可的玩家"
+        "description": "通过奖杯留言帮助了最多玩家的贡献者"
       },
       "contribution": {
         "label": "贡献排名",
@@ -460,7 +460,7 @@
       "perfect": "完美",
       "lowCompletion": "低完成率",
       "favorites": "收藏游戏",
-      "reviews": "游戏评测",
+      "comments": "留言",
       "globalRank": "全球排名",
       "regionRank": "地区排名",
       "points": "奖杯点数",

@@ -78,7 +78,8 @@ function rankClass(rank: number) {
             <th
               v-for="c in columns"
               :key="c"
-              class="px-3 py-3"
+              scope="col"
+              class="whitespace-nowrap px-3 py-3"
               :class="[ALIGN[META[c].align], META[c].class]"
             >
               {{ $t(META[c].labelKey) }}

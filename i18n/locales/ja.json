@@ -5,7 +5,7 @@
     "cancel": "キャンセル",
     "close": "閉じる",
     "copy": "コピー",
-    "edit": "変更",
+    "edit": "編集",
     "next": "次へ",
     "nextPage": "次のページ",
     "previousPage": "前のページ",
@@ -26,8 +26,8 @@
       "edit": "編集",
       "preview": "プレビュー",
       "previewEmpty": "プレビューがここに表示されます。",
-      "help": "記法ガイド",
-      "helpHint": "初めての投稿ですか？ Markdown なら快適に書けます。使い方と記法はこちらをご覧ください。",
+      "help": "書き方ガイド",
+      "helpHint": "Markdown を使うと、コメントを読みやすく整えられます。使い方や記法はこちらで確認できます。",
       "toolbar": { "heading": "見出し", "bold": "太字", "italic": "斜体", "strike": "取り消し線", "mark": "マーカー", "inlineSpoiler": "インラインネタバレ", "quote": "引用", "link": "リンク", "image": "画像", "list": "リスト", "tasks": "タスクリスト", "code": "コード", "size": "サイズ", "color": "文字色", "underline": "ライン", "advanced": "拡張ブロック" },
       "sizes": { "small": "小", "large": "大", "xlarge": "特大" },
       "colors": { "slate": "グレー", "red": "赤", "orange": "オレンジ", "yellow": "黄", "green": "緑", "blue": "青", "purple": "紫", "pink": "ピンク" },
@@ -45,21 +45,21 @@
       "spoiler": { "title": "ネタバレ", "description": "複数段落のネタバレを折りたたんで隠します。", "defaultTitle": "ネタバレを表示" }
     },
     "help": {
-      "seoTitle": "Markdown 記法ガイド | PSRay",
+      "seoTitle": "Markdown の書き方ガイド | PSRay",
       "seoDescription": "PSRay のトロフィーコメントで使える Markdown と拡張ブロックを紹介します。",
-      "title": "Markdown 記法ガイド",
-      "lead": "使い慣れた Markdown と、PSRay の折りたたみ・コールアウト・手順・ネタバレブロックで読みやすい攻略を書けます。",
+      "title": "Markdown の書き方ガイド",
+      "lead": "使い慣れた Markdown に加え、PSRay 独自の折りたたみ・コールアウト・手順・ネタバレブロックを使って、読みやすい攻略を書けます。",
       "source": "記述例",
       "result": "表示結果",
       "copied": "例をコピーしました",
-      "basic": { "title": "Markdown の基本", "description": "すべてのトロフィーコメントで以下の記法を使えます。", "headingTocHint": "ヒントは H1〜H4 の見出しから目次を自動生成します。内容の階層に合わせて見出しを使い、文字を大きくする目的では使用しないでください。", "heading": "見出し（H1〜H4）", "emphasis": "強調", "link": "リンク", "image": "画像", "list": "リスト", "task": "タスクリスト", "quote": "引用", "code": "コード" },
-      "images": { "title": "画像", "description": "画像は攻略や長文で読みやすいよう、常に独立したブロックとして表示されます。画像の直後に Pandoc 属性を追加するとサイズを指定できます。幅または高さの一方だけなら元の比率を維持し、両方なら指定サイズを使用します。単位はピクセルで、1〜4096 の値を指定できます。", "width": "幅を指定", "height": "高さを指定", "both": "幅と高さを指定" },
-      "formatting": { "title": "文字スタイル", "description": "エディターで文字を選択し、背景ハイライト、色付き下線、許可された文字色、文字サイズを適用できます。", "mark": "マーカー", "underline": "カラーライン", "color": "文字色", "size": "文字サイズ", "sample": "重要なテキスト", "attributesTitle": "組み合わせと入れ子", "attributesDescription": "Pandoc 形式では、同じ範囲の属性を一つの属性ブロックにまとめます。文字範囲が異なる場合のみ入れ子にします。属性の順序は結果に影響しません。", "recommended": "推奨", "supported": "入れ子向け", "notRecommended": "非推奨", "outerSample": "文章全体のうち", "innerSample": "この部分は赤色", "combined": { "title": "同じ範囲で組み合わせる", "description": "文字色、サイズ、下線が同じ範囲なら、属性をまとめて記述します。" }, "nested": { "title": "異なる範囲を入れ子にする", "description": "外側のサイズは文章全体に、内側の色は一部だけに適用されます。" }, "avoid": { "title": "同じ範囲を重ねて入れ子にする", "description": "解析は可能ですが冗長です。この場合は一つの属性ブロックにまとめてください。" } },
+      "basic": { "title": "Markdown の基本", "description": "すべてのトロフィーコメントで以下の記法を使えます。", "headingTocHint": "H1〜H4 の見出しから目次が自動生成されます。内容の階層に合わせて使い、文字を大きくする目的では使用しないでください。", "heading": "見出し（H1〜H4）", "emphasis": "強調", "link": "リンク", "image": "画像", "list": "リスト", "task": "タスクリスト", "quote": "引用", "code": "コード" },
+      "images": { "title": "画像", "description": "画像は攻略や長文を読みやすくするため、常に独立したブロックとして表示されます。画像の直後に Pandoc 属性を追加するとサイズを指定できます。幅または高さのどちらか一方を指定した場合は元の比率を維持し、両方を指定した場合はそのサイズで表示します。単位はピクセルで、1〜4096 の値を指定できます。", "width": "幅を指定", "height": "高さを指定", "both": "幅と高さを指定" },
+      "formatting": { "title": "文字スタイル", "description": "エディターで文字を選択し、背景ハイライト、色付き下線、文字色、文字サイズを適用できます。", "mark": "マーカー", "underline": "カラーライン", "color": "文字色", "size": "文字サイズ", "sample": "重要なテキスト", "attributesTitle": "組み合わせと入れ子", "attributesDescription": "Pandoc 形式では、同じ範囲の属性を一つの属性ブロックにまとめます。文字範囲が異なる場合のみ入れ子にします。属性の順序は結果に影響しません。", "recommended": "推奨", "supported": "入れ子向け", "notRecommended": "非推奨", "outerSample": "文章全体のうち", "innerSample": "この部分は赤色", "combined": { "title": "同じ範囲で組み合わせる", "description": "文字色、サイズ、下線が同じ範囲なら、属性をまとめて記述します。" }, "nested": { "title": "異なる範囲を入れ子にする", "description": "外側のサイズは文章全体に、内側の色は一部だけに適用されます。" }, "avoid": { "title": "同じ範囲を重ねて入れ子にする", "description": "解析は可能ですが冗長です。この場合は一つの属性ブロックにまとめてください。" } },
       "advanced": { "title": "拡張ブロック", "description": "::: でブロックを開始し、別の行の ::: で終了します。", "examples": { "detailsTitle": "収集アイテムの場所", "detailsBody": "城門を抜けた先の右側にある木箱を壊すと、**収集アイテム**を入手できます。", "infoTitle": "開始前の情報", "infoBody": "このチャレンジは**チャプター3**以降で挑戦でき、推奨レベルは20です。", "tipTitle": "安定して成功させるコツ", "tipBody": "ボスが攻撃を終えた直後に回避すると、安全に反撃できます。", "warningTitle": "取り逃しに注意", "warningBody": "エリアを離れる前に宝箱を開けてください。次の章へ進むと戻れません。", "dangerTitle": "セーブデータへの影響", "dangerBody": "この選択を確定するとルートが固定されます。先に手動セーブを作成してください。", "checklistTitle": "ボス戦の準備", "checklistDone": "回復アイテムを補充する", "checklistPending": "耐性装備に変更する", "checklistOptional": "ショートカットを開通する", "stepsFirst": "広場にいる敵をすべて倒す", "stepsSecond": "像の裏にあるスイッチを押す", "stepsThird": "開いた扉から宝物庫へ進む", "spoilerTitle": "エンディング条件", "spoilerBody": "すべての鍵を集めてから最終扉を開くと、**隠しエンディング**へ進めます。" } },
       "formattingSampleAfter": "が含まれています。",
       "nesting": { "title": "ブロックの入れ子", "description": "異なる拡張ブロックは入れ子にできます。開始・終了記号をそれぞれ独立した行に置いてください。" },
       "spoilers": { "title": "全体・ブロック・インラインネタバレ", "description": "読者を守れる最小のネタバレ範囲を選びましょう。", "whole": "コメント全体が隠し情報を含む場合は、投稿フォームのネタバレスイッチを使います。", "block": "複数の段落やリストを隠す場合は ::: spoiler ブロックを使います。", "inline": "文中の短い部分だけを隠す場合は、下のインライン記法を使います。文字はぼかされ、クリックすると表示されます。", "inlineBefore": "最後のボスを倒すと、", "inlineSample": "隠しエンディングが解放され", "inlineAfter": "、対応するトロフィーを獲得できます。" },
-      "security": { "title": "安全なコンテンツ", "description": "生の HTML と実行可能な URL は利用できません。Markdown リンクと対応ブロックを使ってください。" },
+      "security": { "title": "安全なコンテンツ", "description": "生の HTML や危険な URL は利用できません。Markdown のリンクや対応しているブロックを使ってください。" },
       "commonMark": "CommonMark クイックリファレンス"
     }
   },
@@ -94,26 +94,26 @@
     },
     "hero": {
       "title": "あなたの PSN ゲームアシスタント",
-      "lead": "PSRay では、PlayStation のトロフィー実績をプレイヤーごとに整理して確認できます。PSN ID を入力するだけで、獲得済みトロフィー、あなただけの PSN プロフィールページ、最近のプレイ履歴まで一目で把握できます。"
+      "lead": "PSRay では、PlayStation のトロフィー獲得状況をプレイヤーごとに整理して確認できます。PSN ID を入力するだけで、獲得済みトロフィーやプロフィール、最近のプレイ履歴までひと目で把握できます。"
     },
     "features": {
       "title": "PSRay でできること",
-      "lead": "プロフィールの確認からトロフィーセットの詳細、ランキング、攻略メモまで、トロフィー収集に必要な情報をまとめて追えます。",
+      "lead": "プロフィール、トロフィーセットの詳細、ランキング、攻略コメントなど、トロフィー収集に役立つ情報をまとめて確認できます。",
       "profile": {
         "title": "プレイヤープロフィール",
         "description": "トロフィー数やレベル、世界・地域別ランキング、直近 1 年の活動カレンダー、プラチナ獲得の節目、獲得順のトロフィー履歴を確認できます。"
       },
       "trophies": {
         "title": "トロフィーセット詳細",
-        "description": "本編と DLC ごとにトロフィーを整理し、PSN 公式と PSRay の獲得率、レアリティ、隠しトロフィー表示、プレイヤー投稿の攻略メモ、最速・初回コンプリートのランキングまで確認できます。"
+        "description": "本編と DLC ごとに整理されたトロフィーを、PSN 公式・PSRay の獲得率、レアリティ、隠しトロフィー、プレイヤー投稿の攻略コメントとあわせて確認できます。最速・初回コンプリートのランキングにも対応しています。"
       },
       "leaderboard": {
         "title": "ランキング",
-        "description": "トロフィーポイントの総合ランキングや地域別ランキングに加え、攻略メモなどの貢献でコミュニティを支えるプレイヤーもチェックできます。"
+        "description": "トロフィーポイントの総合・地域別ランキングに加え、攻略コメントなどを通じてコミュニティに貢献しているプレイヤーも確認できます。"
       },
       "tips": {
-        "title": "攻略メモを共有",
-        "description": "各トロフィーには、他のプレイヤーが残した攻略メモが集まります。ネタバレは必要なときだけ開け、役立つ投稿には評価が集まり、投稿者は貢献度ランキングに反映されます。"
+        "title": "攻略コメントを共有",
+        "description": "各トロフィーには、プレイヤーが投稿した攻略コメントが集まります。ネタバレは必要なときだけ表示でき、役に立ったコメントは貢献度ランキングに反映されます。"
       }
     }
   },
@@ -138,7 +138,7 @@
       "tagline": "旅はまだ終わらない。その先には満天の星が待っている。",
       "forgotPassword": "パスワードをお忘れですか？",
       "submitting": "ログイン中…",
-      "noAccount": "アカウントをお持ちでないですか？",
+      "noAccount": "アカウントをお持ちでない方",
       "registerNow": "新規登録",
       "errors": {
         "generic": "ログインに失敗しました。しばらくしてからもう一度お試しください。",
@@ -161,22 +161,22 @@
       },
       "terms": {
         "intro": "PSRay は PSN ユーザーのためのコミュニティサイトです。",
-        "needsPsn": "{icon} PlayStation (PSN) アカウントが必要です。",
+        "needsPsn": "{icon} PlayStation（PSN）アカウントが必要です。",
         "agreeTerms": "{icon} {link} を読み、同意します。",
         "agreePrivacy": "{icon} {link} を読み、同意します。",
         "termsLink": "利用規約",
         "privacyLink": "プライバシーポリシー"
       },
       "psnid": {
-        "placeholder": "あなたの PlayStation Network ID",
+        "placeholder": "PlayStation Network ID",
         "requirementsTitle": "新規登録の条件",
-        "requirementsHint": "スパムアカウントを避け、プレイヤーのための場所を保つためです。",
+        "requirementsHint": "スパムを防ぎ、プレイヤーが安心して利用できるコミュニティを保つための条件です。",
         "requirement1": "サイト上で 1 回以上同期していること。",
         "requirement2": "PSN のトロフィーレベルが 100 を超えていること。",
         "requirement3": "PSN のゲーム情報が公開設定になっていること。"
       },
       "password": {
-        "hint": "アカウントの安全なログインパスワードを設定してください。"
+        "hint": "アカウントを安全に保つため、推測されにくいパスワードを設定してください。"
       },
       "email": {
         "hint": "「認証コードを送信」を押すと、このアドレスに 6 桁のコードをお送りします。"
@@ -184,12 +184,12 @@
       "verify": {
         "sentTo": "認証コードを {email} に送信しました。メールをご確認ください。迷惑メールに振り分けられる場合があります。",
         "step1": "メールを開き、6 桁の認証コードを確認します。",
-        "step2": "PlayStation App または公式サイトで PSN にログインし、コードを「自己紹介 / About Me」に入力して保存します。",
+        "step2": "PlayStation App または公式サイトで PSN にログインし、コードを「自己紹介（About Me）」に入力して保存します。",
         "step3": "このページに戻って「登録を完了」を押します。認証後は PSN の自己紹介からコードを削除して構いません。",
-        "resend": "届きませんか？認証コードを再送信"
+        "resend": "届きませんか？ 認証コードを再送信"
       },
       "done": {
-        "title": "すべて順調です",
+        "title": "準備が整いました",
         "description": "PSRay アカウントの作成が完了しました。",
         "cta": "ログインへ"
       },
@@ -223,7 +223,7 @@
       "PSN_PROFILE_FAILED": "PSN プロフィールの取得に失敗しました。しばらくしてからもう一度お試しください。",
       "VERIFICATION_CODE_INVALID": "PSN の自己紹介に正しい認証コードが見つかりませんでした。入力済みで、削除されていないかご確認ください。",
       "VERIFICATION_CODE_EXPIRED": "認証コードの有効期限が切れています。再送信してからもう一度お試しください。",
-      "INVALID_CREDENTIALS": "アカウントまたはパスワードが違います。",
+      "INVALID_CREDENTIALS": "メールアドレスまたはパスワードが正しくありません。",
       "ACCOUNT_TERMINATED": "このアカウントは停止されています。"
     }
   },
@@ -239,7 +239,7 @@
     }
   },
   "qr": {
-    "title": "ページの QR コード",
+    "title": "ページの QRコード",
     "copyLink": "リンクをコピー",
     "copied": "コピーしました",
     "linkCopied": "リンクをコピーしました",
@@ -289,7 +289,7 @@
     },
     "sort": {
       "label": "並び替え",
-      "default": "既定",
+      "default": "標準",
       "earned": "獲得日時",
       "rarity": "PSN レアリティ"
     },
@@ -306,7 +306,7 @@
       "mask": "このトロフィーを隠す",
       "earnedAt": "獲得日時",
       "earnedOrder": "獲得順",
-      "firstEarned": "最初の獲得",
+      "firstEarned": "最初に獲得",
       "sincePrevious": "前のトロフィーから",
       "psnRate": "PSN 獲得率",
       "psrayRate": "PSRay 獲得率",
@@ -337,7 +337,7 @@
       "platinums": "プラチナ人数",
       "setId": "トロフィーセット ID",
       "version": "バージョン",
-      "qrTitle": "トロフィーセットの QR コード"
+      "qrTitle": "トロフィーセットの QRコード"
     },
     "progress": {
       "title": "トロフィー進捗",
@@ -345,12 +345,12 @@
       "trophiesUnit": "個",
       "complete": "コンプリート",
       "duration": "経過時間",
-      "lastTrophy": "最後のトロフィー"
+      "lastTrophy": "最新のトロフィー"
     },
     "players": {
       "title": "プレイヤーランキング",
-      "recent": "最近プレイ",
-      "progress": "コンプが早い順",
+      "recent": "最近プレイした順",
+      "progress": "コンプ達成が早い順",
       "speedrun": "最短クリア時間",
       "empty": "プレイヤー記録がまだありません。"
     },
@@ -368,20 +368,20 @@
       "spoiler": "ネタバレを含みます。タップして表示",
       "edited": "編集済み",
       "missable": "取り逃し注意",
-      "helpful": "役に立つ", "notHelpful": "役に立たない", "voteFailed": "評価を更新できませんでした",
+      "helpful": "役に立つ", "notHelpful": "役に立たない", "voteFailed": "選択を更新できませんでした",
       "loadFailed": "コメントを読み込めませんでした。",
       "form": {
         "open": "コメントを書く", "edit": "コメントを編集", "heading": "コメントを書く", "headingEdit": "コメントを編集", "loading": "コメントを読み込んでいます…", "draftHint": "下書きはこの端末に保存されます。",
         "language": "言語", "spoiler": "コメント全体にネタバレを含む", "spoilerHint": "読者が開くまで内容を隠します。",
         "missable": "取り逃し", "missableUnset": "指定しない", "missableYes": "取り逃す可能性あり", "missableNo": "取り逃しなし",
         "publish": "投稿する", "publishing": "投稿中…", "published": "コメントを投稿しました", "publishFailed": "コメントを投稿できませんでした", "update": "変更を保存", "updating": "保存中…", "updated": "コメントを更新しました", "loadFailed": "コメントを読み込めませんでした", "delete": "削除", "deleting": "削除中…", "deleteConfirm": "このコメントを削除しますか？ この操作は元に戻せません。", "deleteConfirmAction": "削除する", "deleted": "コメントを削除しました", "deleteFailed": "コメントを削除できませんでした",
-        "loginTitle": "ログインしてコメントを投稿", "loginHint": "あなたの Markdown 攻略が次のプレイヤーを助けます。",
+        "loginTitle": "ログインしてコメントを投稿", "loginHint": "Markdown で書いた攻略情報が、次のプレイヤーの助けになります。",
         "errors": { "contentRequired": "投稿内容を入力してください。", "contentLength": "コメントは 20,000 文字以内です。", "language": "対応する言語を選択してください。" }
       }
     },
     "similar": {
       "title": "関連するトロフィーセット",
-      "subtitle": "同じゲームの別プラットフォーム / 別地域のトロフィーセット",
+      "subtitle": "同じゲームの別プラットフォーム・別地域のトロフィーセット",
       "setCount": "{n} セット",
       "owners": "{count} 人がプレイ"
     },
@@ -403,7 +403,7 @@
       "level": "レベル",
       "points": "ポイント",
       "tipCount": "コメント数",
-      "voteUp": "高評価",
+      "voteUp": "役に立った数",
       "contribution": "貢献ポイント"
     },
     "board": {
@@ -417,16 +417,16 @@
       },
       "tips": {
         "label": "貢献度ランキング",
-        "description": "トロフィーのコメントを最も多く投稿し、評価されたプレイヤー"
+        "description": "トロフィーのコメントを投稿し、多くの人の役に立ったプレイヤー"
       },
       "contribution": {
-        "label": "コントリビューションランキング",
+        "label": "貢献ポイントランキング",
         "description": "貢献ポイントによる総合ランキング"
       }
     }
   },
   "profile": {
-    "qrTitle": "プロフィールの QR コード",
+    "qrTitle": "プロフィールの QRコード",
     "tabs": {
       "recent": "最近プレイ",
       "trophies": "獲得トロフィー",
@@ -435,9 +435,9 @@
     "identity": {
       "registered": "登録ユーザー",
       "unregistered": "未登録（PSN プロフィールの同期のみ）",
-      "noAboutMe": "この人は何も書き残していません。",
+      "noAboutMe": "自己紹介はまだありません。",
       "views": "{count} 回閲覧",
-      "notRealtime": "リアルタイムのデータではありません"
+      "notRealtime": "最新のデータではない場合があります"
     },
     "actions": {
       "interact": "操作",
@@ -454,13 +454,13 @@
       "mutual": "相互フォロー"
     },
     "stats": {
-      "title": "統計サマリー",
+      "title": "プレイ統計",
       "games": "ゲーム数",
       "trophies": "トロフィー総数",
       "perfect": "コンプリート",
-      "lowCompletion": "低進捗",
+      "lowCompletion": "積みゲー",
       "favorites": "お気に入り",
-      "reviews": "レビュー",
+      "comments": "コメント",
       "globalRank": "世界ランキング",
       "regionRank": "地域ランキング",
       "points": "トロフィーポイント",
@@ -484,7 +484,7 @@
       "title": "直近 1 年の活動",
       "trophiesEarned": "獲得トロフィー",
       "activeDays": "アクティブ日数",
-      "bestDay": "1 日の最高",
+      "bestDay": "1 日の最多獲得",
       "earnedCount": "{n} 個獲得",
       "earnedNone": "獲得なし",
       "less": "少",
@@ -492,7 +492,7 @@
     },
     "milestones": {
       "title": "トロフィーのマイルストーン",
-      "subtitle": "コレクションの節目を記録します",
+      "subtitle": "トロフィー収集の節目",
       "nthPlatinum": "{n} 個目のプラチナ",
       "nthTrophy": "{n} 個目のトロフィー",
       "loadFailed": "マイルストーンの読み込みに失敗しました。しばらくしてからもう一度お試しください。",
@@ -510,8 +510,8 @@
     },
     "recent": {
       "empty": "プレイ記録がまだありません。",
-      "expand": "最近プレイをすべて表示",
-      "collapse": "最近プレイを折りたたむ"
+      "expand": "最近プレイしたゲームをすべて表示",
+      "collapse": "最近プレイしたゲームを折りたたむ"
     },
     "tips": { "title": "最近のコメント", "viewAll": "すべて見る", "dialogTitle": "投稿したコメント", "empty": "投稿したコメントはまだありません。", "loadFailed": "コメントを読み込めませんでした。", "total": "全 {count} 件" },
     "log": {
@@ -520,12 +520,12 @@
     "private": {
       "title": "非公開のアカウントです",
       "line1": "このユーザーのトロフィー情報は非公開のため、詳細を表示できません。",
-      "line2": "PlayStation のプライバシー設定から変更できます。"
+      "line2": "PlayStation のプライバシー設定で公開に変更できます。"
     }
   },
   "sync": {
     "heading": "PSN プロフィールを同期",
-    "subheading": "PSN ID を送信すると同期キューに追加され、順番に処理されます。",
+    "subheading": "PSN ID を入力すると同期キューに追加され、順番に処理されます。",
     "cta": {
       "submit": "送信",
       "submitting": "送信中…"
@@ -542,14 +542,14 @@
       "countdown": "{seconds} 秒後に更新"
     },
     "gamesUnit": "タイトル",
-    "waitingWorker": "ワーカーの受け取りを待っています…",
-    "calculating": "同期対象のゲームを計算中…",
+    "waitingWorker": "同期処理の開始を待っています…",
+    "calculating": "同期するゲームを確認しています…",
     "queueAhead": "あと {badge} 件の順番待ち",
     "currentGame": "同期中",
     "failedCount": "失敗 {count}",
     "skippedCount": "スキップ {count}",
     "goToProfile": "プロフィールへ",
-    "queueOverview": "{active} 件の同期が実行中、{waiting} 人が順番待ちです。",
+    "queueOverview": "{active} 件を同期中、{waiting} 件が順番待ちです。",
     "updatedAt": "{time} に更新",
     "private": {
       "title": "非公開のプロフィールは同期できません",
@@ -582,8 +582,8 @@
         "title": "プロフィールバナー",
         "hint": "プロフィールページ上部に表示される画像です。",
         "urlLabel": "バナー画像の URL",
-        "sizeHint": "横長（およそ 4.5:1、例: 1440×320）の画像を推奨します。小さすぎる画像は大画面でぼやけます。",
-        "uploadHint": "外部の画像ホスティングにアップロードし、そのリンクを貼り付けてください。直接アップロードは準備中です。"
+        "sizeHint": "横長（およそ 4.5:1、例：1440×320）の画像を推奨します。小さすぎる画像は大画面でぼやけます。",
+        "uploadHint": "外部の画像ホスティングサービスにアップロードし、そのリンクを貼り付けてください。直接アップロードは準備中です。"
       },
       "avatar": {
         "title": "アバター",
@@ -592,7 +592,7 @@
         "useCustom": "カスタム画像を使う",
         "urlLabel": "アバター画像の URL",
         "urlRequired": "アバター画像の URL を入力してください",
-        "uploadHint": "外部の画像ホスティングも利用できます。直接アップロードは準備中です。"
+        "uploadHint": "外部の画像ホスティングサービスも利用できます。直接アップロードは準備中です。"
       }
     },
     "security": {
@@ -600,7 +600,7 @@
       "subheading": "ログインと本人確認に使う重要な情報を管理します。",
       "status": {
         "email": "メールの状態",
-        "bound": "登録済み",
+        "bound": "認証済み",
         "password": "パスワード",
         "set": "設定済み"
       },
@@ -611,7 +611,7 @@
         "label": "ログイン用メールアドレス",
         "unbound": "メール未登録",
         "editTitle": "ログイン用メールアドレスを変更",
-        "current": "現在: {email}",
+        "current": "現在：{email}",
         "new": "新しいメールアドレス",
         "save": "メールを更新",
         "saving": "更新中…",
@@ -619,13 +619,13 @@
       },
       "password": {
         "label": "アカウントのパスワード",
-        "hint": "設定済みです。定期的な変更と、他サイトとの使い回しを避けることをおすすめします。",
+        "hint": "パスワードは設定済みです。他のサイトとの使い回しは避け、定期的に変更することをおすすめします。",
         "editTitle": "アカウントのパスワードを変更",
         "editHint": "保存後は、新しいパスワードでログインしてください。",
         "save": "パスワードを変更",
         "saving": "変更中…",
         "updated": "パスワードを変更しました。",
-        "updatedDetail": "他のデバイスはログアウトされました。このデバイスは再ログイン不要です。"
+        "updatedDetail": "ほかのデバイスからログアウトしました。このデバイスでは引き続きログインしたまま利用できます。"
       },
       "strength": {
         "label": "パスワードの強度",
@@ -641,7 +641,7 @@
       "title": "設定",
       "lang": {
         "title": "トロフィーの言語設定",
-        "hint": "有効にすると、すべてのリクエストに選択した言語が付き、サーバーはその言語のトロフィー翻訳を優先して返します。",
+        "hint": "有効にすると、トロフィー情報を取得する際に選択した言語が優先されます。",
         "primary": "第一希望の言語",
         "secondary": "第二希望の言語（任意）",
         "unset": "指定しない",
@@ -649,7 +649,7 @@
       },
       "rate": {
         "title": "トロフィー獲得率の基準",
-        "hint": "トロフィー一覧で主に表示する獲得率を選びます: PSN 公式の獲得率か、PSRay サイト内の獲得率か。"
+        "hint": "トロフィー一覧で優先表示する獲得率を、PSN 公式または PSRay サイト内から選びます。"
       },
       "density": {
         "profile": {
@@ -668,14 +668,14 @@
       },
       "saved": {
         "title": "設定を保存しました",
-        "description": "この端末に保存されました。"
+        "description": "この端末に設定を保存しました。"
       }
     }
   },
   "seo": {
     "home": {
       "title": "PSRay — PSN トロフィートラッカー",
-      "description": "PSN トロフィー実績を見やすく整理。プレイヤープロフィール、獲得率やレアリティ付きのトロフィーセット、ポイント・貢献度ランキングを確認できます。"
+      "description": "PSN のトロフィー獲得状況を見やすく整理。プレイヤープロフィール、獲得率やレアリティ付きのトロフィーセット、ポイント・貢献度ランキングを確認できます。"
     },
     "leaderboard": {
       "title": "ランキング · PSRay",
@@ -684,7 +684,7 @@
     "profile": {
       "title": "{psnid} のプロフィール · PSRay",
       "titleFallback": "プロフィール · PSRay",
-      "description": "{psnid} の PSN トロフィー実績 — 獲得トロフィー、マイルストーン、最近のプレイ記録。"
+      "description": "{psnid} の PSN トロフィー獲得状況 — 獲得トロフィー、マイルストーン、最近のプレイ記録。"
     },
     "trophy": {
       "title": "{name} のトロフィー · PSRay",
