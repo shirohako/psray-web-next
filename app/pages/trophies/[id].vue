@@ -158,6 +158,8 @@ import { ArrowUpDown, ChevronDown } from 'lucide'
 import type { Trophy, TrophyGroup, TrophySetDetail } from '~/services/trophies'
 import { DEFAULT_LOCALE, PSN_LANG, canonicalContentLang, canonicalLang, isUiLocale, type UiLocale } from '#shared/locales'
 
+definePageMeta({ path: '/trophies/:id(\\d+)' })
+
 type FilterMode = 'all' | 'earned' | 'unearned'
 type SortMode = 'default' | 'earned' | 'rarity'
 type TrophyDialogKind = 'detail' | 'earners' | 'tips'
