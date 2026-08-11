@@ -309,6 +309,7 @@
       "tips": "댓글",
       "menu": {
         "view": "트로피 보기",
+        "viewTips": "트로피 댓글 보기",
         "copyTitle": "트로피 이름 복사",
         "copyDetail": "트로피 설명 복사",
         "titleLabel": "트로피 이름",
@@ -361,13 +362,17 @@
       "empty": "아직 댓글이 없습니다.",
       "total": "총 {count}개",
       "spoiler": "스포일러 포함 — 탭하여 표시",
+      "edited": "수정됨",
+      "missable": "놓칠 수 있음",
+      "helpful": "도움이 됨", "notHelpful": "도움이 안 됨", "voteFailed": "평가를 업데이트하지 못했습니다",
       "loadFailed": "댓글을 불러오지 못했습니다.",
       "form": {
-        "open": "댓글 작성", "heading": "댓글 작성", "draftHint": "초안은 이 기기에 저장됩니다.",
+        "open": "댓글 작성", "edit": "댓글 수정", "heading": "댓글 작성", "headingEdit": "댓글 수정", "loading": "댓글을 불러오는 중…", "draftHint": "초안은 이 기기에 저장됩니다.",
         "language": "언어", "spoiler": "댓글 전체에 스포일러 포함", "spoilerHint": "독자가 열기 전까지 내용을 숨깁니다.",
-        "publish": "댓글 게시", "publishing": "게시 중…", "published": "댓글을 게시했습니다", "publishFailed": "댓글을 게시하지 못했습니다",
+        "missable": "놓칠 수 있는지", "missableUnset": "표시 안 함", "missableYes": "놓칠 수 있음", "missableNo": "놓치지 않음",
+        "publish": "댓글 게시", "publishing": "게시 중…", "published": "댓글을 게시했습니다", "publishFailed": "댓글을 게시하지 못했습니다", "update": "변경 사항 저장", "updating": "저장 중…", "updated": "댓글을 수정했습니다", "loadFailed": "댓글을 불러오지 못했습니다", "delete": "삭제", "deleting": "삭제 중…", "deleteConfirm": "이 댓글을 삭제할까요? 이 작업은 되돌릴 수 없습니다.", "deleteConfirmAction": "댓글 삭제", "deleted": "댓글을 삭제했습니다", "deleteFailed": "댓글을 삭제하지 못했습니다",
         "loginTitle": "로그인하여 댓글 작성", "loginHint": "Markdown 공략으로 다음 플레이어를 도울 수 있습니다.",
-        "errors": { "contentRequired": "게시할 내용을 입력하세요.", "contentLength": "댓글은 최대 10,000자까지 작성할 수 있습니다.", "language": "지원하는 언어를 선택하세요." }
+        "errors": { "contentRequired": "게시할 내용을 입력하세요.", "contentLength": "댓글은 최대 20,000자까지 작성할 수 있습니다.", "language": "지원하는 언어를 선택하세요." }
       }
     },
     "similar": {
@@ -504,6 +509,7 @@
       "expand": "최근 플레이 모두 보기",
       "collapse": "최근 플레이 접기"
     },
+    "tips": { "title": "최근 댓글", "viewAll": "전체 보기", "dialogTitle": "작성한 댓글", "empty": "아직 작성한 댓글이 없습니다.", "loadFailed": "댓글을 불러오지 못했습니다.", "total": "총 {count}개" },
     "log": {
       "comingSoon": "트로피 기록 기능은 곧 제공됩니다."
     },

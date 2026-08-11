@@ -25,6 +25,12 @@
         <!-- Right: extended info -->
         <aside class="space-y-6">
           <ProfileStatsCard :profile="profile" />
+          <ProfileRecentTips
+            v-if="profile.recent_tips !== null"
+            :psnid="psnid"
+            :tip-count="profile.tip_count"
+            :tips="profile.recent_tips"
+          />
           <ProfileSocialCard :profile="profile" />
           <ProfileAccountCard :profile="profile" />
         </aside>

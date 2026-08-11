@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { AlertTriangle, LogIn, MessageSquare, Plus, RotateCw } from 'lucide'
-import { useTrophies, type PlayersMeta, type TrophyTip } from '~/services/trophies'
+import { AlertTriangle, LogIn, MessageSquare, Pencil, Plus, RotateCw } from 'lucide'
+import { useTips } from '~/services/tips'
+import type { TrophyTip, TrophyTipPageMeta } from '~/types/tip'
 
 const props = defineProps<{
   trophyId: number | string
@@ -9,16 +10,17 @@ const props = defineProps<{
 }>()
 const emit = defineEmits<{
   'update:open': [v: boolean]
-  compose: []
+  compose: [mode: 'create' | 'edit']
   closed: []
+  count: [value: number]
 }>()
 
 const route = useRoute()
 const { loggedIn } = useAuth()
-const { trophyTips } = useTrophies()
+const { forTrophy } = useTips()
 const page = ref(1)
 const tips = ref<TrophyTip[]>([])
-const meta = ref<PlayersMeta>()
+const meta = ref<TrophyTipPageMeta>()
 const pending = ref(false)
 const loadError = ref(false)
 
@@ -31,9 +33,10 @@ async function load() {
   pending.value = true
   loadError.value = false
   try {
-    const res = await trophyTips(props.trophyId, { page: page.value })
+    const res = await forTrophy(props.trophyId, { page: page.value })
     tips.value = res.data
     meta.value = res.meta
+    emit('count', res.meta?.total ?? res.data.length)
   }
   catch {
     loadError.value = true
@@ -53,7 +56,7 @@ watch(() => props.open, (value) => {
   if (!value) return
   page.value = 1
   load()
-})
+}, { immediate: true })
 </script>
 
 <template>
@@ -68,10 +71,11 @@ watch(() => props.open, (value) => {
         v-if="loggedIn"
         type="button"
         class="flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-slate-300 bg-white px-4 py-3 text-sm font-semibold text-slate-600 transition hover:border-slate-400 hover:text-slate-900"
-        @click="emit('compose')"
+        :disabled="pending"
+        @click="emit('compose', meta?.has_my_tip ? 'edit' : 'create')"
       >
-        <LucideIcon :icon="Plus" class="size-4" />
-        {{ $t('trophy.tips.form.open') }}
+        <LucideIcon :icon="meta?.has_my_tip ? Pencil : Plus" class="size-4" />
+        {{ $t(meta?.has_my_tip ? 'trophy.tips.form.edit' : 'trophy.tips.form.open') }}
       </button>
 
       <div v-else class="flex flex-col items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white px-4 py-4 text-center sm:flex-row sm:text-left">

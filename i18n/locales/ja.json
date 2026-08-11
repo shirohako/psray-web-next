@@ -309,6 +309,7 @@
       "tips": "コメント",
       "menu": {
         "view": "トロフィーを見る",
+        "viewTips": "トロフィーのコメントを見る",
         "copyTitle": "トロフィー名をコピー",
         "copyDetail": "トロフィーの説明をコピー",
         "titleLabel": "トロフィー名",
@@ -361,13 +362,17 @@
       "empty": "コメントはまだありません。",
       "total": "全 {count} 件",
       "spoiler": "ネタバレを含みます。タップして表示",
+      "edited": "編集済み",
+      "missable": "取り逃し注意",
+      "helpful": "役に立つ", "notHelpful": "役に立たない", "voteFailed": "評価を更新できませんでした",
       "loadFailed": "コメントを読み込めませんでした。",
       "form": {
-        "open": "コメントを書く", "heading": "コメントを書く", "draftHint": "下書きはこの端末に保存されます。",
+        "open": "コメントを書く", "edit": "コメントを編集", "heading": "コメントを書く", "headingEdit": "コメントを編集", "loading": "コメントを読み込んでいます…", "draftHint": "下書きはこの端末に保存されます。",
         "language": "言語", "spoiler": "コメント全体にネタバレを含む", "spoilerHint": "読者が開くまで内容を隠します。",
-        "publish": "投稿する", "publishing": "投稿中…", "published": "コメントを投稿しました", "publishFailed": "コメントを投稿できませんでした",
+        "missable": "取り逃し", "missableUnset": "指定しない", "missableYes": "取り逃す可能性あり", "missableNo": "取り逃しなし",
+        "publish": "投稿する", "publishing": "投稿中…", "published": "コメントを投稿しました", "publishFailed": "コメントを投稿できませんでした", "update": "変更を保存", "updating": "保存中…", "updated": "コメントを更新しました", "loadFailed": "コメントを読み込めませんでした", "delete": "削除", "deleting": "削除中…", "deleteConfirm": "このコメントを削除しますか？ この操作は元に戻せません。", "deleteConfirmAction": "削除する", "deleted": "コメントを削除しました", "deleteFailed": "コメントを削除できませんでした",
         "loginTitle": "ログインしてコメントを投稿", "loginHint": "あなたの Markdown 攻略が次のプレイヤーを助けます。",
-        "errors": { "contentRequired": "投稿内容を入力してください。", "contentLength": "コメントは 10,000 文字以内です。", "language": "対応する言語を選択してください。" }
+        "errors": { "contentRequired": "投稿内容を入力してください。", "contentLength": "コメントは 20,000 文字以内です。", "language": "対応する言語を選択してください。" }
       }
     },
     "similar": {
@@ -504,6 +509,7 @@
       "expand": "最近プレイをすべて表示",
       "collapse": "最近プレイを折りたたむ"
     },
+    "tips": { "title": "最近のコメント", "viewAll": "すべて見る", "dialogTitle": "投稿したコメント", "empty": "投稿したコメントはまだありません。", "loadFailed": "コメントを読み込めませんでした。", "total": "全 {count} 件" },
     "log": {
       "comingSoon": "トロフィーログは近日公開予定です。"
     },

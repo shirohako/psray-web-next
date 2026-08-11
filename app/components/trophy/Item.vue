@@ -74,6 +74,7 @@ function fmtEarnGap(sec: number) {
 }
 
 const toast = useToast()
+const route = useRoute()
 async function copy(text: string, label: string) {
   if (!text || !import.meta.client) return
   try {
@@ -90,13 +91,18 @@ async function copy(text: string, label: string) {
 // Dialogs opened from the row's menu / comment button.
 const detailOpen = ref(false)
 const earnersOpen = ref(false)
-const tipsOpen = ref(false)
+const tipsOpen = ref(String(route.query.tips ?? '') === String(props.trophy.id))
 const composerOpen = ref(false)
+const composerMode = ref<'create' | 'edit'>('create')
 const dialogDestination = ref<'tips' | 'composer' | null>(null)
 const displayedTipCount = ref(props.trophy.tip_count)
 watch(() => props.trophy.tip_count, value => { displayedTipCount.value = value })
+watch(() => route.query.tips, (tipId) => {
+  if (String(tipId ?? '') === String(props.trophy.id)) tipsOpen.value = true
+})
 
-function openTipComposer() {
+function openTipComposer(mode: 'create' | 'edit') {
+  composerMode.value = mode
   dialogDestination.value = 'composer'
   tipsOpen.value = false
 }
@@ -118,14 +124,18 @@ function onComposerClosed() {
 }
 
 function onTipPublished() {
-  displayedTipCount.value += 1
+  returnToTips()
+}
+
+function onTipDeleted() {
   returnToTips()
 }
 </script>
 
 <template>
   <Popover
-    class="flex cursor-pointer select-none items-center gap-3 px-3 py-3 transition sm:gap-4 sm:px-5 sm:py-3.5"
+    :id="`trophy-${trophy.id}`"
+    class="flex scroll-mt-20 cursor-pointer select-none items-center gap-3 px-3 py-3 transition target:bg-amber-50/60 sm:gap-4 sm:px-5 sm:py-3.5"
     :class="showEarned ? 'bg-sky-50/60' : 'hover:bg-slate-50'"
   >
     <div class="flex shrink-0 items-center gap-2 sm:gap-3">
@@ -268,6 +278,15 @@ function onTipPublished() {
         type="button"
         role="menuitem"
         class="flex w-full items-center gap-2.5 px-3 py-2 text-left text-slate-700 transition hover:bg-slate-50"
+        @click="tipsOpen = true; close()"
+      >
+        <LucideIcon :icon="MessageSquare" class="size-4 text-slate-400" />
+        {{ $t('trophy.item.menu.viewTips') }}
+      </button>
+      <button
+        type="button"
+        role="menuitem"
+        class="flex w-full items-center gap-2.5 px-3 py-2 text-left text-slate-700 transition hover:bg-slate-50"
         @click="copy(name, $t('trophy.item.menu.titleLabel')); close()"
       >
         <LucideIcon :icon="Copy" class="size-4 text-slate-400" />
@@ -302,13 +321,16 @@ function onTipPublished() {
     v-model:open="tipsOpen"
     @compose="openTipComposer"
     @closed="onTipsClosed"
+    @count="displayedTipCount = $event"
   />
   <TrophyTipComposerDialog
     :trophy-id="trophy.id"
     :trophy-name="name"
     :display-language="displayLanguage"
+    :editing="composerMode === 'edit'"
     v-model:open="composerOpen"
     @published="onTipPublished"
+    @deleted="onTipDeleted"
     @cancelled="returnToTips"
     @closed="onComposerClosed"
   />

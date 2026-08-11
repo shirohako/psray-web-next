@@ -309,6 +309,7 @@
       "tips": "Tips",
       "menu": {
         "view": "View trophy",
+        "viewTips": "View trophy comments",
         "copyTitle": "Copy trophy name",
         "copyDetail": "Copy trophy description",
         "titleLabel": "trophy name",
@@ -361,13 +362,17 @@
       "empty": "No tips yet.",
       "total": "{count} tips in total",
       "spoiler": "Contains spoilers — tap to reveal",
+      "edited": "Edited",
+      "missable": "Missable",
+      "helpful": "Helpful", "notHelpful": "Not helpful", "voteFailed": "Could not update your rating",
       "loadFailed": "Tips could not be loaded.",
       "form": {
-        "open": "Write a comment", "heading": "Write a comment", "draftHint": "Your draft is saved on this device.",
+        "open": "Write a comment", "edit": "Edit comment", "heading": "Write a comment", "headingEdit": "Edit comment", "loading": "Loading comment…", "draftHint": "Your draft is saved on this device.",
         "language": "Language", "spoiler": "This entire tip contains spoilers", "spoilerHint": "Readers must reveal it before reading.",
-        "publish": "Publish tip", "publishing": "Publishing…", "published": "Your tip was published", "publishFailed": "Tip could not be published",
+        "missable": "Missable", "missableUnset": "Not specified", "missableYes": "Can be missed", "missableNo": "Not missable",
+        "publish": "Publish tip", "publishing": "Publishing…", "published": "Your tip was published", "publishFailed": "Tip could not be published", "update": "Save changes", "updating": "Saving…", "updated": "Comment updated", "loadFailed": "Could not load comment", "delete": "Delete", "deleting": "Deleting…", "deleteConfirm": "Delete this comment? This action cannot be undone.", "deleteConfirmAction": "Delete comment", "deleted": "Comment deleted", "deleteFailed": "Could not delete comment",
         "loginTitle": "Sign in to share a tip", "loginHint": "Your Markdown guide can help the next player.",
-        "errors": { "contentRequired": "Write something before publishing.", "contentLength": "Tips can contain at most 10,000 characters.", "language": "Choose a supported language." }
+        "errors": { "contentRequired": "Write something before publishing.", "contentLength": "Tips can contain at most 20,000 characters.", "language": "Choose a supported language." }
       }
     },
     "similar": {
@@ -504,6 +509,7 @@
       "expand": "Show all recently played",
       "collapse": "Collapse recently played"
     },
+    "tips": { "title": "Recent comments", "viewAll": "View all", "dialogTitle": "Published comments", "empty": "No comments have been published yet.", "loadFailed": "Comments could not be loaded.", "total": "{count} total" },
     "log": {
       "comingSoon": "The trophy log is coming soon."
     },

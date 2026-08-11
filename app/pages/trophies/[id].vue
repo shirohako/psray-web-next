@@ -330,7 +330,7 @@ const filterOptions: { value: FilterMode; labelKey: string }[] = [
 ]
 const filter = ref<FilterMode>('all')
 const sort = ref<SortMode>('default')
-const trophyListExpanded = ref(false)
+const trophyListExpanded = ref(route.hash.startsWith('#trophy-'))
 
 // Mask spoiler (PSN-hidden) trophies until toggled on; earned ones stay visible.
 // Persisted in a cookie so the preference survives reloads / navigation.
@@ -350,6 +350,10 @@ watch(hasViewer, (v) => {
 
 watch([filter, sort, showSpoilers], () => {
   trophyListExpanded.value = false
+})
+
+watch(() => route.hash, (hash) => {
+  if (hash.startsWith('#trophy-')) trophyListExpanded.value = true
 })
 
 /**

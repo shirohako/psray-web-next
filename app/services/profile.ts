@@ -7,6 +7,7 @@
  */
 
 import type { Rarity, TrophyType } from '~/services/trophies'
+import type { ProfileRecentTip } from '~/types/tip'
 
 export type ApiDate = number | string
 
@@ -58,6 +59,8 @@ export interface Profile {
   philosophers_stone: number
   tip_count: number
   tip_vote_count: number
+  /** Null for PSN profiles that are not registered PSRay users. */
+  recent_tips: ProfileRecentTip[] | null
   page_view_count: number
 
   sync_interval: number

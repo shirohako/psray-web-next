@@ -309,6 +309,7 @@
       "tips": "留言",
       "menu": {
         "view": "查看奖杯",
+        "viewTips": "查看奖杯留言",
         "copyTitle": "复制奖杯标题",
         "copyDetail": "复制奖杯描述",
         "titleLabel": "奖杯标题",
@@ -361,13 +362,17 @@
       "empty": "还没有玩家留言。",
       "total": "共 {count} 条留言",
       "spoiler": "包含剧透，点击显示",
+      "edited": "已修改",
+      "missable": "可能错过",
+      "helpful": "有帮助", "notHelpful": "没有帮助", "voteFailed": "无法更新评价",
       "loadFailed": "无法加载留言。",
       "form": {
-        "open": "发表留言", "heading": "发表留言", "draftHint": "草稿会保存在当前设备。",
+        "open": "发表留言", "edit": "编辑留言", "heading": "发表留言", "headingEdit": "编辑留言", "loading": "正在读取留言…", "draftHint": "草稿会保存在当前设备。",
         "language": "留言语言", "spoiler": "整篇留言包含剧透", "spoilerHint": "读者需要主动点击后才能阅读。",
-        "publish": "发布留言", "publishing": "发布中…", "published": "留言发布成功", "publishFailed": "留言发布失败",
+        "missable": "是否可能错过", "missableUnset": "不标记", "missableYes": "可能错过", "missableNo": "不会错过",
+        "publish": "发布留言", "publishing": "发布中…", "published": "留言发布成功", "publishFailed": "留言发布失败", "update": "保存修改", "updating": "保存中…", "updated": "留言更新成功", "loadFailed": "无法读取留言", "delete": "删除", "deleting": "删除中…", "deleteConfirm": "确定删除这条留言吗？此操作无法撤销。", "deleteConfirmAction": "删除留言", "deleted": "留言已删除", "deleteFailed": "无法删除留言",
         "loginTitle": "登录后发表留言", "loginHint": "你的 Markdown 攻略可以帮助下一位玩家。",
-        "errors": { "contentRequired": "请先填写留言内容。", "contentLength": "留言最多可以包含 10,000 个字符。", "language": "请选择支持的语言。" }
+        "errors": { "contentRequired": "请先填写留言内容。", "contentLength": "留言最多可以包含 20,000 个字符。", "language": "请选择支持的语言。" }
       }
     },
     "similar": {
@@ -504,6 +509,7 @@
       "expand": "展开最近玩过",
       "collapse": "收起最近玩过"
     },
+    "tips": { "title": "最近发表的留言", "viewAll": "查看全部", "dialogTitle": "发表的全部留言", "empty": "还没有发表过留言。", "loadFailed": "无法加载留言。", "total": "共 {count} 条" },
     "log": {
       "comingSoon": "奖杯记录功能敬请期待。"
     },
