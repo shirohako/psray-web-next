@@ -100,12 +100,13 @@ function psnEarnedRate(item: RecentTrophy) {
 
     <!-- List -->
     <div v-else class="divide-y divide-slate-100 transition-opacity" :class="{ 'opacity-50': pending }">
-      <div
+      <a
         v-for="(item, index) in trophies"
         :key="`${item.trophy_set_id}-${item.trophy_id}-${item.earned_at}`"
-        class="flex items-center gap-3 px-4 py-3.5 transition hover:bg-slate-50 sm:gap-4 sm:px-5"
+        :href="`/trophies/${item.trophy_set_id}`"
+        class="group flex items-center gap-3 px-4 py-3.5 transition hover:bg-slate-50 sm:gap-4 sm:px-5"
+        @click="openTrophyWithProgress($event, item.trophy_set_id, psnid)"
       >
-        <NuxtLink :to="`/trophies/${item.trophy_set_id}`" class="group contents">
         <!-- Acquisition order (newest = highest) -->
         <span
           class="inline-flex shrink-0 items-baseline gap-px text-sm font-semibold tabular-nums text-slate-400 transition group-hover:text-slate-700"
@@ -163,16 +164,7 @@ function psnEarnedRate(item: RecentTrophy) {
           :icon="ChevronRight"
           class="size-5 shrink-0 text-slate-300 transition group-hover:text-slate-400"
         />
-        </NuxtLink>
-        <NuxtLink
-          :to="{ path: `/trophies/${item.trophy_set_id}`, query: { psnid } }"
-          class="grid size-8 shrink-0 place-items-center rounded-md text-slate-400 transition hover:bg-slate-100 hover:text-sky-600"
-          :title="$t('trophy.progress.title')"
-          :aria-label="$t('trophy.progress.title')"
-        >
-          <LucideIcon :icon="Trophy" class="size-4" />
-        </NuxtLink>
-      </div>
+      </a>
     </div>
 
     <!-- Bottom pager -->

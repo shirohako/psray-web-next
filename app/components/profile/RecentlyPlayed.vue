@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { animate, type JSAnimation } from 'animejs'
-import { Clock, ChevronDown, ChevronRight, Globe, Trophy } from 'lucide'
+import { Clock, ChevronDown, ChevronRight, Globe } from 'lucide'
 import type { PlayedTrophySet } from '~/services/profile'
 import type { DisplayDensity } from '~/composables/usePreferences'
 
@@ -229,16 +229,14 @@ onBeforeUnmount(() => {
         !animatedReady && canCollapse && !expanded ? 'max-sm:max-h-100' : '',
       ]"
     >
-      <div
+      <a
         v-for="g in recent"
         :key="g.id"
-        class="flex items-start transition hover:bg-slate-50"
+        :href="`/trophies/${g.trophy_set_id}`"
+        class="group flex items-start transition hover:bg-slate-50"
         :class="density.row"
+        @click="openTrophyWithProgress($event, g.trophy_set_id, psnid)"
       >
-        <NuxtLink
-          :to="`/trophies/${g.trophy_set_id}`"
-          class="group contents"
-        >
         <!-- Fixed-width slot keeps rows aligned; the image renders at its natural
              aspect (PS4 320×176 landscape, PS5 square) with a soft ring instead of
              a gray letterbox box around it, plus a loading skeleton. -->
@@ -319,16 +317,7 @@ onBeforeUnmount(() => {
           class="shrink-0 text-slate-300 transition group-hover:text-slate-400"
           :class="density.chevron"
         />
-        </NuxtLink>
-        <NuxtLink
-          :to="{ path: `/trophies/${g.trophy_set_id}`, query: { psnid } }"
-          class="grid size-8 shrink-0 place-items-center self-center rounded-md text-slate-400 transition hover:bg-slate-100 hover:text-sky-600"
-          :title="$t('trophy.progress.title')"
-          :aria-label="$t('trophy.progress.title')"
-        >
-          <LucideIcon :icon="Trophy" class="size-4" />
-        </NuxtLink>
-      </div>
+      </a>
     </div>
 
     <div

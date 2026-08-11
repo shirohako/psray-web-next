@@ -103,12 +103,13 @@ function milestoneMeta(item: ProfileMilestone) {
         leave-to-class="opacity-0"
         move-class="transition-transform duration-500 ease-in-out"
       >
-      <div
+      <a
         v-for="(item, index) in visibleMilestones"
         :key="`${item.type}-${item.index}-${item.trophy_id}`"
-        class="relative flex gap-3 py-3"
+        :href="`/trophies/${item.trophy_set_id}`"
+        class="group relative flex gap-3 py-3"
+        @click="openTrophyWithProgress($event, item.trophy_set_id, psnid)"
       >
-        <NuxtLink :to="`/trophies/${item.trophy_set_id}`" class="group contents">
         <div class="relative flex w-10 shrink-0 items-center justify-center">
           <span
             class="relative z-10 grid size-10 shrink-0 place-items-center rounded-full ring-1 ring-inset"
@@ -144,16 +145,7 @@ function milestoneMeta(item: ProfileMilestone) {
             <LucideIcon :icon="ChevronRight" class="absolute right-3 top-1/2 size-4 shrink-0 -translate-y-1/2 text-slate-300 transition group-hover:text-slate-500 max-sm:hidden" />
           </div>
         </div>
-        </NuxtLink>
-        <NuxtLink
-          :to="{ path: `/trophies/${item.trophy_set_id}`, query: { psnid } }"
-          class="absolute bottom-5 right-2 z-10 grid size-7 place-items-center rounded-md bg-white/90 text-slate-400 shadow-sm ring-1 ring-slate-200 transition hover:text-sky-600"
-          :title="$t('trophy.progress.title')"
-          :aria-label="$t('trophy.progress.title')"
-        >
-          <LucideIcon :icon="Trophy" class="size-3.5" />
-        </NuxtLink>
-      </div>
+      </a>
       </TransitionGroup>
     </div>
 

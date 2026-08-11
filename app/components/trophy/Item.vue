@@ -80,7 +80,7 @@ const densityStyles: Record<DisplayDensity, {
     earnedIcon: 'size-2.5',
     title: 'text-sm',
     detail: 'mt-0.5 line-clamp-1 text-xs',
-    earnedMeta: 'mt-0.5 gap-x-2 gap-y-0.5 text-[10px]',
+    earnedMeta: 'mt-1 gap-x-2 gap-y-0.5 text-[10px]',
     actions: 'gap-1 sm:gap-2',
     rate: 'text-xs',
     commentButton: 'size-6',
