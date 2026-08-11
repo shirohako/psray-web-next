@@ -3,6 +3,7 @@ import type { ApiMeta, ApiSuccess } from '~/types/api'
 
 type Method = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
 type Options = Omit<NitroFetchOptions<string>, 'method' | 'body'>
+type RequestBody = NitroFetchOptions<string>['body']
 
 /**
  * Ergonomic wrapper around the `$api` plugin instance.
@@ -22,11 +23,11 @@ type Options = Omit<NitroFetchOptions<string>, 'method' | 'body'>
 export function useApi() {
   const { $api } = useNuxtApp()
 
-  function raw<T, M = ApiMeta>(method: Method, url: string, body?: unknown, opts?: Options) {
+  function raw<T, M = ApiMeta>(method: Method, url: string, body?: RequestBody, opts?: Options) {
     return $api<ApiSuccess<T, M>>(url, { method, body, ...opts })
   }
 
-  function unwrap<T>(method: Method, url: string, body?: unknown, opts?: Options) {
+  function unwrap<T>(method: Method, url: string, body?: RequestBody, opts?: Options) {
     return raw<T>(method, url, body, opts).then(r => r.data)
   }
 
@@ -35,17 +36,17 @@ export function useApi() {
     $api,
 
     get: <T>(url: string, opts?: Options) => unwrap<T>('GET', url, undefined, opts),
-    post: <T>(url: string, body?: unknown, opts?: Options) => unwrap<T>('POST', url, body, opts),
-    put: <T>(url: string, body?: unknown, opts?: Options) => unwrap<T>('PUT', url, body, opts),
-    patch: <T>(url: string, body?: unknown, opts?: Options) => unwrap<T>('PATCH', url, body, opts),
+    post: <T>(url: string, body?: RequestBody, opts?: Options) => unwrap<T>('POST', url, body, opts),
+    put: <T>(url: string, body?: RequestBody, opts?: Options) => unwrap<T>('PUT', url, body, opts),
+    patch: <T>(url: string, body?: RequestBody, opts?: Options) => unwrap<T>('PATCH', url, body, opts),
     delete: <T>(url: string, opts?: Options) => unwrap<T>('DELETE', url, undefined, opts),
 
     /** Same verbs, but resolve to the full `{ data, meta }` envelope. */
     raw: {
       get: <T, M = ApiMeta>(url: string, opts?: Options) => raw<T, M>('GET', url, undefined, opts),
-      post: <T, M = ApiMeta>(url: string, body?: unknown, opts?: Options) => raw<T, M>('POST', url, body, opts),
-      put: <T, M = ApiMeta>(url: string, body?: unknown, opts?: Options) => raw<T, M>('PUT', url, body, opts),
-      patch: <T, M = ApiMeta>(url: string, body?: unknown, opts?: Options) => raw<T, M>('PATCH', url, body, opts),
+      post: <T, M = ApiMeta>(url: string, body?: RequestBody, opts?: Options) => raw<T, M>('POST', url, body, opts),
+      put: <T, M = ApiMeta>(url: string, body?: RequestBody, opts?: Options) => raw<T, M>('PUT', url, body, opts),
+      patch: <T, M = ApiMeta>(url: string, body?: RequestBody, opts?: Options) => raw<T, M>('PATCH', url, body, opts),
       delete: <T, M = ApiMeta>(url: string, opts?: Options) => raw<T, M>('DELETE', url, undefined, opts),
     },
   }

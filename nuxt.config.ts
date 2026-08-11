@@ -1,15 +1,16 @@
 import tailwindcss from "@tailwindcss/vite";
-import { REGIONS } from './app/utils/regions'
-
-// RegionFlag builds names dynamically, which @nuxt/icon's static scanner
-// cannot discover. Pre-bundle the supported catalogue for deterministic SSR.
-const regionFlagIcons = REGIONS.map(region => `flag:${region.code.toLowerCase()}-4x3`)
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
+  nitro: {
+    // Serve large local SVG flags (and other public assets) precompressed when
+    // the client advertises Brotli/Gzip support.
+    compressPublicAssets: true,
+  },
   routeRules: {
     '/help/markdown': { redirect: { to: '/docs/markdown', statusCode: 301 } },
+    '/flags/**': { headers: { 'cache-control': 'public, max-age=31536000, immutable' } },
   },
   // Module id, not a path relative to this file — Nuxt 4.5 warns on the latter.
   css: ['~/assets/css/main.css'],
@@ -84,13 +85,5 @@ export default defineNuxtConfig({
     }
   },
 
-  modules: ['@nuxt/icon', '@nuxtjs/i18n'],
-  icon: {
-    serverBundle: { collections: ['flag'] },
-    clientBundle: {
-      icons: regionFlagIcons,
-      scan: false,
-      sizeLimitKb: 768,
-    },
-  },
+  modules: ['@nuxtjs/i18n'],
 })

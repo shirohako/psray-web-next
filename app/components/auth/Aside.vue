@@ -5,7 +5,8 @@ const appConfig = useAppConfig()
 
 // Initialise with the first quote so SSR and the first client render agree
 // (no hydration mismatch), then shuffle to a random one once mounted.
-const quote = ref(appConfig.auth.quotes[0])
+const fallbackQuote = { text: '', author: '' }
+const quote = ref(appConfig.auth.quotes[0] ?? fallbackQuote)
 
 onMounted(() => {
   const quotes = appConfig.auth.quotes

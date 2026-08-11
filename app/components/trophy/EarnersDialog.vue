@@ -9,7 +9,10 @@ const props = defineProps<{
   trophyName?: string
   open: boolean
 }>()
-const emit = defineEmits<{ 'update:open': [v: boolean] }>()
+const emit = defineEmits<{
+  'update:open': [v: boolean]
+  closed: []
+}>()
 
 const { trophyPlayers } = useTrophies()
 const page = ref(1)
@@ -50,7 +53,7 @@ watch(() => props.open, (v) => {
   page.value = 1
   order.value = 'asc'
   load()
-})
+}, { immediate: true })
 </script>
 
 <template>
@@ -58,6 +61,7 @@ watch(() => props.open, (v) => {
     :open="open"
     size="lg"
     @update:open="emit('update:open', $event)"
+    @closed="emit('closed')"
   >
     <template #title>
       {{ $t('trophy.earners.title') }}

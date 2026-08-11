@@ -10,7 +10,7 @@ const props = withDefaults(defineProps<{
 }>(), { initialType: 'recent' })
 const emit = defineEmits<{ 'update:open': [v: boolean] }>()
 
-const tabs: { value: PlayerRankType; label: string }[] = [
+const tabs: { value: PlayerRankType; labelKey: string }[] = [
   { value: 'recent', labelKey: 'trophy.players.recent' },
   { value: 'progress', labelKey: 'trophy.players.progress' },
   { value: 'speedrun', labelKey: 'trophy.players.speedrun' },

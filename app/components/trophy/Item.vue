@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Trophy, Check, Eye, EyeOff, MessageSquare, Copy, FileText, Users, Info, Clock3, Medal, Timer } from 'lucide'
 import type { Trophy as TrophyData } from '~/services/trophies'
+import type { DisplayDensity } from '~/composables/usePreferences'
 
 const props = defineProps<{
   trophy: TrophyData
@@ -30,7 +31,73 @@ const showEarned = computed(() => props.hasViewer && props.earned)
 
 // Headline earn rate follows the site-wide earn-rate-basis preference; the
 // tooltip still lists both PSN and PSRay rates regardless.
-const { rateBasis } = usePreferences()
+const { rateBasis, trophyDensity } = usePreferences()
+const densityStyles: Record<DisplayDensity, {
+  row: string
+  number: string
+  icon: string
+  tierBadge: string
+  tierIcon: string
+  earnedBadge: string
+  earnedIcon: string
+  title: string
+  detail: string
+  earnedMeta: string
+  actions: string
+  rate: string
+  commentButton: string
+  commentIcon: string
+}> = {
+  dense: {
+    row: 'gap-2 px-2 py-1.5 sm:gap-2.5 sm:px-3 sm:py-2',
+    number: 'w-5 text-xs',
+    icon: 'size-10 sm:size-12',
+    tierBadge: '-bottom-1 -right-1 size-4 border',
+    tierIcon: 'size-2.5',
+    earnedBadge: '-right-1 -top-1 size-4 border',
+    earnedIcon: 'size-2.5',
+    title: 'text-sm',
+    detail: 'mt-0 line-clamp-1 text-xs',
+    earnedMeta: 'mt-0.5 gap-x-2 gap-y-0.5 text-[10px]',
+    actions: 'gap-1',
+    rate: 'text-[11px]',
+    commentButton: 'size-5.5',
+    commentIcon: 'size-2.5',
+  },
+  compact: {
+    row: 'gap-2.5 px-2.5 py-2 sm:gap-3 sm:px-4 sm:py-2.5',
+    number: 'w-5 text-xs',
+    icon: 'size-11 sm:size-13',
+    tierBadge: '-bottom-1 -right-1 size-4.5 border',
+    tierIcon: 'size-2.5',
+    earnedBadge: '-right-1 -top-1 size-4 border',
+    earnedIcon: 'size-2.5',
+    title: 'text-sm',
+    detail: 'mt-0.5 line-clamp-1 text-xs',
+    earnedMeta: 'mt-0.5 gap-x-2 gap-y-0.5 text-[10px]',
+    actions: 'gap-1 sm:gap-2',
+    rate: 'text-xs',
+    commentButton: 'size-6',
+    commentIcon: 'size-3',
+  },
+  standard: {
+    row: 'gap-3 px-3 py-3 sm:gap-4 sm:px-5 sm:py-3.5',
+    number: 'w-6 text-sm',
+    icon: 'size-14 sm:size-16',
+    tierBadge: '-bottom-1.5 -right-1.5 size-6 border-2',
+    tierIcon: 'size-3.5',
+    earnedBadge: '-right-1.5 -top-1.5 size-5 border-2',
+    earnedIcon: 'size-3',
+    title: '',
+    detail: 'mt-0.5 line-clamp-2 text-[13px] font-medium',
+    earnedMeta: 'mt-1.5 gap-x-2.5 gap-y-1 text-[11px]',
+    actions: 'gap-1.5 sm:gap-3',
+    rate: 'text-xs sm:text-sm',
+    commentButton: 'size-6 sm:size-7',
+    commentIcon: 'size-3 sm:size-3.5',
+  },
+}
+const density = computed(() => densityStyles[trophyDensity.value])
 const primaryRateLabel = computed(() => (rateBasis.value === 'psray' ? 'PSRay' : 'PSN'))
 const primaryRate = computed(() =>
   rateBasis.value === 'psray' ? props.trophy.psray_rate : props.trophy.psn_earned_rate,
@@ -93,6 +160,12 @@ const detailOpen = ref(false)
 const earnersOpen = ref(false)
 const tipsOpen = ref(String(route.query.tips ?? '') === String(props.trophy.id))
 const composerOpen = ref(false)
+// Dialogs are expensive multiplied by every trophy row. Mount each one only
+// after its first open, then keep it alive until its leave transition finishes.
+const detailMounted = ref(false)
+const earnersMounted = ref(false)
+const tipsMounted = ref(tipsOpen.value)
+const composerMounted = ref(false)
 const composerMode = ref<'create' | 'edit'>('create')
 const dialogDestination = ref<'tips' | 'composer' | null>(null)
 const displayedTipCount = ref(props.trophy.tip_count)
@@ -100,6 +173,10 @@ watch(() => props.trophy.tip_count, value => { displayedTipCount.value = value }
 watch(() => route.query.tips, (tipId) => {
   if (String(tipId ?? '') === String(props.trophy.id)) tipsOpen.value = true
 })
+watch(detailOpen, value => { if (value) detailMounted.value = true })
+watch(earnersOpen, value => { if (value) earnersMounted.value = true })
+watch(tipsOpen, value => { if (value) tipsMounted.value = true })
+watch(composerOpen, value => { if (value) composerMounted.value = true })
 
 function openTipComposer(mode: 'create' | 'edit') {
   composerMode.value = mode
@@ -108,6 +185,7 @@ function openTipComposer(mode: 'create' | 'edit') {
 }
 
 function onTipsClosed() {
+  tipsMounted.value = false
   if (dialogDestination.value !== 'composer') return
   dialogDestination.value = null
   composerOpen.value = true
@@ -118,6 +196,7 @@ function returnToTips() {
 }
 
 function onComposerClosed() {
+  composerMounted.value = false
   if (dialogDestination.value !== 'tips') return
   dialogDestination.value = null
   tipsOpen.value = true
@@ -135,34 +214,35 @@ function onTipDeleted() {
 <template>
   <Popover
     :id="`trophy-${trophy.id}`"
-    class="flex scroll-mt-20 cursor-pointer select-none items-center gap-3 px-3 py-3 transition target:bg-amber-50/60 sm:gap-4 sm:px-5 sm:py-3.5"
-    :class="showEarned ? 'bg-sky-50/60' : 'hover:bg-slate-50'"
+    class="flex scroll-mt-20 cursor-pointer select-none items-center transition target:bg-amber-50/60"
+    :class="[density.row, showEarned ? 'bg-sky-50/60' : 'hover:bg-slate-50']"
   >
     <div class="flex shrink-0 items-center gap-2 sm:gap-3">
       <!-- Continuous serial number -->
-      <span class="w-6 text-right text-sm font-semibold tabular-nums text-slate-400">#{{ number }}</span>
+      <span class="text-right font-semibold tabular-nums text-slate-400" :class="density.number">#{{ number }}</span>
 
       <!-- Icon + tier badge + earned check -->
       <div class="relative">
         <img
           :src="trophy.icon_url"
           :alt="displayName"
-          class="size-14 rounded-lg bg-slate-100 object-cover shadow-sm sm:size-16"
-          :class="{ 'blur-[3px] grayscale': masked }"
+          class="rounded-lg bg-slate-100 object-cover shadow-sm"
+          :class="[density.icon, { 'blur-[3px] grayscale': masked }]"
         />
         <span
-          class="absolute -bottom-1.5 -right-1.5 grid size-6 place-items-center rounded-full border-2 border-white bg-white shadow-sm"
-          :class="trophyTierColor(trophy.type)"
+          class="absolute grid place-items-center rounded-full border-white bg-white shadow-sm"
+          :class="[density.tierBadge, trophyTierColor(trophy.type)]"
           :title="trophy.type"
         >
-          <LucideIcon :icon="Trophy" class="size-3.5" />
+          <LucideIcon :icon="Trophy" :class="density.tierIcon" />
         </span>
         <span
           v-if="showEarned"
-          class="absolute -right-1.5 -top-1.5 grid size-5 place-items-center rounded-full border-2 border-white bg-slate-900 text-white shadow-sm"
+          class="absolute grid place-items-center rounded-full border-white bg-slate-900 text-white shadow-sm"
+          :class="density.earnedBadge"
           :title="$t('trophy.item.earned')"
         >
-          <LucideIcon :icon="Check" class="size-3" stroke-width="3" />
+          <LucideIcon :icon="Check" :class="density.earnedIcon" stroke-width="3" />
         </span>
       </div>
     </div>
@@ -170,7 +250,7 @@ function onTipDeleted() {
     <!-- Name + detail -->
     <div class="min-w-0 flex-1">
       <div class="flex flex-wrap items-center gap-2">
-        <h3 class="min-w-0 truncate font-semibold text-slate-900" :class="{ 'text-slate-400': masked }">{{ displayName }}</h3>
+        <h3 class="min-w-0 truncate font-semibold text-slate-900" :class="[density.title, { 'text-slate-400': masked }]">{{ displayName }}</h3>
         <button
           v-if="trophy.is_hidden && !earned"
           type="button"
@@ -181,10 +261,11 @@ function onTipDeleted() {
           <LucideIcon :icon="masked ? EyeOff : Eye" class="size-3" />
         </button>
       </div>
-      <p v-if="displayDetail" class="mt-0.5 line-clamp-2 text-sm text-slate-500">{{ displayDetail }}</p>
+      <p v-if="displayDetail" class="text-slate-500" :class="density.detail">{{ displayDetail }}</p>
       <div
         v-if="showEarned && earnedAt"
-        class="mt-1 flex max-w-full flex-wrap items-center gap-x-2.5 gap-y-1 text-[11px] font-medium leading-none text-slate-400"
+        class="flex max-w-full flex-wrap items-center font-medium leading-none text-slate-400"
+        :class="density.earnedMeta"
       >
         <!-- When the viewer earned it -->
         <span class="inline-flex min-w-0 items-center gap-1" :title="$t('trophy.item.earnedAt')">
@@ -226,11 +307,11 @@ function onTipDeleted() {
     </div>
 
     <!-- PSN earn rate + actions -->
-    <div class="flex shrink-0 items-center gap-1.5 sm:gap-3">
+    <div class="flex shrink-0 items-center" :class="density.actions">
       <Tooltip placement="left">
         <div tabindex="0" class="flex cursor-pointer flex-col items-end leading-tight focus:outline-none" @click.stop>
           <span class="text-[10px] font-medium text-slate-400 max-sm:hidden">{{ primaryRateLabel }}</span>
-          <span class="text-xs font-semibold tabular-nums text-slate-700 sm:text-sm">{{ fmtRate(primaryRate) }}</span>
+          <span class="font-semibold tabular-nums text-slate-700" :class="density.rate">{{ fmtRate(primaryRate) }}</span>
         </div>
         <template #content>
           <div class="space-y-1">
@@ -250,11 +331,12 @@ function onTipDeleted() {
            keeps its own action instead of opening the row menu. -->
       <button
         type="button"
-        class="relative grid size-6 place-items-center rounded-full border border-slate-200 bg-white text-slate-500 shadow-sm transition hover:border-slate-300 hover:bg-slate-50 hover:text-slate-900 sm:size-7"
+        class="relative grid place-items-center rounded-full border border-slate-200 bg-white text-slate-500 shadow-sm transition hover:border-slate-300 hover:bg-slate-50 hover:text-slate-900"
+        :class="density.commentButton"
         :title="$t('trophy.item.tips')"
         @click.stop="tipsOpen = true"
       >
-        <LucideIcon :icon="MessageSquare" class="size-3 sm:size-3.5" />
+        <LucideIcon :icon="MessageSquare" :class="density.commentIcon" />
         <span
           class="absolute -right-1 -top-1 grid h-3.5 min-w-3.5 place-items-center rounded-full px-1 text-[9px] font-bold leading-none text-white"
           :class="displayedTipCount > 0 ? 'bg-slate-900' : 'bg-slate-300'"
@@ -313,9 +395,21 @@ function onTipDeleted() {
     </template>
   </Popover>
 
-  <TrophyDetailDialog :trophy="trophy" v-model:open="detailOpen" />
-  <TrophyEarnersDialog :trophy-id="trophy.id" :trophy-name="name" v-model:open="earnersOpen" />
-  <TrophyTipsDialog
+  <LazyTrophyDetailDialog
+    v-if="detailMounted"
+    :trophy="trophy"
+    v-model:open="detailOpen"
+    @closed="detailMounted = false"
+  />
+  <LazyTrophyEarnersDialog
+    v-if="earnersMounted"
+    :trophy-id="trophy.id"
+    :trophy-name="name"
+    v-model:open="earnersOpen"
+    @closed="earnersMounted = false"
+  />
+  <LazyTrophyTipsDialog
+    v-if="tipsMounted"
     :trophy-id="trophy.id"
     :trophy-name="name"
     v-model:open="tipsOpen"
@@ -323,7 +417,8 @@ function onTipDeleted() {
     @closed="onTipsClosed"
     @count="displayedTipCount = $event"
   />
-  <TrophyTipComposerDialog
+  <LazyTrophyTipComposerDialog
+    v-if="composerMounted"
     :trophy-id="trophy.id"
     :trophy-name="name"
     :display-language="displayLanguage"

@@ -1,8 +1,8 @@
 /**
  * Canonical list of PSN store regions (country code + English name) selectable
  * across the app — region pickers, leaderboards, filters, etc. Auto-imported
- * like everything under `app/utils/`; `RegionFlag` renders the matching
- * flag-icon, and `regionName` (in `utils/profile`) resolves any code's name.
+ * like everything under `app/utils/`; `RegionFlag` renders the matching local
+ * SVG, and `regionName` (in `utils/profile`) resolves any code's name.
  *
  * Sorted by name and deduplicated. Add/remove entries here to change which
  * regions are offered everywhere.

@@ -647,6 +647,21 @@
         "title": "Trophy earn-rate basis",
         "hint": "Choose which earn rate leads in trophy lists: PSN’s official rate, or PSRay’s site-wide rate."
       },
+      "density": {
+        "profile": {
+          "title": "Recently played games",
+          "hint": "Adjust the height of each game on profile pages."
+        },
+        "trophy": {
+          "title": "Trophy list",
+          "hint": "Adjust the height of each trophy on trophy-set pages."
+        },
+        "options": {
+          "dense": "Dense",
+          "compact": "Compact",
+          "standard": "Standard"
+        }
+      },
       "saved": {
         "title": "Preferences saved",
         "description": "Saved on this device."

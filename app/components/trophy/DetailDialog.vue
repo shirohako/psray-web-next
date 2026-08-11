@@ -6,7 +6,10 @@ const props = defineProps<{
   trophy: TrophyData
   open: boolean
 }>()
-const emit = defineEmits<{ 'update:open': [v: boolean] }>()
+const emit = defineEmits<{
+  'update:open': [v: boolean]
+  closed: []
+}>()
 
 const name = computed(() => props.trophy.localized_name || props.trophy.name)
 const detail = computed(() => props.trophy.localized_detail || props.trophy.detail)
@@ -26,7 +29,13 @@ const TYPE_LABEL: Record<TrophyData['type'], string> = {
 </script>
 
 <template>
-  <Dialog :open="open" size="xl" :title="$t('trophy.detail.title')" @update:open="emit('update:open', $event)">
+  <Dialog
+    :open="open"
+    size="xl"
+    :title="$t('trophy.detail.title')"
+    @update:open="emit('update:open', $event)"
+    @closed="emit('closed')"
+  >
     <div class="p-5">
       <!-- Icon + name + tier/rarity -->
       <div class="flex gap-4">

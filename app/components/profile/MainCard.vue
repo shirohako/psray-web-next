@@ -6,7 +6,7 @@ const props = defineProps<{ psnid: string }>()
 // Tabbed main card. Each tab renders its own content component; add new tabs
 // here as their components land.
 type TabKey = 'recent' | 'trophies' | 'milestones'
-const tabs: { key: TabKey; label: string; icon: IconNode }[] = [
+const tabs: { key: TabKey; labelKey: string; icon: IconNode }[] = [
   { key: 'recent', labelKey: 'profile.tabs.recent', icon: Gamepad2 },
   { key: 'trophies', labelKey: 'profile.tabs.trophies', icon: Trophy },
   { key: 'milestones', labelKey: 'profile.tabs.milestones', icon: Milestone },

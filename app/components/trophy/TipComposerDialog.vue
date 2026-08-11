@@ -189,7 +189,7 @@ function onOpenChange(value: boolean) {
 watch(() => props.open, (value) => {
   if (!value) return
   prepareForm()
-})
+}, { immediate: true })
 </script>
 
 <template>

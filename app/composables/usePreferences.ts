@@ -1,13 +1,10 @@
 /**
- * Site-wide user preferences, persisted to `localStorage` (client only) and
- * shared across the app via `useState`.
+ * Site-wide user preferences, persisted locally and shared across the app via
+ * `useState`.
  *
- * Currently just the trophy-language preference: when enabled, the user picks a
- * primary language (and optionally a secondary), and every API request carries
- * a browser-style `Accept-Language` header (`primary` or `primary,secondary;q=0.9`)
- * so the backend best-matches trophy text to them. When it's off, we fall back
- * to the user's own browser languages, so requests always carry an
- * `Accept-Language`. See the `$api` plugin + the settings drawer.
+ * Language preferences live in localStorage because they only affect API
+ * requests. Visual preferences use cookies so SSR and the client render the
+ * same row dimensions on first paint.
  */
 
 /** Trophy-language preference. When `enabled`, `primary` is required; `secondary` is optional. */
@@ -22,8 +19,13 @@ export interface TrophyLangPref {
 /** Which earn rate to surface as the headline figure on trophy lists. */
 export type RateBasis = 'psn' | 'psray'
 
+/** Row spacing presets shared by profile games and trophy lists. */
+export type DisplayDensity = 'dense' | 'compact' | 'standard'
+
 const STORAGE_KEY = 'prefs:trophy-lang'
 const RATE_BASIS_KEY = 'prefs:rate-basis'
+const PROFILE_GAME_DENSITY_KEY = 'prefs:profile-game-density'
+const TROPHY_DENSITY_KEY = 'prefs:trophy-density'
 
 function defaultTrophyLang(): TrophyLangPref {
   return { enabled: false, primary: '', secondary: '' }
@@ -31,6 +33,13 @@ function defaultTrophyLang(): TrophyLangPref {
 
 function defaultRateBasis(): RateBasis {
   return 'psn'
+}
+
+function readDensity(key: string): DisplayDensity {
+  const stored = useCookie<DisplayDensity>(key).value
+  return stored === 'dense' || stored === 'standard'
+    ? stored
+    : 'compact'
 }
 
 /** Build a browser-style Accept-Language value from an ordered language list. */
@@ -68,6 +77,15 @@ export function usePreferences() {
     const stored = useCookie<RateBasis>(RATE_BASIS_KEY).value
     return stored === 'psn' || stored === 'psray' ? stored : defaultRateBasis()
   })
+
+  const profileGameDensity = useState<DisplayDensity>(
+    'prefs:profileGameDensity',
+    () => readDensity(PROFILE_GAME_DENSITY_KEY),
+  )
+  const trophyDensity = useState<DisplayDensity>(
+    'prefs:trophyDensity',
+    () => readDensity(TROPHY_DENSITY_KEY),
+  )
 
   /**
    * Effective `Accept-Language` for API requests:
@@ -113,5 +131,25 @@ export function usePreferences() {
     }).value = basis
   }
 
-  return { trophyLang, rateBasis, acceptLanguage, load, saveTrophyLang, saveRateBasis }
+  function saveDensity(kind: 'profileGame' | 'trophy', density: DisplayDensity) {
+    const state = kind === 'profileGame' ? profileGameDensity : trophyDensity
+    const key = kind === 'profileGame' ? PROFILE_GAME_DENSITY_KEY : TROPHY_DENSITY_KEY
+    state.value = density
+    useCookie<DisplayDensity>(key, {
+      maxAge: 60 * 60 * 24 * 365,
+      sameSite: 'lax',
+    }).value = density
+  }
+
+  return {
+    trophyLang,
+    rateBasis,
+    profileGameDensity,
+    trophyDensity,
+    acceptLanguage,
+    load,
+    saveTrophyLang,
+    saveRateBasis,
+    saveDensity,
+  }
 }

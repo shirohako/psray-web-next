@@ -103,9 +103,9 @@ export function useSeo(input: SeoInput) {
 
   const alternates = computed(() => {
     const links = [
-      { rel: 'alternate', hreflang: 'x-default', href: urlFor(DEFAULT_LOCALE) },
+      { rel: 'alternate' as const, hreflang: 'x-default', href: urlFor(DEFAULT_LOCALE) },
       ...UI_LOCALES.map(code => ({
-        rel: 'alternate',
+        rel: 'alternate' as const,
         hreflang: code,
         href: urlFor(code),
       })),
@@ -119,7 +119,7 @@ export function useSeo(input: SeoInput) {
       if (!canonicalized || seen.has(canonicalized)) continue
       seen.add(canonicalized)
       links.push({
-        rel: 'alternate',
+        rel: 'alternate' as const,
         hreflang: canonicalized,
         href: urlFor(DEFAULT_LOCALE, canonicalized),
       })

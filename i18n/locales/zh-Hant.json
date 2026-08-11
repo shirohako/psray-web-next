@@ -647,6 +647,21 @@
         "title": "獎盃獲取率基準",
         "hint": "選擇獎盃列表中主要顯示的獲取率來源：PSN 官方獲取率，或 PSRay 站內獲取率。"
       },
+      "density": {
+        "profile": {
+          "title": "最近玩過的遊戲",
+          "hint": "調整個人資料頁面中每款遊戲的顯示高度。"
+        },
+        "trophy": {
+          "title": "獎盃列表",
+          "hint": "調整獎盃組頁面中每個獎盃的顯示高度。"
+        },
+        "options": {
+          "dense": "密集",
+          "compact": "緊湊",
+          "standard": "標準"
+        }
+      },
       "saved": {
         "title": "設定已儲存",
         "description": "偏好已儲存到本機。"

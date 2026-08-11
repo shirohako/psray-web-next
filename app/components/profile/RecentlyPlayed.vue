@@ -2,6 +2,7 @@
 import { animate, type JSAnimation } from 'animejs'
 import { Clock, ChevronDown, ChevronRight, Globe } from 'lucide'
 import type { PlayedTrophySet } from '~/services/profile'
+import type { DisplayDensity } from '~/composables/usePreferences'
 
 const props = defineProps<{ psnid: string }>()
 
@@ -18,7 +19,59 @@ const animatedReady = ref(false)
 const toggleIconTouched = ref(false)
 const listEl = ref<HTMLElement | null>(null)
 const listAnimation = shallowRef<JSAnimation | null>(null)
-const collapsedListHeight = 400
+const { profileGameDensity } = usePreferences()
+
+const densityStyles: Record<DisplayDensity, {
+  row: string
+  artColumn: string
+  art: string
+  mobileBadges: string
+  title: string
+  meta: string
+  progress: string
+  tiers: string
+  chevron: string
+}> = {
+  dense: {
+    row: 'gap-2.5 px-3 py-2 sm:items-center sm:px-4',
+    artColumn: 'w-16 gap-1',
+    art: 'h-12 w-16',
+    mobileBadges: 'max-w-16 gap-0.5',
+    title: 'text-sm',
+    meta: 'mt-0.5',
+    progress: 'mt-1.5 gap-2',
+    tiers: 'mt-1 gap-2 text-[10px]',
+    chevron: 'size-4',
+  },
+  compact: {
+    row: 'gap-3 px-3 py-3 sm:items-center sm:px-4',
+    artColumn: 'w-20 gap-1',
+    art: 'h-15 w-20',
+    mobileBadges: 'max-w-20 gap-0.5',
+    title: 'text-sm',
+    meta: 'mt-1',
+    progress: 'mt-2 gap-2.5',
+    tiers: 'mt-1 gap-2.5 text-[11px]',
+    chevron: 'size-4.5',
+  },
+  standard: {
+    row: 'gap-4 px-4 py-4 sm:items-center sm:px-5',
+    artColumn: 'w-24 gap-1.5',
+    art: 'h-18 w-24',
+    mobileBadges: 'max-w-24 gap-1',
+    title: '',
+    meta: 'mt-1.5',
+    progress: 'mt-2.5 gap-3',
+    tiers: 'mt-1.5 gap-3 text-xs',
+    chevron: 'size-5',
+  },
+}
+const density = computed(() => densityStyles[profileGameDensity.value])
+const collapsedListHeight = computed(() => ({
+  dense: 280,
+  compact: 340,
+  standard: 400,
+})[profileGameDensity.value])
 
 // `page` is read inside the URL getter, so changing it re-fetches.
 const { data: res, pending } = await useApiFetchRaw<PlayedTrophySet[], PageMeta>(
@@ -53,10 +106,10 @@ function prefersReducedMotion() {
 
 function targetListHeight() {
   const el = listEl.value
-  if (!el) return collapsedListHeight
+  if (!el) return collapsedListHeight.value
   return expanded.value || !canCollapse.value
     ? el.scrollHeight
-    : Math.min(collapsedListHeight, el.scrollHeight)
+    : Math.min(collapsedListHeight.value, el.scrollHeight)
 }
 
 function syncListHeight() {
@@ -102,7 +155,7 @@ async function animateListHeight(isExpanded: boolean) {
 
   await nextTick()
 
-  const toHeight = isExpanded ? el.scrollHeight : Math.min(collapsedListHeight, el.scrollHeight)
+  const toHeight = isExpanded ? el.scrollHeight : Math.min(collapsedListHeight.value, el.scrollHeight)
 
   listAnimation.value = animate(el, {
     height: `${toHeight}px`,
@@ -123,7 +176,7 @@ watch(() => props.psnid, () => {
 
 watch(expanded, animateListHeight)
 
-watch([recent, canCollapse], async () => {
+watch([recent, canCollapse, profileGameDensity], async () => {
   await nextTick()
   syncListHeight()
 })
@@ -151,8 +204,8 @@ onBeforeUnmount(() => {
 
   <!-- Loading (initial only — on page change we keep the list visible) -->
   <div v-if="pending && !recent.length" class="divide-y divide-slate-100">
-    <div v-for="i in 5" :key="i" class="flex items-center gap-4 px-4 py-3.5 sm:px-5">
-      <div class="size-16 shrink-0 animate-pulse rounded-lg bg-slate-200" />
+    <div v-for="i in 5" :key="i" class="flex items-center" :class="density.row">
+      <div class="shrink-0 animate-pulse rounded-lg bg-slate-200" :class="density.art" />
       <div class="flex-1 space-y-2">
         <div class="h-4 w-1/2 animate-pulse rounded bg-slate-200" />
         <div class="h-3 w-1/3 animate-pulse rounded bg-slate-200" />
@@ -180,20 +233,21 @@ onBeforeUnmount(() => {
         v-for="g in recent"
         :key="g.id"
         :to="{ path: `/trophies/${g.trophy_set_id}`, query: { psnid } }"
-        class="group flex items-start gap-4 px-4 py-4 transition hover:bg-slate-50 sm:items-center sm:px-5"
+        class="group flex items-start transition hover:bg-slate-50"
+        :class="density.row"
       >
         <!-- Fixed-width slot keeps rows aligned; the image renders at its natural
              aspect (PS4 320×176 landscape, PS5 square) with a soft ring instead of
              a gray letterbox box around it, plus a loading skeleton. -->
-        <div class="flex w-24 shrink-0 flex-col items-center gap-1.5">
-          <div class="relative flex h-18 w-24 items-center justify-center">
+        <div class="flex shrink-0 flex-col items-center" :class="density.artColumn">
+          <div class="relative flex items-center justify-center" :class="density.art">
             <TrophySetImage
               :src="g.trophy_set.icon_url"
               :alt="trophySetName(g)"
               :platform="platformList(g.trophy_set.platform)"
             />
           </div>
-          <div class="flex max-w-24 flex-wrap justify-center gap-1 sm:hidden">
+          <div class="flex flex-wrap justify-center sm:hidden" :class="density.mobileBadges">
             <span
               v-for="platform in platformList(g.trophy_set.platform)"
               :key="platform"
@@ -214,10 +268,10 @@ onBeforeUnmount(() => {
 
         <div class="min-w-0 flex-1">
           <!-- Title -->
-          <h3 class="truncate font-semibold text-slate-900">{{ trophySetName(g) }}</h3>
+          <h3 class="truncate font-semibold text-slate-900" :class="density.title">{{ trophySetName(g) }}</h3>
 
           <!-- Platform + region + last-earned time -->
-          <div class="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1">
+          <div class="flex flex-wrap items-center gap-x-2 gap-y-1" :class="density.meta">
             <span
               v-for="platform in platformList(g.trophy_set.platform)"
               :key="platform"
@@ -240,7 +294,7 @@ onBeforeUnmount(() => {
           </div>
 
           <!-- Progress + per-tier earned counts -->
-          <div class="mt-2.5 flex items-center gap-3">
+          <div class="flex items-center" :class="density.progress">
             <div class="h-1.5 flex-1 overflow-hidden rounded-full bg-slate-100">
               <div
                 class="h-full rounded-full"
@@ -250,7 +304,7 @@ onBeforeUnmount(() => {
             </div>
             <span class="w-9 shrink-0 text-right text-xs font-semibold tabular-nums text-slate-600">{{ g.progress }}%</span>
           </div>
-          <div class="mt-1.5 flex items-center gap-3 text-xs text-slate-500">
+          <div class="flex items-center text-slate-500" :class="density.tiers">
             <span v-for="(t, i) in earnedTiers(g)" :key="i" class="inline-flex items-center gap-1 tabular-nums">
               <span class="size-2 rounded-full" :class="t.dot" />{{ t.count }}
             </span>
@@ -259,7 +313,8 @@ onBeforeUnmount(() => {
 
         <LucideIcon
           :icon="ChevronRight"
-          class="size-5 shrink-0 text-slate-300 transition group-hover:text-slate-400"
+          class="shrink-0 text-slate-300 transition group-hover:text-slate-400"
+          :class="density.chevron"
         />
       </NuxtLink>
     </div>
