@@ -17,7 +17,7 @@ const isNotFound = computed(() => props.error.statusCode === 404)
 const messageKey = computed(() => (isNotFound.value ? 'errors.notFound' : 'errors.generic'))
 
 useSeoMeta({
-  title: () => t(`${messageKey.value}.title`),
+  title: () => `${t(`${messageKey.value}.title`)} | PSRay`,
   robots: 'noindex, follow',
 })
 

@@ -675,37 +675,37 @@
   },
   "seo": {
     "home": {
-      "title": "PSRay — PSN 獎盃追蹤",
+      "title": "PSN 獎盃追蹤 | PSRay",
       "description": "追蹤 PSN 獎盃：查詢玩家資料，瀏覽帶獲取率與稀有度的獎盃組，查看點數與貢獻排行榜。"
     },
     "leaderboard": {
-      "title": "排行榜 · PSRay",
+      "title": "排行榜 | PSRay",
       "description": "PSN 獎盃點數、地區排名與社群貢獻排行榜。"
     },
     "profile": {
-      "title": "{psnid} · 個人資料 · PSRay",
-      "titleFallback": "個人資料 · PSRay",
+      "title": "{psnid} 的個人資料 | PSRay",
+      "titleFallback": "個人資料 | PSRay",
       "description": "{psnid} 的 PSN 獎盃戰績：已獲獎盃、里程碑與最近遊玩記錄。"
     },
     "trophy": {
-      "title": "{name} · 獎盃 · PSRay",
-      "titleFallback": "獎盃組 · PSRay",
+      "title": "{name} 的獎盃 | PSRay",
+      "titleFallback": "獎盃組 | PSRay",
       "description": "{name}（{platform}）的全部 {count} 個獎盃：獲取率、稀有度與攻略心得。"
     },
     "login": {
-      "title": "登入 · PSRay",
+      "title": "登入 | PSRay",
       "description": "登入你的 PSRay 帳號。"
     },
     "register": {
-      "title": "註冊 · PSRay",
+      "title": "註冊 | PSRay",
       "description": "使用 PSN 帳號註冊 PSRay。"
     },
     "sync": {
-      "title": "同步資料 · PSRay",
+      "title": "同步資料 | PSRay",
       "description": "將 PSN 獎盃資料同步到 PSRay。"
     },
     "settings": {
-      "title": "使用者設定 · PSRay"
+      "title": "使用者設定 | PSRay"
     }
   }
 }

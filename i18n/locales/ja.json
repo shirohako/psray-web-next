@@ -675,37 +675,37 @@
   },
   "seo": {
     "home": {
-      "title": "PSRay — PSN トロフィートラッカー",
+      "title": "PSN トロフィートラッカー | PSRay",
       "description": "PSN のトロフィー獲得状況を見やすく整理。プレイヤープロフィール、獲得率やレアリティ付きのトロフィーセット、ポイント・貢献度ランキングを確認できます。"
     },
     "leaderboard": {
-      "title": "ランキング · PSRay",
+      "title": "ランキング | PSRay",
       "description": "PSN のトロフィーポイント、地域別ランキング、コミュニティへの貢献度ランキング。"
     },
     "profile": {
-      "title": "{psnid} のプロフィール · PSRay",
-      "titleFallback": "プロフィール · PSRay",
+      "title": "{psnid} のプロフィール | PSRay",
+      "titleFallback": "プロフィール | PSRay",
       "description": "{psnid} の PSN トロフィー獲得状況 — 獲得トロフィー、マイルストーン、最近のプレイ記録。"
     },
     "trophy": {
-      "title": "{name} のトロフィー · PSRay",
-      "titleFallback": "トロフィーセット · PSRay",
+      "title": "{name} のトロフィー | PSRay",
+      "titleFallback": "トロフィーセット | PSRay",
       "description": "{name}（{platform}）の全 {count} 個のトロフィー一覧 — 獲得率、レアリティ、攻略のヒント。"
     },
     "login": {
-      "title": "ログイン · PSRay",
+      "title": "ログイン | PSRay",
       "description": "PSRay アカウントにログインします。"
     },
     "register": {
-      "title": "新規登録 · PSRay",
+      "title": "新規登録 | PSRay",
       "description": "PSN アカウントで PSRay に登録します。"
     },
     "sync": {
-      "title": "プロフィールを同期 · PSRay",
+      "title": "プロフィールを同期 | PSRay",
       "description": "PSN のトロフィーデータを PSRay に同期します。"
     },
     "settings": {
-      "title": "アカウント設定 · PSRay"
+      "title": "アカウント設定 | PSRay"
     }
   }
 }

@@ -675,37 +675,37 @@
   },
   "seo": {
     "home": {
-      "title": "PSRay — PSN trophy tracker",
+      "title": "PSN trophy tracker | PSRay",
       "description": "Explore PSN trophy progress with player profiles, trophy sets with earn rates and rarity, and leaderboards for points and community contributions."
     },
     "leaderboard": {
-      "title": "Leaderboard · PSRay",
+      "title": "Leaderboard | PSRay",
       "description": "PSN trophy points, regional rankings, and community contribution boards."
     },
     "profile": {
-      "title": "{psnid} · Profile · PSRay",
-      "titleFallback": "Profile · PSRay",
+      "title": "{psnid} Profile | PSRay",
+      "titleFallback": "Profile | PSRay",
       "description": "PSN trophy stats for {psnid} — earned trophies, milestones, and recent play history."
     },
     "trophy": {
-      "title": "{name} Trophies · PSRay",
-      "titleFallback": "Trophy set · PSRay",
+      "title": "{name} Trophies | PSRay",
+      "titleFallback": "Trophy set | PSRay",
       "description": "All {count} trophies for {name} ({platform}) — earn rates, rarity, and tips."
     },
     "login": {
-      "title": "Sign in · PSRay",
+      "title": "Sign in | PSRay",
       "description": "Sign in to your PSRay account."
     },
     "register": {
-      "title": "Sign up · PSRay",
+      "title": "Sign up | PSRay",
       "description": "Create a PSRay account with your PSN account."
     },
     "sync": {
-      "title": "Sync profile · PSRay",
+      "title": "Sync profile | PSRay",
       "description": "Sync your PSN trophy data into PSRay."
     },
     "settings": {
-      "title": "Settings · PSRay"
+      "title": "Settings | PSRay"
     }
   }
 }

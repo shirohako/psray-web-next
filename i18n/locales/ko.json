@@ -675,37 +675,37 @@
   },
   "seo": {
     "home": {
-      "title": "PSRay — PSN 트로피 트래커",
+      "title": "PSN 트로피 트래커 | PSRay",
       "description": "PSN 트로피 진행 상황을 보기 쉽게 정리합니다. 플레이어 프로필, 획득률과 희귀도가 표시된 트로피 세트, 포인트·기여 랭킹을 확인하세요."
     },
     "leaderboard": {
-      "title": "랭킹 · PSRay",
+      "title": "랭킹 | PSRay",
       "description": "PSN 트로피 포인트, 지역별 랭킹, 커뮤니티 기여 랭킹."
     },
     "profile": {
-      "title": "{psnid} · 프로필 · PSRay",
-      "titleFallback": "프로필 · PSRay",
+      "title": "{psnid} 프로필 | PSRay",
+      "titleFallback": "프로필 | PSRay",
       "description": "{psnid}의 PSN 트로피 기록 — 획득 트로피, 마일스톤, 최근 플레이 기록."
     },
     "trophy": {
-      "title": "{name} 트로피 · PSRay",
-      "titleFallback": "트로피 세트 · PSRay",
+      "title": "{name} 트로피 | PSRay",
+      "titleFallback": "트로피 세트 | PSRay",
       "description": "{name}({platform})의 트로피 {count}개 전체 — 획득률, 희귀도, 공략 팁."
     },
     "login": {
-      "title": "로그인 · PSRay",
+      "title": "로그인 | PSRay",
       "description": "PSRay 계정에 로그인합니다."
     },
     "register": {
-      "title": "회원가입 · PSRay",
+      "title": "회원가입 | PSRay",
       "description": "PSN 계정으로 PSRay에 가입합니다."
     },
     "sync": {
-      "title": "프로필 동기화 · PSRay",
+      "title": "프로필 동기화 | PSRay",
       "description": "PSN 트로피 데이터를 PSRay에 동기화합니다."
     },
     "settings": {
-      "title": "계정 설정 · PSRay"
+      "title": "계정 설정 | PSRay"
     }
   }
 }
