@@ -8,6 +8,7 @@ import {
   isUiLocale,
   type UiLocale,
 } from '#shared/locales'
+import { resolveSeoLocalePolicy } from '~/utils/seoLocale'
 
 /**
  * Per-page SEO head: title, description, Open Graph, Twitter card, canonical,
@@ -72,6 +73,12 @@ export interface SeoInput {
   /** Query params to preserve in the canonical besides `lang`. Default: none. */
   keepQuery?: string[]
   noindex?: Source<boolean>
+  /**
+   * Marks a page as having one fixed UI-language edition. Its canonical URL
+   * never carries `?lang=`, no translated hreflang alternates are emitted,
+   * and Open Graph uses this locale regardless of the surrounding UI chrome.
+   */
+  staticLocale?: UiLocale
 }
 
 export function useSeo(input: SeoInput) {
@@ -100,16 +107,25 @@ export function useSeo(input: SeoInput) {
   const activeLocale = computed<UiLocale>(() =>
     isUiLocale(locale.value) ? locale.value : DEFAULT_LOCALE)
 
-  const currentLang = computed(() =>
-    canonicalLang(read(input.canonicalLang)) || activeLocale.value)
+  const localePolicy = computed(() => resolveSeoLocalePolicy(
+    input.staticLocale,
+    read(input.canonicalLang),
+    activeLocale.value,
+  ))
+
+  const currentLang = computed(() => localePolicy.value.canonicalLang)
 
   const canonical = computed(() =>
-    urlFor(currentLang.value, canonicalContentLang(read(input.contentLang))))
+    input.staticLocale
+      ? urlFor(DEFAULT_LOCALE)
+      : urlFor(currentLang.value, canonicalContentLang(read(input.contentLang))))
 
   const alternates = computed(() => {
+    if (input.staticLocale) return []
+
     const links = [
       { rel: 'alternate' as const, hreflang: 'x-default', href: urlFor(DEFAULT_LOCALE) },
-      ...UI_LOCALES.map(code => ({
+      ...localePolicy.value.uiAlternates.map(code => ({
         rel: 'alternate' as const,
         hreflang: code,
         href: urlFor(code),
@@ -144,9 +160,10 @@ export function useSeo(input: SeoInput) {
     ogDescription: () => read(input.description),
     ogImage: () => read(input.image),
     ogUrl: () => canonical.value,
-    ogLocale: () => OG_LOCALE[activeLocale.value],
-    ogLocaleAlternate: () =>
-      UI_LOCALES.filter(code => code !== activeLocale.value).map(code => OG_LOCALE[code]),
+    ogLocale: () => localePolicy.value.ogLocale,
+    ogLocaleAlternate: () => input.staticLocale
+      ? undefined
+      : UI_LOCALES.filter(code => code !== activeLocale.value).map(code => OG_LOCALE[code]),
     twitterCard: () => (read(input.image) ? 'summary_large_image' : 'summary'),
     twitterTitle: () => read(input.title)!,
     twitterDescription: () => read(input.description),

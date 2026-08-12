@@ -64,6 +64,7 @@
     }
   },
   "nav": {
+    "about": "PSRay について",
     "home": "ホーム",
     "leaderboard": "ランキング",
     "login": "ログイン",
@@ -89,7 +90,7 @@
       "heading": "プロフィールを検索",
       "hint": "PSRay を初めてご利用の方は、まずデータを同期してください。",
       "view": "表示",
-      "sync": "同期",
+      "sync": "PSNから読み込む",
       "placeholder": "PSN ID を入力"
     },
     "hero": {

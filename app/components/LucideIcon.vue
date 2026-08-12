@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { IconNode } from 'lucide'
 
-const props = defineProps<{ icon: IconNode }>()
+const props = defineProps<{ icon?: IconNode }>()
 
 function escapeAttribute(value: unknown) {
   return String(value)
@@ -16,7 +16,7 @@ function escapeAttribute(value: unknown) {
  * those definitions as SVG children avoids the Fragment hydration markers that
  * a template-level `v-for` would add around every icon.
  */
-const paths = computed(() => props.icon.map(([tag, attrs]) => {
+const paths = computed(() => (props.icon ?? []).map(([tag, attrs]) => {
   const attributes = Object.entries(attrs)
     .filter(([name]) => name !== 'key')
     .map(([name, value]) => `${name}="${escapeAttribute(value)}"`)

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { House, Menu, Gamepad2, Trophy, LogOut, LogIn, UserPlus, User, RefreshCw, Settings, Search, type IconNode } from 'lucide'
+import { House, Menu, Gamepad2, Trophy, LogOut, LogIn, UserPlus, User, RefreshCw, Settings, Search, Compass, type IconNode } from 'lucide'
 
 const route = useRoute()
 const appConfig = useAppConfig()
@@ -45,6 +45,7 @@ type MenuItem = {
 const menu: MenuItem[] = [
   { labelKey: 'nav.home', to: '/', icon: House },
   { labelKey: 'nav.leaderboard', to: '/leaderboard', icon: Trophy },
+  { labelKey: 'nav.about', to: '/about', icon: Compass },
 ]
 
 function isActive(to: string) {
@@ -277,6 +278,11 @@ async function onLogout() {
           </li>
         </ul>
       </nav>
+
+      <div class="border-t border-slate-100 px-6 py-4" :class="collapsed ? 'lg:hidden' : ''">
+        <p class="text-[11px] text-slate-400">© 2026 PSRay</p>
+      </div>
+
     </aside>
 
     <!-- Main content: no offset on mobile (drawer overlays), pushed on desktop -->
