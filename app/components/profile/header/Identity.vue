@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { BadgeCheck, Eye, RefreshCw } from 'lucide'
+import { BadgeCheck, RefreshCw } from 'lucide'
 import type { Profile } from '~/services/profile'
 
 const props = defineProps<{ profile: Profile }>()
@@ -41,9 +41,6 @@ const isRegistered = computed(() => props.profile.registered_at != null)
       <div class="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-500">
         <span class="inline-flex items-center gap-1">
           <RegionFlag :country="profile.country" /> {{ regionName(profile.country) }}
-        </span>
-        <span class="inline-flex items-center gap-1">
-          <LucideIcon :icon="Eye" class="size-3.5 text-slate-400" /> {{ $t('profile.identity.views', { count: fmt(profile.page_view_count) }) }}
         </span>
         <span class="inline-flex items-center gap-1">
           <LucideIcon :icon="RefreshCw" class="size-3.5 text-slate-400" /> {{ $t('common.updatedAt', { time: fmtDateTime(profile.updated_at) }) }}

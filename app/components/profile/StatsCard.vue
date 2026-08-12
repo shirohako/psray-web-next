@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { CheckCircle2, Layers3, MessageSquare } from 'lucide'
+import { CheckCircle2, Eye, Layers3, MessageSquare } from 'lucide'
 import type { Profile } from '~/services/profile'
 
 const props = defineProps<{ profile: Profile }>()
@@ -32,8 +32,8 @@ const total = computed(() => sumTrophies(props.profile))
       </div>
     </dl>
 
-    <div class="mt-4 border-t border-slate-100 pt-4">
-      <div class="flex items-center justify-between gap-3 px-3 py-2.5">
+    <div class="mt-3 border-t border-slate-100">
+      <div class="flex items-center justify-between gap-3 px-1 py-2">
         <div class="flex min-w-0 items-center gap-2.5">
           <span class="grid size-7 shrink-0 place-items-center rounded-md bg-white text-sky-500 shadow-sm ring-1 ring-slate-200/70">
             <LucideIcon :icon="MessageSquare" class="size-3.5" />
@@ -41,6 +41,15 @@ const total = computed(() => sumTrophies(props.profile))
           <span class="truncate text-xs font-medium text-slate-500">{{ $t('profile.stats.comments') }}</span>
         </div>
         <span class="shrink-0 text-base font-bold tabular-nums text-slate-900">{{ fmt(profile.tip_count) }}</span>
+      </div>
+      <div class="flex items-center justify-between gap-3 border-t border-slate-100 px-1 py-2">
+        <div class="flex min-w-0 items-center gap-2.5">
+          <span class="grid size-7 shrink-0 place-items-center rounded-md bg-white text-violet-500 shadow-sm ring-1 ring-slate-200/70">
+            <LucideIcon :icon="Eye" class="size-3.5" />
+          </span>
+          <span class="truncate text-xs font-medium text-slate-500">{{ $t('profile.stats.views') }}</span>
+        </div>
+        <span class="shrink-0 text-base font-bold tabular-nums text-slate-900">{{ fmt(profile.page_view_count) }}</span>
       </div>
     </div>
   </div>

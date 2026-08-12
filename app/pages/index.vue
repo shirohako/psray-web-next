@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { RefreshCw, Search } from 'lucide'
+import { RefreshCw, Search, UserRound } from 'lucide'
 import { DEFAULT_LOCALE, HTML_LANG, isUiLocale } from '#shared/locales'
 
 const { t, locale } = useI18n()
@@ -77,7 +77,7 @@ useHead(() => ({
             :disabled="!psnid.trim()"
             class="inline-flex min-w-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-lg bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white shadow-sm shadow-slate-900/30 transition hover:bg-slate-800 active:bg-slate-950 disabled:opacity-40 disabled:hover:bg-slate-900 sm:shrink-0"
           >
-            <LucideIcon :icon="Search" class="size-4 shrink-0" />
+            <LucideIcon :icon="UserRound" class="size-4 shrink-0" />
             {{ $t('home.lookup.view') }}
           </button>
           <button

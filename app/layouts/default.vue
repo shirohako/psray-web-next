@@ -280,7 +280,7 @@ async function onLogout() {
       </nav>
 
       <div class="border-t border-slate-100 px-6 py-4" :class="collapsed ? 'lg:hidden' : ''">
-        <p class="text-[11px] text-slate-400">© 2026 PSRay</p>
+        <p class="text-center text-[11px] text-slate-400">© 2026 PSRay</p>
       </div>
 
     </aside>

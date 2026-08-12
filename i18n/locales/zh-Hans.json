@@ -89,33 +89,13 @@
     "lookup": {
       "heading": "查看个人资料",
       "hint": "输入 PSN ID 进入对应的个人资料页面。",
-      "view": "查看",
+      "view": "前往我的页面",
       "sync": "同步",
       "placeholder": "输入 PSN ID"
     },
     "hero": {
       "title": "你的 PSN 游戏助手",
-      "lead": "PSRay 汇总 PlayStation 的奖杯记录。输入 PSN ID，就能查看已获得的奖杯，创建独一无二的 PSN 个人资料页面，并回顾最近的游玩记录。"
-    },
-    "features": {
-      "title": "功能一览",
-      "lead": "围绕奖杯收集的完整功能。",
-      "profile": {
-        "title": "玩家资料",
-        "description": "奖杯数量、等级、全球与地区排名、最近一年的活动日历、白金里程碑，以及按获得顺序排列的奖杯记录。"
-      },
-      "trophies": {
-        "title": "奖杯组详情",
-        "description": "按本篇与 DLC 分组的完整列表，附 PSN 官方与 PSRay 两种获取率、稀有度、隐藏奖杯开关、玩家攻略心得，以及最短耗时与最先完成的排行。"
-      },
-      "leaderboard": {
-        "title": "排行榜",
-        "description": "奖杯点数的全站总排名与地区排名，以及以攻略心得和贡献支撑社区的玩家排行。"
-      },
-      "tips": {
-        "title": "用心得分享经验",
-        "description": "每个奖杯下都能读到其他玩家留下的攻略心得。含剧透的内容默认折叠，有用的会被点赞，写得多又受认可的玩家会出现在「乐于助人排名」里。"
-      }
+      "lead": "PSRay 以清晰易读的方式整理每位玩家的 PlayStation 奖杯进度。只需输入 PSN ID，即可创建专属的 PSN 游戏资料页，一目了然地查看已获得的奖杯和最近玩过的游戏。"
     }
   },
   "auth": {
@@ -462,6 +442,7 @@
       "lowCompletion": "低完成率",
       "favorites": "收藏游戏",
       "comments": "留言",
+      "views": "浏览次数",
       "globalRank": "全球排名",
       "regionRank": "地区排名",
       "points": "奖杯点数",
