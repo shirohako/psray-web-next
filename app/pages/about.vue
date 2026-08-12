@@ -73,6 +73,15 @@ const faqNumberClasses = [
   'bg-rose-100 text-rose-700',
 ]
 
+const openFaqs = ref(new Set<number>())
+
+function toggleFaq(index: number) {
+  const next = new Set(openFaqs.value)
+  if (next.has(index)) next.delete(index)
+  else next.add(index)
+  openFaqs.value = next
+}
+
 function mailto(subject: string) {
   return `mailto:ame@abyss.moe?subject=${encodeURIComponent(`[PSRay] ${subject}`)}`
 }
@@ -86,6 +95,7 @@ useSeo({
 
 <template>
   <StaticPageLayout
+    class="px-1 py-2 sm:px-0 sm:py-0"
     eyebrow="About PSRay"
     title="遊ぶ。集める。振り返る。"
     lead="PSRay は、PlayStation のトロフィー情報を探し、整理し、プレイヤー同士で攻略を共有するためのコミュニティサービスです。このページでは、掲載データの扱いと運営方針をご案内します。"
@@ -93,18 +103,16 @@ useSeo({
     :items="toc"
   >
     <section id="about" class="scroll-mt-24 rounded-2xl border border-violet-200 bg-gradient-to-br from-white to-violet-50/70 p-5 shadow-sm sm:p-7">
-      <div class="flex items-start gap-4">
+      <div class="flex items-center gap-3">
         <span class="grid size-12 shrink-0 place-items-center rounded-xl border border-violet-200 bg-white p-1.5 shadow-sm shadow-violet-900/10">
           <img src="/logo.png" alt="" class="size-full object-contain" />
         </span>
-        <div>
-          <h2 class="text-xl font-bold tracking-tight text-slate-950">PSRay について</h2>
-          <div class="mt-3 space-y-3 text-sm leading-7 text-slate-600">
-            <p>プロフィール、獲得トロフィー、最近遊んだゲーム、ランキングなどを見やすくまとめ、トロフィーごとの攻略情報を共有できる場所を目指しています。</p>
-            <p>PSRay は、Claude や GPT などの AI を活用して制作されています。</p>
-            <p>PSRay は個人による独立したサービスです。Sony Interactive Entertainment Inc.、PlayStation、およびその関連会社との提携・承認・公式な関係はありません。PlayStation および関連する名称・商標は、それぞれの権利者に帰属します。</p>
-          </div>
-        </div>
+        <h2 class="text-xl font-bold tracking-tight text-slate-950">PSRay について</h2>
+      </div>
+      <div class="mt-4 space-y-3 text-sm leading-7 text-slate-600">
+        <p>プロフィール、獲得トロフィー、最近遊んだゲーム、ランキングなどを見やすくまとめ、トロフィーごとの攻略情報を共有できる場所を目指しています。</p>
+        <p>PSRay は、Claude や GPT などの AI を活用して制作されています。</p>
+        <p>PSRay は個人による独立したサービスです。Sony Interactive Entertainment Inc.、PlayStation、およびその関連会社との提携・承認・公式な関係はありません。PlayStation および関連する名称・商標は、それぞれの権利者に帰属します。</p>
       </div>
     </section>
 
@@ -248,21 +256,36 @@ useSeo({
         </div>
       </div>
       <div class="overflow-hidden rounded-2xl border border-sky-200 bg-white shadow-sm shadow-sky-900/5">
-        <details v-for="(faq, index) in faqs" :key="faq.question" class="group border-b border-slate-100 last:border-b-0">
-          <summary class="flex list-none items-center justify-between gap-4 bg-white px-5 py-4 text-sm font-semibold text-slate-800 marker:hidden transition-colors duration-200 hover:bg-slate-50 group-open:bg-sky-50/60 sm:px-6">
+        <div v-for="(faq, index) in faqs" :key="faq.question" class="border-b border-slate-100 last:border-b-0">
+          <button
+            type="button"
+            class="flex w-full items-center justify-between gap-4 px-5 py-4 text-left text-sm font-semibold text-slate-800 transition-colors duration-200 hover:bg-slate-50 sm:px-6"
+            :class="openFaqs.has(index) ? 'bg-sky-50/60' : 'bg-white'"
+            :aria-expanded="openFaqs.has(index)"
+            :aria-controls="`faq-answer-${index}`"
+            @click="toggleFaq(index)"
+          >
             <span class="flex items-center gap-3">
               <span
-                class="grid size-8 shrink-0 place-items-center rounded-lg text-[11px] font-bold tabular-nums transition-transform duration-200 group-open:scale-105"
-                :class="faqNumberClasses[index % faqNumberClasses.length]"
+                class="faq-motion grid size-8 shrink-0 place-items-center rounded-lg text-[11px] font-bold tabular-nums transition-transform duration-300"
+                :class="[faqNumberClasses[index % faqNumberClasses.length], openFaqs.has(index) ? 'scale-105' : '']"
               >
                 {{ String(index + 1).padStart(2, '0') }}
               </span>
               <span>{{ faq.question }}</span>
             </span>
-            <span class="text-lg font-light text-slate-400 transition group-open:rotate-45">+</span>
-          </summary>
-          <p class="border-t border-slate-100 bg-slate-50/70 pb-5 pl-16 pr-5 pt-4 text-sm leading-7 text-slate-600 sm:pl-[4.75rem] sm:pr-6">{{ faq.answer }}</p>
-        </details>
+            <span class="faq-motion shrink-0 text-lg font-light text-slate-400 transition-transform duration-300" :class="openFaqs.has(index) ? 'rotate-45' : ''">+</span>
+          </button>
+          <div
+            :id="`faq-answer-${index}`"
+            class="faq-answer-grid grid transition-[grid-template-rows,opacity] duration-300 ease-out"
+            :class="openFaqs.has(index) ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'"
+          >
+            <div class="overflow-hidden">
+              <p class="border-t border-slate-100 bg-slate-50/70 pb-5 pl-16 pr-5 pt-4 text-sm leading-7 text-slate-600 sm:pl-[4.75rem] sm:pr-6">{{ faq.answer }}</p>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -296,3 +319,12 @@ useSeo({
     </section>
   </StaticPageLayout>
 </template>
+
+<style scoped>
+@media (prefers-reduced-motion: reduce) {
+  .faq-answer-grid,
+  .faq-motion {
+    transition: none;
+  }
+}
+</style>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { Trophy, Timer } from 'lucide'
+import { Trophy, Timer, History, Flag } from 'lucide'
+import type { IconNode } from 'lucide'
 import { useTrophies, type PlayerRanking, type PlayersMeta, type PlayerRankType } from '~/services/trophies'
 
 const props = withDefaults(defineProps<{
@@ -10,10 +11,10 @@ const props = withDefaults(defineProps<{
 }>(), { initialType: 'recent' })
 const emit = defineEmits<{ 'update:open': [v: boolean] }>()
 
-const tabs: { value: PlayerRankType; labelKey: string }[] = [
-  { value: 'recent', labelKey: 'trophy.players.recent' },
-  { value: 'progress', labelKey: 'trophy.players.progress' },
-  { value: 'speedrun', labelKey: 'trophy.players.speedrun' },
+const tabs: { value: PlayerRankType; labelKey: string; icon: IconNode }[] = [
+  { value: 'recent', labelKey: 'trophy.players.recent', icon: History },
+  { value: 'progress', labelKey: 'trophy.players.progress', icon: Flag },
+  { value: 'speedrun', labelKey: 'trophy.players.speedrun', icon: Timer },
 ]
 
 const type = ref<PlayerRankType>('recent')
@@ -83,17 +84,21 @@ function rankClass(rank: number) {
   >
     <!-- Sort tabs (sticky atop the scroll area) -->
     <div class="sticky top-0 z-10 border-b border-slate-100 bg-white/90 px-3 py-2.5 backdrop-blur sm:px-4">
-      <div class="flex gap-1">
+      <div class="grid grid-cols-2 gap-1.5 sm:grid-cols-3 sm:gap-1">
         <button
-          v-for="t in tabs"
+          v-for="(t, index) in tabs"
           :key="t.value"
           type="button"
-          class="rounded-md px-3 py-1.5 text-sm font-medium transition"
-          :class="type === t.value
-            ? 'bg-slate-900 text-white'
-            : 'bg-slate-100 text-slate-500 hover:bg-slate-200 hover:text-slate-900'"
+          class="flex min-h-9 items-center justify-center gap-1.5 rounded-md px-3 py-1.5 text-center text-sm font-medium transition"
+          :class="[
+            index === 0 ? 'col-span-2 sm:col-span-1' : '',
+            type === t.value
+              ? 'bg-slate-900 text-white'
+              : 'bg-slate-100 text-slate-500 hover:bg-slate-200 hover:text-slate-900',
+          ]"
           @click="selectType(t.value)"
         >
+          <LucideIcon :icon="t.icon" class="size-3.5 shrink-0" />
           {{ $t(t.labelKey) }}
         </button>
       </div>

@@ -106,15 +106,19 @@ async function evaluate(choice: 1 | -1) {
       <RichContent v-else class="mt-1.5" :content="tip.content" :format="tip.content_type" />
 
       <!-- Meta + helpfulness totals -->
-      <div class="mt-2.5 flex items-center gap-x-2 gap-y-1 text-xs text-slate-400">
-        <span class="tabular-nums">{{ fmtDateTime(tip.updated_at) }}</span>
-        <span v-if="edited" class="font-medium text-slate-500">{{ $t('trophy.tips.edited') }}</span>
-        <span class="text-slate-300">·</span>
-        <span>{{ langLabel(tip.language) }}</span>
-        <span v-if="tip.missable === true" class="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2 py-0.5 font-semibold text-amber-700">
-          <LucideIcon :icon="AlertTriangle" class="size-3" />
-          {{ $t('trophy.tips.missable') }}
-        </span>
+      <div class="mt-2.5 flex flex-col items-start gap-1.5 text-xs text-slate-400 sm:flex-row sm:items-center sm:gap-2">
+        <div class="flex flex-wrap items-center gap-1.5">
+          <time :datetime="tip.updated_at" class="whitespace-nowrap tabular-nums">{{ fmtDateTime(tip.updated_at) }}</time>
+          <span v-if="edited" class="whitespace-nowrap rounded-md bg-slate-100 px-1.5 py-0.5 font-medium text-slate-500">{{ $t('trophy.tips.edited') }}</span>
+        </div>
+        <span class="hidden text-slate-300 sm:inline">·</span>
+        <div class="flex flex-wrap items-center gap-1.5">
+          <span class="whitespace-nowrap rounded-md bg-sky-50 px-1.5 py-0.5 font-medium text-sky-700">{{ langLabel(tip.language) }}</span>
+          <span v-if="tip.missable === true" class="inline-flex items-center gap-1 whitespace-nowrap rounded-full bg-amber-50 px-2 py-0.5 font-semibold text-amber-700">
+            <LucideIcon :icon="AlertTriangle" class="size-3 shrink-0" />
+            {{ $t('trophy.tips.missable') }}
+          </span>
+        </div>
       </div>
 
       <div class="mt-2.5 flex flex-wrap items-center gap-1.5">

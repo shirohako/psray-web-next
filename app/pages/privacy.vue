@@ -21,6 +21,7 @@ useSeo({
 
 <template>
   <StaticPageLayout
+    class="px-1 py-2 sm:px-0 sm:py-0"
     eyebrow="Privacy Policy"
     title="プライバシーポリシー"
     lead="PSRay運営は、サービスの提供に必要な情報を適切に取り扱い、何を取得し、なぜ利用するのかを分かりやすくお伝えするよう努めます。"

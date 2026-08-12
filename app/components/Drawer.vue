@@ -24,10 +24,9 @@ const props = withDefaults(defineProps<{
 const emit = defineEmits<{ 'update:open': [v: boolean] }>()
 
 const close = () => emit('update:open', false)
-const rendered = ref(props.open)
 
 const hiddenClass = computed(() =>
-  props.side === 'left' ? '-translate-x-full' : 'translate-x-full',
+  `${props.side === 'left' ? '-translate-x-full' : 'translate-x-full'} opacity-0`,
 )
 
 function onKey(e: KeyboardEvent) {
@@ -35,16 +34,11 @@ function onKey(e: KeyboardEvent) {
 }
 
 watch(() => props.open, (v) => {
-  if (v) rendered.value = true
   if (!import.meta.client) return
   document.documentElement.style.overflow = v ? 'hidden' : ''
   if (v) window.addEventListener('keydown', onKey)
   else window.removeEventListener('keydown', onKey)
-})
-
-function afterLeave() {
-  if (!props.open) rendered.value = false
-}
+}, { immediate: true })
 
 onUnmounted(() => {
   if (!import.meta.client) return
@@ -55,28 +49,28 @@ onUnmounted(() => {
 
 <template>
   <ClientOnly>
-    <Teleport v-if="rendered" to="body">
+    <Teleport to="body">
       <Transition
-        enter-active-class="transition-opacity duration-300 ease-out"
+        enter-active-class="transition-opacity duration-300 ease-out motion-reduce:transition-none"
         enter-from-class="opacity-0"
-        leave-active-class="transition-opacity duration-200 ease-in"
+        leave-active-class="transition-opacity duration-300 ease-in motion-reduce:transition-none"
         leave-to-class="opacity-0"
       >
         <div v-if="open" class="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm" @click="close" />
       </Transition>
 
       <Transition
-        enter-active-class="transition-transform duration-300 ease-out"
+        enter-active-class="transition-[transform,opacity] duration-300 ease-out motion-reduce:transition-none"
         :enter-from-class="hiddenClass"
-        leave-active-class="transition-transform duration-200 ease-in"
+        enter-to-class="translate-x-0 opacity-100"
+        leave-active-class="transition-[transform,opacity] duration-300 ease-in motion-reduce:transition-none"
         :leave-to-class="hiddenClass"
-        @after-leave="afterLeave"
       >
         <div
           v-if="open"
           role="dialog"
           aria-modal="true"
-          class="fixed inset-y-0 z-50 flex w-full max-w-sm flex-col bg-white shadow-2xl ring-1 ring-slate-900/5"
+          class="fixed inset-y-0 z-50 flex w-full max-w-sm translate-x-0 flex-col bg-white opacity-100 shadow-2xl ring-1 ring-slate-900/5"
           :class="side === 'left' ? 'left-0' : 'right-0'"
         >
           <!-- Header -->

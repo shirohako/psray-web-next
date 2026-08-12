@@ -81,7 +81,7 @@ function save() {
 </script>
 
 <template>
-  <Drawer v-model:open="open" side="left" :title="$t('settings.prefs.title')">
+  <Drawer v-model:open="open" side="right" :title="$t('settings.prefs.title')">
     <div class="space-y-6 p-5">
       <!-- Trophy language preference -->
       <section>

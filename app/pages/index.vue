@@ -71,22 +71,22 @@ useHead(() => ({
             class="w-full rounded-lg border border-slate-200 bg-white py-2.5 pl-9 pr-3 text-sm text-slate-900 transition placeholder:text-slate-400 focus:border-slate-400 focus:outline-none"
           />
         </div>
-        <div class="grid grid-cols-2 gap-2 sm:flex sm:shrink-0">
+        <div class="grid grid-cols-1 gap-2 sm:flex sm:shrink-0">
           <button
             type="submit"
             :disabled="!psnid.trim()"
-            class="inline-flex min-w-0 items-center justify-center gap-1.5 rounded-lg bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white shadow-sm shadow-slate-900/30 transition hover:bg-slate-800 active:bg-slate-950 disabled:opacity-40 disabled:hover:bg-slate-900 sm:shrink-0"
+            class="inline-flex min-w-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-lg bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white shadow-sm shadow-slate-900/30 transition hover:bg-slate-800 active:bg-slate-950 disabled:opacity-40 disabled:hover:bg-slate-900 sm:shrink-0"
           >
-            <LucideIcon :icon="Search" class="size-4" />
+            <LucideIcon :icon="Search" class="size-4 shrink-0" />
             {{ $t('home.lookup.view') }}
           </button>
           <button
             type="button"
             :disabled="!psnid.trim()"
-            class="inline-flex min-w-0 items-center justify-center gap-1.5 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 hover:text-slate-900 disabled:opacity-40 disabled:hover:bg-white sm:shrink-0"
+            class="inline-flex min-w-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 hover:text-slate-900 disabled:opacity-40 disabled:hover:bg-white sm:shrink-0"
             @click="goToSync"
           >
-            <LucideIcon :icon="RefreshCw" class="size-4" />
+            <LucideIcon :icon="RefreshCw" class="size-4 shrink-0" />
             {{ $t('home.lookup.sync') }}
           </button>
         </div>

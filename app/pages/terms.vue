@@ -21,6 +21,7 @@ useSeo({
 
 <template>
   <StaticPageLayout
+    class="px-1 py-2 sm:px-0 sm:py-0"
     eyebrow="Terms of Service"
     title="利用規約"
     lead="この利用規約は、PSRay が提供するウェブサイトおよび関連機能をご利用いただく際の条件を定めるものです。ご利用前に内容をご確認ください。"
