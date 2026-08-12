@@ -102,7 +102,7 @@ useSeo({
     :updated-at="updatedAt"
     :items="toc"
   >
-    <section id="about" class="scroll-mt-24 rounded-2xl border border-violet-200 bg-gradient-to-br from-white to-violet-50/70 p-5 shadow-sm sm:p-7">
+    <section id="about" class="scroll-mt-24 rounded-2xl border border-violet-200 bg-linear-to-br from-white to-violet-50/70 p-5 shadow-sm sm:p-7">
       <div class="flex items-center gap-3">
         <span class="grid size-12 shrink-0 place-items-center rounded-xl border border-violet-200 bg-white p-1.5 shadow-sm shadow-violet-900/10">
           <img src="/logo.png" alt="" class="size-full object-contain" />
@@ -164,7 +164,7 @@ useSeo({
       </div>
     </section>
 
-    <section id="removal" class="scroll-mt-24 rounded-2xl border border-emerald-200 bg-gradient-to-br from-white to-emerald-50/60 p-5 shadow-sm sm:p-7">
+    <section id="removal" class="scroll-mt-24 rounded-2xl border border-emerald-200 bg-linear-to-br from-white to-emerald-50/60 p-5 shadow-sm sm:p-7">
       <div class="flex items-center gap-3">
         <LucideIcon :icon="ShieldCheck" class="size-5 text-emerald-700" />
         <h2 class="text-xl font-bold tracking-tight text-slate-950">データの削除・非表示</h2>
@@ -282,14 +282,14 @@ useSeo({
             :class="openFaqs.has(index) ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'"
           >
             <div class="overflow-hidden">
-              <p class="border-t border-slate-100 bg-slate-50/70 pb-5 pl-16 pr-5 pt-4 text-sm leading-7 text-slate-600 sm:pl-[4.75rem] sm:pr-6">{{ faq.answer }}</p>
+              <p class="border-t border-slate-100 bg-slate-50/70 pb-5 pl-16 pr-5 pt-4 text-sm leading-7 text-slate-600 sm:pl-19 sm:pr-6">{{ faq.answer }}</p>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <section id="open-source" class="scroll-mt-24 rounded-2xl border border-indigo-200 bg-gradient-to-br from-white to-indigo-50/60 p-5 shadow-sm sm:p-7">
+    <section id="open-source" class="scroll-mt-24 rounded-2xl border border-indigo-200 bg-linear-to-br from-white to-indigo-50/60 p-5 shadow-sm sm:p-7">
       <div class="flex items-center gap-3">
         <LucideIcon :icon="BookOpen" class="size-5 text-indigo-700" />
         <div>
