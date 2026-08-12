@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ListOrdered, MessageSquare, RefreshCw, Search, Trophy, User, type IconNode } from 'lucide'
+import { RefreshCw, Search } from 'lucide'
 import { DEFAULT_LOCALE, HTML_LANG, isUiLocale } from '#shared/locales'
 
 const { t, locale } = useI18n()
@@ -16,19 +16,6 @@ function goToSync() {
   if (!id) return
   navigateTo(`/sync?psnid=${encodeURIComponent(id)}`)
 }
-
-/**
- * What the site actually does, in the order a new visitor meets it: look up a
- * player → open a trophy set → compare against everyone else → keep it fresh.
- * Rendered as real prose rather than icons alone, so the landing page has
- * something to rank for beyond its own name.
- */
-const features: { icon: IconNode; key: string }[] = [
-  { icon: User, key: 'profile' },
-  { icon: Trophy, key: 'trophies' },
-  { icon: ListOrdered, key: 'leaderboard' },
-  { icon: MessageSquare, key: 'tips' },
-]
 
 useSeo({
   title: () => t('seo.home.title'),
@@ -106,30 +93,6 @@ useHead(() => ({
       </form>
 
       <p class="mt-2.5 text-xs leading-relaxed text-slate-400">{{ $t('home.lookup.hint') }}</p>
-    </section>
-
-    <!-- What the site does -->
-    <section>
-      <h2 class="text-lg font-bold tracking-tight text-slate-900">{{ $t('home.features.title') }}</h2>
-      <p class="mt-1.5 text-sm text-slate-500">{{ $t('home.features.lead') }}</p>
-
-      <div class="mt-4 grid gap-4 sm:grid-cols-2">
-        <article
-          v-for="feature in features"
-          :key="feature.key"
-          class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm"
-        >
-          <span class="grid size-10 place-items-center rounded-lg bg-slate-900 text-white">
-            <LucideIcon :icon="feature.icon" class="size-5" stroke-width="1.75" />
-          </span>
-          <h3 class="mt-3.5 text-sm font-semibold text-slate-900">
-            {{ $t(`home.features.${feature.key}.title`) }}
-          </h3>
-          <p class="mt-1.5 text-sm leading-relaxed text-slate-500">
-            {{ $t(`home.features.${feature.key}.description`) }}
-          </p>
-        </article>
-      </div>
     </section>
   </div>
 </template>

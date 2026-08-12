@@ -11,7 +11,8 @@ useSeo({
 
 // All available boards (registry). Each owns its label, icon, filters, columns
 // and fetcher — see `useRankingBoards`.
-const boards = useRankingBoards()
+const hiddenBoardKeys = new Set(['tips', 'contribution'])
+const boards = useRankingBoards().filter(board => !hiddenBoardKeys.has(board.key))
 
 const activeKey = ref(boards[0]!.key)
 const board = computed(() => boards.find(b => b.key === activeKey.value) ?? boards[0]!)
