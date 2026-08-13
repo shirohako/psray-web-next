@@ -42,6 +42,7 @@ import { resolveSeoLocalePolicy } from '~/utils/seoLocale'
 
 /** A value, or a getter for one — so callers can hang SEO off pending async data. */
 type Source<T> = T | (() => T)
+type SeoImageType = 'image/jpeg' | 'image/gif' | 'image/png' | 'image/webp' | 'image/avif'
 
 const read = <T>(source: Source<T> | undefined): T | undefined =>
   typeof source === 'function' ? (source as () => T)() : source
@@ -59,7 +60,7 @@ export interface SeoInput {
   imageWidth?: Source<number | undefined>
   imageHeight?: Source<number | undefined>
   /** MIME type for the social preview image, such as `image/png`. */
-  imageType?: Source<string | undefined>
+  imageType?: Source<SeoImageType | undefined>
   /** `lang` value for the canonical URL. Defaults to the active UI locale. */
   canonicalLang?: Source<string>
   /**
