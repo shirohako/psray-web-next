@@ -53,6 +53,13 @@ export interface SeoInput {
   description?: Source<string>
   /** Absolute image URL for `og:image` / `twitter:image`. */
   image?: Source<string | undefined>
+  /** Accessible description for the social preview image. */
+  imageAlt?: Source<string | undefined>
+  /** Intrinsic social preview dimensions, when known. */
+  imageWidth?: Source<number | undefined>
+  imageHeight?: Source<number | undefined>
+  /** MIME type for the social preview image, such as `image/png`. */
+  imageType?: Source<string | undefined>
   /** `lang` value for the canonical URL. Defaults to the active UI locale. */
   canonicalLang?: Source<string>
   /**
@@ -159,15 +166,24 @@ export function useSeo(input: SeoInput) {
     ogTitle: () => read(input.title)!,
     ogDescription: () => read(input.description),
     ogImage: () => read(input.image),
+    ogImageAlt: () => read(input.imageAlt),
+    ogImageWidth: () => read(input.imageWidth),
+    ogImageHeight: () => read(input.imageHeight),
+    ogImageType: () => read(input.imageType),
     ogUrl: () => canonical.value,
     ogLocale: () => localePolicy.value.ogLocale,
     ogLocaleAlternate: () => input.staticLocale
       ? undefined
       : UI_LOCALES.filter(code => code !== activeLocale.value).map(code => OG_LOCALE[code]),
     twitterCard: () => (read(input.image) ? 'summary_large_image' : 'summary'),
+    twitterSite: '@shionari_',
+    twitterCreator: '@shionari_',
     twitterTitle: () => read(input.title)!,
     twitterDescription: () => read(input.description),
     twitterImage: () => read(input.image),
+    twitterImageAlt: () => read(input.imageAlt),
+    twitterImageWidth: () => read(input.imageWidth),
+    twitterImageHeight: () => read(input.imageHeight),
     // `follow` even when noindex: these pages still link on to indexable ones.
     robots: () => (read(input.noindex) ? 'noindex, follow' : undefined),
   })

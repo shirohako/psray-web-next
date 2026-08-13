@@ -4,6 +4,7 @@ import { DEFAULT_LOCALE, HTML_LANG, isUiLocale } from '#shared/locales'
 
 const { t, locale } = useI18n()
 const psnid = ref('')
+const siteUrl = useRuntimeConfig().public.siteUrl.replace(/\/+$/, '')
 
 function goToProfile() {
   const id = psnid.value.trim()
@@ -20,11 +21,15 @@ function goToSync() {
 useSeo({
   title: () => t('seo.home.title'),
   description: () => t('seo.home.description'),
+  image: () => `${siteUrl}/images/psray-share.png`,
+  imageAlt: () => `PSRay — ${t('home.hero.title')}`,
+  imageWidth: 1200,
+  imageHeight: 630,
+  imageType: 'image/png',
 })
 
 // Minimal, honest structured data: what this site is and what it's called.
 // No SearchAction — that promises a search-results URL we don't have yet.
-const siteUrl = useRuntimeConfig().public.siteUrl.replace(/\/+$/, '')
 useHead(() => ({
   script: [{
     type: 'application/ld+json',
