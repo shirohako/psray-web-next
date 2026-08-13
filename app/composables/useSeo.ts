@@ -47,8 +47,16 @@ type SeoImageType = 'image/jpeg' | 'image/gif' | 'image/png' | 'image/webp' | 'i
 const read = <T>(source: Source<T> | undefined): T | undefined =>
   typeof source === 'function' ? (source as () => T)() : source
 
+function withSiteTitle(title: string, siteNameFirst = false): string {
+  const pageTitle = title.replace(/\s*[|｜]\s*PSRay\s*$/i, '').trim()
+  if (pageTitle === 'PSRay') return pageTitle
+  return siteNameFirst ? `PSRay | ${pageTitle}` : `${pageTitle} | PSRay`
+}
+
 export interface SeoInput {
   title: Source<string>
+  /** Places the site name before the page title. Reserved for the homepage. */
+  siteNameFirst?: boolean
   /** Canonical pathname. Defaults to the current route path. */
   canonicalPath?: Source<string>
   description?: Source<string>
@@ -122,6 +130,7 @@ export function useSeo(input: SeoInput) {
   ))
 
   const currentLang = computed(() => localePolicy.value.canonicalLang)
+  const title = computed(() => withSiteTitle(read(input.title)!, input.siteNameFirst))
 
   const canonical = computed(() =>
     input.staticLocale
@@ -160,11 +169,11 @@ export function useSeo(input: SeoInput) {
   })
 
   useSeoMeta({
-    title: () => read(input.title)!,
+    title: () => title.value,
     description: () => read(input.description),
     ogType: 'website',
     ogSiteName: 'PSRay',
-    ogTitle: () => read(input.title)!,
+    ogTitle: () => title.value,
     ogDescription: () => read(input.description),
     ogImage: () => read(input.image),
     ogImageAlt: () => read(input.imageAlt),
@@ -179,7 +188,7 @@ export function useSeo(input: SeoInput) {
     twitterCard: () => (read(input.image) ? 'summary_large_image' : 'summary'),
     twitterSite: '@shionari_',
     twitterCreator: '@shionari_',
-    twitterTitle: () => read(input.title)!,
+    twitterTitle: () => title.value,
     twitterDescription: () => read(input.description),
     twitterImage: () => read(input.image),
     twitterImageAlt: () => read(input.imageAlt),

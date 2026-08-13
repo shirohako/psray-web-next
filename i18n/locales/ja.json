@@ -45,7 +45,7 @@
       "spoiler": { "title": "ネタバレ", "description": "複数段落のネタバレを折りたたんで隠します。", "defaultTitle": "ネタバレを表示" }
     },
     "help": {
-      "seoTitle": "Markdown の書き方ガイド | PSRay",
+      "seoTitle": "Markdown の書き方ガイド",
       "seoDescription": "PSRay のトロフィーコメントで使える Markdown と拡張ブロックを紹介します。",
       "title": "Markdown の書き方ガイド",
       "lead": "使い慣れた Markdown に加え、PSRay 独自の折りたたみ・コールアウト・手順・ネタバレブロックを使って、読みやすい攻略を書けます。",
@@ -656,37 +656,37 @@
   },
   "seo": {
     "home": {
-      "title": "PSN トロフィートラッカー | PSRay",
+      "title": "あなたの PSN アシスタント",
       "description": "PSRay は、PSN のトロフィー獲得状況を見やすくまとめるサービスです。自分のゲームプロフィールを作成し、獲得したトロフィーや最近遊んだゲームを確認できます。"
     },
     "leaderboard": {
-      "title": "ランキング | PSRay",
-      "description": "PSN のトロフィーポイント、地域別ランキング、コミュニティへの貢献度ランキング。"
+      "title": "ランキング",
+      "description": "PSN のトロフィーポイントをもとに、総合ランキングと国・地域別ランキングを確認できます。"
     },
     "profile": {
-      "title": "{psnid} のプロフィール | PSRay",
-      "titleFallback": "プロフィール | PSRay",
+      "title": "{psnid} のプロフィール",
+      "titleFallback": "プロフィール",
       "description": "{psnid} の PSN トロフィー獲得状況 — 獲得トロフィー、マイルストーン、最近のプレイ記録。"
     },
     "trophy": {
-      "title": "{name} のトロフィー | PSRay",
-      "titleFallback": "トロフィーセット | PSRay",
+      "title": "{name} のトロフィー",
+      "titleFallback": "トロフィーセット",
       "description": "{name}（{platform}）の全 {count} 個のトロフィー一覧 — 獲得率、レアリティ、攻略のヒント。"
     },
     "login": {
-      "title": "ログイン | PSRay",
+      "title": "ログイン",
       "description": "PSRay アカウントにログインします。"
     },
     "register": {
-      "title": "新規登録 | PSRay",
+      "title": "新規登録",
       "description": "PSN アカウントで PSRay に登録します。"
     },
     "sync": {
-      "title": "プロフィールを同期 | PSRay",
+      "title": "プロフィールを同期",
       "description": "PSN のトロフィーデータを PSRay に同期します。"
     },
     "settings": {
-      "title": "アカウント設定 | PSRay"
+      "title": "アカウント設定"
     }
   }
 }

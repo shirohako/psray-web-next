@@ -13,7 +13,7 @@ const toc = [
 ]
 
 useSeo({
-  title: 'プライバシーポリシー | PSRay',
+  title: 'プライバシーポリシー',
   description: 'PSRay における個人データ、PSN 公開情報、Cookie、ログ、投稿内容の取扱いと、アクセス・訂正・削除の申請方法をご案内します。',
   staticLocale: 'ja',
 })

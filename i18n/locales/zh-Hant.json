@@ -45,7 +45,7 @@
       "spoiler": { "title": "劇透區域", "description": "摺疊隱藏包含多個段落或清單的劇透內容。", "defaultTitle": "點擊顯示劇透" }
     },
     "help": {
-      "seoTitle": "Markdown 寫作說明 | PSRay",
+      "seoTitle": "Markdown 寫作說明",
       "seoDescription": "瞭解 PSRay 獎盃留言支援的 Markdown 與進階內容區塊。",
       "title": "Markdown 寫作說明",
       "lead": "使用熟悉的 Markdown，以及 PSRay 的摺疊、提示、步驟和劇透內容區塊，寫出清楚美觀的獎盃攻略。",
@@ -656,37 +656,37 @@
   },
   "seo": {
     "home": {
-      "title": "PSN 獎盃追蹤 | PSRay",
+      "title": "你的 PSN 助手",
       "description": "PSRay 清晰整理你的 PSN 獎盃進度。建立專屬遊戲資料頁，一目了然地查看已獲得的獎盃和最近玩過的遊戲。"
     },
     "leaderboard": {
-      "title": "排行榜 | PSRay",
-      "description": "PSN 獎盃點數、地區排名與社群貢獻排行榜。"
+      "title": "排行榜",
+      "description": "根據 PSN 獎盃點數查看全球總榜以及國家和地區排行榜。"
     },
     "profile": {
-      "title": "{psnid} 的個人資料 | PSRay",
-      "titleFallback": "個人資料 | PSRay",
+      "title": "{psnid} 的個人資料",
+      "titleFallback": "個人資料",
       "description": "{psnid} 的 PSN 獎盃戰績：已獲獎盃、里程碑與最近遊玩記錄。"
     },
     "trophy": {
-      "title": "{name} 的獎盃 | PSRay",
-      "titleFallback": "獎盃組 | PSRay",
+      "title": "{name} 的獎盃",
+      "titleFallback": "獎盃組",
       "description": "{name}（{platform}）的全部 {count} 個獎盃：獲取率、稀有度與攻略心得。"
     },
     "login": {
-      "title": "登入 | PSRay",
+      "title": "登入",
       "description": "登入你的 PSRay 帳號。"
     },
     "register": {
-      "title": "註冊 | PSRay",
+      "title": "註冊",
       "description": "使用 PSN 帳號註冊 PSRay。"
     },
     "sync": {
-      "title": "同步資料 | PSRay",
+      "title": "同步資料",
       "description": "將 PSN 獎盃資料同步到 PSRay。"
     },
     "settings": {
-      "title": "使用者設定 | PSRay"
+      "title": "使用者設定"
     }
   }
 }

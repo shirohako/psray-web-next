@@ -45,7 +45,7 @@
       "spoiler": { "title": "Spoiler area", "description": "Collapse spoiler content containing multiple paragraphs or lists.", "defaultTitle": "Reveal spoiler" }
     },
     "help": {
-      "seoTitle": "Markdown writing guide | PSRay",
+      "seoTitle": "Markdown writing guide",
       "seoDescription": "Learn the Markdown and advanced content blocks supported by PSRay trophy tips.",
       "title": "Markdown writing guide",
       "lead": "Write clear trophy guides with familiar Markdown and PSRay's collapsible, callout, step and spoiler blocks.",
@@ -656,37 +656,37 @@
   },
   "seo": {
     "home": {
-      "title": "PSN trophy tracker | PSRay",
+      "title": "Your PSN assistant",
       "description": "PSRay brings your PSN trophy progress together in one clear profile. Create your own gaming profile and see your earned trophies and recently played games at a glance."
     },
     "leaderboard": {
-      "title": "Leaderboard | PSRay",
-      "description": "PSN trophy points, regional rankings, and community contribution boards."
+      "title": "Leaderboard",
+      "description": "Compare PSN trophy point rankings worldwide or by country and region."
     },
     "profile": {
-      "title": "{psnid} Profile | PSRay",
-      "titleFallback": "Profile | PSRay",
+      "title": "{psnid} Profile",
+      "titleFallback": "Profile",
       "description": "PSN trophy stats for {psnid} — earned trophies, milestones, and recent play history."
     },
     "trophy": {
-      "title": "{name} Trophies | PSRay",
-      "titleFallback": "Trophy set | PSRay",
+      "title": "{name} Trophies",
+      "titleFallback": "Trophy set",
       "description": "All {count} trophies for {name} ({platform}) — earn rates, rarity, and tips."
     },
     "login": {
-      "title": "Sign in | PSRay",
+      "title": "Sign in",
       "description": "Sign in to your PSRay account."
     },
     "register": {
-      "title": "Sign up | PSRay",
+      "title": "Sign up",
       "description": "Create a PSRay account with your PSN account."
     },
     "sync": {
-      "title": "Sync profile | PSRay",
+      "title": "Sync profile",
       "description": "Sync your PSN trophy data into PSRay."
     },
     "settings": {
-      "title": "Settings | PSRay"
+      "title": "Settings"
     }
   }
 }

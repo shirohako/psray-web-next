@@ -45,7 +45,7 @@
       "spoiler": { "title": "스포일러 영역", "description": "여러 단락이나 목록이 포함된 스포일러를 접어서 숨깁니다.", "defaultTitle": "스포일러 보기" }
     },
     "help": {
-      "seoTitle": "Markdown 작성 안내 | PSRay",
+      "seoTitle": "Markdown 작성 안내",
       "seoDescription": "PSRay 트로피 댓글에서 지원하는 Markdown과 고급 콘텐츠 블록을 알아보세요.",
       "title": "Markdown 작성 안내",
       "lead": "익숙한 Markdown과 PSRay의 접기, 알림, 단계 및 스포일러 블록으로 읽기 좋은 트로피 공략을 작성하세요.",
@@ -656,37 +656,37 @@
   },
   "seo": {
     "home": {
-      "title": "PSN 트로피 트래커 | PSRay",
+      "title": "당신의 PSN 어시스턴트",
       "description": "PSRay는 PSN 트로피 획득 현황을 한눈에 보기 쉽게 정리해 줍니다. 나만의 게임 프로필을 만들고, 획득한 트로피와 최근 플레이한 게임을 확인해 보세요."
     },
     "leaderboard": {
-      "title": "랭킹 | PSRay",
-      "description": "PSN 트로피 포인트, 지역별 랭킹, 커뮤니티 기여 랭킹."
+      "title": "랭킹",
+      "description": "PSN 트로피 포인트를 기준으로 전체 랭킹과 국가·지역별 랭킹을 확인할 수 있습니다."
     },
     "profile": {
-      "title": "{psnid} 프로필 | PSRay",
-      "titleFallback": "프로필 | PSRay",
+      "title": "{psnid} 프로필",
+      "titleFallback": "프로필",
       "description": "{psnid}의 PSN 트로피 기록 — 획득 트로피, 마일스톤, 최근 플레이 기록."
     },
     "trophy": {
-      "title": "{name} 트로피 | PSRay",
-      "titleFallback": "트로피 세트 | PSRay",
+      "title": "{name} 트로피",
+      "titleFallback": "트로피 세트",
       "description": "{name}({platform})의 트로피 {count}개 전체 — 획득률, 희귀도, 공략 팁."
     },
     "login": {
-      "title": "로그인 | PSRay",
+      "title": "로그인",
       "description": "PSRay 계정에 로그인합니다."
     },
     "register": {
-      "title": "회원가입 | PSRay",
+      "title": "회원가입",
       "description": "PSN 계정으로 PSRay에 가입합니다."
     },
     "sync": {
-      "title": "프로필 동기화 | PSRay",
+      "title": "프로필 동기화",
       "description": "PSN 트로피 데이터를 PSRay에 동기화합니다."
     },
     "settings": {
-      "title": "계정 설정 | PSRay"
+      "title": "계정 설정"
     }
   }
 }

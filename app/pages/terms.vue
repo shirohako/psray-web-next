@@ -13,7 +13,7 @@ const toc = [
 ]
 
 useSeo({
-  title: '利用規約 | PSRay',
+  title: '利用規約',
   description: 'PSRay の利用条件、アカウント、投稿コンテンツ、禁止事項、免責事項などを定める利用規約です。',
   staticLocale: 'ja',
 })

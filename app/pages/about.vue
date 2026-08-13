@@ -87,8 +87,8 @@ function mailto(subject: string) {
 }
 
 useSeo({
-  title: 'PSRay について | PSRay',
-  description: 'PSRay のデータの取得元、更新・削除方法、運営情報、ドキュメント、オープンソースプロジェクト、よくある質問をご案内します。',
+  title: 'PSRay について',
+  description: 'PSRay のサービス概要、PSN データの取得と更新、削除・非表示の申請方法、利用規約・プライバシーポリシー、運営情報、ドキュメント、よくある質問をご案内します。',
   staticLocale: 'ja',
 })
 </script>

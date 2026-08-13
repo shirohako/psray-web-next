@@ -20,6 +20,7 @@ function goToSync() {
 
 useSeo({
   title: () => t('seo.home.title'),
+  siteNameFirst: true,
   description: () => t('seo.home.description'),
   image: () => `${siteUrl}/images/psray-share.png`,
   imageAlt: () => `PSRay — ${t('home.hero.title')}`,
