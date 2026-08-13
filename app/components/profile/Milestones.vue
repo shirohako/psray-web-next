@@ -124,7 +124,7 @@ function milestoneMeta(item: ProfileMilestone) {
             <LucideIcon :icon="milestoneMeta(item).icon" class="size-3" />
             {{ milestoneMeta(item).label }}
           </div>
-          <div class="flex items-center gap-3 px-3 py-2.5 sm:pr-44">
+          <div class="flex items-center gap-3 px-3 py-2.5">
             <img
               :src="item.trophyIconUrl"
               :alt="item.trophyName"
@@ -138,11 +138,11 @@ function milestoneMeta(item: ProfileMilestone) {
                 {{ fmtDateTime(item.earned_at) }}
               </time>
             </div>
-            <time class="absolute right-9 top-1/2 hidden -translate-y-1/2 items-center gap-1 text-xs text-slate-400 tabular-nums sm:inline-flex">
+            <time class="ml-auto hidden shrink-0 items-center gap-1 text-xs text-slate-400 tabular-nums sm:inline-flex">
               <LucideIcon :icon="Clock" class="size-3.5" />
               {{ fmtDateTime(item.earned_at) }}
             </time>
-            <LucideIcon :icon="ChevronRight" class="absolute right-3 top-1/2 size-4 shrink-0 -translate-y-1/2 text-slate-300 transition group-hover:text-slate-500 max-sm:hidden" />
+            <LucideIcon :icon="ChevronRight" class="size-4 shrink-0 text-slate-300 transition group-hover:text-slate-500 max-sm:hidden" />
           </div>
         </div>
       </a>

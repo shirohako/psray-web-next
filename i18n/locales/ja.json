@@ -421,7 +421,7 @@
       "notRealtime": "最新のデータではない場合があります"
     },
     "actions": {
-      "interact": "操作",
+      "interact": "メニュー",
       "sync": "更新",
       "follow": "フォロー",
       "unfollow": "フォロー解除",
@@ -458,9 +458,9 @@
       "firstTrophy": "最初のトロフィー",
       "lastTrophy": "最新のトロフィー",
       "joined": "登録日",
-      "syncInterval": "自動同期の間隔",
-      "nextSync": "次回の同期予定",
-      "hours": "{n} 時間"
+      "syncInterval": "自動更新",
+      "nextSync": "次回の更新予定",
+      "hours": "{n}時間ごと"
     },
     "calendar": {
       "title": "この1年間の活動",
@@ -487,8 +487,8 @@
       "subtitle": "獲得日時順のトロフィー記録",
       "total": "全 {count} 個",
       "empty": "まだトロフィーを獲得していません。",
-      "gapTitle": "前のトロフィーからの間隔",
-      "gap": "間隔 {duration}"
+      "gapTitle": "前のトロフィー獲得からの経過時間",
+      "gap": "前回から {duration}"
     },
     "recent": {
       "empty": "プレイ記録がまだありません。",

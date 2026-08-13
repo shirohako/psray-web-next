@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { RefreshCw, Search, UserRound } from 'lucide'
+import { Gamepad2, RefreshCw, Search, UserRound } from 'lucide'
 import { DEFAULT_LOCALE, HTML_LANG, isUiLocale } from '#shared/locales'
 
 const { t, locale } = useI18n()
@@ -44,9 +44,14 @@ useHead(() => ({
   <div class="mx-auto max-w-4xl space-y-10">
     <!-- Hero: the one thing most visitors came to do -->
     <section class="rounded-lg border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
-      <h1 class="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
-        {{ $t('home.hero.title') }}
-      </h1>
+      <div class="flex items-center gap-2.5">
+        <span class="grid size-9 shrink-0 place-items-center rounded-lg bg-slate-900 text-white shadow-sm shadow-slate-900/20">
+          <LucideIcon :icon="Gamepad2" class="size-5" />
+        </span>
+        <h1 class="text-lg font-bold tracking-tight text-slate-900 sm:text-xl">
+          {{ $t('home.hero.title') }}
+        </h1>
+      </div>
       <p class="mt-3 max-w-2xl text-sm leading-relaxed text-slate-500 sm:text-base">
         {{ $t('home.hero.lead') }}
       </p>

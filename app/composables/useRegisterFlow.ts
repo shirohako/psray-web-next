@@ -160,8 +160,8 @@ export function useRegisterFlow() {
     errorMessage.value = ''
     fieldErrors.value = {}
     try {
-      const res = await useAuthApi().sendCode({ email: email.value.trim(), type: 'register' })
-      toast.success({ title: res.message || t('auth.register.codeSent') })
+      await useAuthApi().sendCode({ email: email.value.trim(), type: 'register' })
+      toast.success({ title: t('auth.register.codeSent') })
       sentEmail.value = email.value.trim()
       sentPsnid.value = psnid.value.trim()
       startCooldown(60)

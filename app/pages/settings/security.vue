@@ -75,8 +75,8 @@ async function sendCode() {
   codeSending.value = true
   emailErrors.value = {}
   try {
-    const res = await api.sendEmailCode({ email: newEmail.value.trim() })
-    toast.success({ title: res.message || t('auth.register.codeSent') })
+    await api.sendEmailCode({ email: newEmail.value.trim() })
+    toast.success({ title: t('auth.register.codeSent') })
     startCooldown(60)
   }
   catch (error) {
@@ -92,12 +92,12 @@ async function saveEmail() {
   emailSaving.value = true
   emailErrors.value = {}
   try {
-    const res = await api.changeEmail({
+    await api.changeEmail({
       current_password: emailPassword.value,
       email: newEmail.value.trim(),
       code: emailCode.value.trim(),
     })
-    toast.success({ title: res.message || t('settings.security.email.updated') })
+    toast.success({ title: t('settings.security.email.updated') })
     await fetchMe()
     cancelEmail()
   }
@@ -160,9 +160,9 @@ async function savePassword() {
   pwSaving.value = true
   pwErrors.value = {}
   try {
-    const res = await api.changePassword({ current_password: currentPassword.value, new_password: newPassword.value })
+    await api.changePassword({ current_password: currentPassword.value, new_password: newPassword.value })
     toast.success({
-      title: res.message || t('settings.security.password.updated'),
+      title: t('settings.security.password.updated'),
       description: t('settings.security.password.updatedDetail'),
     })
     cancelPassword()
