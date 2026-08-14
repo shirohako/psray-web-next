@@ -23,6 +23,23 @@ describe('Markdown renderer', () => {
     expect(html).not.toContain(':::')
   })
 
+  it('renders every non-checklist container nested inside every other container', () => {
+    const names = markdownContainers
+      .map(({ name }) => name)
+      .filter(name => name !== 'checklist')
+
+    for (const outer of names) {
+      for (const inner of names) {
+        const html = renderMarkdown(`:::: ${outer} Outer-${outer}\n::: ${inner} Inner-${inner}\n**Nested body**\n:::\n::::`)
+        expect(html.match(new RegExp(`Outer-${outer}`, 'g'))).toHaveLength(1)
+        expect(html.match(new RegExp(`Inner-${inner}`, 'g'))).toHaveLength(1)
+        expect(html.match(/Nested body/g)).toHaveLength(1)
+        expect(html).toContain('<strong>Nested body</strong>')
+        expect(html).not.toContain(':::')
+      }
+    }
+  })
+
   it('escapes container titles and raw HTML', () => {
     const html = renderMarkdown('::: details <img src=x onerror=alert(1)>\n<script>alert(1)</script>\n:::')
     expect(html).toContain('&lt;img src=x onerror=alert(1)&gt;')
@@ -58,6 +75,20 @@ describe('Markdown renderer', () => {
     expect(html).toContain('<span class="markdown-text-size text-lg">Outer <span class="markdown-text-color text-rose-600">inner</span></span>')
   })
 
+  it('cross-nests inline spoilers, styled spans and emphasis without duplication', () => {
+    const html = renderMarkdown('[Outer ||hidden **bold**||]{color=red}\n\n||[styled *text*]{color=blue}||')
+
+    expect(html.match(/Outer/g)).toHaveLength(1)
+    expect(html.match(/hidden/g)).toHaveLength(1)
+    expect(html.match(/bold/g)).toHaveLength(1)
+    expect(html.match(/styled/g)).toHaveLength(1)
+    expect(html).toContain('<strong>bold</strong>')
+    expect(html).toContain('<em>text</em>')
+    expect(html.match(/class="markdown-inline-spoiler"/g)).toHaveLength(2)
+    expect(html).toContain('markdown-text-color text-rose-600')
+    expect(html).toContain('markdown-text-color text-sky-600')
+  })
+
   it('renders inline spoilers with nested Markdown and leaves unclosed syntax inert', () => {
     const html = renderMarkdown('Before ||hidden **text**|| after\n\n||unclosed')
     expect(html).toContain('class="markdown-inline-spoiler"')
@@ -71,6 +102,54 @@ describe('Markdown renderer', () => {
     expect(html).toContain('markdown-container-checklist')
     expect(html).toContain('<strong>Preparation</strong>')
     expect(html).toContain('markdown-checklist-progress-value">1 / 2')
+  })
+
+  it('does not duplicate nested Markdown in task-list labels', () => {
+    const source = [
+      '::: checklist 必殺技',
+      '- [ ] ****仁華\\*\\*** オシュト + ルクオン',
+      ':::',
+    ].join('\n')
+    const html = renderMarkdown(source)
+
+    expect(html.match(/仁華/g)).toHaveLength(1)
+    expect(html).toContain('<strong>仁華**</strong>')
+    expect(html).not.toContain('****仁華\\*\\***')
+  })
+
+  it('preserves supported inline nesting in task-list labels', () => {
+    const source = [
+      '- [ ] **Bold** and *italic* and ~~strike~~ and ==mark==',
+      '- [ ] [Link](https://example.com) and `code` and ||spoiler **nested**||',
+      '- [ ] [Styled **nested**]{color=red size=large}',
+      '- [ ] ![Logo](/logo.png){width=320 height=180}',
+    ].join('\n')
+    const html = renderMarkdown(source)
+
+    expect(html).toContain('<strong>Bold</strong>')
+    expect(html).toContain('<em>italic</em>')
+    expect(html).toContain('<s>strike</s>')
+    expect(html).toContain('<mark>mark</mark>')
+    expect(html).toContain('<a href="https://example.com"')
+    expect(html).toContain('<code>code</code>')
+    expect(html).toContain('class="markdown-inline-spoiler"')
+    expect(html).toContain('<strong>nested</strong>')
+    expect(html).toContain('markdown-text-color text-rose-600')
+    expect(html).toContain('markdown-text-size text-lg')
+    expect(html).toContain('class="markdown-sized-image"')
+    expect(html).toContain('width="320"')
+    expect(html).toContain('height="180"')
+    expect(html.match(/>Bold</g)).toHaveLength(1)
+    expect(html.match(/>Link</g)).toHaveLength(1)
+    expect(html.match(/>Styled /g)).toHaveLength(1)
+  })
+
+  it('escapes raw HTML nested in a task-list label', () => {
+    const html = renderMarkdown('- [ ] <img src=x onerror=alert(1)> **safe**')
+
+    expect(html).toContain('&lt;img src=x onerror=alert(1)&gt;')
+    expect(html).not.toContain('<img src=x')
+    expect(html).toContain('<strong>safe</strong>')
   })
 
   it('applies safe Pandoc image dimensions and preserves unsafe attributes as text', () => {

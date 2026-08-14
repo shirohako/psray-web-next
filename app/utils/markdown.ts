@@ -138,6 +138,39 @@ md.use(taskLists, { enabled: true, label: true, labelAfter: true })
 md.use(mark)
 
 /**
+ * markdown-it-task-lists' `labelAfter` mode assumes an item has a single text
+ * token. For nested Markdown it leaves the already-rendered tokens in place
+ * and appends the complete source again as a raw label, duplicating content
+ * (and bypassing Markdown escaping inside that label). Rebuild the label from
+ * parsed inline tokens while retaining the plugin's checkbox/id structure.
+ */
+md.core.ruler.after('github-task-lists', 'psray_task_list_labels', (state) => {
+  for (const token of state.tokens) {
+    if (token.type !== 'inline' || !token.children?.length) continue
+
+    const checkbox = token.children[0]
+    const rawLabel = token.children[token.children.length - 1]
+    if (
+      checkbox?.type !== 'html_inline'
+      || !checkbox.content.includes('task-list-item-checkbox')
+      || rawLabel?.type !== 'html_inline'
+      || !rawLabel.content.startsWith('<label class="task-list-item-label"')
+    ) continue
+
+    const id = /\sid="([^"]+)"/.exec(checkbox.content)?.[1]
+    if (!id) continue
+
+    const labelOpen = new state.Token('html_inline', '', 0)
+    labelOpen.content = `<label class="task-list-item-label" for="${id}">`
+    const labelClose = new state.Token('html_inline', '', 0)
+    labelClose.content = '</label>'
+    const labelChildren: typeof token.children = []
+    state.md.inline.parse(token.content, state.md, state.env, labelChildren)
+    token.children = [checkbox, labelOpen, ...labelChildren, labelClose]
+  }
+})
+
+/**
  * A deliberately small, safe subset of Pandoc's bracketed-span attributes:
  *
  *   [text]{color=red}
@@ -251,7 +284,9 @@ md.inline.ruler.before('emphasis', 'psray_inline_spoiler', inlineSpoilerRule)
 
 /** Safe Pandoc-style image dimensions. A single dimension preserves the
  * intrinsic aspect ratio; providing both creates an explicit image box. */
-md.core.ruler.after('inline', 'psray_image_dimensions', (state) => {
+// Run after task-list labels are rebuilt so images nested in a task item also
+// receive their validated dimensions.
+md.core.ruler.after('psray_task_list_labels', 'psray_image_dimensions', (state) => {
   for (const blockToken of state.tokens) {
     const children = blockToken.children
     if (!children) continue
