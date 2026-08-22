@@ -13,7 +13,7 @@ const collapsed = ref(false)
 // in as an overlay layer above the content when opened.
 const mobileOpen = ref(false)
 
-// Site-wide settings drawer (slides from the left).
+// Site-wide settings drawer (slides in from the right).
 const settingsOpen = ref(false)
 
 onMounted(() => {

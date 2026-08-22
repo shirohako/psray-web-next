@@ -459,8 +459,10 @@
       "lastTrophy": "Latest trophy",
       "joined": "Joined",
       "syncInterval": "Auto-sync interval",
+      "lastSync": "Last updated",
       "nextSync": "Next sync",
-      "hours": "{n} hours"
+      "every": "Every {interval}",
+      "never": "Never"
     },
     "calendar": {
       "title": "Activity over the past year",

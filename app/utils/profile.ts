@@ -40,6 +40,40 @@ export function fmtDateTime(value: DateLike) {
 }
 
 /**
+ * An API interval expressed in hours → an exact, localized readable duration.
+ * Prefer larger units only when no rounding is needed: 168h becomes “1 week”,
+ * 720h remains “30 days”, and the backend maximum 8760h becomes “1 year”.
+ */
+export function formatHourInterval(
+  value: number | null | undefined,
+  locale = currentLocale(),
+): string | null {
+  if (value == null || !Number.isFinite(value) || value <= 0) return null
+
+  let amount = value
+  let unit: Intl.NumberFormatOptions['unit'] = 'hour'
+  if (value === 365 * 24) {
+    amount = 1
+    unit = 'year'
+  }
+  else if (value % (7 * 24) === 0) {
+    amount = value / (7 * 24)
+    unit = 'week'
+  }
+  else if (value % 24 === 0) {
+    amount = value / 24
+    unit = 'day'
+  }
+
+  return new Intl.NumberFormat(locale, {
+    style: 'unit',
+    unit,
+    unitDisplay: 'long',
+    maximumFractionDigits: 2,
+  }).format(amount)
+}
+
+/**
  * A duration in seconds → a compact two-unit label, e.g. `2y 3mo` or `3d 14h`.
  * Month/year values deliberately use 30/365-day duration buckets rather than
  * calendar arithmetic because callers provide elapsed seconds, not two dates.

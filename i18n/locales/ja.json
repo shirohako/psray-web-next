@@ -459,8 +459,10 @@
       "lastTrophy": "最新のトロフィー",
       "joined": "登録日",
       "syncInterval": "自動更新",
+      "lastSync": "最終更新日時",
       "nextSync": "次回の更新予定",
-      "hours": "{n}時間ごと"
+      "every": "{interval}ごと",
+      "never": "停止中"
     },
     "calendar": {
       "title": "この1年間の活動",

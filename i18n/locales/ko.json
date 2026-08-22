@@ -459,8 +459,10 @@
       "lastTrophy": "최근 트로피",
       "joined": "가입일",
       "syncInterval": "자동 동기화 주기",
+      "lastSync": "마지막 업데이트",
       "nextSync": "다음 동기화 예정",
-      "hours": "{n}시간"
+      "every": "{interval}마다",
+      "never": "더 이상 자동 업데이트되지 않음"
     },
     "calendar": {
       "title": "지난 1년간의 활동",

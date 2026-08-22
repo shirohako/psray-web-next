@@ -4,6 +4,10 @@
 /* Tailwind v4 Preflight resets <button> to the default cursor; restore the
    pointer for enabled buttons (and role="button") app-wide. */
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
   button:not(:disabled),
   [role="button"]:not(:disabled) {
     cursor: pointer;
@@ -42,6 +46,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
   .animate-rise,
   .animate-kenburns {
     animation: none;

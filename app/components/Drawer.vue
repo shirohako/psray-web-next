@@ -25,10 +25,6 @@ const emit = defineEmits<{ 'update:open': [v: boolean] }>()
 
 const close = () => emit('update:open', false)
 
-const hiddenClass = computed(() =>
-  `${props.side === 'left' ? '-translate-x-full' : 'translate-x-full'} opacity-0`,
-)
-
 function onKey(e: KeyboardEvent) {
   if (e.key === 'Escape') close()
 }
@@ -50,28 +46,28 @@ onUnmounted(() => {
 <template>
   <ClientOnly>
     <Teleport to="body">
-      <Transition
-        enter-active-class="transition-opacity duration-300 ease-out motion-reduce:transition-none"
-        enter-from-class="opacity-0"
-        leave-active-class="transition-opacity duration-300 ease-in motion-reduce:transition-none"
-        leave-to-class="opacity-0"
-      >
-        <div v-if="open" class="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm" @click="close" />
-      </Transition>
-
-      <Transition
-        enter-active-class="transition-[transform,opacity] duration-300 ease-out motion-reduce:transition-none"
-        :enter-from-class="hiddenClass"
-        enter-to-class="translate-x-0 opacity-100"
-        leave-active-class="transition-[transform,opacity] duration-300 ease-in motion-reduce:transition-none"
-        :leave-to-class="hiddenClass"
+      <div
+        class="fixed inset-0 z-50"
+        :class="open ? 'pointer-events-auto' : 'pointer-events-none'"
+        :aria-hidden="open ? undefined : 'true'"
       >
         <div
-          v-if="open"
+          class="absolute inset-0 bg-slate-900/50 backdrop-blur-sm transition-opacity duration-300 motion-reduce:transition-none"
+          :class="open ? 'opacity-100 ease-out' : 'opacity-0 ease-in'"
+          @click="close"
+        />
+
+        <div
           role="dialog"
           aria-modal="true"
-          class="fixed inset-y-0 z-50 flex w-full max-w-sm translate-x-0 flex-col bg-white opacity-100 shadow-2xl ring-1 ring-slate-900/5"
-          :class="side === 'left' ? 'left-0' : 'right-0'"
+          :inert="!open"
+          class="absolute inset-y-0 flex w-full max-w-sm flex-col bg-white shadow-2xl ring-1 ring-slate-900/5 transition-transform duration-300 will-change-transform motion-reduce:transition-none"
+          :class="[
+            side === 'left' ? 'left-0' : 'right-0',
+            open
+              ? 'translate-x-0 ease-out'
+              : side === 'left' ? '-translate-x-full ease-in' : 'translate-x-full ease-in',
+          ]"
         >
           <!-- Header -->
           <header class="flex items-center justify-between gap-3 border-b border-slate-100 px-5 py-4">
@@ -98,7 +94,7 @@ onUnmounted(() => {
             <slot name="footer" />
           </footer>
         </div>
-      </Transition>
+      </div>
     </Teleport>
   </ClientOnly>
 </template>

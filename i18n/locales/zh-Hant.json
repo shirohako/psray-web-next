@@ -459,8 +459,10 @@
       "lastTrophy": "最近獎盃",
       "joined": "加入於",
       "syncInterval": "自動同步間隔",
+      "lastSync": "最後更新時間",
       "nextSync": "預計下次同步",
-      "hours": "{n} 小時"
+      "every": "每 {interval}",
+      "never": "不再自動更新"
     },
     "calendar": {
       "title": "最近一年的活動",
