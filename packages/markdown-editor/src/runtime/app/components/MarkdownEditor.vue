@@ -33,11 +33,12 @@ import {
 } from '../utils/markdownEditor'
 
 const props = withDefaults(defineProps<{
+  alwaysSplit?: boolean
   disabled?: boolean
   error?: string
   helpUrl?: string | false
   placeholder?: string
-}>(), { disabled: false, error: '', helpUrl: '/docs/markdown', placeholder: '' })
+}>(), { alwaysSplit: false, disabled: false, error: '', helpUrl: '/docs/markdown', placeholder: '' })
 
 const model = defineModel<string>({ required: true })
 const { t } = useI18n()
@@ -204,27 +205,29 @@ function applyTextStyle(kind: 'color' | 'size' | 'underline', value: MarkdownTex
   </a>
 
   <div class="overflow-hidden rounded-xl border bg-white" :class="error ? 'border-rose-300' : 'border-slate-200'">
-    <div class="grid grid-cols-1 items-center gap-1.5 border-b border-slate-200 bg-slate-50 px-2 py-1.5 md:grid-cols-[minmax(0,1fr)_auto] md:gap-2">
+    <div class="grid grid-cols-1 items-center gap-1.5 border-b border-slate-200 bg-slate-50/80 px-2 py-1.5 md:grid-cols-[minmax(0,1fr)_auto] md:gap-2">
       <div class="order-1 flex min-w-0 flex-wrap items-center gap-1">
-        <button
-          v-for="item in toolbar"
-          :key="item.action"
-          type="button"
-          :disabled="disabled"
-          class="grid size-8 place-items-center rounded-md text-slate-500 transition hover:bg-white hover:text-slate-900 hover:shadow-sm disabled:opacity-40"
-          :title="$t(item.labelKey)"
-          :aria-label="$t(item.labelKey)"
-          @click="applyAction(item.action)"
-        >
-          <MarkdownEditorIcon :icon="item.icon" class="size-4" />
-        </button>
+        <div class="flex shrink-0 items-center rounded-lg border border-slate-200 bg-white p-0.5 shadow-sm">
+          <button
+            v-for="item in toolbar"
+            :key="item.action"
+            type="button"
+            :disabled="disabled"
+            class="grid size-7 place-items-center rounded-md text-slate-500 transition hover:bg-slate-100 hover:text-slate-900 disabled:opacity-40"
+            :title="$t(item.labelKey)"
+            :aria-label="$t(item.labelKey)"
+            @click="applyAction(item.action)"
+          >
+            <MarkdownEditorIcon :icon="item.icon" class="size-4" />
+          </button>
+        </div>
 
-        <div class="flex shrink-0 items-center gap-1 max-sm:basis-full">
+        <div class="flex shrink-0 items-center rounded-lg border border-slate-200 bg-white p-0.5 shadow-sm max-sm:basis-full">
           <MarkdownEditorDropdownMenu>
         <button
           type="button"
           :disabled="disabled"
-          class="inline-flex h-8 items-center gap-1.5 rounded-md px-2 text-xs font-semibold text-slate-600 transition hover:bg-white hover:text-slate-900 hover:shadow-sm disabled:opacity-40"
+          class="inline-flex h-7 items-center gap-1.5 rounded-md px-2 text-xs font-semibold text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 disabled:opacity-40"
         >
           <MarkdownEditorIcon :icon="Type" class="size-4" />
           {{ $t('markdown.editor.toolbar.size') }}
@@ -248,7 +251,7 @@ function applyTextStyle(kind: 'color' | 'size' | 'underline', value: MarkdownTex
         <button
           type="button"
           :disabled="disabled"
-          class="inline-flex h-8 items-center gap-1.5 rounded-md px-2 text-xs font-semibold text-slate-600 transition hover:bg-white hover:text-slate-900 hover:shadow-sm disabled:opacity-40"
+          class="inline-flex h-7 items-center gap-1.5 rounded-md px-2 text-xs font-semibold text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 disabled:opacity-40"
         >
           <MarkdownEditorIcon :icon="Palette" class="size-4" />
           {{ $t('markdown.editor.toolbar.color') }}
@@ -272,7 +275,7 @@ function applyTextStyle(kind: 'color' | 'size' | 'underline', value: MarkdownTex
         <button
           type="button"
           :disabled="disabled"
-          class="inline-flex h-8 items-center gap-1.5 rounded-md px-2 text-xs font-semibold text-slate-600 transition hover:bg-white hover:text-slate-900 hover:shadow-sm disabled:opacity-40"
+          class="inline-flex h-7 items-center gap-1.5 rounded-md px-2 text-xs font-semibold text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 disabled:opacity-40"
         >
           <MarkdownEditorIcon :icon="Underline" class="size-4" />
           {{ $t('markdown.editor.toolbar.underline') }}
@@ -296,13 +299,13 @@ function applyTextStyle(kind: 'color' | 'size' | 'underline', value: MarkdownTex
 
       <MarkdownEditorDropdownMenu
         align="right"
-        class="order-2 flex w-full items-center self-center md:w-auto md:justify-self-end md:border-l md:border-slate-200 md:pl-2"
+        class="order-2 flex w-full items-center self-center md:w-auto md:justify-self-end"
         panel-class="w-[min(22rem,calc(100vw-1rem))] max-h-[min(22rem,calc(100vh-2rem))] overflow-y-auto p-1.5"
       >
         <button
           type="button"
           :disabled="disabled"
-          class="inline-flex h-8 w-full items-center justify-center gap-1.5 rounded-md border border-zinc-800 bg-zinc-800 px-3 text-xs font-semibold text-white transition hover:border-zinc-700 hover:bg-zinc-700 disabled:opacity-40 md:w-auto"
+          class="inline-flex h-8 w-full items-center justify-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 text-xs font-semibold text-slate-700 shadow-sm transition hover:border-slate-300 hover:bg-slate-100 hover:text-slate-900 disabled:opacity-40 md:w-auto"
         >
           <MarkdownEditorIcon :icon="Braces" class="size-4" />
           {{ $t('markdown.editor.toolbar.advanced') }}
@@ -332,7 +335,7 @@ function applyTextStyle(kind: 'color' | 'size' | 'underline', value: MarkdownTex
 
     </div>
 
-    <div class="flex border-b border-slate-200 bg-white p-1 md:hidden">
+    <div v-if="!alwaysSplit" class="flex border-b border-slate-200 bg-white p-1 md:hidden">
       <button
         v-for="pane in (['edit', 'preview'] as const)"
         :key="pane"
@@ -346,9 +349,19 @@ function applyTextStyle(kind: 'color' | 'size' | 'underline', value: MarkdownTex
       </button>
     </div>
 
-    <div class="grid md:grid-cols-2 md:divide-x md:divide-slate-200">
-      <div ref="editorHost" class="min-w-0 bg-white" :class="mobilePane === 'edit' ? 'block' : 'hidden md:block'" />
-      <div class="min-h-72 overflow-y-auto bg-slate-50/50 p-4" :class="mobilePane === 'preview' ? 'block' : 'hidden md:block'">
+    <div
+      class="grid"
+      :class="alwaysSplit ? 'grid-cols-2 divide-x divide-slate-200' : 'md:grid-cols-2 md:divide-x md:divide-slate-200'"
+    >
+      <div
+        ref="editorHost"
+        class="min-w-0 bg-white"
+        :class="alwaysSplit || mobilePane === 'edit' ? 'block' : 'hidden md:block'"
+      />
+      <div
+        class="min-w-0 min-h-72 overflow-y-auto bg-slate-50/50 p-4"
+        :class="alwaysSplit || mobilePane === 'preview' ? 'block' : 'hidden md:block'"
+      >
         <MarkdownContent v-if="preview.trim()" :content="preview" />
         <div v-else class="grid min-h-64 place-items-center text-sm text-slate-400">
           {{ $t('markdown.editor.previewEmpty') }}

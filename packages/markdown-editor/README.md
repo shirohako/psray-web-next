@@ -124,6 +124,7 @@ classes and attributes from fixed allow lists. Links open in a new tab with
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `v-model` | `string` | Required | Markdown source. |
+| `always-split` | `boolean` | `false` | Always shows the editor and live preview side by side instead of using mobile pane tabs. |
 | `disabled` | `boolean` | `false` | Makes the CodeMirror editor read-only and disables toolbar actions. |
 | `error` | `string` | `''` | Displays an error message and error border below the editor. |
 | `help-url` | `string \| false` | `'/docs/markdown'` | Syntax-guide URL. Use `false` or an empty string to hide it. |

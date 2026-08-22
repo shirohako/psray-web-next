@@ -1,5 +1,6 @@
 import { addComponent, addImports, createResolver, defineNuxtModule } from '@nuxt/kit'
 import type { NuxtModule } from '@nuxt/schema'
+import type {} from '@nuxtjs/i18n'
 
 export interface ModuleOptions {
   /** Register the bundled locale messages through @nuxtjs/i18n. */
@@ -7,6 +8,12 @@ export interface ModuleOptions {
 }
 
 const localeCodes = ['en', 'ja', 'ko', 'zh-Hans', 'zh-Hant'] as const
+const optimizeDependencies = [
+  '@psray/editor > markdown-it',
+  '@psray/editor > markdown-it-container',
+  '@psray/editor > markdown-it-mark',
+  '@psray/editor > markdown-it-task-lists',
+] as const
 
 const markdownEditorModule: NuxtModule<ModuleOptions> = defineNuxtModule<ModuleOptions>({
   meta: {
@@ -23,6 +30,13 @@ const markdownEditorModule: NuxtModule<ModuleOptions> = defineNuxtModule<ModuleO
 
     nuxt.options.alias['#markdown-editor'] = appRuntime
     nuxt.options.css.push(resolver.resolve('./runtime/markdown.css'))
+    nuxt.options.vite.optimizeDeps ??= {}
+    nuxt.options.vite.optimizeDeps.include = [
+      ...new Set([
+        ...(nuxt.options.vite.optimizeDeps.include ?? []),
+        ...optimizeDependencies,
+      ]),
+    ]
 
     addComponent({
       name: 'MarkdownEditor',

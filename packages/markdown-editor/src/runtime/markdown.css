@@ -1,6 +1,7 @@
 /* Generate the package's utilities even when installed under node_modules,
    which Tailwind v4 intentionally excludes from automatic source detection. */
 @import "tailwindcss/utilities.css" layer(utilities) source(none);
+@plugin "@tailwindcss/typography";
 @source "./app/components";
 
 /* Community Markdown containers. Kept outside Tailwind's prose selectors so
