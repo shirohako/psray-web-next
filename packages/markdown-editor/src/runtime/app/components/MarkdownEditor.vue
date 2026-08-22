@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { onMounted, onUnmounted, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import {
   AlertTriangle, Bold, Braces, ChevronDown, Code, ExternalLink, Eye, EyeOff,
   Heading2, HelpCircle, Highlighter, Image, Info, Italic, Lightbulb, Link,
@@ -10,14 +12,32 @@ import { Compartment, EditorState } from '@codemirror/state'
 import { placeholder as editorPlaceholder } from '@codemirror/view'
 import { markdown } from '@codemirror/lang-markdown'
 import { autocompletion, type CompletionContext } from '@codemirror/autocomplete'
-import type { MarkdownContainerName, MarkdownTextColor, MarkdownTextSize, MarkdownUnderlineColor } from '~/utils/markdown'
-import type { MarkdownEditAction } from '~/utils/markdownEditor'
+import MarkdownContent from './MarkdownContent.vue'
+import MarkdownEditorDropdownMenu from './internal/MarkdownEditorDropdownMenu.vue'
+import MarkdownEditorIcon from './internal/MarkdownEditorIcon.vue'
+import {
+  MARKDOWN_TEXT_COLORS,
+  MARKDOWN_TEXT_SIZES,
+  MARKDOWN_UNDERLINE_COLORS,
+  markdownContainers,
+  type MarkdownContainerName,
+  type MarkdownTextColor,
+  type MarkdownTextSize,
+  type MarkdownUnderlineColor,
+} from '../utils/markdown'
+import {
+  applyMarkdownEdit,
+  applyMarkdownTextStyle,
+  markdownContainerSnippet,
+  type MarkdownEditAction,
+} from '../utils/markdownEditor'
 
 const props = withDefaults(defineProps<{
   disabled?: boolean
   error?: string
+  helpUrl?: string | false
   placeholder?: string
-}>(), { disabled: false, error: '', placeholder: '' })
+}>(), { disabled: false, error: '', helpUrl: '/docs/markdown', placeholder: '' })
 
 const model = defineModel<string>({ required: true })
 const { t } = useI18n()
@@ -166,21 +186,22 @@ function applyTextStyle(kind: 'color' | 'size' | 'underline', value: MarkdownTex
 </script>
 
 <template>
-  <NuxtLink
-    to="/docs/markdown"
+  <a
+    v-if="helpUrl"
+    :href="helpUrl"
     target="_blank"
     rel="noopener noreferrer"
     class="group mb-3 flex items-center gap-2.5 rounded-xl border border-sky-200 bg-gradient-to-r from-sky-50 to-white px-3 py-2 text-left transition hover:border-sky-300 sm:px-3.5"
   >
     <span class="grid size-7 shrink-0 place-items-center rounded-md bg-sky-100/80 text-sky-700 ring-1 ring-sky-200/80 transition group-hover:scale-105 group-hover:bg-sky-100 group-hover:text-sky-800">
-      <LucideIcon :icon="HelpCircle" class="size-4" />
+      <MarkdownEditorIcon :icon="HelpCircle" class="size-4" />
     </span>
     <span class="min-w-0 flex-1">
       <span class="block text-sm font-bold text-slate-900">{{ $t('markdown.editor.help') }}</span>
       <span class="block text-xs leading-4 text-slate-500">{{ $t('markdown.editor.helpHint') }}</span>
     </span>
-    <LucideIcon :icon="ExternalLink" class="size-4 shrink-0 text-sky-500 transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-  </NuxtLink>
+    <MarkdownEditorIcon :icon="ExternalLink" class="size-4 shrink-0 text-sky-500 transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+  </a>
 
   <div class="overflow-hidden rounded-xl border bg-white" :class="error ? 'border-rose-300' : 'border-slate-200'">
     <div class="grid grid-cols-1 items-center gap-1.5 border-b border-slate-200 bg-slate-50 px-2 py-1.5 md:grid-cols-[minmax(0,1fr)_auto] md:gap-2">
@@ -195,17 +216,17 @@ function applyTextStyle(kind: 'color' | 'size' | 'underline', value: MarkdownTex
           :aria-label="$t(item.labelKey)"
           @click="applyAction(item.action)"
         >
-          <LucideIcon :icon="item.icon" class="size-4" />
+          <MarkdownEditorIcon :icon="item.icon" class="size-4" />
         </button>
 
         <div class="flex shrink-0 items-center gap-1 max-sm:basis-full">
-          <DropdownMenu>
+          <MarkdownEditorDropdownMenu>
         <button
           type="button"
           :disabled="disabled"
           class="inline-flex h-8 items-center gap-1.5 rounded-md px-2 text-xs font-semibold text-slate-600 transition hover:bg-white hover:text-slate-900 hover:shadow-sm disabled:opacity-40"
         >
-          <LucideIcon :icon="Type" class="size-4" />
+          <MarkdownEditorIcon :icon="Type" class="size-4" />
           {{ $t('markdown.editor.toolbar.size') }}
         </button>
         <template #menu="{ close }">
@@ -221,15 +242,15 @@ function applyTextStyle(kind: 'color' | 'size' | 'underline', value: MarkdownTex
             <span :class="MARKDOWN_TEXT_SIZES[value]">Aa</span>
           </button>
         </template>
-          </DropdownMenu>
+          </MarkdownEditorDropdownMenu>
 
-          <DropdownMenu>
+          <MarkdownEditorDropdownMenu>
         <button
           type="button"
           :disabled="disabled"
           class="inline-flex h-8 items-center gap-1.5 rounded-md px-2 text-xs font-semibold text-slate-600 transition hover:bg-white hover:text-slate-900 hover:shadow-sm disabled:opacity-40"
         >
-          <LucideIcon :icon="Palette" class="size-4" />
+          <MarkdownEditorIcon :icon="Palette" class="size-4" />
           {{ $t('markdown.editor.toolbar.color') }}
         </button>
         <template #menu="{ close }">
@@ -245,15 +266,15 @@ function applyTextStyle(kind: 'color' | 'size' | 'underline', value: MarkdownTex
             {{ $t(`markdown.editor.colors.${value}`) }}
           </button>
         </template>
-          </DropdownMenu>
+          </MarkdownEditorDropdownMenu>
 
-          <DropdownMenu>
+          <MarkdownEditorDropdownMenu>
         <button
           type="button"
           :disabled="disabled"
           class="inline-flex h-8 items-center gap-1.5 rounded-md px-2 text-xs font-semibold text-slate-600 transition hover:bg-white hover:text-slate-900 hover:shadow-sm disabled:opacity-40"
         >
-          <LucideIcon :icon="Underline" class="size-4" />
+          <MarkdownEditorIcon :icon="Underline" class="size-4" />
           {{ $t('markdown.editor.toolbar.underline') }}
         </button>
         <template #menu="{ close }">
@@ -269,11 +290,11 @@ function applyTextStyle(kind: 'color' | 'size' | 'underline', value: MarkdownTex
             <span class="markdown-text-underline font-semibold" :class="className">Aa</span>
           </button>
         </template>
-          </DropdownMenu>
+          </MarkdownEditorDropdownMenu>
         </div>
       </div>
 
-      <DropdownMenu
+      <MarkdownEditorDropdownMenu
         align="right"
         class="order-2 flex w-full items-center self-center md:w-auto md:justify-self-end md:border-l md:border-slate-200 md:pl-2"
         panel-class="w-[min(22rem,calc(100vw-1rem))] max-h-[min(22rem,calc(100vh-2rem))] overflow-y-auto p-1.5"
@@ -283,7 +304,7 @@ function applyTextStyle(kind: 'color' | 'size' | 'underline', value: MarkdownTex
           :disabled="disabled"
           class="inline-flex h-8 w-full items-center justify-center gap-1.5 rounded-md border border-zinc-800 bg-zinc-800 px-3 text-xs font-semibold text-white transition hover:border-zinc-700 hover:bg-zinc-700 disabled:opacity-40 md:w-auto"
         >
-          <LucideIcon :icon="Braces" class="size-4" />
+          <MarkdownEditorIcon :icon="Braces" class="size-4" />
           {{ $t('markdown.editor.toolbar.advanced') }}
         </button>
         <template #menu="{ close }">
@@ -296,7 +317,7 @@ function applyTextStyle(kind: 'color' | 'size' | 'underline', value: MarkdownTex
             @click="insertContainer(definition.name); close()"
           >
             <span class="grid size-8 shrink-0 place-items-center rounded-lg" :class="containerMenuMeta[definition.name].iconClass">
-              <LucideIcon :icon="containerMenuMeta[definition.name].icon" class="size-4" />
+              <MarkdownEditorIcon :icon="containerMenuMeta[definition.name].icon" class="size-4" />
             </span>
             <span class="min-w-0 flex-1">
               <span class="flex min-w-0 items-baseline gap-2">
@@ -307,7 +328,7 @@ function applyTextStyle(kind: 'color' | 'size' | 'underline', value: MarkdownTex
             </span>
           </button>
         </template>
-      </DropdownMenu>
+      </MarkdownEditorDropdownMenu>
 
     </div>
 
@@ -320,7 +341,7 @@ function applyTextStyle(kind: 'color' | 'size' | 'underline', value: MarkdownTex
         :class="mobilePane === pane ? 'bg-slate-900 text-white' : 'text-slate-500'"
         @click="mobilePane = pane"
       >
-        <LucideIcon :icon="pane === 'edit' ? Pencil : Eye" class="size-3.5" />
+        <MarkdownEditorIcon :icon="pane === 'edit' ? Pencil : Eye" class="size-3.5" />
         {{ $t(`markdown.editor.${pane}`) }}
       </button>
     </div>
@@ -328,7 +349,7 @@ function applyTextStyle(kind: 'color' | 'size' | 'underline', value: MarkdownTex
     <div class="grid md:grid-cols-2 md:divide-x md:divide-slate-200">
       <div ref="editorHost" class="min-w-0 bg-white" :class="mobilePane === 'edit' ? 'block' : 'hidden md:block'" />
       <div class="min-h-72 overflow-y-auto bg-slate-50/50 p-4" :class="mobilePane === 'preview' ? 'block' : 'hidden md:block'">
-        <RichContent v-if="preview.trim()" :content="preview" format="markdown" />
+        <MarkdownContent v-if="preview.trim()" :content="preview" />
         <div v-else class="grid min-h-64 place-items-center text-sm text-slate-400">
           {{ $t('markdown.editor.previewEmpty') }}
         </div>

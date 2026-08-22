@@ -19,50 +19,6 @@
     "updatedAt": "更新於 {time}",
     "view": "查看"
   },
-  "markdown": {
-    "editor": {
-      "placeholder": "使用 Markdown 撰寫你的留言…",
-      "ariaLabel": "Markdown 留言編輯器",
-      "edit": "編輯",
-      "preview": "預覽",
-      "previewEmpty": "預覽內容會顯示在這裡。",
-      "help": "語法說明",
-      "helpHint": "第一次寫作？使用 Markdown 可以讓你更舒適地創作。使用說明和語法請參考這裡。",
-      "toolbar": { "heading": "標題", "bold": "粗體", "italic": "斜體", "strike": "刪除線", "mark": "螢光標記", "inlineSpoiler": "行內劇透", "quote": "引用", "link": "連結", "image": "圖片", "list": "清單", "tasks": "工作清單", "code": "程式碼", "size": "字級", "color": "文字顏色", "underline": "彩色線", "advanced": "進階內容區塊" },
-      "sizes": { "small": "小字", "large": "大字", "xlarge": "超大字" },
-      "colors": { "slate": "灰色", "red": "紅色", "orange": "橙色", "yellow": "黃色", "green": "綠色", "blue": "藍色", "purple": "紫色", "pink": "粉紅色" },
-      "placeholders": { "text": "文字", "linkText": "連結文字", "imageAlt": "圖片說明", "code": "程式碼", "title": "選填標題", "content": "內容", "firstStep": "第一步", "secondStep": "第二步", "completedTask": "已完成項目", "pendingTask": "待完成項目" }
-    },
-    "inlineSpoiler": { "reveal": "點擊顯示行內劇透" },
-    "blocks": {
-      "details": { "title": "摺疊詳情", "description": "將補充內容放在可點擊展開的標題後。", "defaultTitle": "顯示詳情" },
-      "info": { "title": "資訊提示", "description": "凸顯實用的背景資訊。", "defaultTitle": "資訊" },
-      "tip": { "title": "技巧提示", "description": "強調實用的攻略建議。", "defaultTitle": "技巧" },
-      "warning": { "title": "注意事項", "description": "提醒讀者留意重要事項。", "defaultTitle": "注意" },
-      "danger": { "title": "危險警告", "description": "強調高風險或無法復原的操作。", "defaultTitle": "危險" },
-      "checklist": { "title": "帶標題的工作清單", "description": "將工作清單組成帶標題和即時完成進度的卡片。", "defaultTitle": "工作清單", "progress": "已完成 {completed} 項，共 {total} 項" },
-      "steps": { "title": "步驟流程", "description": "呈現清楚的編號操作流程。", "defaultTitle": "步驟" },
-      "spoiler": { "title": "劇透區域", "description": "摺疊隱藏包含多個段落或清單的劇透內容。", "defaultTitle": "點擊顯示劇透" }
-    },
-    "help": {
-      "seoTitle": "Markdown 寫作說明",
-      "seoDescription": "瞭解 PSRay 獎盃留言支援的 Markdown 與進階內容區塊。",
-      "title": "Markdown 寫作說明",
-      "lead": "使用熟悉的 Markdown，以及 PSRay 的摺疊、提示、步驟和劇透內容區塊，寫出清楚美觀的獎盃攻略。",
-      "source": "原始碼",
-      "result": "效果",
-      "copied": "範例已複製",
-      "basic": { "title": "Markdown 基礎", "description": "每則獎盃留言都支援以下常用寫法。", "headingTocHint": "提示會依據 H1–H4 標題自動產生目錄。請按照內容層級合理使用標題，避免為了放大文字而使用標題語法。", "heading": "標題（H1–H4）", "emphasis": "文字強調", "link": "連結", "image": "圖片", "list": "清單", "task": "工作清單", "quote": "引用", "code": "程式碼" },
-      "images": { "title": "圖片", "description": "為了讓攻略和長篇文章更易閱讀，圖片一律以獨立區塊顯示。在圖片後加入 Pandoc 屬性可以指定尺寸。只設定寬度或高度時會保留原始比例；同時設定兩項時使用指定尺寸。數值單位為像素，允許範圍為 1–4096。", "width": "指定寬度", "height": "指定高度", "both": "指定寬度和高度" },
-      "formatting": { "title": "文字樣式", "description": "在編輯器中選取文字，再套用背景醒目標示、彩色底線、白名單文字顏色或字級。", "mark": "螢光標記", "underline": "彩色線", "color": "文字顏色", "size": "文字字級", "sample": "重要文字", "attributesTitle": "組合與巢狀", "attributesDescription": "Pandoc 風格會將同一範圍的多個屬性寫在同一個屬性區塊中；只有文字範圍不同時才需要巢狀。屬性順序不影響效果。", "recommended": "推薦", "supported": "適合巢狀", "notRecommended": "不推薦", "outerSample": "整段文字，其中", "innerSample": "這部分為紅色", "combined": { "title": "同一範圍組合", "description": "顏色、字級和底線作用於相同文字時，請集中書寫屬性。" }, "nested": { "title": "不同範圍巢狀", "description": "外層字級作用於整段，內層顏色只作用於部分文字。" }, "avoid": { "title": "同一範圍重複巢狀", "description": "雖然可以解析，但較冗長；這種情況應改用同一個屬性區塊。" } },
-      "advanced": { "title": "進階內容區塊", "description": "使用 ::: 開始內容區塊，並在獨立一行使用 ::: 結束。", "examples": { "detailsTitle": "收集品位置", "detailsBody": "穿過城門後打破右側的木箱，即可獲得這個**收集品**。", "infoTitle": "開始前須知", "infoBody": "這項挑戰會在**第三章**後開放，建議等級為20級。", "tipTitle": "穩定完成的技巧", "tipBody": "在首領攻擊結束後立刻閃避，可以獲得安全的反擊機會。", "warningTitle": "小心遺漏", "warningBody": "離開區域前請打開寶箱。進入下一章後將無法返回。", "dangerTitle": "存檔影響", "dangerBody": "確認這個選擇後路線將被鎖定，請先建立手動存檔。", "checklistTitle": "首領戰準備", "checklistDone": "補充恢復道具", "checklistPending": "換上抗性裝備", "checklistOptional": "開啟捷徑", "stepsFirst": "擊敗廣場內的所有敵人", "stepsSecond": "按下雕像背後的開關", "stepsThird": "從打開的門進入寶物庫", "spoilerTitle": "結局條件", "spoilerBody": "收集全部鑰匙後再打開最終大門，即可進入**隱藏結局**。" } },
-      "formattingSampleAfter": "需要特別注意。",
-      "nesting": { "title": "巢狀內容區塊", "description": "不同類型的進階區塊可以巢狀使用。請讓起止標記各佔一行，以維持結構清楚。" },
-      "spoilers": { "title": "整篇、區塊與行內劇透", "description": "請選擇足以保護讀者的最小劇透範圍。", "whole": "整則留言都會洩漏隱藏資訊時，使用發佈表單中的整篇劇透開關。", "block": "需要隱藏多個段落或清單時，使用 ::: spoiler 區塊。", "inline": "只隱藏句子中的少量文字時，使用下方的行內劇透語法；文字會被遮擋，點擊後顯示。", "inlineBefore": "擊敗最終 Boss 後，", "inlineSample": "隱藏結局將會解鎖", "inlineAfter": "，並獲得對應獎盃。" },
-      "security": { "title": "內容安全", "description": "不支援原始 HTML 和可執行 URL，請改用 Markdown 連結與支援的內容區塊。" },
-      "commonMark": "CommonMark 快速參考"
-    }
-  },
   "nav": {
     "about": "關於 PSRay",
     "home": "首頁",

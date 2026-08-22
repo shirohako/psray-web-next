@@ -19,50 +19,6 @@
     "updatedAt": "{time} に更新",
     "view": "見る"
   },
-  "markdown": {
-    "editor": {
-      "placeholder": "Markdown でコメントを書く…",
-      "ariaLabel": "Markdown コメントエディター",
-      "edit": "編集",
-      "preview": "プレビュー",
-      "previewEmpty": "プレビューがここに表示されます。",
-      "help": "書き方ガイド",
-      "helpHint": "Markdown を使うと、コメントを読みやすく整えられます。使い方や記法はこちらで確認できます。",
-      "toolbar": { "heading": "見出し", "bold": "太字", "italic": "斜体", "strike": "取り消し線", "mark": "マーカー", "inlineSpoiler": "インラインネタバレ", "quote": "引用", "link": "リンク", "image": "画像", "list": "リスト", "tasks": "タスクリスト", "code": "コード", "size": "サイズ", "color": "文字色", "underline": "ライン", "advanced": "拡張ブロック" },
-      "sizes": { "small": "小", "large": "大", "xlarge": "特大" },
-      "colors": { "slate": "グレー", "red": "赤", "orange": "オレンジ", "yellow": "黄", "green": "緑", "blue": "青", "purple": "紫", "pink": "ピンク" },
-      "placeholders": { "text": "テキスト", "linkText": "リンク文字", "imageAlt": "画像の説明", "code": "コード", "title": "任意のタイトル", "content": "内容", "firstStep": "最初の手順", "secondStep": "次の手順", "completedTask": "完了した項目", "pendingTask": "未完了の項目" }
-    },
-    "inlineSpoiler": { "reveal": "クリックしてインラインネタバレを表示" },
-    "blocks": {
-      "details": { "title": "折りたたみ", "description": "補足情報を折りたたんで表示します。", "defaultTitle": "詳細を表示" },
-      "info": { "title": "情報", "description": "背景情報や補足を見やすく伝えます。", "defaultTitle": "情報" },
-      "tip": { "title": "ヒント", "description": "攻略に役立つコツを目立たせます。", "defaultTitle": "ヒント" },
-      "warning": { "title": "注意", "description": "見落としや注意点をわかりやすく伝えます。", "defaultTitle": "注意" },
-      "danger": { "title": "危険", "description": "重大な危険や元に戻せない操作を伝えます。", "defaultTitle": "危険" },
-      "checklist": { "title": "チェックリスト", "description": "タイトルと進捗付きでタスクを整理します。", "defaultTitle": "タスクリスト", "progress": "{total} 件中 {completed} 件完了" },
-      "steps": { "title": "手順", "description": "手順を番号付きでわかりやすく表示します。", "defaultTitle": "手順" },
-      "spoiler": { "title": "ネタバレ", "description": "複数段落のネタバレを折りたたんで隠します。", "defaultTitle": "ネタバレを表示" }
-    },
-    "help": {
-      "seoTitle": "Markdown の書き方ガイド",
-      "seoDescription": "PSRay のトロフィーコメントで使える Markdown と拡張ブロックを紹介します。",
-      "title": "Markdown の書き方ガイド",
-      "lead": "使い慣れた Markdown に加え、PSRay 独自の折りたたみ・コールアウト・手順・ネタバレブロックを使って、読みやすい攻略を書けます。",
-      "source": "記述例",
-      "result": "表示結果",
-      "copied": "例をコピーしました",
-      "basic": { "title": "Markdown の基本", "description": "すべてのトロフィーコメントで以下の記法を使えます。", "headingTocHint": "H1〜H4 の見出しから目次が自動生成されます。内容の階層に合わせて使い、文字を大きくする目的では使用しないでください。", "heading": "見出し（H1〜H4）", "emphasis": "強調", "link": "リンク", "image": "画像", "list": "リスト", "task": "タスクリスト", "quote": "引用", "code": "コード" },
-      "images": { "title": "画像", "description": "画像は攻略や長文を読みやすくするため、常に独立したブロックとして表示されます。画像の直後に Pandoc 属性を追加するとサイズを指定できます。幅または高さのどちらか一方を指定した場合は元の比率を維持し、両方を指定した場合はそのサイズで表示します。単位はピクセルで、1〜4096 の値を指定できます。", "width": "幅を指定", "height": "高さを指定", "both": "幅と高さを指定" },
-      "formatting": { "title": "文字スタイル", "description": "エディターで文字を選択し、背景ハイライト、色付き下線、文字色、文字サイズを適用できます。", "mark": "マーカー", "underline": "カラーライン", "color": "文字色", "size": "文字サイズ", "sample": "重要なテキスト", "attributesTitle": "組み合わせと入れ子", "attributesDescription": "Pandoc 形式では、同じ範囲の属性を一つの属性ブロックにまとめます。文字範囲が異なる場合のみ入れ子にします。属性の順序は結果に影響しません。", "recommended": "推奨", "supported": "入れ子向け", "notRecommended": "非推奨", "outerSample": "文章全体のうち", "innerSample": "この部分は赤色", "combined": { "title": "同じ範囲で組み合わせる", "description": "文字色、サイズ、下線が同じ範囲なら、属性をまとめて記述します。" }, "nested": { "title": "異なる範囲を入れ子にする", "description": "外側のサイズは文章全体に、内側の色は一部だけに適用されます。" }, "avoid": { "title": "同じ範囲を重ねて入れ子にする", "description": "解析は可能ですが冗長です。この場合は一つの属性ブロックにまとめてください。" } },
-      "advanced": { "title": "拡張ブロック", "description": "::: でブロックを開始し、別の行の ::: で終了します。", "examples": { "detailsTitle": "収集アイテムの場所", "detailsBody": "城門を抜けた先の右側にある木箱を壊すと、**収集アイテム**を入手できます。", "infoTitle": "開始前の情報", "infoBody": "このチャレンジは**チャプター3**以降で挑戦でき、推奨レベルは20です。", "tipTitle": "安定して成功させるコツ", "tipBody": "ボスが攻撃を終えた直後に回避すると、安全に反撃できます。", "warningTitle": "取り逃しに注意", "warningBody": "エリアを離れる前に宝箱を開けてください。次の章へ進むと戻れません。", "dangerTitle": "セーブデータへの影響", "dangerBody": "この選択を確定するとルートが固定されます。先に手動セーブを作成してください。", "checklistTitle": "ボス戦の準備", "checklistDone": "回復アイテムを補充する", "checklistPending": "耐性装備に変更する", "checklistOptional": "ショートカットを開通する", "stepsFirst": "広場にいる敵をすべて倒す", "stepsSecond": "像の裏にあるスイッチを押す", "stepsThird": "開いた扉から宝物庫へ進む", "spoilerTitle": "エンディング条件", "spoilerBody": "すべての鍵を集めてから最終扉を開くと、**隠しエンディング**へ進めます。" } },
-      "formattingSampleAfter": "が含まれています。",
-      "nesting": { "title": "ブロックの入れ子", "description": "異なる拡張ブロックは入れ子にできます。開始・終了記号をそれぞれ独立した行に置いてください。" },
-      "spoilers": { "title": "全体・ブロック・インラインネタバレ", "description": "読者を守れる最小のネタバレ範囲を選びましょう。", "whole": "コメント全体が隠し情報を含む場合は、投稿フォームのネタバレスイッチを使います。", "block": "複数の段落やリストを隠す場合は ::: spoiler ブロックを使います。", "inline": "文中の短い部分だけを隠す場合は、下のインライン記法を使います。文字はぼかされ、クリックすると表示されます。", "inlineBefore": "最後のボスを倒すと、", "inlineSample": "隠しエンディングが解放され", "inlineAfter": "、対応するトロフィーを獲得できます。" },
-      "security": { "title": "安全なコンテンツ", "description": "生の HTML や危険な URL は利用できません。Markdown のリンクや対応しているブロックを使ってください。" },
-      "commonMark": "CommonMark クイックリファレンス"
-    }
-  },
   "nav": {
     "about": "PSRay について",
     "home": "ホーム",

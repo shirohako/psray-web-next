@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { applyMarkdownEdit, applyMarkdownTextStyle, markdownContainerSnippet } from '~/utils/markdownEditor'
+import { applyMarkdownEdit, applyMarkdownTextStyle, markdownContainerSnippet } from '../packages/markdown-editor/src/runtime/app/utils/markdownEditor'
 
 describe('Markdown editor transforms', () => {
   it('wraps a selection and preserves the selected range', () => {

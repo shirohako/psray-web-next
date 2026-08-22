@@ -19,50 +19,6 @@
     "updatedAt": "更新于 {time}",
     "view": "查看"
   },
-  "markdown": {
-    "editor": {
-      "placeholder": "使用 Markdown 撰写你的留言…",
-      "ariaLabel": "Markdown 留言编辑器",
-      "edit": "编辑",
-      "preview": "预览",
-      "previewEmpty": "预览内容会显示在这里。",
-      "help": "语法说明",
-      "helpHint": "第一次写作？使用 Markdown 可以让你更舒适地创作。使用说明和语法请参考这里。",
-      "toolbar": { "heading": "标题", "bold": "粗体", "italic": "斜体", "strike": "删除线", "mark": "荧光标记", "inlineSpoiler": "行内剧透", "quote": "引用", "link": "链接", "image": "图片", "list": "列表", "tasks": "任务列表", "code": "代码", "size": "字号", "color": "文字颜色", "underline": "彩色线", "advanced": "高级内容块" },
-      "sizes": { "small": "小号", "large": "大号", "xlarge": "超大号" },
-      "colors": { "slate": "灰色", "red": "红色", "orange": "橙色", "yellow": "黄色", "green": "绿色", "blue": "蓝色", "purple": "紫色", "pink": "粉色" },
-      "placeholders": { "text": "文本", "linkText": "链接文字", "imageAlt": "图片说明", "code": "代码", "title": "可选标题", "content": "内容", "firstStep": "第一步", "secondStep": "第二步", "completedTask": "已完成项目", "pendingTask": "待完成项目" }
-    },
-    "inlineSpoiler": { "reveal": "点击显示行内剧透" },
-    "blocks": {
-      "details": { "title": "折叠详情", "description": "将补充内容放在可点击展开的标题后。", "defaultTitle": "显示详情" },
-      "info": { "title": "信息提示", "description": "突出有用的背景信息。", "defaultTitle": "信息" },
-      "tip": { "title": "技巧提示", "description": "强调实用的攻略建议。", "defaultTitle": "技巧" },
-      "warning": { "title": "注意事项", "description": "提醒读者留意重要事项。", "defaultTitle": "注意" },
-      "danger": { "title": "危险警告", "description": "强调高风险或不可撤销的操作。", "defaultTitle": "危险" },
-      "checklist": { "title": "带标题的任务列表", "description": "将任务列表组成带标题和实时完成进度的卡片。", "defaultTitle": "任务列表", "progress": "已完成 {completed} 项，共 {total} 项" },
-      "steps": { "title": "步骤流程", "description": "展示清晰的编号操作流程。", "defaultTitle": "步骤" },
-      "spoiler": { "title": "剧透区域", "description": "折叠隐藏包含多个段落或列表的剧透内容。", "defaultTitle": "点击显示剧透" }
-    },
-    "help": {
-      "seoTitle": "Markdown 写作说明",
-      "seoDescription": "了解 PSRay 奖杯留言支持的 Markdown 与高级内容块。",
-      "title": "Markdown 写作说明",
-      "lead": "使用熟悉的 Markdown，以及 PSRay 的折叠、提示、步骤和剧透内容块，写出清晰美观的奖杯攻略。",
-      "source": "源码",
-      "result": "效果",
-      "copied": "示例已复制",
-      "basic": { "title": "Markdown 基础", "description": "每条奖杯留言都支持以下常用写法。", "headingTocHint": "提示会根据 H1–H4 标题自动生成目录。请按内容层级合理使用标题，避免为了放大文字而使用标题语法。", "heading": "标题（H1–H4）", "emphasis": "文字强调", "link": "链接", "image": "图片", "list": "列表", "task": "任务列表", "quote": "引用", "code": "代码" },
-      "images": { "title": "图片", "description": "为了让攻略和长文章更易阅读，图片始终作为独立区块显示。在图片后添加 Pandoc 属性可以指定尺寸。只设置宽度或高度时保留原始比例；同时设置两项时使用指定尺寸。数值单位为像素，允许范围为 1–4096。", "width": "指定宽度", "height": "指定高度", "both": "指定宽度和高度" },
-      "formatting": { "title": "文字样式", "description": "在编辑器中选中文字，然后应用背景高亮、彩色下划线、白名单文字颜色或字号。", "mark": "荧光标记", "underline": "彩色线", "color": "文字颜色", "size": "文字字号", "sample": "重要文字", "attributesTitle": "组合与嵌套", "attributesDescription": "Pandoc 风格将同一范围的多个属性写在同一个属性块中；只有文字范围不同时才需要嵌套。属性顺序不影响效果。", "recommended": "推荐", "supported": "适合嵌套", "notRecommended": "不推荐", "outerSample": "整段文字，其中", "innerSample": "这部分为红色", "combined": { "title": "同一范围组合", "description": "颜色、字号和下划线作用于相同文字时，将属性集中书写。" }, "nested": { "title": "不同范围嵌套", "description": "外层字号作用于整段，内层颜色只作用于部分文字。" }, "avoid": { "title": "同一范围重复嵌套", "description": "虽然能够解析，但更冗长；这种情况应改用同一个属性块。" } },
-      "advanced": { "title": "高级内容块", "description": "使用 ::: 开始内容块，并在单独一行使用 ::: 结束。", "examples": { "detailsTitle": "收集品位置", "detailsBody": "穿过城门后打破右侧的木箱，即可获得这个**收集品**。", "infoTitle": "开始前须知", "infoBody": "这项挑战会在**第三章**后开放，推荐等级为20级。", "tipTitle": "稳定完成的技巧", "tipBody": "在首领攻击结束后立刻闪避，可以获得安全的反击机会。", "warningTitle": "小心遗漏", "warningBody": "离开区域前请打开宝箱。进入下一章后将无法返回。", "dangerTitle": "存档影响", "dangerBody": "确认这个选择后路线将被锁定，请先创建手动存档。", "checklistTitle": "首领战准备", "checklistDone": "补充恢复道具", "checklistPending": "换上抗性装备", "checklistOptional": "开启捷径", "stepsFirst": "击败广场内的所有敌人", "stepsSecond": "按下雕像背后的开关", "stepsThird": "从打开的门进入宝物库", "spoilerTitle": "结局条件", "spoilerBody": "收集全部钥匙后再打开最终大门，即可进入**隐藏结局**。" } },
-      "formattingSampleAfter": "需要特别注意。",
-      "nesting": { "title": "嵌套内容块", "description": "不同类型的高级块可以嵌套。请让起止标记各占一行，以保持结构清晰。" },
-      "spoilers": { "title": "整篇、块级与行内剧透", "description": "请选择能够保护读者的最小剧透范围。", "whole": "整条留言都会泄露隐藏信息时，使用发布表单中的整篇剧透开关。", "block": "多个段落或列表需要隐藏时，使用 ::: spoiler 块。", "inline": "只隐藏句子中的少量文字时，使用下方的行内剧透语法；文字会被遮挡，点击后显示。", "inlineBefore": "击败最终 Boss 后，", "inlineSample": "隐藏结局将会解锁", "inlineAfter": "，并获得对应奖杯。" },
-      "security": { "title": "内容安全", "description": "不支持原始 HTML 和可执行 URL，请改用 Markdown 链接与受支持的内容块。" },
-      "commonMark": "CommonMark 快速参考"
-    }
-  },
   "nav": {
     "about": "关于 PSRay",
     "home": "首页",

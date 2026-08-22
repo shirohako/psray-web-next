@@ -1,0 +1,206 @@
+{
+  "markdown": {
+    "editor": {
+      "placeholder": "Write your tip in Markdown…",
+      "ariaLabel": "Markdown tip editor",
+      "edit": "Edit",
+      "preview": "Preview",
+      "previewEmpty": "Your preview will appear here.",
+      "help": "Syntax guide",
+      "helpHint": "Writing for the first time? Markdown makes writing easier. See the guide for usage and syntax.",
+      "toolbar": {
+        "heading": "Heading",
+        "bold": "Bold",
+        "italic": "Italic",
+        "strike": "Strikethrough",
+        "mark": "Marker",
+        "inlineSpoiler": "Inline spoiler",
+        "quote": "Quote",
+        "link": "Link",
+        "image": "Image",
+        "list": "List",
+        "tasks": "Task list",
+        "code": "Code",
+        "size": "Text size",
+        "color": "Text color",
+        "underline": "Color line",
+        "advanced": "Advanced blocks"
+      },
+      "sizes": {
+        "small": "Small",
+        "large": "Large",
+        "xlarge": "Extra large"
+      },
+      "colors": {
+        "slate": "Slate",
+        "red": "Red",
+        "orange": "Orange",
+        "yellow": "Yellow",
+        "green": "Green",
+        "blue": "Blue",
+        "purple": "Purple",
+        "pink": "Pink"
+      },
+      "placeholders": {
+        "text": "text",
+        "linkText": "link text",
+        "imageAlt": "image description",
+        "code": "code",
+        "title": "Optional title",
+        "content": "Content",
+        "firstStep": "First step",
+        "secondStep": "Second step",
+        "completedTask": "Completed item",
+        "pendingTask": "Pending item"
+      }
+    },
+    "inlineSpoiler": {
+      "reveal": "Click to reveal inline spoiler"
+    },
+    "blocks": {
+      "details": {
+        "title": "Collapsible details",
+        "description": "Hide supporting details behind a clickable heading.",
+        "defaultTitle": "Show details"
+      },
+      "info": {
+        "title": "Information",
+        "description": "Highlight useful background information.",
+        "defaultTitle": "Information"
+      },
+      "tip": {
+        "title": "Tip",
+        "description": "Call attention to a practical recommendation.",
+        "defaultTitle": "Tip"
+      },
+      "warning": {
+        "title": "Warning",
+        "description": "Warn readers about something important.",
+        "defaultTitle": "Warning"
+      },
+      "danger": {
+        "title": "Danger",
+        "description": "Emphasize a serious risk or irreversible action.",
+        "defaultTitle": "Danger"
+      },
+      "checklist": {
+        "title": "Titled task list",
+        "description": "Group tasks in a card with a title and live completion count.",
+        "defaultTitle": "Task list",
+        "progress": "{completed} of {total} completed"
+      },
+      "steps": {
+        "title": "Steps",
+        "description": "Present a numbered walkthrough.",
+        "defaultTitle": "Steps"
+      },
+      "spoiler": {
+        "title": "Spoiler area",
+        "description": "Collapse spoiler content containing multiple paragraphs or lists.",
+        "defaultTitle": "Reveal spoiler"
+      }
+    },
+    "help": {
+      "seoTitle": "Markdown writing guide",
+      "seoDescription": "Learn the Markdown and advanced content blocks supported by PSRay trophy tips.",
+      "title": "Markdown writing guide",
+      "lead": "Write clear trophy guides with familiar Markdown and PSRay's collapsible, callout, step and spoiler blocks.",
+      "source": "Source",
+      "result": "Result",
+      "copied": "Example copied",
+      "basic": {
+        "title": "Markdown basics",
+        "description": "These familiar forms work in every trophy tip.",
+        "headingTocHint": "Tips automatically generate a table of contents from H1–H4 headings. Follow the content hierarchy and do not use headings merely to enlarge text.",
+        "heading": "Headings (H1–H4)",
+        "emphasis": "Emphasis",
+        "link": "Links",
+        "image": "Images",
+        "list": "Lists",
+        "task": "Task lists",
+        "quote": "Quotes",
+        "code": "Code"
+      },
+      "images": {
+        "title": "Images",
+        "description": "Images always appear as standalone blocks for readable guides and long-form posts. Add Pandoc attributes immediately after an image to set its size. Setting only width or height preserves its intrinsic ratio; setting both uses the requested dimensions. Values are pixels from 1 to 4096.",
+        "width": "Set width",
+        "height": "Set height",
+        "both": "Set width and height"
+      },
+      "formatting": {
+        "title": "Text formatting",
+        "description": "Select text in the editor, then apply a background highlight, colored underline, allow-listed text color or text size.",
+        "mark": "Marker",
+        "underline": "Color line",
+        "color": "Text color",
+        "size": "Text size",
+        "sample": "Important text",
+        "attributesTitle": "Combining and nesting",
+        "attributesDescription": "Pandoc-style syntax keeps attributes for the same range in one attribute block. Nest only when the text ranges differ. Attribute order does not affect the result.",
+        "recommended": "Recommended",
+        "supported": "Use nesting",
+        "notRecommended": "Not recommended",
+        "outerSample": "This whole sentence, while",
+        "innerSample": "this part is red",
+        "combined": {
+          "title": "Combine the same range",
+          "description": "When color, size and underline apply to the same text, keep the attributes together."
+        },
+        "nested": {
+          "title": "Nest different ranges",
+          "description": "The outer size applies to all text while the inner color applies only to part of it."
+        },
+        "avoid": {
+          "title": "Repeat nesting for one range",
+          "description": "This parses correctly but is verbose; use a single attribute block instead."
+        }
+      },
+      "advanced": {
+        "title": "Advanced blocks",
+        "description": "Start a block with ::: and finish it with another ::: line.",
+        "examples": {
+          "detailsTitle": "Collectible location",
+          "detailsBody": "Break the crate on the right after passing through the castle gate to obtain the **collectible**.",
+          "infoTitle": "Before you begin",
+          "infoBody": "This challenge becomes available after **Chapter 3** and has a recommended level of 20.",
+          "tipTitle": "A reliable strategy",
+          "tipBody": "Dodge just after the boss finishes attacking to create a safe opening for a counterattack.",
+          "warningTitle": "Missable item",
+          "warningBody": "Open the chest before leaving the area. You cannot return after starting the next chapter.",
+          "dangerTitle": "Save data warning",
+          "dangerBody": "Confirming this choice locks your route. Create a manual save before continuing.",
+          "checklistTitle": "Boss battle preparation",
+          "checklistDone": "Restock healing items",
+          "checklistPending": "Equip resistance gear",
+          "checklistOptional": "Unlock the shortcut",
+          "stepsFirst": "Defeat every enemy in the courtyard",
+          "stepsSecond": "Press the switch behind the statue",
+          "stepsThird": "Enter the treasure room through the open door",
+          "spoilerTitle": "Ending requirement",
+          "spoilerBody": "Collect every key before opening the final door to reach the **secret ending**."
+        }
+      },
+      "formattingSampleAfter": " is followed by ordinary text.",
+      "nesting": {
+        "title": "Nesting blocks",
+        "description": "Different advanced blocks can be nested. Keep each opening and closing marker on its own line so the structure stays clear."
+      },
+      "spoilers": {
+        "title": "Whole-tip, block and inline spoilers",
+        "description": "Choose the smallest spoiler boundary that protects readers.",
+        "whole": "Use the publish form's spoiler switch when the entire tip gives away hidden information.",
+        "block": "Use a ::: spoiler block to hide multiple paragraphs or a list.",
+        "inline": "Use the inline syntax shown below for a short phrase within a sentence. Its text is obscured until clicked.",
+        "inlineBefore": "After defeating the final boss, ",
+        "inlineSample": "the secret ending is unlocked",
+        "inlineAfter": " and the related trophy is awarded."
+      },
+      "security": {
+        "title": "Safe content",
+        "description": "Raw HTML and executable URLs are not accepted. Use Markdown links and the supported blocks instead."
+      },
+      "commonMark": "CommonMark quick reference"
+    }
+  }
+}

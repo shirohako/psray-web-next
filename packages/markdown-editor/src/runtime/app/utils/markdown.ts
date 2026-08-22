@@ -2,7 +2,7 @@ import MarkdownIt from 'markdown-it'
 import container from 'markdown-it-container'
 import mark from 'markdown-it-mark'
 import taskLists from 'markdown-it-task-lists'
-import { tr } from '~/utils/locale'
+import { tr } from './translate'
 import type StateInline from 'markdown-it/lib/rules_inline/state_inline.mjs'
 
 export type MarkdownContainerName =

@@ -11,8 +11,9 @@
  *    passes reliably, `i18n/i18n.config.ts` can drop `fallbackLocale` and halve
  *    what each visitor downloads.
  *
- * 2. **Usage** — every literal key referenced from `app/` must exist in
- *    `ja.json`. Catches typos and keys renamed on only one side.
+ * 2. **Usage** — every literal key referenced from `app/` or the shared
+ *    Markdown editor package must exist in the merged `ja` catalog. Catches
+ *    typos and keys renamed on only one side.
  *
  * Dynamic keys (built at runtime, e.g. `errors.api.${code}`) can't be checked
  * statically; they're resolved through `te()` at the call site, which falls
@@ -25,6 +26,8 @@ import { fileURLToPath } from 'node:url'
 const root = fileURLToPath(new URL('..', import.meta.url))
 const localesDir = join(root, 'i18n/locales')
 const appDir = join(root, 'app')
+const markdownEditorDir = join(root, 'packages/markdown-editor/src/runtime/app')
+const markdownEditorLocalesDir = join(root, 'packages/markdown-editor/src/runtime/locales')
 
 const SOURCE_LOCALE = 'ja'
 
@@ -41,7 +44,13 @@ function flatten(node, prefix = '', out = new Set()) {
 const catalogs = new Map()
 for (const file of readdirSync(localesDir).filter(f => f.endsWith('.json'))) {
   const locale = file.replace(/\.json$/, '')
-  catalogs.set(locale, flatten(JSON.parse(readFileSync(join(localesDir, file), 'utf8'))))
+  const appMessages = JSON.parse(readFileSync(join(localesDir, file), 'utf8'))
+  const packageFile = join(markdownEditorLocalesDir, file)
+  const packageMessages = JSON.parse(readFileSync(packageFile, 'utf8'))
+  catalogs.set(locale, new Set([
+    ...flatten(appMessages),
+    ...flatten(packageMessages),
+  ]))
 }
 
 const source = catalogs.get(SOURCE_LOCALE)
@@ -79,7 +88,7 @@ function* walk(dir) {
 }
 
 const used = new Map()
-for (const file of walk(appDir)) {
+for (const file of [...walk(appDir), ...walk(markdownEditorDir)]) {
   const text = readFileSync(file, 'utf8')
   for (const pattern of PATTERNS) {
     for (const [, key] of text.matchAll(pattern)) {

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Check, Clipboard, ExternalLink, List, ShieldCheck } from 'lucide'
-import type { MarkdownContainerName } from '~/utils/markdown'
+import type { MarkdownContainerName } from '#markdown-editor/utils/markdown'
 
 const { t } = useI18n()
 const toast = useToast()

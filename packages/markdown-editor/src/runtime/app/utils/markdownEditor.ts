@@ -1,5 +1,5 @@
-import type { MarkdownContainerName, MarkdownTextColor, MarkdownTextSize, MarkdownUnderlineColor } from '~/utils/markdown'
-import { tr } from '~/utils/locale'
+import type { MarkdownContainerName, MarkdownTextColor, MarkdownTextSize, MarkdownUnderlineColor } from './markdown'
+import { tr } from './translate'
 
 export type MarkdownEditAction =
   | 'heading'

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { markdownContainers, renderMarkdown } from '~/utils/markdown'
+import { markdownContainers, renderMarkdown } from '../packages/markdown-editor/src/runtime/app/utils/markdown'
 
 describe('Markdown renderer', () => {
   it('renders standard Markdown and task lists', () => {
