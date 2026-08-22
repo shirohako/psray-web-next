@@ -1,6 +1,6 @@
 {
   "name": "@psray/editor",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "A Nuxt Markdown editor with live preview, safe rendering and rich content blocks.",
   "license": "MIT",
   "type": "module",

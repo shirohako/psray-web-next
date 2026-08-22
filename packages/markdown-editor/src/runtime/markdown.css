@@ -1,5 +1,6 @@
 /* Generate the package's utilities even when installed under node_modules,
    which Tailwind v4 intentionally excludes from automatic source detection. */
+@reference "tailwindcss/theme.css";
 @import "tailwindcss/utilities.css" layer(utilities) source(none);
 @plugin "@tailwindcss/typography";
 @source "./app/components";
